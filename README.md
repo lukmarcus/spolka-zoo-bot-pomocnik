@@ -1,0 +1,1 @@
+# spolka-zoo-bot-pomocnik
