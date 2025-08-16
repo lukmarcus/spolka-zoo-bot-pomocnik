@@ -17,9 +17,9 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualny status**: 🔧 W planowaniu
-**Aktualna wersja**: 0.0.0 (przed pierwszym commitem)
-**Następna wersja**: 0.0.1 - Setup projektu
+**Aktualna wersja**: 0.0.1 ✅  
+**Status**: Setup projektu ukończony  
+**Następna wersja**: 0.1.0 - Mechanika kart botów
 
 ## 📋 Szybki start
 
@@ -28,7 +28,7 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - Node.js 18+
 - npm/yarn/pnpm
 
-### Instalacja (po stworzeniu projektu)
+### Instalacja
 
 ```bash
 # Klonowanie repo
@@ -40,6 +40,15 @@ npm install
 
 # Uruchomienie dev server
 npm run dev
+```
+
+### Dostępne komendy
+
+```bash
+npm run dev     # Uruchomienie serwera deweloperskiego
+npm run build   # Build produkcyjny
+npm run lint    # Sprawdzenie linting
+npm run preview # Podgląd builda
 ```
 
 ## 📖 Dokumentacja
@@ -56,18 +65,17 @@ Zawiera:
 
 ## 🛠️ Technologie
 
-- **Frontend**: React + TypeScript + Vite
+- **Frontend**: React 19.1.1 + TypeScript 5.8.3 + Vite 5.4.19
 - **Style**: CSS Modules
-- **State**: React Context + useReducer
-- **PWA**: Service Worker + Web App Manifest
+- **Routing**: React Router DOM 7.8.1
 - **Build**: Vite
-- **Tests**: Jest + React Testing Library
+- **Linting**: ESLint
 
 ## 🗓️ Plan rozwoju
 
 | Wersja | Status       | Opis                                        |
 | ------ | ------------ | ------------------------------------------- |
-| 0.0.1  | 🔜 Planowana | Setup projektu i podstawowa nawigacja       |
+| 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja       |
 | 0.1.0  | 🔜 Planowana | Podstawowa mechanika bota (1 bot, 13 kart)  |
 | 0.2.0  | 🔜 Planowana | Zapis i wczytywanie gry                     |
 | 0.3.0  | 🔜 Planowana | Wiele botów na jednej talii                 |
@@ -75,22 +83,37 @@ Zawiera:
 | 0.5.0  | 🔜 Planowana | Wizualizacja kart                           |
 | ...    |              | Zobacz [DOKUMENTACJA.md](./DOKUMENTACJA.md) |
 
+## 🎨 Wygląd aplikacji
+
+Aplikacja wykorzystuje kolory z instrukcji gry:
+
+- 🟢 Żółto-zielone tło gradientowe
+- 🟤 Brązowe nagłówki i przyciski
+- 🟡 Kremowe tło kart z pomarańczowo-brązowymi ramkami
+- 📱 Design mobile-first (portrait mode)
+
 ## 🤝 Rozwój
 
 ### Workflow
 
 1. Każda nowa funkcja = nowy branch z `main`
-2. Commit messages po polsku
+2. Commit messages po angielsku
 3. Pull request do `main` po zakończeniu funkcji
 4. Dokumentacja aktualizowana z każdą wersją
 
-### Struktura commitów
+### Struktura projektu
 
 ```
-feat: dodanie ekranu gry dla jednego bota
-fix: poprawka kodowania stanu gry
-docs: aktualizacja dokumentacji wersji 0.1.0
-style: poprawa responsywności dla telefonów
+src/
+├── components/         # Komponenty React (Layout, etc.)
+├── pages/             # Strony aplikacji (Home, Game)
+├── hooks/             # Custom React hooks
+├── context/           # React Context providers
+├── utils/             # Funkcje pomocnicze
+├── types/             # TypeScript definitions
+├── data/              # Dane gry (karty, etc.)
+├── styles/            # Globalne style CSS
+└── assets/            # Obrazy, ikony, czcionki
 ```
 
 ## 📄 Licencja
@@ -103,6 +126,6 @@ Spółka ZOO to gra planszowa, w której gracze zarządzają ogrodami zoologiczn
 
 ---
 
-**Autor**: lukmarcus  
+**Autor**: Marek Szumny  
 **Repo**: [spolka-zoo-bot-pomocnik](https://github.com/lukmarcus/spolka-zoo-bot-pomocnik)  
 **Język**: Polski
