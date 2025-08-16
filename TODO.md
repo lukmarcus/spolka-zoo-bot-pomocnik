@@ -61,9 +61,9 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 
 - [ ] **Definicje kart botów**
 
-  - [ ] Plik `data/botCards.ts` z 13 kartami
-  - [ ] TypeScript interface dla kart
-  - [ ] Tymczasowe tekstowe opisy kart
+  - [ ] Plik `data/botCards.ts` z 13 kartami **Lorem Ipsum** (tymczasowo)
+  - [ ] TypeScript interface dla kart (1-2 efekty + opcjonalna zdolność)
+  - [ ] **Prawdziwe karty będą dostępne w ciągu tygodnia**
 
 - [ ] **Stan gry**
 
@@ -74,15 +74,16 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 - [ ] **Ekran gry**
 
   - [ ] Component `GameScreen.tsx`
-  - [ ] Wyświetlanie aktualnej karty
+  - [ ] **Wyświetlanie karty**: nazwa + efekty + zdolność (tylko UI!)
   - [ ] Licznik kart (X/13)
   - [ ] Przycisk "Dobierz kartę"
+  - [ ] **Style**: żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
 
 - [ ] **Logika gry**
   - [ ] Tasowanie kart na start
   - [ ] Dobieranie następnej karty
   - [ ] Przetasowanie po wyczerpaniu talii
-  - [ ] Walidacja czy karta może być użyta
+  - [ ] **Uwaga**: Aplikacja NIE rozpatruje efektów - tylko je wyświetla!
 
 ### Nice to Have
 
@@ -161,17 +162,22 @@ _Brak znanych problemów (projekt nie rozpoczęty)_
 
 ### Decyzje techniczne do podjęcia w 0.0.1:
 
-1. **Styling**: CSS Modules vs Styled Components vs Tailwind?
-2. **State management**: Context+Reducer vs Zustand vs Redux Toolkit?
-3. **Icons**: React Icons vs własne SVG vs Font Awesome?
-4. **PWA**: Od razu vs dopiero w 0.8.0?
+1. **Styling**: CSS Modules ✅ (pasuje do kolorów z instrukcji)
+2. **State management**: Context+Reducer ✅ (wystarczy dla tej aplikacji)
+3. **Icons**: React Icons vs własne SVG ❓
+4. **PWA**: Dopiero w 0.8.0 ✅
 
-### Pytania do wyjaśnienia:
+### ✅ Wyjaśnione pytania:
 
-1. Czy masz dostęp do treści 13 kart z gry?
-2. Jakie dokładnie efekty mają karty?
-3. Czy są jakieś specjalne zasady dla niektórych kart?
-4. Preferowane kolory/motyw wizualny?
+1. **Dostęp do kart**: ✅ Będzie dostępny w ciągu tygodnia, na razie używamy Lorem Ipsum
+2. **Efekty kart**: ✅ Aplikacja tylko WYŚWIETLA karty, nie rozpatruje efektów (fizyczna gra)
+3. **Struktura kart**: ✅ Każda karta może mieć 1-2 efekty + zdolność dodatkową
+4. **Kolory/motyw**: ✅ Żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
+
+### Nowe pytania do wyjaśnienia:
+
+- Czy potrzebne są ikony dla różnych typów efektów?
+- Jak długie są opisy na kartach (dla responsywności)?
 
 ---
 

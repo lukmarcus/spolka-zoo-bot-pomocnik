@@ -30,7 +30,7 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 - [ ] Podstawowy routing (React Router)
 - [ ] Responsywny layout dla telefonów (portrait)
 - [ ] Komponenty: Header, Navigation, Layout
-- [ ] Podstawowe style i kolory tematyczne
+- [ ] **Kolory tematyczne**: Żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
 
 **Pliki do stworzenia**:
 
@@ -49,9 +49,9 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 **Funkcjonalności**:
 
-- [ ] System 13 kart bota (definicje kart)
+- [ ] **System 13 kart bota** (tymczasowo Lorem Ipsum do czasu otrzymania prawdziwych)
 - [ ] Ekran gry z jednym botem
-- [ ] Wyświetlanie aktualnej karty (tekst)
+- [ ] **Wyświetlanie karty**: Nazwa + 1-2 efekty + opcjonalna zdolność (tylko wyświetlanie!)
 - [ ] Licznik użytych kart (X/13)
 - [ ] Przycisk "Dobierz kartę" z potwierdzeniem
 - [ ] Przycisk powrotu do menu z ostrzeżeniem
@@ -289,28 +289,95 @@ v2_separate_4_bot1:03:4a7b2c_bot2:07:9d5e1f_checksum
 
 ## Struktura kart botów
 
-### Lista 13 kart (do zdefiniowania)
+### Mechanika kart (z instrukcji gry)
+
+**Źródło**: Instrukcja Spółka ZOO, strony 24-25
+
+**Zasady botów**:
+
+- Boty nie używają żetonów Akcji - zastępuje je talia 13 kart
+- Gdy przychodzi kolej na bota, sąsiadujący gracz odkrywa wierzchnią kartę
+- Karty mają 1-2 efekty (u góry karty) + ewentualną zdolność dodatkową
+- Jeśli nie da się rozpatrzyć żadnego efektu, karta idzie do odrzuconych i dobiera się kolejną
+- Jeśli można wykonać oba efekty, należy to zrobić
+- Po wyczerpaniu talii - przetasowanie odrzuconych kart
+
+**Aplikacja tylko WYŚWIETLA karty** - nie rozpatruje efektów (to robi fizyczna gra)
+
+### Kolory i motywy (z instrukcji)
+
+- **Tło**: Żółto-zielone gradient (jak w instrukcji)
+- **Nagłówki**: Brązowe (#8B4513 lub podobny)
+- **Karty**: Pomarańczowo-brązowe ramki, kremowe tło
+- **Akcenty**: Zielone dla dodatków/efektów
+- **Tekst**: Ciemnobrązowy dla dobrej czytelności
+
+### Struktura kart (TypeScript)
 
 ```typescript
 interface BotCard {
-  id: number;
+  id: number; // 1-13
   name: string;
-  effects: string[];
+  effects: BotEffect[]; // 1-2 efekty
+  ability?: string; // dodatkowa zdolność (opcjonalna)
+  description: string; // pełny opis karty
+  placeholder?: boolean; // czy to tymczasowa karta Lorem Ipsum
+}
+
+interface BotEffect {
+  type: "primary" | "secondary";
   description: string;
-  icon?: string;
+  icon?: string; // ikona efektu (gwiazdka, itp.)
+}
+```
+
+### Tymczasowe karty (Lorem Ipsum) - do wersji 0.1.0
+
+```typescript
+// Będą używane do czasu otrzymania prawdziwych kart
+const placeholderCards: BotCard[] = [
+  {
+    id: 1,
+    name: "Karta Bota #1",
+    effects: [
+      {
+        type: "primary",
+        description: "Lorem ipsum dolor sit amet consectetur",
+      },
+    ],
+    description:
+      "Consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
+    placeholder: true,
+  },
+  {
+    id: 2,
+    name: "Karta Bota #2",
+    effects: [
+      { type: "primary", description: "Ut labore et dolore magna aliqua" },
+      { type: "secondary", description: "Enim ad minim veniam quis" },
+    ],
+    ability: "Nostrud exercitation ullamco",
+    description: "Laboris nisi ut aliquip ex ea commodo consequat.",
+    placeholder: true,
+  },
+  // ... 11 więcej kart Lorem Ipsum
+];
+```
+
 }
 
 // Przykład struktury - do uzupełnienia rzeczywistymi kartami z gry
 const botCards: BotCard[] = [
-  { id: 1, name: "Karta 1", effects: ["Efekt A"], description: "..." },
-  {
-    id: 2,
-    name: "Karta 2",
-    effects: ["Efekt B", "Efekt C"],
-    description: "...",
-  },
-  // ... 11 więcej kart
+{ id: 1, name: "Karta 1", effects: ["Efekt A"], description: "..." },
+{
+id: 2,
+name: "Karta 2",
+effects: ["Efekt B", "Efekt C"],
+description: "...",
+},
+// ... 11 więcej kart
 ];
+
 ```
 
 ---
@@ -320,17 +387,19 @@ const botCards: BotCard[] = [
 ### Architektura aplikacji
 
 ```
+
 src/
-├── components/          # Reusable components
-├── pages/              # Page components (routes)
-├── hooks/              # Custom React hooks
-├── context/            # React Context providers
-├── utils/              # Utility functions
-├── types/              # TypeScript definitions
-├── data/               # Game data (cards, etc.)
-├── styles/             # Global styles
-└── assets/             # Images, icons, sounds
-```
+├── components/ # Reusable components
+├── pages/ # Page components (routes)
+├── hooks/ # Custom React hooks
+├── context/ # React Context providers
+├── utils/ # Utility functions
+├── types/ # TypeScript definitions
+├── data/ # Game data (cards, etc.)
+├── styles/ # Global styles
+└── assets/ # Images, icons, sounds
+
+````
 
 ### Stan aplikacji
 
@@ -345,6 +414,28 @@ src/
 - **CRC32** checksum dla walidacji
 - **Wersjonowanie** dla kompatybilności wstecznej
 - **Kompresja** dla długich stanów (wielu botów)
+
+### Paleta kolorów (na podstawie instrukcji)
+```css
+:root {
+  /* Główne kolory */
+  --bg-primary: linear-gradient(135deg, #E8F5E8, #F0F8C7); /* Żółto-zielone tło */
+  --text-primary: #4A2C17; /* Ciemnobrązowy tekst */
+  --text-header: #8B4513; /* Brązowe nagłówki */
+
+  /* Karty */
+  --card-bg: #FFF8DC; /* Kremowe tło kart */
+  --card-border: #CD853F; /* Pomarańczowo-brązowa ramka */
+  --card-accent: #228B22; /* Zielone akcenty */
+
+  /* UI elementy */
+  --button-primary: #8B4513;
+  --button-secondary: #CD853F;
+  --success: #228B22;
+  --warning: #FF8C00;
+  --danger: #DC143C;
+}
+````
 
 ---
 
