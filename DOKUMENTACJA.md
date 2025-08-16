@@ -326,8 +326,8 @@ interface BotCard {
 
 interface BotEffect {
   type: "primary" | "secondary";
-  description: string;
-  icon?: string; // ikona efektu (gwiazdka, itp.)
+  description: string; // krótkie zdanie (jak w instrukcji)
+  icon?: string; // własna ikona SVG/PNG specyficzna dla gry
 }
 ```
 
@@ -435,7 +435,26 @@ src/
   --warning: #FF8C00;
   --danger: #DC143C;
 }
-````
+```
+
+### Typografia i assets
+
+**Czcionki** (na podstawie instrukcji):
+- **Główna**: Szukać czcionek podobnych do tych w instrukcji (serif, ciepłe)
+- **Nagłówki**: Mocniejsza, czytelnا waga
+- **Karty**: Klasyczna, dobrze czytelna na małych ekranach
+- **Backup**: Georgia, "Times New Roman", serif (dla kompatybilności)
+
+**Ikony i grafiki**:
+- **Format**: SVG (skalowalność) + PNG fallback
+- **Źródło**: Własne ikony specyficzne dla gry Spółka ZOO
+- **Style**: Dopasowane do estetyki gry (ciepłe, organiczne)
+- **Rozmiary**: 16px, 24px, 32px, 48px (responsive)
+
+**Teksty kart**:
+- **Długość**: Krótkie (jedno zdanie na efekt)
+- **Responsywność**: Optymalizacja dla mobile-first
+- **Kontrast**: Wysoki kontrast na kremowym tle kart`
 
 ---
 
@@ -452,3 +471,4 @@ src/
 2. Commit messages po polsku
 3. README.md aktualny z instrukcjami
 4. CHANGELOG.md dla każdej wersji
+````

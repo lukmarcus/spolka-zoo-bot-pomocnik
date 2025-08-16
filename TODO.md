@@ -24,7 +24,11 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
   ├── utils/
   ├── types/
   ├── data/
-  └── styles/
+  ├── styles/
+  └── assets/
+      ├── icons/          # SVG/PNG ikony gry
+      ├── fonts/          # Czcionki (podobne do instrukcji)
+      └── images/         # Inne grafiki
   ```
 
 - [ ] **React Router setup**
@@ -44,6 +48,7 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
   - [ ] `Header.tsx` - nagłówek z tytułem
   - [ ] `Navigation.tsx` - nawigacja między stronami
   - [ ] `Button.tsx` - reusable button component
+  - [ ] **Przygotowanie**: folder `assets/` dla ikon i czcionek
 
 ### Nice to Have
 
@@ -164,8 +169,9 @@ _Brak znanych problemów (projekt nie rozpoczęty)_
 
 1. **Styling**: CSS Modules ✅ (pasuje do kolorów z instrukcji)
 2. **State management**: Context+Reducer ✅ (wystarczy dla tej aplikacji)
-3. **Icons**: React Icons vs własne SVG ❓
+3. **Icons**: Własne SVG/PNG ✅ (specyficzne ikonki dla gry)
 4. **PWA**: Dopiero w 0.8.0 ✅
+5. **Fonts**: Czcionki jak w instrukcji (lub podobne darmowe alternatywy) 🔍
 
 ### ✅ Wyjaśnione pytania:
 
@@ -173,11 +179,15 @@ _Brak znanych problemów (projekt nie rozpoczęty)_
 2. **Efekty kart**: ✅ Aplikacja tylko WYŚWIETLA karty, nie rozpatruje efektów (fizyczna gra)
 3. **Struktura kart**: ✅ Każda karta może mieć 1-2 efekty + zdolność dodatkową
 4. **Kolory/motyw**: ✅ Żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
+5. **Ikony**: ✅ Własne SVG/PNG (specyficzne dla gry)
+6. **Czcionki**: ✅ Jak w instrukcji (lub podobne darmowe)
+7. **Długość tekstów**: ✅ Krótkie (jedno zdanie jak w przykładzie)
 
-### Nowe pytania do wyjaśnienia:
+### Zadania do badania w przyszłości:
 
-- Czy potrzebne są ikony dla różnych typów efektów?
-- Jak długie są opisy na kartach (dla responsywności)?
+- **Font matching**: Identyfikacja czcionek z instrukcji lub znalezienie podobnych darmowych
+- **Asset extraction**: Wyciągnięcie ikon z prawdziwych kart (gdy będą dostępne)
+- **Responsive text**: Optymalizacja dla krótkich tekstów (jedno zdanie)
 
 ---
 
