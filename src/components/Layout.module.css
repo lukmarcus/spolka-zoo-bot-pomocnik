@@ -51,7 +51,7 @@
   margin: 0;
 }
 
-/* Responsywność */
+/* Responsiveness */
 @media (min-width: 481px) {
   .layout {
     padding: 2rem;

@@ -1,42 +1,42 @@
-// Typy dla aplikacji Spółka ZOO Bot Pomocnik
+// Types for Spółka ZOO Bot Helper application
 
 export interface BotCard {
   id: number; // 1-13
   name: string;
-  effects: BotEffect[]; // 1-2 efekty
-  ability?: string; // dodatkowa zdolność (opcjonalna)
-  description: string; // pełny opis karty
-  placeholder?: boolean; // czy to tymczasowa karta Lorem Ipsum
+  effects: BotEffect[]; // 1-2 effects
+  ability?: string; // additional ability (optional)
+  description: string; // full card description
+  placeholder?: boolean; // whether this is a temporary Lorem Ipsum card
 }
 
 export interface BotEffect {
   type: "primary" | "secondary";
-  description: string; // krótkie zdanie (jak w instrukcji)
-  icon?: string; // własna ikona SVG/PNG specyficzna dla gry
+  description: string; // short sentence (as in the rulebook)
+  icon?: string; // custom SVG/PNG icon specific to the game
 }
 
 export interface GameState {
-  currentCardIndex: number; // aktualna pozycja w talii (0-12)
-  cardSequence: number[]; // potasowana sekwencja kart (0-12)
-  usedCards: number[]; // użyte karty w tej rundzie
-  shuffleCount: number; // ile razy przetasowano
+  currentCardIndex: number; // current position in deck (0-12)
+  cardSequence: number[]; // shuffled card sequence (0-12)
+  usedCards: number[]; // used cards in this round
+  shuffleCount: number; // how many times shuffled
 }
 
 export interface Bot {
   id: string;
   name: string;
-  currentCard?: number; // ID aktualnej karty
+  currentCard?: number; // ID of current card
 }
 
 export interface MultiGameState {
   bots: Bot[];
   currentBotIndex: number;
-  gameMode: "shared" | "separate"; // jedna talia vs osobne talie
-  sharedDeck?: GameState; // dla trybu shared
-  separateDecks?: { [botId: string]: GameState }; // dla trybu separate
+  gameMode: "shared" | "separate"; // shared deck vs separate decks
+  sharedDeck?: GameState; // for shared mode
+  separateDecks?: { [botId: string]: GameState }; // for separate mode
 }
 
-// Enums jako const assertions (kompatybilne z erasableSyntaxOnly)
+// Enums as const assertions (compatible with erasableSyntaxOnly)
 export const GameMode = {
   SHARED: "shared",
   SEPARATE: "separate",
@@ -68,7 +68,7 @@ export interface MenuOption {
 
 // Game settings
 export interface GameSettings {
-  botCount: number; // 1-4
+  botCount: number; // 1-4 bots
   gameMode: GameMode;
   botNames: string[];
   autoSave: boolean;
@@ -76,10 +76,10 @@ export interface GameSettings {
 
 // Game code format
 export interface GameCode {
-  version: string; // v1, v2, etc.
+  version: string; // version format: v1, v2, etc.
   botCount: number;
   gameMode: GameMode;
-  currentStates: GameState | { [botId: string]: GameState }; // depends on mode
+  currentStates: GameState | { [botId: string]: GameState }; // depends on game mode
   checksum: string;
 }
 

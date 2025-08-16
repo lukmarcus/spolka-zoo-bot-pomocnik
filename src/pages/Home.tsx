@@ -19,7 +19,7 @@ const Home: React.FC = () => {
       title: "Wczytaj grę",
       description: "Użyj kodu gry",
       action: () => {
-        // TODO: Implementacja w v0.2.0
+        // TODO: Implementation in v0.2.0
         alert("Funkcja będzie dostępna w wersji 0.2.0");
       },
       disabled: true,
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
       title: "Ustawienia",
       description: "Liczba botów, tryb gry",
       action: () => {
-        // TODO: Implementacja w v0.3.0
+        // TODO: Implementation in v0.3.0
         alert("Funkcja będzie dostępna w wersji 0.3.0");
       },
       disabled: true,

@@ -114,7 +114,7 @@
   min-width: 150px;
 }
 
-/* Responsywność */
+/* Responsiveness */
 @media (min-width: 481px) {
   .placeholderTitle {
     font-size: 1.75rem;

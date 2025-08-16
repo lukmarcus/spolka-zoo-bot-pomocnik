@@ -113,7 +113,7 @@
   font-size: 0.95rem;
 }
 
-/* Responsywność */
+/* Responsiveness */
 @media (min-width: 481px) {
   .heroTitle {
     font-size: 2.5rem;

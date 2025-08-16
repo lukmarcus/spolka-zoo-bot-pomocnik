@@ -1,30 +1,34 @@
-/* Globalne style - Spółka ZOO Bot Pomocnik */
+/* Global styles - Spółka ZOO Bot Helper */
 
 :root {
-  /* Główne kolory (z instrukcji gry) */
-  --bg-primary: linear-gradient(135deg, #E8F5E8, #F0F8C7); /* Żółto-zielone tło */
-  --text-primary: #4A2C17; /* Ciemnobrązowy tekst */
-  --text-header: #8B4513; /* Brązowe nagłówki */
-  
-  /* Karty */
-  --card-bg: #FFF8DC; /* Kremowe tło kart */
-  --card-border: #CD853F; /* Pomarańczowo-brązowa ramka */
-  --card-accent: #228B22; /* Zielone akcenty */
-  
+  /* Main colors (from game manual) */
+  --bg-primary: linear-gradient(
+    135deg,
+    #e8f5e8,
+    #f0f8c7
+  ); /* Yellow-green background */
+  --text-primary: #4a2c17; /* Dark brown text */
+  --text-header: #8b4513; /* Brown headers */
+
+  /* Cards */
+  --card-bg: #fff8dc; /* Cream card background */
+  --card-border: #cd853f; /* Orange-brown border */
+  --card-accent: #228b22; /* Green accents */
+
   /* UI elementy */
-  --button-primary: #8B4513;
-  --button-secondary: #CD853F;
-  --success: #228B22;
-  --warning: #FF8C00;
-  --danger: #DC143C;
-  
+  --button-primary: #8b4513;
+  --button-secondary: #cd853f;
+  --success: #228b22;
+  --warning: #ff8c00;
+  --danger: #dc143c;
+
   /* Cienie i efekty */
   --shadow-light: 0 2px 4px rgba(139, 69, 19, 0.1);
   --shadow-medium: 0 4px 8px rgba(139, 69, 19, 0.15);
   --border-radius: 8px;
-  
-  /* Responsywność */
-  --max-width: 480px; /* Maksymalna szerokość dla telefonów */
+
+  /* Responsiveness */
+  --max-width: 480px; /* Maximum width for phones */
   --padding: 1rem;
   --gap: 0.75rem;
 }
@@ -42,7 +46,7 @@ html {
 }
 
 body {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   line-height: 1.5;
   color: var(--text-primary);
   background: var(--bg-primary);
@@ -59,7 +63,12 @@ body {
 }
 
 /* Typografia */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--text-header);
   font-weight: bold;
   margin-bottom: var(--gap);
@@ -106,7 +115,7 @@ button:active {
 }
 
 .btn-primary:hover {
-  background: #7A3F11;
+  background: #7a3f11;
 }
 
 .btn-secondary {
@@ -115,7 +124,7 @@ button:active {
 }
 
 .btn-secondary:hover {
-  background: #B8732A;
+  background: #b8732a;
 }
 
 .btn-danger {
@@ -124,10 +133,10 @@ button:active {
 }
 
 .btn-danger:hover {
-  background: #B71C3C;
+  background: #b71c3c;
 }
 
-/* Layout główny */
+/* Main layout */
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -176,13 +185,25 @@ button:active {
   color: var(--danger);
 }
 
-.mt-1 { margin-top: 0.5rem; }
-.mt-2 { margin-top: var(--gap); }
-.mt-3 { margin-top: 1.5rem; }
+.mt-1 {
+  margin-top: 0.5rem;
+}
+.mt-2 {
+  margin-top: var(--gap);
+}
+.mt-3 {
+  margin-top: 1.5rem;
+}
 
-.mb-1 { margin-bottom: 0.5rem; }
-.mb-2 { margin-bottom: var(--gap); }
-.mb-3 { margin-bottom: 1.5rem; }
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+.mb-2 {
+  margin-bottom: var(--gap);
+}
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
 
 .flex {
   display: flex;
@@ -204,12 +225,12 @@ button:active {
   gap: var(--gap);
 }
 
-/* Responsywność */
+/* Responsiveness */
 @media (min-width: 481px) {
   .container {
     padding: 2rem;
   }
-  
+
   h1 {
     font-size: 2.5rem;
   }
