@@ -1,0 +1,232 @@
+/* Globalne style - Spółka ZOO Bot Pomocnik */
+
+:root {
+  /* Główne kolory (z instrukcji gry) */
+  --bg-primary: linear-gradient(135deg, #E8F5E8, #F0F8C7); /* Żółto-zielone tło */
+  --text-primary: #4A2C17; /* Ciemnobrązowy tekst */
+  --text-header: #8B4513; /* Brązowe nagłówki */
+  
+  /* Karty */
+  --card-bg: #FFF8DC; /* Kremowe tło kart */
+  --card-border: #CD853F; /* Pomarańczowo-brązowa ramka */
+  --card-accent: #228B22; /* Zielone akcenty */
+  
+  /* UI elementy */
+  --button-primary: #8B4513;
+  --button-secondary: #CD853F;
+  --success: #228B22;
+  --warning: #FF8C00;
+  --danger: #DC143C;
+  
+  /* Cienie i efekty */
+  --shadow-light: 0 2px 4px rgba(139, 69, 19, 0.1);
+  --shadow-medium: 0 4px 8px rgba(139, 69, 19, 0.15);
+  --border-radius: 8px;
+  
+  /* Responsywność */
+  --max-width: 480px; /* Maksymalna szerokość dla telefonów */
+  --padding: 1rem;
+  --gap: 0.75rem;
+}
+
+/* Reset i podstawowe style */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  min-height: 100vh;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typografia */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-header);
+  font-weight: bold;
+  margin-bottom: var(--gap);
+}
+
+h1 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+/* Przyciski */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-light);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--button-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #7A3F11;
+}
+
+.btn-secondary {
+  background: var(--button-secondary);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #B8732A;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #B71C3C;
+}
+
+/* Layout główny */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--padding);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* Karty */
+.card {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  box-shadow: var(--shadow-medium);
+}
+
+.card-header {
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: var(--gap);
+  padding-bottom: var(--gap);
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-warning {
+  color: var(--warning);
+}
+
+.text-danger {
+  color: var(--danger);
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: var(--gap); }
+.mt-3 { margin-top: 1.5rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: var(--gap); }
+.mb-3 { margin-bottom: 1.5rem; }
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-2 {
+  gap: var(--gap);
+}
+
+/* Responsywność */
+@media (min-width: 481px) {
+  .container {
+    padding: 2rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+
+/* Animacje */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
