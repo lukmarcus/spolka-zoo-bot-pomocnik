@@ -71,31 +71,45 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 
 ---
 
-## 🎯 Wersja 0.0.2 - Poprawki wizualne (bugfixy)
+## 🎯 Wersja 0.0.2 - Poprawki wizualne (bugfixy) ✅ UKOŃCZONA
 
-### Must Have (krytyczne błędy UX)
+### Must Have (krytyczne błędy UX) ✅
 
-- [ ] **Layout viewport issues**
+- [x] **Layout viewport issues**
 
-  - [ ] Naprawić urwane tło na dole ekranu
-  - [ ] Naprawić overflow - zawartość nie mieści się na ekranie
-  - [ ] Dodać prawidłowy scroll dla małych ekranów
-  - [ ] Sprawdzić `min-height: 100vh` vs `height: 100vh`
+  - [x] Naprawić urwane tło na dole ekranu
+  - [x] Naprawić overflow - zawartość nie mieści się na ekranie
+  - [x] Dodać prawidłowy scroll dla małych ekranów
+  - [x] Sprawdzić `min-height: 100vh` vs `height: 100vh`
 
-- [ ] **Responsive improvements**
+- [x] **Responsive improvements**
 
-  - [ ] Dostosować rozmiary czcionek na małych ekranach
-  - [ ] Sprawdzić padding/margin w Layout.tsx
-  - [ ] Testować na różnych wysokościach ekranów (phones)
+  - [x] Dostosować rozmiary czcionek na małych ekranach
+  - [x] Sprawdzić padding/margin w Layout.tsx
+  - [x] Testować na różnych wysokościach ekranów (phones)
 
-- [ ] **CSS fixes**
-  - [ ] Upewnić się że gradient tła pokrywa cały ekran
-  - [ ] Dodać `overflow-y: auto` gdzie potrzeba
-  - [ ] Sprawdzić czy meta viewport jest prawidłowy
+- [x] **CSS fixes**
 
-### 🎯 Cel v0.0.2
+  - [x] Upewnić się że gradient tła pokrywa cały ekran
+  - [x] Dodać `overflow-y: auto` gdzie potrzeba
+  - [x] Sprawdzić czy meta viewport jest prawidłowy
 
-Naprawić krytyczne problemy wizualne z v0.0.1 które uniemożliwiają wygodne korzystanie z aplikacji na małych ekranach.
+- [x] **Technical improvements**
+  - [x] Automatyczne pobieranie wersji z package.json
+  - [x] Dodanie `resolveJsonModule` w TypeScript
+
+### 🎉 Osiągnięcia v0.0.2 - KOMPLETNE ✅
+
+- ✅ Naprawiono wszystkie krytyczne bugi wizualne z v0.0.1
+- ✅ Responsywne czcionki z `clamp()` na wszystkich ekranach
+- ✅ Prawidłowe wyświetlanie tła na mobile (100dvh + background-attachment)
+- ✅ Automatyczne wersje pobierane z package.json
+- ✅ Lepsze wsparcie dla bardzo małych ekranów (≤380px)
+- ✅ Build i lint bez błędów
+
+### 🎯 Cel v0.0.2 - ZREALIZOWANY ✅
+
+Naprawić krytyczne problemy wizualne z v0.0.1 które uniemożliwiały wygodne korzystanie z aplikacji na małych ekranach.
 
 ---
 
@@ -232,11 +246,11 @@ _Brak znanych problemów (projekt nie rozpoczęty)_
 
 ## 🎯 Następne kroki
 
-1. **Teraz**: Przejść do implementacji wersji 0.0.1
-2. **Po 0.0.1**: Zebrać feedback i zdefiniować konkretne karty botów
-3. **Po 0.1.0**: Testowanie z prawdziwą grą planszową
+1. **Teraz**: Przejść do implementacji wersji 0.1.0 - mechanika kart botów
+2. **Po 0.1.0**: Zebrać feedback i zdefiniować konkretne karty botów
+3. **Po 0.2.0**: Testowanie z prawdziwą grą planszową
 4. **Długoterminowo**: Rozważyć publikację w Google Play Store
 
 ---
 
-_Ostatnia aktualizacja: 2025-08-16_
+_Ostatnia aktualizacja: 2025-08-17_

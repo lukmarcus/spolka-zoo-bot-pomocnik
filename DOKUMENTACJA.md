@@ -21,24 +21,45 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 ### 🎯 Wersja 0.0.1 - Podstawowa struktura
 
-**Status**: 🔜 Planowana
+**Status**: ✅ Ukończona (2025-08-16)
 **Cel**: Setup projektu i podstawowa nawigacja
 
 **Funkcjonalności**:
 
-- [ ] Setup React + TypeScript + Vite
-- [ ] Podstawowy routing (React Router)
-- [ ] Responsywny layout dla telefonów (portrait)
-- [ ] Komponenty: Header, Navigation, Layout
-- [ ] **Kolory tematyczne**: Żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
+- [x] Setup React + TypeScript + Vite
+- [x] Podstawowy routing (React Router)
+- [x] Responsywny layout dla telefonów (portrait)
+- [x] Komponenty: Header, Navigation, Layout
+- [x] **Kolory tematyczne**: Żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
 
-**Pliki do stworzenia**:
+**Pliki utworzone**:
 
 - `src/App.tsx` - główny komponent
 - `src/components/Layout.tsx` - layout aplikacji
 - `src/pages/Home.tsx` - strona główna
 - `src/pages/Game.tsx` - ekran gry
 - `src/styles/` - style globalne
+
+---
+
+### 🎯 Wersja 0.0.2 - Poprawki wizualne
+
+**Status**: ✅ Ukończona (2025-08-17)
+**Cel**: Naprawienie krytycznych bugów responsywności
+
+**Poprawione problemy**:
+
+- [x] **Layout viewport**: Urwane tło na dole ekranu
+- [x] **Content overflow**: Zawartość niewidoczna na małych ekranach
+- [x] **Responsywność**: Czcionki za duże na telefonach
+- [x] **Technical**: Automatyczne wersje z package.json
+
+**Kluczowe zmiany**:
+
+- Użycie `100dvh` zamiast `100vh` dla mobile browsers
+- Responsywne czcionki z `clamp()`
+- Media queries dla ekranów ≤380px
+- `background-attachment: fixed` dla gradientu
 
 ---
 
