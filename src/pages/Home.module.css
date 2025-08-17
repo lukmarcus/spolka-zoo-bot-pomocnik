@@ -1,0 +1,151 @@
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 1rem;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+}
+
+.heroTitle {
+  color: var(--text-header);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.heroDescription {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.menuButton {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-light);
+  text-align: left;
+  width: 100%;
+}
+
+.menuButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--button-primary);
+}
+
+.menuButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f5f5f5;
+}
+
+.menuButton.primary {
+  border-color: var(--button-primary);
+  background: linear-gradient(135deg, var(--card-bg), #fef9dc);
+}
+
+.menuButton.primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #fef9dc, #fdf6c9);
+}
+
+.menuButtonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menuButtonTitle {
+  color: var(--text-header);
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.menuButtonDescription {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.info {
+  margin-top: auto;
+}
+
+.infoCard {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-light);
+}
+
+.infoCard h4 {
+  color: var(--text-header);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.featureList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.featureList li {
+  color: var(--text-primary);
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+/* Responsiveness */
+@media (min-width: 481px) {
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroDescription {
+    font-size: 1.2rem;
+  }
+
+  .menuButtonTitle {
+    font-size: 1.4rem;
+  }
+
+  .menuButtonDescription {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .heroTitle {
+    font-size: 1.75rem;
+  }
+
+  .heroDescription {
+    font-size: 1rem;
+  }
+
+  .menuButton {
+    padding: 1.25rem;
+  }
+}

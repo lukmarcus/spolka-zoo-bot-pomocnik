@@ -1,0 +1,148 @@
+.gameContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+}
+
+.placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.placeholderTitle {
+  color: var(--text-header);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.placeholderText {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.preview {
+  width: 100%;
+  max-width: 350px;
+}
+
+.mockCard {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+}
+
+.mockCardHeader {
+  background: var(--button-secondary);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mockCardHeader h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.mockCounter {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.mockCardContent {
+  padding: 1.5rem;
+}
+
+.mockCardContent h4 {
+  color: var(--text-header);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.mockEffect,
+.mockAbility {
+  background: rgba(139, 69, 19, 0.05);
+  border-left: 3px solid var(--card-accent);
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.mockEffect:last-child,
+.mockAbility:last-child {
+  margin-bottom: 0;
+}
+
+.mockEffect strong,
+.mockAbility strong {
+  color: var(--text-header);
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.mockActions {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.mockActions button {
+  width: 100%;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.gameControls {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.gameControls button {
+  min-width: 150px;
+}
+
+/* Responsiveness */
+@media (min-width: 481px) {
+  .placeholderTitle {
+    font-size: 1.75rem;
+  }
+
+  .placeholderText {
+    font-size: 1.2rem;
+  }
+
+  .preview {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 360px) {
+  .placeholder {
+    padding: 1rem;
+  }
+
+  .mockCardHeader {
+    padding: 0.75rem;
+  }
+
+  .mockCardContent {
+    padding: 1rem;
+  }
+
+  .mockActions {
+    padding: 0.75rem 1rem 1rem;
+  }
+}

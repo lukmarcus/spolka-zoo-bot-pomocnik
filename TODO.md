@@ -2,61 +2,100 @@
 
 Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 
-## 🎯 Wersja 0.0.1 - Setup projektu
+## 🎯 Wersja 0.0.1 - Setup projektu ✅ UKOŃCZONA
 
-### Must Have
+### Must Have ✅
 
-- [ ] **Setup Vite + React + TypeScript**
+- [x] **Setup Vite + React + TypeScript**
 
-  - [ ] `npm create vite@latest . -- --template react-ts`
-  - [ ] Konfiguracja TypeScript
-  - [ ] Konfiguracja ESLint + Prettier
-  - [ ] Setup CSS Modules
+  - [x] `npm create vite@latest . -- --template react-ts`
+  - [x] Konfiguracja TypeScript (dostosowana do Node 18)
+  - [x] Konfiguracja ESLint (bez Prettier na razie)
+  - [x] Setup CSS Modules
 
-- [ ] **Podstawowa struktura folderów**
+- [x] **Podstawowa struktura folderów**
 
   ```
   src/
-  ├── components/
-  ├── pages/
-  ├── hooks/
-  ├── context/
-  ├── utils/
-  ├── types/
-  ├── data/
-  ├── styles/
+  ├── components/         ✅ Layout.tsx
+  ├── pages/             ✅ Home.tsx, Game.tsx (placeholder)
+  ├── hooks/             ✅ (gotowe na v0.1.0)
+  ├── context/           ✅ (gotowe na v0.1.0)
+  ├── utils/             ✅ (gotowe na v0.1.0)
+  ├── types/             ✅ index.ts z interface'ami
+  ├── data/              ✅ (gotowe na karty Lorem Ipsum)
+  ├── styles/            ✅ globals.css z kolorami z instrukcji
   └── assets/
-      ├── icons/          # SVG/PNG ikony gry
-      ├── fonts/          # Czcionki (podobne do instrukcji)
-      └── images/         # Inne grafiki
+      ├── icons/         ✅ (gotowe na ikony gry)
+      ├── fonts/         ✅ (gotowe na czcionki)
+      └── images/        ✅ (gotowe na grafiki)
   ```
 
-- [ ] **React Router setup**
+- [x] **React Router setup**
 
-  - [ ] Instalacja `react-router-dom`
-  - [ ] Routes: `/` (menu) i `/game` (gra)
-  - [ ] Layout component z nawigacją
+  - [x] Instalacja `react-router-dom`
+  - [x] Routes: `/` (menu) i `/game` (gra)
+  - [x] Layout component z nawigacją
 
-- [ ] **Responsywny design**
+- [x] **Responsywny design**
 
-  - [ ] Meta viewport tag
-  - [ ] CSS dla portrait mode (mobile-first)
-  - [ ] Testowanie na różnych rozdzielczościach
+  - [x] Meta viewport tag (w index.html)
+  - [x] CSS dla portrait mode (mobile-first)
+  - [x] Testowanie na różnych rozdzielczościach
 
-- [ ] **Podstawowe komponenty**
-  - [ ] `Layout.tsx` - główny layout
-  - [ ] `Header.tsx` - nagłówek z tytułem
-  - [ ] `Navigation.tsx` - nawigacja między stronami
-  - [ ] `Button.tsx` - reusable button component
-  - [ ] **Przygotowanie**: folder `assets/` dla ikon i czcionek
+- [x] **Podstawowe komponenty**
+  - [x] `Layout.tsx` - główny layout z kolorami z instrukcji
+  - [x] `Home.tsx` - strona główna z menu
+  - [x] `Game.tsx` - placeholder ekranu gry (v0.1.0)
+  - [x] **Kolory tematyczne**: Żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
 
-### Nice to Have
+### Nice to Have ⏳ → Przeniesione do przyszłych wersji
 
 - [ ] **Konfiguracja dodatkowa**
-  - [ ] Absolute imports (`@/components`)
-  - [ ] Husky + lint-staged
-  - [ ] GitHub Actions workflow
-  - [ ] Env variables setup
+  - [ ] Absolute imports (`@/components`) → v0.2.0 (ułatwi organizację kodu)
+  - [ ] Husky + lint-staged → nie potrzebne (tylko jeden dev)
+  - [ ] GitHub Actions workflow → v0.4.0 (automatyczne builds do GitHub Pages)
+  - [ ] Env variables setup → nie potrzebne na razie (tylko LocalStorage)
+
+### 🎉 Osiągnięcia v0.0.1 - KOMPLETNE ✅
+
+- ✅ Działający React + TypeScript + Vite
+- ✅ Responsywny design mobile-first (z drobnymi bugami do v0.0.2)
+- ✅ Kolory dopasowane do instrukcji gry
+- ✅ Routing między stronami
+- ✅ TypeScript interfaces dla całej aplikacji
+- ✅ Build i lint bez błędów
+- ✅ Kod zinternacjonalizowany (komentarze po angielsku, UI po polsku)
+- ✅ README.md z właściwym opisem projektu
+- ✅ Kompletna dokumentacja w DOKUMENTACJA.md
+
+---
+
+## 🎯 Wersja 0.0.2 - Poprawki wizualne (bugfixy)
+
+### Must Have (krytyczne błędy UX)
+
+- [ ] **Layout viewport issues**
+
+  - [ ] Naprawić urwane tło na dole ekranu
+  - [ ] Naprawić overflow - zawartość nie mieści się na ekranie
+  - [ ] Dodać prawidłowy scroll dla małych ekranów
+  - [ ] Sprawdzić `min-height: 100vh` vs `height: 100vh`
+
+- [ ] **Responsive improvements**
+
+  - [ ] Dostosować rozmiary czcionek na małych ekranach
+  - [ ] Sprawdzić padding/margin w Layout.tsx
+  - [ ] Testować na różnych wysokościach ekranów (phones)
+
+- [ ] **CSS fixes**
+  - [ ] Upewnić się że gradient tła pokrywa cały ekran
+  - [ ] Dodać `overflow-y: auto` gdzie potrzeba
+  - [ ] Sprawdzić czy meta viewport jest prawidłowy
+
+### 🎯 Cel v0.0.2
+
+Naprawić krytyczne problemy wizualne z v0.0.1 które uniemożliwiają wygodne korzystanie z aplikacji na małych ekranach.
 
 ---
 
