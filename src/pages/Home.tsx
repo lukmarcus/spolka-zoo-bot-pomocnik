@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import styles from "./Home.module.css";
+import packageJson from "../../package.json";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -68,10 +69,11 @@ const Home: React.FC = () => {
 
       <div className={styles.info}>
         <div className={styles.infoCard}>
-          <h4>Wersja 0.0.1</h4>
+          <h4>Wersja {packageJson.version}</h4>
           <ul className={styles.featureList}>
             <li>✅ Podstawowa nawigacja</li>
             <li>✅ Layout z kolorami z instrukcji</li>
+            <li>✅ Poprawki responsywności</li>
             <li>⏳ Mechanika kart (v0.1.0)</li>
             <li>⏳ Zapis/wczytywanie (v0.2.0)</li>
           </ul>
