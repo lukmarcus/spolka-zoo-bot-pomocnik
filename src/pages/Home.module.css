@@ -1,7 +1,7 @@
 .hero {
   text-align: center;
   margin-bottom: 3rem;
-  padding: 2rem 1rem;
+  padding: clamp(1rem, 4vw, 2rem) clamp(0.5rem, 3vw, 1rem); /* Responsive padding */
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: var(--border-radius);
@@ -10,13 +10,14 @@
 
 .heroTitle {
   color: var(--text-header);
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem); /* Responsive font size */
   margin-bottom: 1rem;
+  line-height: 1.3;
 }
 
 .heroDescription {
   color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 3vw, 1.1rem); /* Responsive font size */
   line-height: 1.6;
   margin: 0;
   max-width: 400px;
