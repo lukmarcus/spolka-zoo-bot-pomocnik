@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Layout.module.css";
+import packageJson from "../../package.json";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -19,7 +20,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title = "Spółka ZOO" }) => 
       <main className={styles.main}>{children}</main>
 
       <footer className={styles.footer}>
-        <p className={styles.footerText}>v0.0.1 • Pomocnik do gry planszowej</p>
+        <p className={styles.footerText}>
+          v{packageJson.version} • Pomocnik do gry planszowej
+        </p>
       </footer>
     </div>
   );
