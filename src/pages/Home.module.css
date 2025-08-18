@@ -1,29 +1,28 @@
 .hero {
   text-align: center;
   margin-bottom: 3rem;
-  padding: clamp(0.75rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem); /* More conservative padding for 320px */
+  padding: 2rem 1rem; /* Simplified - will be overridden by media queries */
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-medium);
-  box-sizing: border-box; /* Include border and padding in width */
-  max-width: 100%; /* Ensure it doesn't exceed container */
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .heroTitle {
   color: var(--text-header);
-  font-size: clamp(1.5rem, 4vw, 2rem); /* Responsive font size */
+  font-size: var(--font-size-hero-title);
   margin-bottom: 1rem;
   line-height: 1.3;
 }
 
 .heroDescription {
   color: var(--text-primary);
-  font-size: clamp(0.95rem, 3vw, 1.1rem); /* Responsive font size */
+  font-size: var(--font-size-hero-desc);
   line-height: 1.6;
-  margin: 0;
-  max-width: 400px;
   margin: 0 auto;
+  max-width: 400px;
 }
 
 .menu {
@@ -37,13 +36,13 @@
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: var(--border-radius);
-  padding: clamp(1rem, 4vw, 1.5rem); /* Responsive padding for small screens */
+  padding: 1.5rem; /* Simplified - will be overridden by media queries */
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-light);
   text-align: left;
   width: 100%;
-  box-sizing: border-box; /* Explicit box-sizing */
+  box-sizing: border-box;
 }
 
 .menuButton:hover:not(:disabled) {
@@ -75,14 +74,14 @@
 
 .menuButtonTitle {
   color: var(--text-header);
-  font-size: 1.3rem;
+  font-size: var(--font-size-menu-title);
   font-weight: bold;
   margin: 0;
 }
 
 .menuButtonDescription {
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: var(--font-size-menu-desc);
   margin: 0;
   opacity: 0.8;
 }
@@ -95,9 +94,9 @@
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius);
-  padding: clamp(1rem, 4vw, 1.5rem); /* Responsive padding for small screens */
+  padding: 1.5rem; /* Simplified - will be overridden by media queries */
   box-shadow: var(--shadow-light);
-  box-sizing: border-box; /* Explicit box-sizing for safety */
+  box-sizing: border-box;
 }
 
 .infoCard h4 {
@@ -140,7 +139,7 @@
 @media (max-width: 360px) {
   /* Unified style for all small screens ≤360px (including WCAG 320px) */
   .hero {
-    padding: 0.25rem 0.25rem; /* Ultra minimal padding */
+    padding: var(--card-padding); /* Use CSS custom property */
     margin-bottom: 1rem;
     border-width: 1px; /* Thinner border to save space */
     width: calc(100% - 0.5rem); /* Leave only 0.25rem margin on each side */
@@ -149,23 +148,15 @@
     max-width: none; /* Override any max-width constraints */
   }
 
-  .heroTitle {
-    font-size: 1.4rem;
-  }
-
-  .heroDescription {
-    font-size: 0.85rem;
-  }
-
   .menuButton {
-    padding: 0.5rem 0.25rem; /* Ultra reduced padding */
+    padding: 0.5rem var(--card-padding); /* Use CSS custom property */
     margin: 0 auto; /* Center the button */
     width: calc(100% - 0.5rem); /* Leave only 0.25rem margin on each side */
     max-width: none; /* Override any max-width constraints */
   }
 
   .infoCard {
-    padding: 0.5rem 0.25rem; /* Ultra reduced padding */
+    padding: 0.5rem var(--card-padding); /* Use CSS custom property */
     margin: 0 auto; /* Center the card */
     width: calc(100% - 0.5rem); /* Leave only 0.25rem margin on each side */
     max-width: none; /* Override any max-width constraints */
