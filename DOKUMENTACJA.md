@@ -63,6 +63,34 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 ---
 
+### 🎯 Wersja 0.0.3 - Responsywność WCAG
+
+**Status**: ✅ Ukończona (2025-08-18)
+**Cel**: WCAG compliance i optymalizacja CSS
+
+**Poprawione problemy**:
+
+- [x] **320px WCAG requirement**: Poziomy overflow na najwęższych ekranach
+- [x] **Media query conflicts**: Konflikty między różnymi zakresami CSS
+- [x] **Card sizing jumps**: Skoki szerokości kart między breakpointami
+- [x] **CSS architecture**: Duplikacja kodu i konfliktujące reguły
+
+**Kluczowe zmiany**:
+
+- Ujednolicony styl dla całego zakresu ≤360px (eliminuje konflikty)
+- CSS custom properties dla responsive font-size i spacing
+- Refaktor: eliminacja `clamp()` na rzecz centralnego zarządzania
+- Optymalizacja bundle size (10.49kB → 10.03kB)
+- Zero poziomego przewijania na wszystkich urządzeniach mobilnych
+
+**Technical improvements**:
+
+- Wprowadzono `--font-size-*` i `--card-padding` CSS variables
+- Uproszono media queries z wielu zakresów do `@media (max-width: 360px)`
+- Wyeliminowano konflikty między globals.css, Layout.module.css i Home.module.css
+
+---
+
 ### 🎯 Wersja 0.1.0 - Podstawowa mechanika bota
 
 **Status**: 🔜 Planowana

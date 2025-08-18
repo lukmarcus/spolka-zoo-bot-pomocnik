@@ -17,8 +17,8 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.0.2 ✅  
-**Status**: Poprawki wizualne ukończone  
+**Aktualna wersja**: 0.0.3 ✅  
+**Status**: Responsywność WCAG ukończona  
 **Następna wersja**: 0.1.0 - Mechanika kart botów
 
 ## 📋 Szybki start
@@ -77,6 +77,7 @@ Zawiera:
 | ------ | ------------ | ------------------------------------------- |
 | 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja       |
 | 0.0.2  | ✅ Ukończona | Poprawki wizualne i responsywności          |
+| 0.0.3  | ✅ Ukończona | WCAG 320px compliance, CSS refactoring      |
 | 0.1.0  | 🔜 Planowana | Podstawowa mechanika bota (1 bot, 13 kart)  |
 | 0.2.0  | 🔜 Planowana | Zapis i wczytywanie gry                     |
 | 0.3.0  | 🔜 Planowana | Wiele botów na jednej talii                 |
@@ -120,10 +121,6 @@ src/
 ## 📄 Licencja
 
 MIT License - projekt open source
-
-## 🎲 O grze Spółka ZOO
-
-Spółka ZOO to gra planszowa, w której gracze zarządzają ogrodami zoologicznymi. Boty w grze to sztuczni gracze sterowani przez talię 13 kart, które określają ich akcje w każdej turze.
 
 ---
 

@@ -13,6 +13,33 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Ekran gry z jednym botem
 - Dobieranie kart i przetasowanie
 
+## [0.0.3] - 2025-08-18
+
+### Naprawione
+
+- 🐛 **WCAG 320px compliance**: Naprawiono poziomy overflow na ekranach 320px (wymóg dostępności)
+- 🐛 **Horizontal scrolling**: Wyeliminowano poziome przewijanie na małych ekranach (320px-360px)
+- 🐛 **CSS media query conflicts**: Naprawiono konflikty między różnymi zakresami responsywności
+- 🐛 **Card sizing issues**: Ujednolicono szerokość kart dla płynnych przejść między rozmiarami ekranu
+
+### Dodane
+
+- ✅ **CSS custom properties**: Wprowadzono zmienne dla responsywnych font-size i spacing
+- ✅ **Unified small screen support**: Jeden spójny styl dla wszystkich ekranów ≤360px
+- ✅ **Responsive font system**: System zarządzania czcionkami przez CSS custom properties
+
+### Zmienione
+
+- 🔧 **Media queries**: Uproszczono z wielu zakresów do jednolitego `@media (max-width: 360px)`
+- 🔧 **CSS architecture**: Refaktor - eliminacja `clamp()` na rzecz CSS custom properties
+- 🔧 **Small screen layout**: Zoptymalizowano layout dla ekranów 320px-360px z równymi odstępami
+- 🔧 **Code maintainability**: Zmniejszono duplikację CSS poprzez centralne zarządzanie responsive styles
+
+### Techniczne
+
+- 📦 **CSS bundle size**: Zoptymalizowano z 10.49kB → 10.03kB
+- 🧹 **Code cleanup**: Usunięto konfliktujące reguły CSS i uproszono strukturę responsywności
+
 ## [0.0.2] - 2025-08-17
 
 ### Naprawione
