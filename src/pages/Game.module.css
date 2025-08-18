@@ -1,11 +1,15 @@
+/* Game Page Styles */
+
 .gameContainer {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   height: 100%;
+  min-height: calc(100vh - 140px); /* Account for layout header/padding */
 }
 
-.placeholder {
+/* Game Start Screen */
+.gameStart {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -15,134 +19,199 @@
   padding: 2rem;
 }
 
-.placeholderTitle {
-  color: var(--text-header);
-  font-size: 1.5rem;
+.startTitle {
+  color: var(--color-primary);
+  font-size: var(--font-size-xl);
   margin-bottom: 1rem;
+  font-weight: 600;
 }
 
-.placeholderText {
-  color: var(--text-primary);
-  font-size: 1.1rem;
+.startDescription {
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
   margin-bottom: 2rem;
-  opacity: 0.8;
+  max-width: 500px;
+  line-height: 1.5;
 }
 
-.preview {
-  width: 100%;
-  max-width: 350px;
+/* Active Game */
+.gameActive {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.mockCard {
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-medium);
-  overflow: hidden;
-}
-
-.mockCardHeader {
-  background: var(--button-secondary);
-  color: white;
-  padding: 1rem;
+.gameStatus {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--color-background);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
 }
 
-.mockCardHeader h3 {
-  margin: 0;
-  font-size: 1.2rem;
+.statusInfo {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cardCounter {
+  background: var(--color-primary);
   color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
 }
 
-.mockCounter {
-  font-size: 0.9rem;
-  opacity: 0.9;
+.remainingCards {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
 }
 
-.mockCardContent {
-  padding: 1.5rem;
+.shuffleInfo {
+  color: var(--color-secondary);
+  font-size: var(--font-size-sm);
+  font-style: italic;
 }
 
-.mockCardContent h4 {
-  color: var(--text-header);
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
+/* Card Display Area */
+.cardArea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  min-height: 300px;
 }
 
-.mockEffect,
-.mockAbility {
-  background: rgba(139, 69, 19, 0.05);
-  border-left: 3px solid var(--card-accent);
-  padding: 0.75rem;
-  margin-bottom: 0.75rem;
-  border-radius: 0 4px 4px 0;
+.currentCard {
+  animation: slideIn 0.3s ease-out;
 }
 
-.mockEffect:last-child,
-.mockAbility:last-child {
-  margin-bottom: 0;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.mockEffect strong,
-.mockAbility strong {
-  color: var(--text-header);
-  display: block;
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
+.noCard {
+  text-align: center;
+  color: var(--color-text);
+  background: var(--color-background);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px dashed var(--color-border);
 }
 
-.mockActions {
-  padding: 1rem 1.5rem 1.5rem;
+.noCard h3 {
+  color: var(--color-secondary);
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-lg);
 }
 
-.mockActions button {
-  width: 100%;
-  opacity: 0.6;
-  cursor: not-allowed;
+.noCard p {
+  margin: 0;
+  font-size: var(--font-size-base);
 }
 
+/* Game Controls */
 .gameControls {
   display: flex;
+  gap: 1rem;
   justify-content: center;
-  padding-top: 1rem;
-  border-top: 1px solid var(--card-border);
+  flex-wrap: wrap;
+  padding: 1rem;
 }
 
 .gameControls button {
-  min-width: 150px;
+  min-width: 140px;
+  font-size: var(--font-size-sm);
 }
 
-/* Responsiveness */
-@media (min-width: 481px) {
-  .placeholderTitle {
-    font-size: 1.75rem;
-  }
-
-  .placeholderText {
-    font-size: 1.2rem;
-  }
-
-  .preview {
-    max-width: 400px;
-  }
+.gameControls button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
-@media (max-width: 360px) {
-  .placeholder {
+.gameControls button:disabled:hover {
+  transform: none;
+}
+
+/* Bottom Controls */
+.bottomControls {
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .gameContainer {
+    gap: 1.5rem;
+  }
+
+  .gameStatus {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
     padding: 1rem;
   }
 
-  .mockCardHeader {
-    padding: 0.75rem;
+  .statusInfo {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    width: 100%;
   }
 
-  .mockCardContent {
+  .cardArea {
+    padding: 0.5rem;
+    min-height: 250px;
+  }
+
+  .gameControls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .gameControls button {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .startTitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .startDescription {
+    font-size: var(--font-size-base);
+    padding: 0 1rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .gameContainer {
+    gap: 1rem;
+  }
+
+  .gameStart {
     padding: 1rem;
   }
 
-  .mockActions {
-    padding: 0.75rem 1rem 1rem;
+  .cardArea {
+    min-height: 200px;
   }
 }

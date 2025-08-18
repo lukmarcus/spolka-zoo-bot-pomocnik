@@ -1,10 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useGame } from "../context/GameContext";
+import { BOT_CARDS } from "../data/botCards";
 import Layout from "../components/Layout";
+import BotCard from "../components/BotCard";
 import styles from "./Game.module.css";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
+  const game = useGame();
 
   const handleBackToMenu = () => {
     const confirmLeave = window.confirm(
@@ -16,42 +20,79 @@ const Game: React.FC = () => {
     }
   };
 
+  const currentCardId = game.getCurrentCard();
+  const currentCard =
+    currentCardId !== null
+      ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
+      : null;
+
   return (
     <Layout title="Gra">
       <div className={styles.gameContainer}>
-        <div className={styles.placeholder}>
-          <h2 className={styles.placeholderTitle}>Ekran gry w budowie</h2>
-          <p className={styles.placeholderText}>
-            Mechanika kart i botów będzie dostępna w wersji 0.1.0
-          </p>
-
-          <div className={styles.preview}>
-            <div className={styles.mockCard}>
-              <div className={styles.mockCardHeader}>
-                <h3>Bot #1</h3>
-                <span className={styles.mockCounter}>Karta 1/13</span>
+        {!game.isGameStarted() ? (
+          <div className={styles.gameStart}>
+            <h2 className={styles.startTitle}>Spółka ZOO Bot Pomocnik</h2>
+            <p className={styles.startDescription}>
+              Kliknij "Rozpocznij grę" aby przetasować talię i wylosować
+              pierwszą kartę bota.
+            </p>
+            <button className="btn-primary" onClick={game.newGame}>
+              🎲 Rozpocznij grę
+            </button>
+          </div>
+        ) : (
+          <div className={styles.gameActive}>
+            <div className={styles.gameStatus}>
+              <div className={styles.statusInfo}>
+                <span className={styles.cardCounter}>
+                  Karta {game.state.currentCardIndex + 1}/{BOT_CARDS.length}
+                </span>
+                <span className={styles.remainingCards}>
+                  Pozostało: {game.getCardsRemaining()}
+                </span>
               </div>
 
-              <div className={styles.mockCardContent}>
-                <h4>Karta Bota #1</h4>
-                <div className={styles.mockEffect}>
-                  <strong>Efekt:</strong> Lorem ipsum dolor sit amet consectetur
+              {game.state.shuffleCount > 0 && (
+                <span className={styles.shuffleInfo}>
+                  Przetasowano: {game.state.shuffleCount}x
+                </span>
+              )}
+            </div>
+
+            <div className={styles.cardArea}>
+              {currentCard ? (
+                <BotCard card={currentCard} className={styles.currentCard} />
+              ) : (
+                <div className={styles.noCard}>
+                  <h3>Koniec talii</h3>
+                  <p>Wszystkie karty zostały wykorzystane.</p>
                 </div>
-                <div className={styles.mockAbility}>
-                  <strong>Zdolność:</strong> Adipiscing elit sed do eiusmod
-                </div>
-              </div>
+              )}
+            </div>
 
-              <div className={styles.mockActions}>
-                <button className="btn-primary" disabled>
-                  Dobierz następną kartę
-                </button>
-              </div>
+            <div className={styles.gameControls}>
+              <button
+                className="btn-primary"
+                onClick={game.drawCard}
+                disabled={game.isDeckExhausted()}
+              >
+                {game.isDeckExhausted()
+                  ? "Talia wyczerpana"
+                  : "🎯 Dobierz następną kartę"}
+              </button>
+
+              <button className="btn-secondary" onClick={game.shuffleDeck}>
+                🔀 Przetasuj talię
+              </button>
+
+              <button className="btn-outline" onClick={game.resetGame}>
+                🔄 Reset gry
+              </button>
             </div>
           </div>
-        </div>
+        )}
 
-        <div className={styles.gameControls}>
+        <div className={styles.bottomControls}>
           <button className="btn-secondary" onClick={handleBackToMenu}>
             ← Powrót do menu
           </button>
