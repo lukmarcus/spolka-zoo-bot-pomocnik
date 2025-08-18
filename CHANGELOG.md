@@ -5,13 +5,47 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0] - 2025-08-19
+
+### ✨ Dodane
+
+- **🎮 Kompletna mechanika kart**
+  - 13 kart botów Lorem Ipsum z efektami i zdolnościami
+  - Losowanie, tasowanie i reset kart
+  - Zarządzanie stanem gry z React Context + useReducer
+  - Komponent BotCard z responsywnym designem
+  - Kontrolki gry: "Dobierz kartę", "Przetasuj talię", "Reset gry"
+  - Auto-start gry po wejściu na stronę
+  - Statystyki gry: aktualna karta, pozostałe karty, liczba tasowań
+
+### 🎯 Doświadczenie użytkownika
+
+- Płynne animacje kart z CSS keyframes
+- Disabled states dla przycisków gdy to właściwe
+- Mobile-first responsive design (320px+ WCAG compliant)
+- Intuicyjny flow: Home → "Rozpocznij grę" → natychmiastowe wyświetlenie karty
+
+### 🏗️ Techniczne
+
+- TypeScript full type safety z custom interfaces
+- System CSS custom properties dla spójnego stylingu
+- Profesjonalna struktura projektu z rozdzielonymi odpowiedzialnościami
+- Implementacja algorytmu Fisher-Yates shuffle
+- Czyste procesy build i lint
+
+### 🔧 Zmienione
+
+- Game.tsx: usunięto zbędny ekran startowy, auto-start gry
+- Struktura: skonsolidowano typy w /types/index.ts
+- CSS: optymalizacja i usunięcie nieużywanych reguł
+
 ## [Nie wydane]
 
-### Planowane w wersji 0.1.0
+### Planowane w wersji 0.2.0
 
-- Mechanika kart botów (Lorem Ipsum)
-- Ekran gry z jednym botem
-- Dobieranie kart i przetasowanie
+- Zapis i wczytywanie stanu gry
+- Kody gry do udostępniania
+- LocalStorage integration
 
 ## [0.0.3] - 2025-08-18
 

@@ -149,53 +149,84 @@ Naprawić krytyczne problemy wizualne z v0.0.1 które uniemożliwiały wygodne k
 
 ---
 
-## 🎯 Wersja 0.1.0 - Podstawowa mechanika bota
+## 🎯 Wersja 0.1.0 - Podstawowa mechanika bota ✅ UKOŃCZONA
 
-### Must Have (po 0.0.1)
+### Must Have (po 0.0.1) ✅
 
-- [ ] **Definicje kart botów**
+- [x] **Definicje kart botów**
 
-  - [ ] Plik `data/botCards.ts` z 13 kartami **Lorem Ipsum** (tymczasowo)
-  - [ ] TypeScript interface dla kart (1-2 efekty + opcjonalna zdolność)
-  - [ ] **Prawdziwe karty będą dostępne w ciągu tygodnia**
+  - [x] Plik `data/botCards.ts` z 13 kartami **Lorem Ipsum** (tymczasowo)
+  - [x] TypeScript interface dla kart (1-2 efekty + opcjonalna zdolność)
+  - [x] **Prawdziwe karty będą dostępne w ciągu tygodnia**
 
-- [ ] **Stan gry**
+- [x] **Stan gry**
 
-  - [ ] React Context dla stanu gry
-  - [ ] useReducer dla zarządzania kartami
-  - [ ] Hook `useGameState`
+  - [x] React Context dla stanu gry
+  - [x] useReducer dla zarządzania kartami
+  - [x] Hook `useGame`
 
-- [ ] **Ekran gry**
+- [x] **Ekran gry**
 
-  - [ ] Component `GameScreen.tsx`
-  - [ ] **Wyświetlanie karty**: nazwa + efekty + zdolność (tylko UI!)
-  - [ ] Licznik kart (X/13)
-  - [ ] Przycisk "Dobierz kartę"
-  - [ ] **Style**: żółto-zielone tło, brązowe nagłówki (jak w instrukcji)
+  - [x] Component `Game.tsx` z pełną funkcjonalnością
+  - [x] **Wyświetlanie karty**: komponent `BotCard.tsx` z nazwą + efektami + zdolnością
+  - [x] Licznik kart (X/13) i pozostałych kart
+  - [x] Przycisk "Dobierz kartę", "Przetasuj talię", "Reset gry"
+  - [x] **Style**: responsywne z kolorami gry, animacje transitions
 
-- [ ] **Logika gry**
-  - [ ] Tasowanie kart na start
-  - [ ] Dobieranie następnej karty
-  - [ ] Przetasowanie po wyczerpaniu talii
-  - [ ] **Uwaga**: Aplikacja NIE rozpatruje efektów - tylko je wyświetla!
+- [x] **Logika gry**
+  - [x] Tasowanie kart na start (`newGame()`)
+  - [x] Dobieranie następnej karty (`drawCard()`)
+  - [x] Przetasowanie w dowolnym momencie (`shuffleDeck()`)
+  - [x] Reset gry do stanu początkowego (`resetGame()`)
+  - [x] **Auto-start**: gra automatycznie startuje po wejściu na stronę
+
+### Nice to Have ✅
+
+- [x] **UX improvements**
+  - [x] Smooth transitions i animacje kart
+  - [x] Disabled states dla przycisków
+  - [x] Loading states w trakcie operacji
+
+### 🎯 Cel v0.1.0 - ZREALIZOWANY ✅
+
+Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełnym interfejsem użytkownika.
+
+---
+
+## 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry
+
+### Must Have
+
+- [ ] **Zapis stanu gry**
+
+  - [ ] Serialization GameState do JSON
+  - [ ] LocalStorage integration
+  - [ ] Auto-save przy każdej akcji
+  - [ ] Restore stanu przy reload strony
+
+- [ ] **Share game state**
+
+  - [ ] Base64 encoding stanu gry
+  - [ ] Generator kodów gry (6-8 znaków)
+  - [ ] Kopia kodu do schowka
+  - [ ] Walidacja kodów z checksumą
+
+- [ ] **UI dla zapisu**
+  - [ ] Przycisk "Udostępnij grę"
+  - [ ] Modal z kodem do skopiowania
+  - [ ] Input do wczytania kodu
+  - [ ] Error handling dla błędnych kodów
 
 ### Nice to Have
 
-- [ ] **UX improvements**
-  - [ ] Loading states
-  - [ ] Smooth transitions
-  - [ ] Error handling
+- [ ] **Export/Import**
+  - [ ] Eksport do pliku JSON
+  - [ ] Import z pliku
+  - [ ] QR kod dla mobile sharing
 
 ---
 
 ## 🎯 Backlog (przyszłe wersje)
-
-### Wersja 0.2.0 - Zapis gry
-
-- [ ] Base64 encoding/decoding
-- [ ] LocalStorage integration
-- [ ] Game code generation
-- [ ] Code validation with checksum
 
 ### Wersja 0.3.0 - Wiele botów
 

@@ -4,22 +4,46 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - cyfrowy zamiennik
 
 ## 🎮 O projekcie
 
-Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spółka ZOO. Umożliwia grę z 1-4 botami, zarządzanie ich kartami i zapisywanie stanu gry.
+Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spółka ZOO. Umożliwia grę z botami, zarządzanie ich kartami i losowanie kart z talii.
 
 ### Główne funkcje
 
-- 🤖 Zarządzanie botami (1-4 sztuki)
-- 🃏 Symulacja talii 13 kart dla każdego bota
-- 💾 Zapisywanie i wczytywanie stanu gry
-- 📱 Responsywny design dla telefonów
-- 🎯 Licznik punktów graczy
-- 📊 Historia użytych kart
+- 🤖 Losowanie kart botów z talii 13 kart
+- 🎲 Tasowanie i dobieranie kolejnych kart
+- � Reset i przetasowanie talii
+- 📱 Responsywny design dla telefonów (320px+)
+- 🎯 Licznik pozostałych kart i statystyk gry
+- 📊 Wyświetlanie efektów i zdolności kart
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.0.3 ✅  
-**Status**: Responsywność WCAG ukończona  
-**Następna wersja**: 0.1.0 - Mechanika kart botów
+**Aktualna wersja**: 0.1.0 ✅  
+**Status**: Mechanika kart zaimplementowana  
+**Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+
+## ✨ What's New v0.1.0
+
+🎯 **Pełna mechanika gry**:
+
+- Losowanie i wyświetlanie kart botów (13 kart Lorem Ipsum)
+- Automatyczne tasowanie na start gry
+- Dobieranie kolejnych kart z animacjami
+- Przetasowanie talii w dowolnym momencie
+- Reset gry do stanu początkowego
+
+🎮 **Intuicyjny interfejs**:
+
+- Auto-start gry po kliknięciu "Rozpocznij grę"
+- Liczniki: aktualna karta, pozostałe karty, liczba tasowań
+- Responsive design 320px+ WCAG compliance
+- Smooth animations i visual feedback
+
+🛠️ **Solidna architektura**:
+
+- React Context + useReducer pattern
+- TypeScript full type safety
+- CSS custom properties system
+- Professional project structure
 
 ## 📋 Szybki start
 
@@ -73,17 +97,20 @@ Zawiera:
 
 ## 🗓️ Plan rozwoju
 
-| Wersja | Status       | Opis                                        |
-| ------ | ------------ | ------------------------------------------- |
-| 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja       |
-| 0.0.2  | ✅ Ukończona | Poprawki wizualne i responsywności          |
-| 0.0.3  | ✅ Ukończona | WCAG 320px compliance, CSS refactoring      |
-| 0.1.0  | 🔜 Planowana | Podstawowa mechanika bota (1 bot, 13 kart)  |
-| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie gry                     |
-| 0.3.0  | 🔜 Planowana | Wiele botów na jednej talii                 |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota               |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart                           |
-| ...    |              | Zobacz [DOKUMENTACJA.md](./DOKUMENTACJA.md) |
+| Wersja | Status       | Opis                                                  |
+| ------ | ------------ | ----------------------------------------------------- |
+| 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja                 |
+| 0.0.2  | ✅ Ukończona | Poprawki wizualne i responsywności                    |
+| 0.0.3  | ✅ Ukończona | WCAG 320px compliance, CSS refactoring                |
+| 0.1.0  | ✅ Ukończona | **Mechanika kart - losowanie, tasowanie, dobieranie** |
+| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie stanu gry                         |
+| 0.3.0  | 🔜 Planowana | Zarządzanie wieloma botami                            |
+| 0.1.0  | 🔜 Planowana | Podstawowa mechanika bota (1 bot, 13 kart)            |
+| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie gry                               |
+| 0.3.0  | 🔜 Planowana | Wiele botów na jednej talii                           |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart                                     |
+| ...    |              | Zobacz [DOKUMENTACJA.md](./DOKUMENTACJA.md)           |
 
 ## 🎨 Wygląd aplikacji
 

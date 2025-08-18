@@ -93,36 +93,52 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 ### 🎯 Wersja 0.1.0 - Podstawowa mechanika bota
 
-**Status**: 🔜 Planowana
+**Status**: ✅ Ukończona (2025-08-19)
 **Cel**: Działający bot z jedną talią 13 kart
 
-**Funkcjonalności**:
+**Zaimplementowane funkcjonalności**:
 
-- [ ] **System 13 kart bota** (tymczasowo Lorem Ipsum do czasu otrzymania prawdziwych)
-- [ ] Ekran gry z jednym botem
-- [ ] **Wyświetlanie karty**: Nazwa + 1-2 efekty + opcjonalna zdolność (tylko wyświetlanie!)
-- [ ] Licznik użytych kart (X/13)
-- [ ] Przycisk "Dobierz kartę" z potwierdzeniem
-- [ ] Przycisk powrotu do menu z ostrzeżeniem
-- [ ] Automatyczne przetasowanie po wyczerpaniu talii
+- ✅ **System 13 kart bota** (Lorem Ipsum - prawdziwe karty wkrótce)
+- ✅ **Ekran gry** z automatycznym startem przy wejściu
+- ✅ **Wyświetlanie karty**: Komponent `BotCard.tsx` z nazwą + efektami + zdolnością
+- ✅ **Licznik kart**: Aktualna karta (X/13) + pozostałe karty
+- ✅ **Kontrolki gry**: "Dobierz kartę", "Przetasuj talię", "Reset gry"
+- ✅ **UX**: Animacje, disabled states, responsive design
+- ✅ **Auto-tasowanie**: Automatyczne na start gry
 
-**Komponenty**:
+**Zaimplementowane komponenty**:
 
-- `BotCard.tsx` - wyświetlanie karty
-- `GameControls.tsx` - przyciski sterowania
-- `CardCounter.tsx` - licznik kart
-- `ConfirmDialog.tsx` - dialogi potwierdzenia
+- ✅ `BotCard.tsx` + `BotCard.module.css` - wyświetlanie karty z efektami
+- ✅ `Game.tsx` + `Game.module.css` - pełny ekran gry z kontrolkami
+- ✅ `GameContext.tsx` - zarządzanie stanem z useReducer
+- ✅ `useGame()` - custom hook do dostępu do kontekstu
 
-**Stan gry**:
+**Struktura stanu gry**:
 
 ```typescript
 interface GameState {
-  currentCardIndex: number;
-  cardSequence: number[]; // shuffled sequence 0-12
-  usedCards: number[];
-  shuffleCount: number;
+  currentCardIndex: number; // aktualny indeks (0-12)
+  cardSequence: number[]; // przetasowana sekwencja kart
+  usedCards: number[]; // użyte karty w tej rundzie
+  shuffleCount: number; // liczba przetasowań
+  gameStarted: boolean; // czy gra została rozpoczęta
+}
+
+interface BotCard {
+  id: number; // 1-13
+  name: string; // nazwa karty
+  effects: string[]; // 1-2 efekty
+  ability?: string; // opcjonalna zdolność specjalna
 }
 ```
+
+**Technical highlights**:
+
+- React Context + useReducer pattern dla state management
+- Fisher-Yates shuffle algorithm
+- CSS animations z `@keyframes slideIn`
+- Mobile-first responsive design
+- TypeScript full type safety
 
 ---
 

@@ -74,7 +74,8 @@ const Home: React.FC = () => {
             <li>✅ Podstawowa nawigacja</li>
             <li>✅ Layout z kolorami z instrukcji</li>
             <li>✅ Poprawki responsywności</li>
-            <li>⏳ Mechanika kart (v0.1.0)</li>
+            <li>✅ WCAG 320px compliance</li>
+            <li>✅ Mechanika kart (v0.1.0)</li>
             <li>⏳ Zapis/wczytywanie (v0.2.0)</li>
           </ul>
         </div>
