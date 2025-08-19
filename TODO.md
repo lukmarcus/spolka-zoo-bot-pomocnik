@@ -71,7 +71,7 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 
 ---
 
-## 🎯 Wersja 0.0.3 - Responsywność WCAG ✅ UKOŃCZONA
+## 🎯 Wersja 0.0.2 - Responsywność WCAG ✅ UKOŃCZONA
 
 ### Must Have (WCAG compliance) ✅
 
@@ -107,7 +107,7 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 
 ---
 
-## 🎯 Wersja 0.0.2 - Poprawki wizualne (bugfixy) ✅ UKOŃCZONA
+## 🎯 Wersja 0.0.3 - Poprawki wizualne (bugfixy) ✅ UKOŃCZONA
 
 ### Must Have (krytyczne błędy UX) ✅
 
@@ -193,39 +193,6 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
 
 ---
 
-## 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry
-
-### Must Have
-
-- [ ] **Zapis stanu gry**
-
-  - [ ] Serialization GameState do JSON
-  - [ ] LocalStorage integration
-  - [ ] Auto-save przy każdej akcji
-  - [ ] Restore stanu przy reload strony
-
-- [ ] **Share game state**
-
-  - [ ] Base64 encoding stanu gry
-  - [ ] Generator kodów gry (6-8 znaków)
-  - [ ] Kopia kodu do schowka
-  - [ ] Walidacja kodów z checksumą
-
-- [ ] **UI dla zapisu**
-  - [ ] Przycisk "Udostępnij grę"
-  - [ ] Modal z kodem do skopiowania
-  - [ ] Input do wczytania kodu
-  - [ ] Error handling dla błędnych kodów
-
-### Nice to Have
-
-- [ ] **Export/Import**
-  - [ ] Eksport do pliku JSON
-  - [ ] Import z pliku
-  - [ ] QR kod dla mobile sharing
-
----
-
 ## 🎯 Hotfix Wersje (Post v0.1.0 UX Improvements)
 
 ### Wersja 0.1.1 - Uproszczenie interfejsu gry ✅ UKOŃCZONA
@@ -282,6 +249,39 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
   - [ ] Gradient transitions
   - [ ] Hover effects na kartach
   - [ ] Loading animations
+
+---
+
+## 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry
+
+### Must Have
+
+- [ ] **Zapis stanu gry**
+
+  - [ ] Serialization GameState do JSON
+  - [ ] LocalStorage integration
+  - [ ] Auto-save przy każdej akcji
+  - [ ] Restore stanu przy reload strony
+
+- [ ] **Share game state**
+
+  - [ ] Base64 encoding stanu gry
+  - [ ] Generator kodów gry (6-8 znaków)
+  - [ ] Kopia kodu do schowka
+  - [ ] Walidacja kodów z checksumą
+
+- [ ] **UI dla zapisu**
+  - [ ] Przycisk "Udostępnij grę"
+  - [ ] Modal z kodem do skopiowania
+  - [ ] Input do wczytania kodu
+  - [ ] Error handling dla błędnych kodów
+
+### Nice to Have
+
+- [ ] **Export/Import**
+  - [ ] Eksport do pliku JSON
+  - [ ] Import z pliku
+  - [ ] QR kod dla mobile sharing
 
 ---
 

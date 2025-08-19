@@ -62,14 +62,6 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Struktura: skonsolidowano typy w /types/index.ts
 - CSS: optymalizacja i usunięcie nieużywanych reguł
 
-## [Nie wydane]
-
-### Planowane w wersji 0.2.0
-
-- Zapis i wczytywanie stanu gry
-- Kody gry do udostępniania
-- LocalStorage integration
-
 ## [0.0.3] - 2025-08-18
 
 ### Naprawione
