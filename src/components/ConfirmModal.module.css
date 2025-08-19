@@ -63,6 +63,11 @@
   padding: 1.5rem;
 }
 
+/* Gdy nie ma headera, dodaj więcej paddingu na górze */
+.modal .content:first-child {
+  padding-top: 2rem;
+}
+
 .message {
   margin: 0;
   color: var(--text-primary);

@@ -3,7 +3,7 @@ import styles from "./ConfirmModal.module.css";
 
 interface ConfirmModalProps {
   isOpen: boolean;
-  title: string;
+  title?: string;
   message: string;
   confirmText?: string;
   cancelText?: string;
@@ -42,9 +42,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       tabIndex={-1}
     >
       <div className={styles.modal}>
-        <div className={styles.header}>
-          <h3 className={styles.title}>{title}</h3>
-        </div>
+        {title && (
+          <div className={styles.header}>
+            <h3 className={styles.title}>{title}</h3>
+          </div>
+        )}
 
         <div className={styles.content}>
           <p className={styles.message}>{message}</p>
