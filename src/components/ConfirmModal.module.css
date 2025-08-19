@@ -119,22 +119,22 @@
     width: 95%;
     margin: 1rem;
   }
-  
+
   .actions {
     flex-direction: column-reverse;
     gap: 0.75rem;
   }
-  
+
   .button {
     width: 100%;
     padding: 1rem;
     font-size: var(--font-size-base);
   }
-  
+
   .header {
     padding: 1rem;
   }
-  
+
   .content {
     padding: 1rem;
   }

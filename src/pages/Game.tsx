@@ -11,6 +11,7 @@ const Game: React.FC = () => {
   const navigate = useNavigate();
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
+  const [showDrawCardModal, setShowDrawCardModal] = useState(false);
 
   // Auto-start game when component mounts
   useEffect(() => {
@@ -32,6 +33,19 @@ const Game: React.FC = () => {
     setShowExitModal(false);
   };
 
+  const handleDrawCard = () => {
+    setShowDrawCardModal(true);
+  };
+
+  const confirmDrawCard = () => {
+    setShowDrawCardModal(false);
+    game.drawCard();
+  };
+
+  const cancelDrawCard = () => {
+    setShowDrawCardModal(false);
+  };
+
   const currentCardId = game.getCurrentCard();
   const currentCard =
     currentCardId !== null
@@ -47,7 +61,7 @@ const Game: React.FC = () => {
     if (currentIndex === -1) {
       return {
         text: "🎯 Dobierz pierwszą kartę",
-        action: game.drawCard,
+        action: handleDrawCard,
         disabled: false,
         className: "btn-primary",
       };
@@ -57,7 +71,7 @@ const Game: React.FC = () => {
     if (currentIndex === totalCards - 2) {
       return {
         text: "🎯 Dobierz ostatnią kartę",
-        action: game.drawCard,
+        action: handleDrawCard,
         disabled: false,
         className: "btn-primary",
       };
@@ -76,7 +90,7 @@ const Game: React.FC = () => {
     // Stan normalny (1-11/13)
     return {
       text: "🎯 Dobierz następną kartę",
-      action: game.drawCard,
+      action: handleDrawCard,
       disabled: false,
       className: "btn-primary",
     };
@@ -140,7 +154,7 @@ const Game: React.FC = () => {
           </button>
         </div>
       </div>
-      
+
       <ConfirmModal
         isOpen={showExitModal}
         title="Powrót do menu"
@@ -149,6 +163,16 @@ const Game: React.FC = () => {
         cancelText="Anuluj"
         onConfirm={confirmExit}
         onCancel={cancelExit}
+      />
+
+      <ConfirmModal
+        isOpen={showDrawCardModal}
+        title="Potwierdź zobaczenie nowej karty"
+        message="Czy na pewno chcesz dobrać następną kartę? Po zobaczeniu karty nie będziesz mógł jej cofnąć."
+        confirmText="Tak, dobierz kartę"
+        cancelText="Anuluj"
+        onConfirm={confirmDrawCard}
+        onCancel={cancelDrawCard}
       />
     </Layout>
   );

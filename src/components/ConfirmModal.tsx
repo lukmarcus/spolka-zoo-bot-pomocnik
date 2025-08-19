@@ -45,11 +45,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <div className={styles.header}>
           <h3 className={styles.title}>{title}</h3>
         </div>
-        
+
         <div className={styles.content}>
           <p className={styles.message}>{message}</p>
         </div>
-        
+
         <div className={styles.actions}>
           <button
             className={`${styles.button} ${styles.cancelButton}`}
