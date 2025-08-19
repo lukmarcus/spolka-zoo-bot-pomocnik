@@ -24,7 +24,7 @@ type GameAction =
 
 // Initial game state
 const initialState: GameState = {
-  currentCardIndex: 0,
+  currentCardIndex: -1,
   cardSequence: [],
   usedCards: [],
   shuffleCount: 0,
@@ -44,31 +44,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "DRAW_CARD": {
-      if (!state.gameStarted || state.currentCardIndex >= TOTAL_CARDS) {
+      if (!state.gameStarted) {
         return state;
       }
 
-      const newUsedCards = [
-        ...state.usedCards,
-        state.cardSequence[state.currentCardIndex],
-      ];
-      const newIndex = state.currentCardIndex + 1;
+      const nextIndex = state.currentCardIndex + 1;
 
-      // Check if deck is exhausted
-      if (newIndex >= TOTAL_CARDS) {
-        // Auto-shuffle for next round
-        return {
-          ...state,
-          currentCardIndex: 0,
-          cardSequence: generateShuffledSequence(),
-          usedCards: [],
-          shuffleCount: state.shuffleCount + 1,
-        };
+      // Check if trying to draw beyond deck
+      if (nextIndex >= TOTAL_CARDS) {
+        return state; // Don't auto-shuffle, let user manually shuffle
       }
+
+      const newUsedCards = [...state.usedCards, state.cardSequence[nextIndex]];
 
       return {
         ...state,
-        currentCardIndex: newIndex,
+        currentCardIndex: nextIndex,
         usedCards: newUsedCards,
       };
     }
@@ -117,6 +108,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     getCurrentCard: () => {
       if (
         !state.gameStarted ||
+        state.currentCardIndex < 0 ||
         state.currentCardIndex >= state.cardSequence.length
       ) {
         return null;
@@ -124,8 +116,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
       return state.cardSequence[state.currentCardIndex];
     },
     isGameStarted: () => state.gameStarted,
-    isDeckExhausted: () => state.currentCardIndex >= TOTAL_CARDS,
-    getCardsRemaining: () => Math.max(0, TOTAL_CARDS - state.currentCardIndex),
+    isDeckExhausted: () => state.currentCardIndex >= TOTAL_CARDS - 1,
+    getCardsRemaining: () =>
+      Math.max(0, TOTAL_CARDS - (state.currentCardIndex + 1)),
   };
 
   return (
