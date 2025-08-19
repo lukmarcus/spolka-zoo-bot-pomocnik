@@ -226,6 +226,65 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
 
 ---
 
+## 🎯 Hotfix Wersje (Post v0.1.0 UX Improvements)
+
+### Wersja 0.1.1 - Uproszczenie interfejsu gry ✅ UKOŃCZONA
+
+#### 🎨 UX Improvements ✅
+
+- [x] **Konsolidacja przycisków**
+
+  - [x] Zastąpienie 3 osobnych przycisków 1 dynamicznym
+  - [x] Inteligentne komunikaty:
+    - 0/13: "🎯 Dobierz pierwszą kartę"
+    - 1-11/13: "🎯 Dobierz następną kartę"
+    - 12/13: "🎯 Dobierz ostatnią kartę"
+    - 13/13: "🔀 Przetasuj i dobierz kartę"
+  - [x] Całkowite usunięcie przycisku "Reset gry"
+
+- [x] **Uproszczenie informacji**
+
+  - [x] Usunięcie redundantnej informacji "Pozostało: X kart"
+  - [x] Pozostawienie tylko "X/13" jako główny licznik
+  - [x] Lepsze wyśrodkowanie statusu gry
+
+- [x] **Poprawa responsywności**
+  - [x] Większy, bardziej wyróżniony główny przycisk
+  - [x] Lepsza organizacja na urządzeniach mobilnych
+  - [x] Uproszczony układ kontrolek (główny przycisk + powrót do menu)
+
+### Wersja 0.1.2 - Niestandardowe modale ⏳ W PLANACH
+
+#### 🪟 Modal Improvements
+
+- [ ] **Zastąpienie window.confirm**
+
+  - [ ] Stworzenie komponentu ConfirmModal
+  - [ ] Stylowanie zgodne z motywem aplikacji
+  - [ ] Animacje wejścia/wyjścia
+
+- [ ] **Niestandardowe dialogi**
+  - [ ] Potwierdzenie wyjścia z gry
+  - [ ] Potwierdzenie resetu gry
+  - [ ] Obsługa ESC i click outside
+
+### Wersja 0.1.3 - Grafiki tła ⏳ W PLANACH
+
+#### 🎨 Visual Enhancements
+
+- [ ] **Dodanie grafik tematycznych**
+
+  - [ ] Delikatne grafiki zoo w tle strony głównej
+  - [ ] Subtelne wzory na kartach
+  - [ ] Ikony zwierząt jako accent elements
+
+- [ ] **Poprawki wizualne**
+  - [ ] Gradient transitions
+  - [ ] Hover effects na kartach
+  - [ ] Loading animations
+
+---
+
 ## 🎯 Backlog (przyszłe wersje)
 
 ### Wersja 0.3.0 - Wiele botów

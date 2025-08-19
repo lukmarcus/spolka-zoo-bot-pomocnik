@@ -17,9 +17,22 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.0 ✅  
-**Status**: Mechanika kart zaimplementowana  
-**Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+**Aktualna wersja**: 0.1.1 ✅  
+**Status**: UX gry zoptymalizowany  
+**Następna wersja**: 0.1.2 - Niestandardowe modale
+
+## ✨ What's New v0.1.1
+
+🎨 **Uproszczony interfejs gry**:
+
+- Konsolidacja 3 przycisków do 1 dynamicznego przycisku głównego:
+  - 0/13: "🎯 Dobierz pierwszą kartę"
+  - 1-11/13: "🎯 Dobierz następną kartę"
+  - 12/13: "🎯 Dobierz ostatnią kartę"
+  - 13/13: "🔀 Przetasuj i dobierz kartę"
+- Usunięcie redundantnej informacji o pozostałych kartach
+- Całkowite usunięcie przycisku "Reset gry" dla czystszego interfejsu
+- Lepsze wyśrodkowanie i responsywność na urządzeniach mobilnych
 
 ## ✨ What's New v0.1.0
 

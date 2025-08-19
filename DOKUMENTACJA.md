@@ -108,6 +108,43 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 **Zaimplementowane komponenty**:
 
+- ✅ `Game.tsx` - główny ekran gry z pełną logiką
+- ✅ `BotCard.tsx` - komponent karty z responsywnym designem
+- ✅ `GameContext.tsx` - zarządzanie stanem z useReducer
+- ✅ Dane `BOT_CARDS` - 13 kart Lorem Ipsum z efektami
+
+---
+
+### 🎯 Wersja 0.1.1 - Uproszczenie UX gry
+
+**Status**: ✅ Ukończona (2025-08-19)
+**Cel**: Poprawa doświadczenia użytkownika w grze
+
+**Zaimplementowane ulepszenia**:
+
+- ✅ **Konsolidacja przycisków**: Zastąpienie 3 przycisków 1 dynamicznym
+
+  - Inteligentne komunikaty:
+    - 0/13: "🎯 Dobierz pierwszą kartę"
+    - 1-11/13: "🎯 Dobierz następną kartę"
+    - 12/13: "🎯 Dobierz ostatnią kartę"
+    - 13/13: "🔀 Przetasuj i dobierz kartę"
+  - Usunięcie redundantnego przycisku "Przetasuj talię"
+  - Całkowite usunięcie przycisku "Reset gry" dla czystszego interfejsu
+
+- ✅ **Uproszczenie informacji**:
+
+  - Usunięto redundantną informację "Pozostało: X kart"
+  - Pozostawiono tylko "X/13" jako główny licznik kart
+  - Lepsze wyśrodkowanie statusu gry
+
+- ✅ **Poprawa responsywności**:
+  - Większy, bardziej wyróżniony główny przycisk akcji
+  - Lepsza organizacja kontrolek na urządzeniach mobilnych
+  - Uproszczony układ z tylko jednym głównym przyciskiem
+
+**Zaimplementowane komponenty**:
+
 - ✅ `BotCard.tsx` + `BotCard.module.css` - wyświetlanie karty z efektami
 - ✅ `Game.tsx` + `Game.module.css` - pełny ekran gry z kontrolkami
 - ✅ `GameContext.tsx` - zarządzanie stanem z useReducer
