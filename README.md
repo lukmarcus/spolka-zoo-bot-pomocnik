@@ -17,9 +17,22 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.0 ✅  
-**Status**: Mechanika kart zaimplementowana  
-**Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+**Aktualna wersja**: 0.1.1 ✅  
+**Status**: UX gry zoptymalizowany  
+**Następna wersja**: 0.1.2 - Niestandardowe modale
+
+## ✨ What's New v0.1.1
+
+🎨 **Uproszczony interfejs gry**:
+
+- Konsolidacja 3 przycisków do 1 dynamicznego przycisku głównego:
+  - 0/13: "🎯 Dobierz pierwszą kartę"
+  - 1-11/13: "🎯 Dobierz następną kartę"
+  - 12/13: "🎯 Dobierz ostatnią kartę"
+  - 13/13: "🔀 Przetasuj i dobierz kartę"
+- Usunięcie redundantnej informacji o pozostałych kartach
+- Całkowite usunięcie przycisku "Reset gry" dla czystszego interfejsu
+- Lepsze wyśrodkowanie i responsywność na urządzeniach mobilnych
 
 ## ✨ What's New v0.1.0
 
@@ -100,14 +113,14 @@ Zawiera:
 | Wersja | Status       | Opis                                                  |
 | ------ | ------------ | ----------------------------------------------------- |
 | 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja                 |
-| 0.0.2  | ✅ Ukończona | Poprawki wizualne i responsywności                    |
-| 0.0.3  | ✅ Ukończona | WCAG 320px compliance, CSS refactoring                |
+| 0.0.2  | ✅ Ukończona | Responsywność WCAG 320px compliance                   |
+| 0.0.3  | ✅ Ukończona | Poprawki wizualne i CSS refactoring                   |
 | 0.1.0  | ✅ Ukończona | **Mechanika kart - losowanie, tasowanie, dobieranie** |
-| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie stanu gry                         |
-| 0.3.0  | 🔜 Planowana | Zarządzanie wieloma botami                            |
-| 0.1.0  | 🔜 Planowana | Podstawowa mechanika bota (1 bot, 13 kart)            |
-| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie gry                               |
-| 0.3.0  | 🔜 Planowana | Wiele botów na jednej talii                           |
+| 0.1.1  | ✅ Ukończona | **UX improvements - uproszczenie interfejsu gry**     |
+| 0.1.2  | 🔜 Planowana | Niestandardowe modale (zamiast window.confirm)        |
+| 0.1.3  | 🔜 Planowana | Grafiki tła i wizualne ulepszenia                     |
+| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie stanu gry (LocalStorage + kody)   |
+| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                              |
 | 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |
 | 0.5.0  | 🔜 Planowana | Wizualizacja kart                                     |
 | ...    |              | Zobacz [DOKUMENTACJA.md](./DOKUMENTACJA.md)           |

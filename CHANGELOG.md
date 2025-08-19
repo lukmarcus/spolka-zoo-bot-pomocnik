@@ -5,6 +5,29 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2025-08-19
+
+### 🎨 Ulepszenia UX
+
+- **🔄 Uproszczony interfejs gry**
+  - Konsolidacja 3 przycisków do 1 dynamicznego przycisku głównego:
+    - 0/13: "🎯 Dobierz pierwszą kartę"
+    - 1-11/13: "🎯 Dobierz następną kartę"
+    - 12/13: "🎯 Dobierz ostatnią kartę"
+    - 13/13: "🔀 Przetasuj i dobierz kartę"
+  - Usunięcie redundantnej informacji o pozostałych kartach
+  - Całkowite usunięcie przycisku "Reset gry" dla czystszego interfejsu
+  - Lepsze wyśrodkowanie statusu gry i informacji
+  - Zwiększenie rozmiaru głównego przycisku akcji
+  - Poprawiona responsywność na urządzeniach mobilnych
+
+### 📱 Responsywność
+
+- **📱 Optymalizacja mobilna**
+  - Lepsze wyśrodkowanie elementów na małych ekranach
+  - Uproszczony układ kontrolek (tylko 1 główny przycisk + powrót do menu)
+  - Ulepszony układ statusu gry dla urządzeń mobilnych
+
 ## [0.1.0] - 2025-08-19
 
 ### ✨ Dodane
@@ -38,14 +61,6 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Game.tsx: usunięto zbędny ekran startowy, auto-start gry
 - Struktura: skonsolidowano typy w /types/index.ts
 - CSS: optymalizacja i usunięcie nieużywanych reguł
-
-## [Nie wydane]
-
-### Planowane w wersji 0.2.0
-
-- Zapis i wczytywanie stanu gry
-- Kody gry do udostępniania
-- LocalStorage integration
 
 ## [0.0.3] - 2025-08-18
 
