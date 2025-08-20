@@ -148,6 +148,40 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 - ✅ `BotCard.tsx` + `BotCard.module.css` - wyświetlanie karty z efektami
 - ✅ `Game.tsx` + `Game.module.css` - pełny ekran gry z kontrolkami
 - ✅ `GameContext.tsx` - zarządzanie stanem z useReducer
+
+---
+
+### 🎯 Wersja 0.1.2 - Profesjonalny modal
+
+**Status**: ✅ Ukończona (2025-08-20)
+**Cel**: Zastąpienie natywnych modali przeglądarki i poprawa UX
+
+**Zaimplementowane ulepszenia**:
+
+- ✅ **System modala**:
+
+  - Komponent `ConfirmModal.tsx` + `ConfirmModal.module.css`
+  - Zastąpienie `window.confirm()` przeglądarki
+  - Spójny design z kolorystyką ZOO (kremowe tło #fff8dc, brązowe elementy #8b4513)
+  - Animacje fade/slide z responsive design
+  - Obsługa klawisza Escape i kliknięcia poza modal
+
+- ✅ **UX improvements**:
+
+  - Natychmiastowe dobieranie kart dla płynnego gameplay
+  - Modal tylko dla wyjścia z gry ("punkt bez powrotu")
+  - Opcjonalny tytuł w komponencie - może działać z nagłówkiem lub bez
+
+- ✅ **Uniwersalny design system**:
+  - Wielokrotnego użytku komponent z konfigurowalnymi props
+  - Gotowy do wykorzystania w przyszłych funkcjonalnościach
+  - Spójne kolory używające zmiennych CSS z `globals.css`
+
+**Zaimplementowane komponenty**:
+
+- ✅ `ConfirmModal.tsx` - uniwersalny modal potwierdzenia
+- ✅ `ConfirmModal.module.css` - style z animacjami i responsywnością
+- ✅ Zmodyfikowane `Game.tsx` - integracja z modalem wyjścia
 - ✅ `useGame()` - custom hook do dostępu do kontekstu
 
 **Struktura stanu gry**:

@@ -220,20 +220,26 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
   - [x] Lepsza organizacja na urządzeniach mobilnych
   - [x] Uproszczony układ kontrolek (główny przycisk + powrót do menu)
 
-### Wersja 0.1.2 - Niestandardowe modale ⏳ W PLANACH
+### Wersja 0.1.2 - Niestandardowe modale ✅ UKOŃCZONA
 
 #### 🪟 Modal Improvements
 
-- [ ] **Zastąpienie window.confirm**
+- [x] **Zastąpienie window.confirm**
 
-  - [ ] Stworzenie komponentu ConfirmModal
-  - [ ] Stylowanie zgodne z motywem aplikacji
-  - [ ] Animacje wejścia/wyjścia
+  - [x] Stworzenie komponentu ConfirmModal
+  - [x] Stylowanie zgodne z motywem aplikacji (kolory ZOO)
+  - [x] Animacje wejścia/wyjścia (fade/slide)
 
-- [ ] **Niestandardowe dialogi**
-  - [ ] Potwierdzenie wyjścia z gry
-  - [ ] Potwierdzenie resetu gry
-  - [ ] Obsługa ESC i click outside
+- [x] **Niestandardowe dialogi**
+
+  - [x] Modal wyjścia z gry
+  - [x] Opcjonalny tytuł w komponencie
+  - [x] Obsługa ESC i click outside
+  - [x] Spójny design system z resztą aplikacji
+
+- [x] **UX Improvements**
+  - [x] Natychmiastowe dobieranie kart dla płynnego gameplay
+  - [x] Uproszczony komunikat wyjścia z gry
 
 ### Wersja 0.1.3 - Grafiki tła ⏳ W PLANACH
 
@@ -376,7 +382,3 @@ _Brak znanych problemów (projekt nie rozpoczęty)_
 2. **Po 0.1.0**: Zebrać feedback i zdefiniować konkretne karty botów
 3. **Po 0.2.0**: Testowanie z prawdziwą grą planszową
 4. **Długoterminowo**: Rozważyć publikację w Google Play Store
-
----
-
-_Ostatnia aktualizacja: 2025-08-17_

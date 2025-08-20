@@ -5,6 +5,38 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2025-08-20
+
+### ✨ Nowe funkcjonalności
+
+- **🔄 Profesjonalny modal potwierdzenia**
+  - Zastąpienie natywnego `window.confirm()` przeglądarki
+  - Komponent `ConfirmModal` z pełną responsywnością i animacjami
+  - Spójny design system z kolorystyką ZOO
+  - Obsługa klawisza Escape i kliknięcia poza modal
+  - Opcjonalny tytuł - modal może działać z nagłówkiem lub bez
+
+### 🎨 Ulepszenia UX
+
+- **⚡ Płynny gameplay**
+  - Natychmiastowe dobieranie kart bez przeszkód
+  - Modal tylko dla wyjścia z gry (rzeczywisty "punkt bez powrotu")
+  - Krótsza, jaśniejsza wiadomość: "Czy na pewno wrócić do głównego menu? Stan gry zostanie utracony."
+
+### 🎨 Polepszenia wizualne
+
+- **🎨 Spójne kolory**
+  - Modal dopasowany do kolorystyki ZOO (kremowe tło, brązowe elementy)
+  - Wykorzystanie zmiennych CSS z głównego design systemu
+  - Profesjonalne animacje fade/slide z responsywnym designem
+
+### 🔧 Zmiany techniczne
+
+- **🧩 Uniwersalny komponent ConfirmModal**
+  - Wielokrotnego użytku z konfigurowalnymi props
+  - Opcjonalny `title` dla różnych przypadków użycia
+  - Gotowy do wykorzystania w przyszłych funkcjonalnościach
+
 ## [0.1.1] - 2025-08-19
 
 ### 🎨 Ulepszenia UX
