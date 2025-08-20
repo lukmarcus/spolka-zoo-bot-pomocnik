@@ -38,7 +38,7 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <Layout>
+    <Layout backgroundType="home">
       <div className={styles.hero}>
         <h2 className={styles.heroTitle}>Bot Pomocnik</h2>
         <p className={styles.heroDescription}>

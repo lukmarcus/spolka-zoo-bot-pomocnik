@@ -85,7 +85,7 @@ const Game: React.FC = () => {
   const primaryAction = getPrimaryAction();
 
   return (
-    <Layout title="Gra">
+    <Layout title="Gra" backgroundType="game">
       <div className={styles.gameContainer}>
         <div className={styles.gameActive}>
           <div className={styles.gameStatus}>
