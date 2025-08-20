@@ -5,6 +5,46 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2025-08-21
+
+### ✨ Nowe funkcjonalności
+
+- **🎨 System grafik tła**
+  - Dodano grafikę `home-bg.jpg` na stronie głównej dla lepszego efektu wizualnego
+  - Dodano grafikę `game-bg.jpg` na ekranie gry jako pełne tło (nie overlay)
+  - Implementacja grafiki `card-reverse.jpg` na ekranie 0/13 - symbolizuje zakryty stos kart
+  - CSS utility classes: `.bg-home`, `.bg-game` dla łatwego zarządzania tłami
+  - CSS variables: `--home-bg`, `--game-bg` dla elastycznej konfiguracji
+
+### 🎨 Ulepszenia UX
+
+- **⚡ Drastyczna optymalizacja interfejsu**
+  - Zmniejszenie margin header z 32px na 12px (62% redukcja)
+  - Kompaktowy padding w gameStatus z 16px na 2px w pionie (87% redukcja)
+  - Globalny --gap zmniejszony z 12px na 8px (33% redukcja)
+  - CardArea min-height z 300px na 150px (50% redukcja)
+  - Card reverse image max-width z 250px na 200px (20% redukcja)
+
+### 🔧 Zmiany techniczne
+
+- **🧩 Rozszerzony Layout component**
+
+  - Dodano `backgroundType` prop dla dynamicznego wyboru tła
+  - Implementacja `getBackgroundClass()` dla type-safe background switching
+  - Import CSS-in-TS dla card-reverse.jpg asset optimization
+
+- **📱 Responsive improvements**
+  - Poprawki w media query `@media (max-width: 768px)` dla gameStatus
+  - Spójny padding na wszystkich urządzeniach mobilnych
+  - Zachowana funkcjonalność przy maksymalnie kompaktowym designie
+
+### 🎨 Polepszenia wizualne
+
+- **🎨 Efektowne tła**
+  - Pełne grafiki tła zamiast subtelnych overlay effects
+  - Responsywne tła z `background-size: cover` i `background-position: center`
+  - Professional card-reverse visualization dla stanu początkowego gry
+
 ## [0.1.2] - 2025-08-20
 
 ### ✨ Nowe funkcjonalności

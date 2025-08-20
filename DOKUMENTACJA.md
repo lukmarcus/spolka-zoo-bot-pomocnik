@@ -213,6 +213,52 @@ interface BotCard {
 
 ---
 
+### 🎯 Wersja 0.1.3 - Grafiki tła i optymalizacja interfejsu
+
+**Status**: ✅ Ukończona (2025-08-21)
+**Cel**: Dodanie grafik tła i optymalizacja kompaktowości interfejsu
+
+**Zaimplementowane ulepszenia**:
+
+- ✅ **System grafik tła**:
+
+  - Grafika `home-bg.jpg` na stronie głównej
+  - Grafika `game-bg.jpg` na ekranie gry
+  - Grafika `card-reverse.jpg` na ekranie 0/13 (symbolizuje zakryty stos kart)
+  - CSS utility classes: `.bg-home`, `.bg-game` z pełnymi tłami (nie overlay)
+  - CSS variables: `--home-bg`, `--game-bg` dla łatwej zmiany
+
+- ✅ **Optymalizacja interfejsu**:
+
+  - Drastyczne zmniejszenie odstępów między elementami
+  - Header margin: 32px → 12px
+  - GameStatus padding: 16px → 2px w pionie
+  - Globalny --gap: 12px → 8px
+  - CardArea min-height: 300px → 150px
+  - Card reverse image: 250px → 200px max-width
+
+- ✅ **Responsywność i media queries**:
+
+  - Poprawki w `@media (max-width: 768px)` dla gameStatus
+  - Spójny padding na wszystkich urządzeniach
+  - Zachowana funkcjonalność przy kompaktowym designie
+
+**Zaimplementowane komponenty**:
+
+- ✅ Layout.tsx - rozszerzony o `backgroundType` prop
+- ✅ globals.css - CSS variables i utility classes dla tła
+- ✅ Game.tsx - integracja card-reverse image dla stanu 0/13
+- ✅ Game.module.css - optymalizacja spacing i responsive fixes
+
+**Technical highlights**:
+
+- Dynamic background switching w Layout component
+- CSS-in-TS import dla card-reverse.jpg
+- Mobile-first compactness optimization
+- Asset optimization w build pipeline
+
+---
+
 ### 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry
 
 **Status**: 🔜 Planowana

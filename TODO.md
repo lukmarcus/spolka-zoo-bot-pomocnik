@@ -241,20 +241,30 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
   - [x] Natychmiastowe dobieranie kart dla płynnego gameplay
   - [x] Uproszczony komunikat wyjścia z gry
 
-### Wersja 0.1.3 - Grafiki tła ⏳ W PLANACH
+### Wersja 0.1.3 - Grafiki tła ✅ UKOŃCZONA
 
-#### 🎨 Visual Enhancements
+#### 🎨 Visual Enhancements ✅
 
-- [ ] **Dodanie grafik tematycznych**
+- [x] **System grafik tła**
 
-  - [ ] Delikatne grafiki zoo w tle strony głównej
-  - [ ] Subtelne wzory na kartach
-  - [ ] Ikony zwierząt jako accent elements
+  - [x] Grafika `home-bg.jpg` na stronie głównej
+  - [x] Grafika `game-bg.jpg` na ekranie gry
+  - [x] Grafika `card-reverse.jpg` na ekranie 0/13 (stos kart)
+  - [x] CSS utility classes: `.bg-home`, `.bg-game`
+  - [x] CSS variables dla łatwej konfiguracji
 
-- [ ] **Poprawki wizualne**
-  - [ ] Gradient transitions
-  - [ ] Hover effects na kartach
-  - [ ] Loading animations
+- [x] **Optymalizacja interfejsu**
+
+  - [x] Drastyczne zmniejszenie odstępów między elementami
+  - [x] Kompaktowy padding w gameStatus (2px w pionie)
+  - [x] Zmniejszony margin header (12px zamiast 32px)
+  - [x] Globalny --gap optimization (8px zamiast 12px)
+  - [x] Responsive media queries fixes
+
+- [x] **Technical implementations**
+  - [x] Dynamic backgroundType w Layout component
+  - [x] Asset optimization w build pipeline
+  - [x] Mobile-first compactness design
 
 ---
 
