@@ -17,9 +17,24 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.1 ✅  
-**Status**: UX gry zoptymalizowany  
-**Następna wersja**: 0.1.2 - Niestandardowe modale
+**Aktualna wersja**: 0.1.2 ✅  
+**Status**: Profesjonalne modały i uproszczony UX  
+**Następna wersja**: 0.1.3 - Grafiki w tle i animacje
+
+## ✨ What's New v0.1.2
+
+🔄 **Profesjonalny modal**:
+
+- Zastąpienie natywnego `window.confirm()` przeglądarki
+- Komponent `ConfirmModal` z animacjami i responsywnością
+- Spójny design z kolorystyką ZOO (kremowe tło, brązowe elementy)
+- Obsługa Escape i kliknięcia poza modal
+
+⚡ **Płynny gameplay**:
+
+- Natychmiastowe dobieranie kart bez przeszkód
+- Modal tylko dla wyjścia z gry (rzeczywisty "punkt bez powrotu")
+- Krótsza, jaśniejsza wiadomość: "Czy na pewno wrócić do głównego menu? Stan gry zostanie utracony."
 
 ## ✨ What's New v0.1.1
 

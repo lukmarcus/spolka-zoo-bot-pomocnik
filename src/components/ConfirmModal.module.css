@@ -1,0 +1,146 @@
+/* ConfirmModal Styles */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--card-border);
+  box-shadow: var(--shadow-medium);
+  width: 90%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.9) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.header {
+  background: var(--button-primary);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.title {
+  margin: 0;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+/* Gdy nie ma headera, dodaj więcej paddingu na górze */
+.modal .content:first-child {
+  padding-top: 2rem;
+}
+
+.message {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f9f9f9;
+  border-top: 1px solid var(--card-border);
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.cancelButton {
+  background: transparent;
+  border-color: var(--card-border);
+  color: var(--text-primary);
+}
+
+.cancelButton:hover {
+  background: #f0f0f0;
+  border-color: var(--button-secondary);
+}
+
+.confirmButton {
+  background: var(--button-primary);
+  border-color: var(--button-primary);
+  color: white;
+}
+
+.confirmButton:hover {
+  background: #6d3410;
+  border-color: #6d3410;
+  transform: translateY(-1px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .modal {
+    width: 95%;
+    margin: 1rem;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .button {
+    width: 100%;
+    padding: 1rem;
+    font-size: var(--font-size-base);
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+}

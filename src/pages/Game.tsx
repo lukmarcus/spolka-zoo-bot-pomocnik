@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/GameContext";
 import { BOT_CARDS } from "../data/botCards";
 import Layout from "../components/Layout";
 import BotCard from "../components/BotCard";
+import ConfirmModal from "../components/ConfirmModal";
 import styles from "./Game.module.css";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
   const game = useGame();
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // Auto-start game when component mounts
   useEffect(() => {
@@ -18,13 +20,16 @@ const Game: React.FC = () => {
   }, [game]);
 
   const handleBackToMenu = () => {
-    const confirmLeave = window.confirm(
-      "Czy na pewno chcesz wrócić do menu? Niezapisane dane zostaną utracone."
-    );
+    setShowExitModal(true);
+  };
 
-    if (confirmLeave) {
-      navigate("/");
-    }
+  const confirmExit = () => {
+    setShowExitModal(false);
+    navigate("/");
+  };
+
+  const cancelExit = () => {
+    setShowExitModal(false);
   };
 
   const currentCardId = game.getCurrentCard();
@@ -135,6 +140,15 @@ const Game: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showExitModal}
+        message="Czy na pewno wrócić do głównego menu? Stan gry zostanie utracony."
+        confirmText="Tak"
+        cancelText="Nie"
+        onConfirm={confirmExit}
+        onCancel={cancelExit}
+      />
     </Layout>
   );
 };
