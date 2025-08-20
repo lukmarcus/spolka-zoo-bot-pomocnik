@@ -3,17 +3,16 @@
 .gameContainer {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0.5rem;
   height: 100%;
   min-height: calc(100vh - 140px); /* Account for layout header/padding */
 }
 
 /* Active Game */
 .gameActive {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .gameStatus {
@@ -21,7 +20,7 @@
   justify-content: center;
   align-items: center;
   background: var(--color-background);
-  padding: 1rem;
+  padding: 0.125rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--color-border);
 }
@@ -55,12 +54,11 @@
 
 /* Card Display Area */
 .cardArea {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  min-height: 300px;
+  padding: 0.25rem;
+  min-height: 150px;
 }
 
 .currentCard {
@@ -82,7 +80,7 @@
   text-align: center;
   color: var(--color-text);
   background: var(--color-background);
-  padding: 2rem;
+  padding: 0.75rem;
   border-radius: 12px;
   border: 2px dashed var(--color-border);
 }
@@ -103,11 +101,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.25rem;
 }
 
 .cardReverseImage {
-  max-width: 250px;
+  max-width: 200px;
   width: 100%;
   height: auto;
   border-radius: 12px;
@@ -158,7 +156,7 @@
   }
 
   .gameStatus {
-    padding: 1rem;
+    padding: 0.125rem 1rem;
   }
 
   .statusInfo {
