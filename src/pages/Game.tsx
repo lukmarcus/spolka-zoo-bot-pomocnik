@@ -6,6 +6,7 @@ import Layout from "../components/Layout";
 import BotCard from "../components/BotCard";
 import ConfirmModal from "../components/ConfirmModal";
 import styles from "./Game.module.css";
+import cardReverseImg from "../assets/images/interface/card-reverse.jpg";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ const Game: React.FC = () => {
   const primaryAction = getPrimaryAction();
 
   return (
-    <Layout title="Gra">
+    <Layout title="Gra" backgroundType="game">
       <div className={styles.gameContainer}>
         <div className={styles.gameActive}>
           <div className={styles.gameStatus}>
@@ -109,10 +110,15 @@ const Game: React.FC = () => {
             ) : (
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
-                  <>
+                  <div className={styles.cardReverse}>
+                    <img
+                      src={cardReverseImg}
+                      alt="Zakryty stos kart"
+                      className={styles.cardReverseImage}
+                    />
                     <h3>Gotowy do gry</h3>
                     <p>Naciśnij przycisk, aby wylosować pierwszą kartę.</p>
-                  </>
+                  </div>
                 ) : (
                   <>
                     <h3>Koniec talii</h3>

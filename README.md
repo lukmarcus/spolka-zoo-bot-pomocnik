@@ -17,9 +17,32 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.2 ✅  
-**Status**: Profesjonalne modały i uproszczony UX  
-**Następna wersja**: 0.1.3 - Grafiki w tle i animacje
+**Aktualna wersja**: 0.1.3 ✅  
+**Status**: Grafiki tła i optimalizacja UI  
+**Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+
+## ✨ What's New v0.1.3
+
+🎨 **Grafiki tła**:
+
+- Dodano grafikę `home-bg.jpg` na stronie głównej
+- Dodano grafikę `game-bg.jpg` na ekranie gry
+- Implementacja grafiki `card-reverse.jpg` na ekranie 0/13 (symbolizuje zakryty stos kart)
+- Pełne tła (nie subtelne overlay) dla lepszego efektu wizualnego
+
+⚡ **Optymalizacja interfejsu**:
+
+- Drastyczne zmniejszenie odstępów między elementami na ekranie gry
+- Kompaktowy padding w gameStatus (2px zamiast 16px w pionie)
+- Zmniejszony margines header (12px zamiast 32px)
+- Responsywne media queries skorygowane dla spójności
+
+🔧 **Usprawnienia techniczne**:
+
+- CSS utility classes dla backgroundów (.bg-home, .bg-game)
+- Zmniejszony globalny --gap (8px zamiast 12px)
+- Optymalizacja Layout component z dynamicznym backgroundType
+- Poprawki w Game.module.css dla lepszej responsywności
 
 ## ✨ What's New v0.1.2
 
@@ -132,8 +155,8 @@ Zawiera:
 | 0.0.3  | ✅ Ukończona | Poprawki wizualne i CSS refactoring                   |
 | 0.1.0  | ✅ Ukończona | **Mechanika kart - losowanie, tasowanie, dobieranie** |
 | 0.1.1  | ✅ Ukończona | **UX improvements - uproszczenie interfejsu gry**     |
-| 0.1.2  | 🔜 Planowana | Niestandardowe modale (zamiast window.confirm)        |
-| 0.1.3  | 🔜 Planowana | Grafiki tła i wizualne ulepszenia                     |
+| 0.1.2  | ✅ Ukończona | Niestandardowe modale (zamiast window.confirm)        |
+| 0.1.3  | ✅ Ukończona | **Grafiki tła i optymalizacja interfejsu**            |
 | 0.2.0  | 🔜 Planowana | Zapis i wczytywanie stanu gry (LocalStorage + kody)   |
 | 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                              |
 | 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |

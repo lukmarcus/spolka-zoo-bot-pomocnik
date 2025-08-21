@@ -5,11 +5,27 @@ import packageJson from "../../package.json";
 interface LayoutProps {
   children: React.ReactNode;
   title?: string;
+  backgroundType?: "home" | "game" | "default";
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, title = "Spółka ZOO" }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  title = "Spółka ZOO",
+  backgroundType = "default",
+}) => {
+  const getBackgroundClass = () => {
+    switch (backgroundType) {
+      case "home":
+        return "bg-home";
+      case "game":
+        return "bg-game";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <div className={styles.layout}>
+    <div className={`${styles.layout} ${getBackgroundClass()}`}>
       <header className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         {title !== "Spółka ZOO" && (
