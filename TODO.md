@@ -2,7 +2,50 @@
 
 Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 
-## 🎯 Wersja 0.0.1 - Setup projektu ✅ UKOŃCZONA
+## 🎯 Wersja 0.2.0 - Save/Load System ✅ UKOŃCZONA
+
+### Must Have ✅
+
+- [x] **System zapisywania stanu gry**
+
+  - [x] Auto-save w localStorage przy każdej akcji
+  - [x] Funkcje serializeGameState() i deserializeGameState()
+  - [x] Walidacja i error handling dla corrupted data
+
+- [x] **Kody do udostępniania gry**
+
+  - [x] generateShareableCode() - Base64 encoding z checksumą
+  - [x] loadFromShareableCode() - dekodowanie z walidacją
+  - [x] isValidGameCode() - sprawdzanie formatu
+
+- [x] **Modal components**
+
+  - [x] BaseModal - uniwersalny modal z reużywalnymi stylami
+  - [x] ShareGameModal - generowanie i kopiowanie kodów gry
+  - [x] LoadGameModal - wczytywanie gry z kodów
+
+- [x] **GameContext rozszerzenia**
+
+  - [x] loadGame() action w kontekście
+  - [x] LOAD_GAME reducer case
+  - [x] Auto-save useEffect hook
+
+- [x] **UI Integration**
+  - [x] Przycisk "Udostępnij grę" w Game.tsx
+  - [x] Przycisk "Wczytaj grę" w Home.tsx (aktywacja)
+  - [x] copyToClipboard() z clipboard API
+
+### Zrealizowane funkcje ✅
+
+- ✅ **Automatyczne zapisywanie** - brak konieczności ręcznego save
+- ✅ **Cross-device sharing** - kody gry działają między urządzeniami
+- ✅ **Bezpieczna walidacja** - checksumы i format validation
+- ✅ **User-friendly UX** - instrukcje, komunikaty, kopiowanie jednym klikiem
+- ✅ **Architektura modułowa** - reużywalne komponenty i utilities
+
+---
+
+## 🎯 Wersja 0.1.4 - Complete bugfix cycle ✅ UKOŃCZONA
 
 ### Must Have ✅
 
@@ -448,6 +491,138 @@ _Brak znanych problemów (projekt nie rozpoczęty)_
 - **Font matching**: Identyfikacja czcionek z instrukcji lub znalezienie podobnych darmowych
 - **Asset extraction**: Wyciągnięcie ikon z prawdziwych kart (gdy będą dostępne)
 - **Responsive text**: Optymalizacja dla krótkich tekstów (jedno zdanie)
+
+---
+
+## 🚀 Pomysły na przyszłe wersje
+
+### 🎯 Wersja 0.3.0 - Enhanced UX
+
+**Cel**: Ulepszenia użyteczności i dostępności
+
+- [ ] **Motyw ciemny/jasny**
+
+  - [ ] Toggle dark/light mode w settings
+  - [ ] Zapisywanie preferencji w localStorage
+  - [ ] CSS variables dla seamless switching
+
+- [ ] **Ulepszone animacje**
+
+  - [ ] Card flip animations przy dobieraniu
+  - [ ] Smooth transitions między stanami
+  - [ ] Loading spinners z lepszym UX
+
+- [ ] **Accessibility improvements**
+  - [ ] ARIA labels dla screen readers
+  - [ ] Keyboard navigation support
+  - [ ] High contrast mode support
+
+### 🎯 Wersja 0.4.0 - Statystyki i history
+
+**Cel**: Tracking i analiza rozgrywek
+
+- [ ] **Historia gier**
+
+  - [ ] Zapisywanie completowanych gier w localStorage
+  - [ ] Lista ostatnich 10 rozgrywek z timestampami
+  - [ ] Możliwość ponownego obejrzenia sekwencji kart
+
+- [ ] **Podstawowe statystyki**
+  - [ ] Licznik odbytych gier
+  - [ ] Najczęściej dobierane karty
+  - [ ] Średnia długość gry (liczba tasowań)
+
+### 🎯 Wersja 0.5.0 - Multiplayer prep
+
+**Cel**: Przygotowanie do funkcji multiplayer
+
+- [ ] **Room system**
+
+  - [ ] Generowanie room codes
+  - [ ] Join room functionality
+  - [ ] Local multiplayer (jeden telefon)
+
+- [ ] **Game state sync**
+  - [ ] Enhanced save/load dla multiple players
+  - [ ] Conflict resolution przy jednoczesnych akcjach
+  - [ ] Turn-based state management
+
+### 🎯 Wersja 0.6.0 - PWA & Offline
+
+**Cel**: Pełnowartościowa aplikacja offline
+
+- [ ] **Progressive Web App**
+
+  - [ ] Service Worker implementation
+  - [ ] App manifest dla "Add to Home Screen"
+  - [ ] Offline functionality z cache strategies
+
+- [ ] **Enhanced mobile experience**
+  - [ ] Splash screen przy ładowaniu
+  - [ ] Full-screen mode support
+  - [ ] Vibration API dla feedback
+
+### 🎯 Wersja 0.7.0 - Cloud features
+
+**Cel**: Synchronizacja między urządzeniami
+
+- [ ] **Cloud save**
+
+  - [ ] Firebase/Supabase integration
+  - [ ] User accounts (optional)
+  - [ ] Cross-device synchronization
+
+- [ ] **Enhanced sharing**
+  - [ ] QR codes dla game codes
+  - [ ] Direct links z embedded game state
+  - [ ] Social media sharing
+
+### 🎯 Wersja 0.8.0 - Real multiplayer
+
+**Cel**: Online multiplayer functionality
+
+- [ ] **Real-time multiplayer**
+
+  - [ ] WebSocket/Socket.io integration
+  - [ ] Real-time game state sync
+  - [ ] Player presence indicators
+
+- [ ] **Lobby system**
+  - [ ] Public/private rooms
+  - [ ] Player matchmaking
+  - [ ] Spectator mode
+
+### 🎯 Wersja 0.9.0 - Mobile app prep
+
+**Cel**: Przygotowanie do publikacji w store
+
+- [ ] **Capacitor integration**
+
+  - [ ] Android/iOS app builds
+  - [ ] Native device features
+  - [ ] App store optimization
+
+- [ ] **Performance optimization**
+  - [ ] Bundle size optimization
+  - [ ] Lazy loading strategies
+  - [ ] Memory usage optimization
+
+### 🎯 Wersja 1.0.0 - Production ready
+
+**Cel**: Pełna aplikacja gotowa do publikacji
+
+- [ ] **Production features**
+
+  - [ ] Full testing coverage
+  - [ ] Error reporting (Sentry)
+  - [ ] Analytics integration
+  - [ ] User feedback system
+
+- [ ] **Google Play Store**
+  - [ ] Store listing preparation
+  - [ ] Screenshots and marketing materials
+  - [ ] Privacy policy i terms of service
+  - [ ] Publikacja w Google Play
 
 ---
 

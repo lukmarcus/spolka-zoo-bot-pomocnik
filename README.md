@@ -10,18 +10,47 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 - 🤖 Losowanie kart botów z talii 13 kart
 - 🎲 Tasowanie i dobieranie kolejnych kart
-- � Reset i przetasowanie talii
-- 📱 Responsywny design dla telefonów (320px+)
+- 🔄 Reset i przetasowanie talii
+- � **NOWE**: Zapisywanie i wczytywanie stanu gry
+- 🔗 **NOWE**: Udostępnianie gry poprzez kody
+- �📱 Responsywny design dla telefonów (320px+)
 - 🎯 Licznik pozostałych kart i statystyk gry
 - 📊 Wyświetlanie efektów i zdolności kart
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.4 ✅  
-**Status**: Complete bugfix cycle (4 issues resolved)  
-**Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+**Aktualna wersja**: 0.2.0 ✅  
+**Status**: Save/Load functionality implemented  
+**Następna wersja**: TBD
 
-## ✨ What's New v0.1.4
+## ✨ What's New v0.2.0
+
+💾 **Save & Load System**:
+
+- **Automatyczne zapisywanie**: Stan gry automatycznie zapisuje się w localStorage
+- **Kody gry**: Generowanie i udostępnianie gry poprzez kody Base64
+- **Import/Export**: Możliwość przenoszenia gry między urządzeniami
+- **Walidacja**: Bezpieczne wczytywanie z checksumami i walidacją
+
+🔗 **Nowe modale**:
+
+- **ShareGameModal**: Generowanie kodów do udostępniania stanu gry
+- **LoadGameModal**: Wczytywanie gry z otrzymanych kodów
+- **BaseModal**: Uniwersalny system modali z reużywalnymi stylami
+
+🎮 **Ulepszone UX**:
+
+- Przycisk "Udostępnij grę" dostępny podczas rozgrywki
+- Przycisk "Wczytaj grę" aktywny w menu głównym
+- Kopiowanie kodów do schowka jednym kliknięciem
+- Instrukcje użycia wbudowane w interfejs
+
+🏗️ **Architektura**:
+
+- Rozbudowany GameContext z obsługą loadGame
+- Nowe utilities w gameStorage.ts
+- Eliminacja duplikacji CSS między modalami
+- Pełna typizacja TypeScript dla nowych funkcji
 
 🐛 **Complete bugfix cycle**:
 
@@ -46,7 +75,34 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 📁 **All bugs resolved**: Issues #13, #14, #15, #16 - ROZWIĄZANE ✅
 
-## ✨ What's New v0.1.3
+## 📖 Instrukcja obsługi Save/Load
+
+### 💾 Zapisywanie gry
+
+Gra **automatycznie zapisuje** się w lokalnej pamięci przeglądarki podczas każdej akcji. Nie musisz niczego robić!
+
+### 🔗 Udostępnianie gry
+
+1. **Podczas gry** kliknij przycisk **"🔗 Udostępnij grę"**
+2. W modalU kliknij **"📝 Wygeneruj kod gry"**
+3. **Skopiuj** wygenerowany kod (przycisk 📋)
+4. **Prześlij** kod innemu graczowi (SMS, email, messenger)
+
+### 📥 Wczytywanie otrzymanej gry
+
+1. **W menu głównym** kliknij **"📥 Wczytaj grę"**
+2. **Wprowadź kod** otrzymany od innego gracza
+3. Kliknij **"📥 Wczytaj grę"** lub naciśnij **Enter**
+4. Gra zostanie wczytana w identycznym stanie!
+
+### 🔒 Bezpieczeństwo
+
+- Kody gry są **zaszyfrowane** (Base64) z **checksumami**
+- **Walidacja** nieprawidłowych kodów z komunikatami błędów
+- **Automatyczne formatowanie** - tylko prawidłowe znaki
+- **Brak możliwości** uszkodzenia stanu gry przez błędny kod
+
+## ✨ What's New v0.1.4
 
 🎨 **Grafiki tła**:
 

@@ -5,6 +5,58 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-08-23
+
+### ✨ Nowe funkcje
+
+- **💾 System zapisywania i wczytywania gry**
+
+  - Automatyczne zapisywanie stanu gry w localStorage
+  - Możliwość udostępniania gry poprzez kody gry
+  - Import/export stanu gry między urządzeniami
+  - Base64 encoding z checksumami dla bezpiecznego przesyłania
+
+- **🔗 Modale udostępniania i wczytywania**
+  - ShareGameModal - generowanie kodów do udostępniania
+  - LoadGameModal - wczytywanie gry z kodów
+  - Walidacja kodów gry z odpowiednimi komunikatami błędów
+  - Kopiowanie do schowka z wizualnym potwierdzeniem
+
+### 🏗️ Zmiany architektoniczne
+
+- **🧩 BaseModal component**
+
+  - Uniwersalny modal bazujący na istniejącym ConfirmModal
+  - Reużywalne style dla spójności designu
+  - Usunięcie duplikacji CSS między modalami
+
+- **⚛️ GameContext rozszerzenia**
+
+  - Dodano `loadGame` action do wczytywania stanu
+  - Integracja z gameStorage utilities
+  - Auto-save functionality z useEffect
+
+- **🛠️ Utilities gameStorage**
+  - `serializeGameState()` - konwersja stanu do Base64
+  - `deserializeGameState()` - dekodowanie z walidacją
+  - `generateShareableCode()` - tworzenie kodów gry
+  - `loadFromShareableCode()` - wczytywanie z kodów
+  - `autoSaveGameState()` - automatyczne zapisywanie
+  - `copyToClipboard()` - helper do kopiowania
+
+### 🎮 Interfejs użytkownika
+
+- **🏠 Home.tsx** - Aktywacja przycisku "Wczytaj grę"
+- **🎯 Game.tsx** - Dodanie przycisku "Udostępnij grę"
+- **📱 Responsywny design** - Modale dostosowane do urządzeń mobilnych
+
+### 🔧 Zmiany techniczne
+
+- **📦 Wersja 0.2.0** - Aktualizacja package.json
+- **🌿 Nowa gałąź v0.2.0** - Organizacja rozwoju wersji
+- **🧪 TypeScript** - Pełna typizacja nowych komponentów
+- **♻️ Refaktor modali** - Eliminacja duplikacji styli CSS
+
 ## [0.1.4] - 2025-08-22
 
 ### 🐛 Naprawione błędy

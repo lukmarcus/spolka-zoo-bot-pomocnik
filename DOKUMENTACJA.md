@@ -19,6 +19,63 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 ## Funkcjonalności
 
+### 🎯 Wersja 0.2.0 - Save/Load System
+
+**Status**: ✅ Ukończona (2025-08-23)
+**Cel**: Możliwość zapisywania i udostępniania stanu gry
+
+**Funkcjonalności**:
+
+- [x] **System zapisywania**: Automatyczne zapisywanie stanu w localStorage
+- [x] **Kody gry**: Generowanie Base64 kodów z checksumami do udostępniania
+- [x] **Modale Save/Load**: ShareGameModal i LoadGameModal z BaseModal
+- [x] **Walidacja**: Bezpieczne wczytywanie z walidacją formatów i checksumów
+- [x] **UX**: Kopiowanie do schowka, instrukcje użycia, komunikaty błędów
+- [x] **Integracja**: Aktywne przyciski w Home.tsx i Game.tsx
+
+**Komponenty utworzone**:
+
+- `src/components/BaseModal.tsx` - uniwersalny modal z reużywalnymi stylami
+- `src/components/ShareGameModal.tsx` - modal udostępniania gry
+- `src/components/LoadGameModal.tsx` - modal wczytywania gry
+- `src/utils/gameStorage.ts` - utilities dla serializacji/deserializacji stanu
+
+**GameContext rozszerzenia**:
+
+- `loadGame()` - akcja wczytywania stanu gry
+- `LOAD_GAME` - reducer case dla ładowania stanu
+- Auto-save z useEffect - automatyczne zapisywanie przy każdej zmianie
+
+**Architektura**:
+
+- **Serialization**: `GameState` → Base64 string z checksumami
+- **Deserialization**: Base64 string → `GameState` z walidacją
+- **Storage**: localStorage dla auto-save, clipboard API dla kodów
+- **Modular CSS**: Reużywanie ConfirmModal.module.css dla spójności
+
+---
+
+### 🎯 Wersja 0.1.4 - Complete bugfix cycle
+
+**Status**: ✅ Ukończona (2025-08-22)
+**Cel**: Rozwiązanie wszystkich znanych błędów UI/UX
+
+**Naprawione problemy**:
+
+- [x] **Issue #13**: Centrowanie aplikacji na ekranach desktop (>480px)
+- [x] **Issue #14**: Tła nie pokrywające całego ekranu
+- [x] **Issue #15**: Niespójne szerokości elementów
+- [x] **Issue #16**: Brak resetu stanu gry przy powrocie do menu
+
+**Zmiany techniczne**:
+
+- Unified Layout system z max-width: 480px
+- Dynamic background management w Layout.tsx
+- CSS variables optimization dla spójności
+- Game state reset w confirmExit()
+
+---
+
 ### 🎯 Wersja 0.0.1 - Podstawowa struktura
 
 **Status**: ✅ Ukończona (2025-08-16)
@@ -712,6 +769,136 @@ src/
 - **Długość**: Krótkie (jedno zdanie na efekt)
 - **Responsywność**: Optymalizacja dla mobile-first
 - **Kontrast**: Wysoki kontrast na kremowym tle kart`
+
+---
+
+## Architektura Save/Load System (v0.2.0)
+
+### GameStorage utilities
+
+**Lokalizacja**: `src/utils/gameStorage.ts`
+
+**Główne funkcje**:
+
+```typescript
+// Serializacja stanu gry do Base64 z checksumą
+function serializeGameState(gameState: GameState): string
+
+// Deserializacja z walidacją formatu i checksumą
+function deserializeGameState(data: string): GameState | null
+
+// Generowanie kodu gry do udostępniania
+function generateShareableCode(gameState: GameState): string
+
+// Wczytywanie gry z otrzymanego kodu
+function loadFromShareableCode(code: string): GameState | null
+
+// Automatyczne zapisywanie w localStorage
+function autoSaveGameState(gameState: GameState): void
+
+// Helper do kopiowania kodów do schowka
+function copyToClipboard(text: string): Promise<boolean>
+
+// Walidacja formatu kodów gry
+function isValidGameCode(code: string): boolean
+```
+
+### Architektura kodów gry
+
+**Format kodu**: `BASE64_ENCODED_JSON_WITH_CHECKSUM`
+
+1. **GameState** → **JSON string**
+2. **JSON** + **CRC32 checksum** → **Combined string**
+3. **Combined string** → **Base64 encoding**
+4. **Base64** → **Uppercase format** (user-friendly)
+
+**Przykład**:
+```
+GameState {gameStarted: true, currentCardIndex: 5, ...}
+↓
+JSON: '{"gameStarted":true,"currentCardIndex":5,...}'
+↓
+JSON + checksum: '{"gameStarted":true,...}|CRC32:ABC123'
+↓
+Base64: 'eyJnYW1lU3RhcnRlZCI6dHJ1ZSwuLi59fENSQzMyOkFCQzEyMw=='
+↓
+Code: 'EYJNYW1lU3RhCnRlZCI6dHJ1ZSwuLi59fENSQzMyOkFCQzEyMw=='
+```
+
+### Modal Components
+
+**BaseModal** (`src/components/BaseModal.tsx`):
+- Reużywalny modal bazujący na ConfirmModal.module.css
+- Uniwersalny overlay, keyboard handling, click outside
+- Parametryzowalna szerokość (maxWidth prop)
+- Konsystentny design system
+
+**ShareGameModal**:
+- Generowanie kodów gry z GameState
+- Kopiowanie do schowka z wizualnym feedback
+- Instrukcje użycia wbudowane w UI
+- Error handling dla problemów z generowaniem
+
+**LoadGameModal**:
+- Input z walidacją formatu kodu gry
+- Real-time walidacja podczas wpisywania
+- Error states z komunikatami dla użytkownika
+- Enter key support dla wygody użytkowania
+
+### GameContext Integration
+
+**Nowe akcje**:
+```typescript
+type GameAction =
+  | { type: "DRAW_CARD" }
+  | { type: "SHUFFLE_DECK" }
+  | { type: "RESET_GAME" }
+  | { type: "NEW_GAME" }
+  | { type: "LOAD_GAME"; payload: GameState } // NOWA AKCJA
+
+interface GameContextType {
+  // ... istniejące funkcje
+  loadGame: (gameState: GameState) => void; // NOWA FUNKCJA
+}
+```
+
+**Auto-save mechanism**:
+```typescript
+// W GameProvider - automatyczne zapisywanie przy każdej zmianie stanu
+useEffect(() => {
+  autoSaveGameState(state);
+}, [state]);
+```
+
+### localStorage Strategy
+
+**Klucz**: `SPOLKA_ZOO_GAME_STATE`
+**Format**: JSON string (bezpośredni GameState)
+**Timing**: Auto-save po każdej akcji gry
+**Recovery**: Sprawdzenie localStorage przy inicjalizacji aplikacji
+
+### UI Integration Points
+
+**Home.tsx**:
+- Przycisk "📥 Wczytaj grę" → otwiera LoadGameModal
+- onLoadGame → loadGame(gameState) → navigate("/game")
+
+**Game.tsx**:
+- Przycisk "🔗 Udostępnij grę" → otwiera ShareGameModal
+- Przekazanie aktualnego game.state do ShareGameModal
+
+### Error Handling
+
+**Walidacja kodu gry**:
+- Format check (Base64, długość)
+- Checksum verification
+- GameState schema validation
+- User-friendly error messages
+
+**Failsafe mechanisms**:
+- Graceful degradation przy problemach z localStorage
+- Backup dla starszych przeglądarek bez clipboard API
+- Instrukcje manualne przy błędach kopiowania
 
 ---
 
