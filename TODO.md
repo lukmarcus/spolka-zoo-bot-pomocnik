@@ -105,6 +105,10 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 - ✅ Refaktor CSS - mniej duplikacji, lepsza utrzymywalność
 - ✅ Zoptymalizowany bundle (10.49kB → 10.03kB)
 
+### 📁 Bug fixes dla Issues ✅
+
+- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
+
 ---
 
 ## 🎯 Wersja 0.0.3 - Poprawki wizualne (bugfixy) ✅ UKOŃCZONA
@@ -142,6 +146,12 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 - ✅ Automatyczne wersje pobierane z package.json
 - ✅ Lepsze wsparcie dla bardzo małych ekranów (≤380px)
 - ✅ Build i lint bez błędów
+
+### 📁 Bug fixes dla Issues ✅
+
+- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
+- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
+- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
 
 ### 🎯 Cel v0.0.2 - ZREALIZOWANY ✅
 
@@ -265,6 +275,61 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
   - [x] Dynamic backgroundType w Layout component
   - [x] Asset optimization w build pipeline
   - [x] Mobile-first compactness design
+
+### Wersja 0.1.4 - Desktop centering bugfix ✅ UKOŃCZONA
+
+#### 🐛 Bug Fixes ✅
+
+- [x] **Desktop layout centering (Issue #13)**
+
+  - [x] Naprawiono problem z centrowaniem na ekranach >480px
+  - [x] Unified max-width system - wszystkie ekrany używają 480px
+  - [x] Enhanced media queries dla desktop z explicitnym `margin: 0 auto`
+  - [x] Poprawiono CSS variables w globals.css
+  - [x] Usunięto conflicting max-width z Home.module.css (400px → 100%)
+
+- [x] **Layout consistency**
+
+  - [x] Spójny system szerokości między Home, Game i Layout
+  - [x] Lepsze responsywne calc() dla narrow screens
+  - [x] Explicitne centrowanie w Layout.module.css dla desktop
+
+- [x] **Technical improvements**
+  - [x] Version bump to 0.1.4 w package.json
+  - [x] Documentation update w CHANGELOG.md
+  - [x] Enhanced CSS architecture dla desktop consistency
+
+#### 🐛 Kompletny Bug Fix Cycle v0.1.4 ✅
+
+- [x] **Desktop centering (Issue #13)**
+
+  - [x] Unified max-width system 480px dla wszystkich ekranów
+  - [x] Enhanced media queries dla desktop z explicitnym margin auto
+
+- [x] **Full-screen background coverage (Issue #14)**
+
+  - [x] Przeniesiono aplikację tła z Layout component na body element
+  - [x] Dodano `background-attachment: fixed` dla stabilnych teł
+  - [x] Wprowadzono subtelny overlay dla czytelności tekstu
+
+- [x] **Layout width consistency (Issue #15)**
+
+  - [x] BotCard: zmieniono max-width z 400px na 100% dla Layout consistency
+  - [x] Game buttons: usunięto max-width 300px dla spójności z Layout
+  - [x] Unified Layout max-width system dla wszystkich komponentów
+
+- [x] **Game state reset bug (Issue #16)**
+
+  - [x] Dodano wywołanie `game.resetGame()` w funkcji `confirmExit()`
+  - [x] Stan gry jest teraz prawidłowo resetowany przed nawigacją
+
+- [x] **All technical improvements v0.1.4**
+  - [x] Layout.tsx - useEffect dla dynamicznego zarządzania klasami tła na body
+  - [x] globals.css - refaktor background utilities, enhanced media queries
+  - [x] Layout.module.css - positioning, z-index, explicitne max-width
+  - [x] BotCard.module.css - max-width 400px → 100% dla consistency
+  - [x] Game.module.css - usunięto max-width constraints, zwiększono card-reverse
+  - [x] Game.tsx - dodano `game.resetGame()` call w `confirmExit()`
 
 ---
 

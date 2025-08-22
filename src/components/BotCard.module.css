@@ -6,7 +6,8 @@
   border-radius: 12px;
   padding: var(--card-padding);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 100%; /* Use full available width from Layout container */
+  width: 100%;
   margin: 0 auto;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

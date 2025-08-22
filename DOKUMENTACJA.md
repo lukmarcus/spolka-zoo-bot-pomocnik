@@ -54,6 +54,12 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 - [x] **Responsywność**: Czcionki za duże na telefonach
 - [x] **Technical**: Automatyczne wersje z package.json
 
+**Bug fixes dla Issues**:
+
+- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
+- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
+- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
+
 **Kluczowe zmiany**:
 
 - Użycie `100dvh` zamiast `100vh` dla mobile browsers
@@ -74,6 +80,10 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 - [x] **Media query conflicts**: Konflikty między różnymi zakresami CSS
 - [x] **Card sizing jumps**: Skoki szerokości kart między breakpointami
 - [x] **CSS architecture**: Duplikacja kodu i konfliktujące reguły
+
+**Bug fixes dla Issues**:
+
+- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
 
 **Kluczowe zmiany**:
 
@@ -256,6 +266,71 @@ interface BotCard {
 - CSS-in-TS import dla card-reverse.jpg
 - Mobile-first compactness optimization
 - Asset optimization w build pipeline
+
+---
+
+### 🎯 Wersja 0.1.4 - Desktop centering bugfix
+
+**Status**: ✅ Ukończona (2025-08-22)
+**Cel**: Naprawienie problemu z centrowaniem aplikacji na ekranach desktopowych
+
+**Naprawione błędy**:
+
+- ✅ **Desktop layout centering (Issue #13)**:
+
+  - Problem: Na ekranach >480px aplikacja nie była poprawnie wyśrodkowana
+  - Rozwiązanie: Unified max-width system - wszystkie ekrany używają spójnego 480px
+  - Enhanced media queries dla desktop z explicitnym `margin: 0 auto`
+  - Poprawiono CSS variables w globals.css z lepszym calc() dla narrow screens
+
+- ✅ **Layout consistency**:
+
+  - Usunięto conflicting max-width z Home.module.css (400px → 100%)
+  - Spójny system szerokości między Home, Game i Layout components
+  - Explicitne centrowanie w Layout.module.css dla ekranów >481px
+
+**Zmodyfikowane pliki**:
+
+- ✅ package.json - version bump do 0.1.4
+- ✅ globals.css - poprawione CSS variables i media queries
+- ✅ Layout.module.css - dodano explicitne `max-width: 480px` dla desktop
+- ✅ Home.module.css - usunięto conflicting `max-width: 400px` z heroDescription
+
+**Technical improvements**:
+
+- Lepsze responsywne zachowanie na różnych szerokościach ekranu
+- Spójne centrowanie między wszystkimi ekranami aplikacji
+- Enhanced CSS architecture dla desktop consistency
+
+**Dodatkowo naprawione w v0.1.4**:
+
+- ✅ **Full-screen background coverage (Issue #14)**:
+
+  - Problem: Grafiki tła nie pokrywały całego ekranu (tylko Layout o szerokości 480px)
+  - Rozwiązanie: Przeniesiono aplikację tła z Layout component na body element
+  - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
+  - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
+
+- ✅ **Layout width consistency (Issue #15)**:
+
+  - Problem: Niespójne szerokości elementów na różnych ekranach (BotCard 400px, Game buttons 300px)
+  - Rozwiązanie: Unified Layout max-width system dla wszystkich komponentów
+  - BotCard: zmieniono max-width z 400px na 100% dla pełnego wykorzystania Layout
+  - Game buttons: usunięto ograniczenie max-width 300px dla spójności
+
+- ✅ **Game state reset bug (Issue #16)**:
+  - Problem: Stan gry nie był resetowany przy powrocie do menu (mimo modal warning)
+  - Rozwiązanie: Dodano wywołanie `game.resetGame()` w funkcji `confirmExit()`
+  - Stan gry jest teraz prawidłowo resetowany przed nawigacją do menu
+
+**Wszystkie zmodyfikowane pliki w v0.1.4**:
+
+- ✅ Layout.tsx - useEffect dla dynamicznego zarządzania klasami tła na body
+- ✅ globals.css - refaktor background utilities, enhanced media queries
+- ✅ Layout.module.css - positioning, z-index, explicitne max-width dla desktop
+- ✅ BotCard.module.css - max-width 400px → 100% dla Layout consistency
+- ✅ Game.module.css - usunięto max-width constraints, zwiększono card-reverse
+- ✅ Game.tsx - dodano `game.resetGame()` call w `confirmExit()`
 
 ---
 

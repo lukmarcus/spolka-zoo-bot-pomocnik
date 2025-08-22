@@ -17,9 +17,34 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.3 ✅  
-**Status**: Grafiki tła i optimalizacja UI  
+**Aktualna wersja**: 0.1.4 ✅  
+**Status**: Complete bugfix cycle (4 issues resolved)  
 **Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+
+## ✨ What's New v0.1.4
+
+🐛 **Complete bugfix cycle**:
+
+- **Issue #13**: Naprawiono centrowanie aplikacji na ekranach desktopowych (>480px)
+- **Issue #14**: Naprawiono tła nie pokrywające całego ekranu - przeniesiono na body element
+- **Issue #15**: Naprawiono niespójne szerokości elementów - unified Layout max-width system
+- **Issue #16**: Naprawiony reset stanu gry przy powrocie do menu
+
+🔧 **Layout & UX improvements**:
+
+- Unified system szerokości 480px dla wszystkich komponentów (BotCard, Game buttons)
+- Full-screen background coverage z `background-attachment: fixed`
+- Spójne centrowanie między wszystkimi ekranami aplikacji
+- Proper game state management - reset przy powrocie do menu
+
+🎯 **Technical enhancements**:
+
+- Enhanced media queries dla lepszego desktop experience
+- Dynamic background management z useEffect w Layout.tsx
+- CSS architecture optimization dla unified layout system
+- Game state reset functionality w confirmExit()
+
+📁 **All bugs resolved**: Issues #13, #14, #15, #16 - ROZWIĄZANE ✅
 
 ## ✨ What's New v0.1.3
 
@@ -157,6 +182,7 @@ Zawiera:
 | 0.1.1  | ✅ Ukończona | **UX improvements - uproszczenie interfejsu gry**     |
 | 0.1.2  | ✅ Ukończona | Niestandardowe modale (zamiast window.confirm)        |
 | 0.1.3  | ✅ Ukończona | **Grafiki tła i optymalizacja interfejsu**            |
+| 0.1.4  | ✅ Ukończona | **Complete bugfix cycle - 4 issues resolved**         |
 | 0.2.0  | 🔜 Planowana | Zapis i wczytywanie stanu gry (LocalStorage + kody)   |
 | 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                              |
 | 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |

@@ -9,6 +9,8 @@
   padding: var(--padding);
   overflow-x: hidden; /* Prevent horizontal scroll */
   box-sizing: border-box; /* Include padding in width calculation */
+  position: relative; /* Ensure layout is positioned above background overlay */
+  z-index: 1; /* Above background overlay */
 }
 
 .header {
@@ -60,6 +62,9 @@
 @media (min-width: 481px) {
   .layout {
     padding: 2rem;
+    max-width: 480px; /* Fixed desktop width */
+    margin: 0 auto; /* Ensure perfect centering */
+    width: 100%;
   }
 
   .title {

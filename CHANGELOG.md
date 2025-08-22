@@ -5,6 +5,74 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2025-08-22
+
+### 🐛 Naprawione błędy
+
+- **🖥️ Poprawione centrowanie na desktopie**
+  - Naprawiono problem z centrowaniem aplikacji na szerszych ekranach (>480px)
+  - Unified szerokość aplikacji - wszystkie ekrany używają teraz spójnego systemu 480px max-width
+  - Dodano lepsze media queries dla ekranów desktop z `margin: 0 auto`
+  - Poprawiono CSS variables dla `--max-width` z lepszym calc() dla narrow screens
+  - Home description nie używa już własnej max-width 400px (teraz 100% z Layout)
+
+### 🔧 Zmiany techniczne
+
+- **📦 Wersja 0.1.4** - Aktualizacja package.json
+- **🎯 Layout.module.css**: Dodano explicite `max-width: 480px` i `margin: 0 auto` dla desktop, positioning i z-index
+- **🌐 globals.css**: Ulepszone media queries dla spójnego centrowania, refaktor background utilities
+- **🏠 Home.module.css**: Usunięto konflictujące max-width z heroDescription
+- **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
+- **🎨 BotCard.module.css**: Zmieniono max-width z 400px na 100% dla Layout consistency
+- **🎮 Game.module.css**: Usunięto ograniczenie max-width 300px z przycisków, zwiększono card-reverse
+- **⚛️ Game.tsx**: Dodano `game.resetGame()` call w `confirmExit()` dla proper state management
+
+### 📁 Bug fix dla Issue #13
+
+- "Ekran nie jest wyśrodkowany w wersji desktopowej" - ROZWIĄZANY ✅
+
+### 📁 Bug fix dla Issue #14
+
+- "Tło nie zajmuje całego ekranu i nie jest wyśrodkowane" - ROZWIĄZANY ✅
+
+### 📁 Bug fix dla Issue #15
+
+- "Niespójne szerokości elementów na różnych ekranach" - ROZWIĄZANY ✅
+
+### 📁 Bug fix dla Issue #16
+
+- "Stan gry nie jest resetowany przy powrocie do menu" - ROZWIĄZANY ✅
+
+### 🐛 Naprawione błędy
+
+- **🎨 Poprawione tła pełnoekranowe**
+
+  - Naprawiono problem z tłami nie pokrywającymi całego ekranu (Issue #14)
+  - Przeniesiono aplikację tła z Layout component na body element dla full-screen coverage
+  - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
+  - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
+  - Ulepszona hierarchia z-index (Layout z-index: 1, overlay z-index: 0)
+
+- **� Spójność układu na różnych ekranach**
+
+  - Naprawiono niespójne szerokości elementów między ekranami (Issue #15)
+  - BotCard: zmieniono max-width z 400px na 100% dla pełnego wykorzystania Layout
+  - Game buttons: usunięto ograniczenie max-width 300px dla spójności z Layout
+  - Game card-reverse: zwiększono max-width z 200px na 250px dla lepszej proporcji
+  - Wszystkie komponenty używają teraz unified Layout max-width system (480px)
+
+- **🎮 Poprawiony reset stanu gry**
+  - Naprawiono problem z nieresetowaniem stanu gry przy powrocie do menu (Issue #16)
+  - Dodano wywołanie `game.resetGame()` w funkcji `confirmExit()` w Game.tsx
+  - Modal ostrzeżenia pozostaje aktywny dla informacji użytkownika
+  - Stan gry jest teraz prawidłowo resetowany przed nawigacją do menu
+
+### 🔧 Zmiany techniczne
+
+- **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
+- **🌐 globals.css**: Refaktor background utilities - aplikacja na body, nie Layout
+- **📱 Layout.module.css**: Dodano positioning i z-index dla proper layering
+
 ## [0.1.3] - 2025-08-21
 
 ### ✨ Nowe funkcjonalności
@@ -143,6 +211,10 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - 🐛 **CSS media query conflicts**: Naprawiono konflikty między różnymi zakresami responsywności
 - 🐛 **Card sizing issues**: Ujednolicono szerokość kart dla płynnych przejść między rozmiarami ekranu
 
+### 📁 Bug fixes dla Issues
+
+- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
+
 ### Dodane
 
 - ✅ **CSS custom properties**: Wprowadzono zmienne dla responsywnych font-size i spacing
@@ -169,6 +241,12 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - 🐛 **Content overflow**: Poprawiono wyświetlanie na małych ekranach - zawartość nie była w pełni widoczna
 - 🐛 **Responsywność czcionek**: Zastąpiono stałe rozmiary czcionek responsywnymi (`clamp()`)
 - 🐛 **Padding na małych ekranach**: Dodano responsywny padding dla urządzeń <380px
+
+### 📁 Bug fixes dla Issues
+
+- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
+- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
+- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
 
 ### Dodane
 
