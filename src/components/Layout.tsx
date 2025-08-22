@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Layout.module.css";
 import packageJson from "../../package.json";
 
@@ -13,19 +13,34 @@ const Layout: React.FC<LayoutProps> = ({
   title = "Spółka ZOO",
   backgroundType = "default",
 }) => {
-  const getBackgroundClass = () => {
+  useEffect(() => {
+    // Apply background class to body for full-screen coverage
+    const body = document.body;
+
+    // Remove any existing background classes
+    body.classList.remove("bg-home", "bg-game");
+
+    // Add the appropriate background class
     switch (backgroundType) {
       case "home":
-        return "bg-home";
+        body.classList.add("bg-home");
+        break;
       case "game":
-        return "bg-game";
+        body.classList.add("bg-game");
+        break;
       default:
-        return "";
+        // Use default gradient background (no additional class needed)
+        break;
     }
-  };
+
+    // Cleanup function to remove background classes when component unmounts
+    return () => {
+      body.classList.remove("bg-home", "bg-game");
+    };
+  }, [backgroundType]);
 
   return (
-    <div className={`${styles.layout} ${getBackgroundClass()}`}>
+    <div className={styles.layout}>
       <header className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         {title !== "Spółka ZOO" && (

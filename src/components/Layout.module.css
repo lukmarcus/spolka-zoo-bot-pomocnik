@@ -9,6 +9,8 @@
   padding: var(--padding);
   overflow-x: hidden; /* Prevent horizontal scroll */
   box-sizing: border-box; /* Include padding in width calculation */
+  position: relative; /* Ensure layout is positioned above background overlay */
+  z-index: 1; /* Above background overlay */
 }
 
 .header {

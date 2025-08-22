@@ -67,14 +67,18 @@ body {
   font-family: Georgia, "Times New Roman", serif;
   line-height: 1.5;
   color: var(--text-primary);
-  background: var(--bg-primary);
-  background-attachment: fixed; /* Fixes background cut-off on mobile */
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
+}
+
+/* Default gradient background when no image background is set */
+body:not(.bg-home):not(.bg-game) {
+  background: var(--bg-primary);
+  background-attachment: fixed; /* Fixes background cut-off on mobile */
 }
 
 #root {
@@ -327,6 +331,25 @@ button:active {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed; /* Stable background on scroll */
+  position: relative;
+}
+
+.bg-home::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(
+    232,
+    245,
+    232,
+    0.05
+  ); /* Very subtle overlay for text readability */
+  pointer-events: none;
+  z-index: 0;
 }
 
 .bg-game {
@@ -334,4 +357,23 @@ button:active {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed; /* Stable background on scroll */
+  position: relative;
+}
+
+.bg-game::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(
+    240,
+    248,
+    199,
+    0.05
+  ); /* Very subtle overlay for text readability */
+  pointer-events: none;
+  z-index: 0;
 }

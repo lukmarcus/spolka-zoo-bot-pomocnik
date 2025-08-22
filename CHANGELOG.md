@@ -27,6 +27,25 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - "Ekran nie jest wyśrodkowany w wersji desktopowej" - ROZWIĄZANY ✅
 
+### 📁 Bug fix dla Issue #14
+
+- "Tło nie zajmuje całego ekranu i nie jest wyśrodkowane" - ROZWIĄZANY ✅
+
+### 🐛 Naprawione błędy (v0.1.4.1)
+
+- **🎨 Poprawione tła pełnoekranowe**
+  - Naprawiono problem z tłami nie pokrywającymi całego ekranu (Issue #14)
+  - Przeniesiono aplikację tła z Layout component na body element dla full-screen coverage
+  - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
+  - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
+  - Ulepszona hierarchia z-index (Layout z-index: 1, overlay z-index: 0)
+
+### 🔧 Zmiany techniczne (v0.1.4.1)
+
+- **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
+- **🌐 globals.css**: Refaktor background utilities - aplikacja na body, nie Layout
+- **📱 Layout.module.css**: Dodano positioning i z-index dla proper layering
+
 ## [0.1.3] - 2025-08-21
 
 ### ✨ Nowe funkcjonalności

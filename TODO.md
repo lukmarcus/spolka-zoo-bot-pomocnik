@@ -299,6 +299,21 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
   - [x] Documentation update w CHANGELOG.md
   - [x] Enhanced CSS architecture dla desktop consistency
 
+#### 🐛 Bug Fixes v0.1.4.1 ✅
+
+- [x] **Full-screen background coverage (Issue #14)**
+
+  - [x] Naprawiono problem z tłami nie pokrywającymi całego ekranu
+  - [x] Przeniesiono aplikację tła z Layout component na body element
+  - [x] Dodano `background-attachment: fixed` dla stabilnych teł
+  - [x] Wprowadzono subtelny overlay (0.05 opacity) dla czytelności tekstu
+  - [x] Ulepszona hierarchia z-index dla proper layering
+
+- [x] **Technical improvements v0.1.4.1**
+  - [x] Layout.tsx - useEffect dla dynamicznego zarządzania klasami tła na body
+  - [x] globals.css - refaktor background utilities (body, nie Layout)
+  - [x] Layout.module.css - positioning i z-index dla proper layering
+
 ---
 
 ## 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry

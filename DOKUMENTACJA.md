@@ -302,6 +302,22 @@ interface BotCard {
 - Spójne centrowanie między wszystkimi ekranami aplikacji
 - Enhanced CSS architecture dla desktop consistency
 
+**Naprawione błędy v0.1.4.1**:
+
+- ✅ **Full-screen background coverage (Issue #14)**:
+
+  - Problem: Grafiki tła nie pokrywały całego ekranu (tylko Layout o szerokości 480px)
+  - Rozwiązanie: Przeniesiono aplikację tła z Layout component na body element
+  - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
+  - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
+  - Ulepszona hierarchia z-index dla proper layering
+
+**Zmodyfikowane pliki v0.1.4.1**:
+
+- ✅ Layout.tsx - dodano useEffect dla dynamicznego zarządzania klasami tła na body
+- ✅ globals.css - refaktor background utilities (aplikacja na body, nie Layout)
+- ✅ Layout.module.css - dodano positioning i z-index dla proper layering
+
 ---
 
 ### 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry
