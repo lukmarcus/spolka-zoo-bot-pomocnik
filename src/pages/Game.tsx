@@ -5,6 +5,7 @@ import { BOT_CARDS } from "../data/botCards";
 import Layout from "../components/Layout";
 import BotCard from "../components/BotCard";
 import ConfirmModal from "../components/ConfirmModal";
+import ShareGameModal from "../components/ShareGameModal";
 import styles from "./Game.module.css";
 import cardReverseImg from "../assets/images/interface/card-reverse.jpg";
 
@@ -12,6 +13,7 @@ const Game: React.FC = () => {
   const navigate = useNavigate();
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // Auto-start game when component mounts
   useEffect(() => {
@@ -145,6 +147,13 @@ const Game: React.FC = () => {
           <button className="btn-secondary" onClick={handleBackToMenu}>
             ← Powrót do menu
           </button>
+          <button
+            className="btn-tertiary"
+            onClick={() => setShowShareModal(true)}
+            disabled={!game.isGameStarted()}
+          >
+            📤 Udostępnij grę
+          </button>
         </div>
       </div>
 
@@ -155,6 +164,12 @@ const Game: React.FC = () => {
         cancelText="Nie"
         onConfirm={confirmExit}
         onCancel={cancelExit}
+      />
+
+      <ShareGameModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        gameState={game.state}
       />
     </Layout>
   );

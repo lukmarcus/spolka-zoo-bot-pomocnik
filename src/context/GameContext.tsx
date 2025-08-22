@@ -3,10 +3,14 @@
 
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { GameState, GameContextType } from "../types";
 import { TOTAL_CARDS } from "../data/botCards";
+import {
+  autoSaveGameState,
+  loadAutoSavedGameState,
+} from "../utils/gameStorage";
 
 // === CONTEXT ===
 
@@ -20,16 +24,27 @@ type GameAction =
   | { type: "DRAW_CARD" }
   | { type: "SHUFFLE_DECK" }
   | { type: "RESET_GAME" }
-  | { type: "NEW_GAME" };
+  | { type: "NEW_GAME" }
+  | { type: "LOAD_GAME"; payload: GameState };
+
+// Get initial state (with auto-save restore)
+function getInitialState(): GameState {
+  const autoSaved = loadAutoSavedGameState();
+  if (autoSaved) {
+    return autoSaved;
+  }
+
+  return {
+    currentCardIndex: -1,
+    cardSequence: [],
+    usedCards: [],
+    shuffleCount: 0,
+    gameStarted: false,
+  };
+}
 
 // Initial game state
-const initialState: GameState = {
-  currentCardIndex: -1,
-  cardSequence: [],
-  usedCards: [],
-  shuffleCount: 0,
-  gameStarted: false,
-};
+const initialState: GameState = getInitialState();
 
 // Game reducer
 function gameReducer(state: GameState, action: GameAction): GameState {
@@ -77,6 +92,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case "RESET_GAME":
       return initialState;
 
+    case "LOAD_GAME":
+      return action.payload;
+
     default:
       return state;
   }
@@ -105,6 +123,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     shuffleDeck: () => dispatch({ type: "SHUFFLE_DECK" }),
     resetGame: () => dispatch({ type: "RESET_GAME" }),
     newGame: () => dispatch({ type: "NEW_GAME" }),
+    loadGame: (gameState: GameState) =>
+      dispatch({ type: "LOAD_GAME", payload: gameState }),
     getCurrentCard: () => {
       if (
         !state.gameStarted ||
@@ -120,6 +140,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     getCardsRemaining: () =>
       Math.max(0, TOTAL_CARDS - (state.currentCardIndex + 1)),
   };
+
+  // Auto-save game state when it changes
+  useEffect(() => {
+    autoSaveGameState(state);
+  }, [state]);
 
   return (
     <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
