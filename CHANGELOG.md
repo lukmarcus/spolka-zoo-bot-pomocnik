@@ -165,6 +165,10 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - 🐛 **CSS media query conflicts**: Naprawiono konflikty między różnymi zakresami responsywności
 - 🐛 **Card sizing issues**: Ujednolicono szerokość kart dla płynnych przejść między rozmiarami ekranu
 
+### 📁 Bug fixes dla Issues
+
+- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
+
 ### Dodane
 
 - ✅ **CSS custom properties**: Wprowadzono zmienne dla responsywnych font-size i spacing
@@ -191,6 +195,12 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - 🐛 **Content overflow**: Poprawiono wyświetlanie na małych ekranach - zawartość nie była w pełni widoczna
 - 🐛 **Responsywność czcionek**: Zastąpiono stałe rozmiary czcionek responsywnymi (`clamp()`)
 - 🐛 **Padding na małych ekranach**: Dodano responsywny padding dla urządzeń <380px
+
+### 📁 Bug fixes dla Issues
+
+- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
+- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
+- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
 
 ### Dodane
 

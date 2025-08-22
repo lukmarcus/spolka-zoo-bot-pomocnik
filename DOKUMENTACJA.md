@@ -54,6 +54,12 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 - [x] **Responsywność**: Czcionki za duże na telefonach
 - [x] **Technical**: Automatyczne wersje z package.json
 
+**Bug fixes dla Issues**:
+
+- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
+- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
+- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
+
 **Kluczowe zmiany**:
 
 - Użycie `100dvh` zamiast `100vh` dla mobile browsers
@@ -74,6 +80,10 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 - [x] **Media query conflicts**: Konflikty między różnymi zakresami CSS
 - [x] **Card sizing jumps**: Skoki szerokości kart między breakpointami
 - [x] **CSS architecture**: Duplikacja kodu i konfliktujące reguły
+
+**Bug fixes dla Issues**:
+
+- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
 
 **Kluczowe zmiany**:
 

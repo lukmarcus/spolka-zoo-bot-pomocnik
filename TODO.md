@@ -105,6 +105,10 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 - ✅ Refaktor CSS - mniej duplikacji, lepsza utrzymywalność
 - ✅ Zoptymalizowany bundle (10.49kB → 10.03kB)
 
+### 📁 Bug fixes dla Issues ✅
+
+- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
+
 ---
 
 ## 🎯 Wersja 0.0.3 - Poprawki wizualne (bugfixy) ✅ UKOŃCZONA
@@ -142,6 +146,12 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 - ✅ Automatyczne wersje pobierane z package.json
 - ✅ Lepsze wsparcie dla bardzo małych ekranów (≤380px)
 - ✅ Build i lint bez błędów
+
+### 📁 Bug fixes dla Issues ✅
+
+- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
+- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
+- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
 
 ### 🎯 Cel v0.0.2 - ZREALIZOWANY ✅
 
