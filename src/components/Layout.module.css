@@ -60,6 +60,9 @@
 @media (min-width: 481px) {
   .layout {
     padding: 2rem;
+    max-width: 480px; /* Fixed desktop width */
+    margin: 0 auto; /* Ensure perfect centering */
+    width: 100%;
   }
 
   .title {

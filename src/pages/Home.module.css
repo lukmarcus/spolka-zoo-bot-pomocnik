@@ -22,7 +22,7 @@
   font-size: var(--font-size-hero-desc);
   line-height: 1.6;
   margin: 0 auto;
-  max-width: 400px;
+  max-width: 100%; /* Use full available width from Layout */
 }
 
 .menu {

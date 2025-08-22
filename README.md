@@ -17,9 +17,26 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.1.3 ✅  
-**Status**: Grafiki tła i optimalizacja UI  
+**Aktualna wersja**: 0.1.4 ✅  
+**Status**: Desktop centering bugfix  
 **Następna wersja**: 0.2.0 - Zapis i wczytywanie gry
+
+## ✨ What's New v0.1.4
+
+🐛 **Desktop layout fix**:
+
+- Naprawiono problem z centrowaniem aplikacji na ekranach desktopowych (>480px)
+- Unified system szerokości - wszystkie ekrany używają spójnego max-width 480px
+- Enhanced media queries dla lepszego centrowania z explicitnym `margin: 0 auto`
+- Usunięto conflicting max-width settings między komponentami
+
+🔧 **Layout consistency**:
+
+- Spójny system szerokości między Home, Game i Layout components
+- Poprawione CSS variables dla lepszego responsywnego zachowania
+- Enhanced desktop experience z lepszym centrowaniem
+
+📁 **Bug tracking**: Issue #13 "Ekran nie jest wyśrodkowany w wersji desktopowej" - ROZWIĄZANY ✅
 
 ## ✨ What's New v0.1.3
 

@@ -259,6 +259,41 @@ interface BotCard {
 
 ---
 
+### 🎯 Wersja 0.1.4 - Desktop centering bugfix
+
+**Status**: ✅ Ukończona (2025-08-22)
+**Cel**: Naprawienie problemu z centrowaniem aplikacji na ekranach desktopowych
+
+**Naprawione błędy**:
+
+- ✅ **Desktop layout centering (Issue #13)**:
+
+  - Problem: Na ekranach >480px aplikacja nie była poprawnie wyśrodkowana
+  - Rozwiązanie: Unified max-width system - wszystkie ekrany używają spójnego 480px
+  - Enhanced media queries dla desktop z explicitnym `margin: 0 auto`
+  - Poprawiono CSS variables w globals.css z lepszym calc() dla narrow screens
+
+- ✅ **Layout consistency**:
+
+  - Usunięto conflicting max-width z Home.module.css (400px → 100%)
+  - Spójny system szerokości między Home, Game i Layout components
+  - Explicitne centrowanie w Layout.module.css dla ekranów >481px
+
+**Zmodyfikowane pliki**:
+
+- ✅ package.json - version bump do 0.1.4
+- ✅ globals.css - poprawione CSS variables i media queries
+- ✅ Layout.module.css - dodano explicitne `max-width: 480px` dla desktop
+- ✅ Home.module.css - usunięto conflicting `max-width: 400px` z heroDescription
+
+**Technical improvements**:
+
+- Lepsze responsywne zachowanie na różnych szerokościach ekranu
+- Spójne centrowanie między wszystkimi ekranami aplikacji
+- Enhanced CSS architecture dla desktop consistency
+
+---
+
 ### 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry
 
 **Status**: 🔜 Planowana

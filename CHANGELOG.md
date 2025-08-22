@@ -5,6 +5,28 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2025-08-22
+
+### 🐛 Naprawione błędy
+
+- **🖥️ Poprawione centrowanie na desktopie**
+  - Naprawiono problem z centrowaniem aplikacji na szerszych ekranach (>480px)
+  - Unified szerokość aplikacji - wszystkie ekrany używają teraz spójnego systemu 480px max-width
+  - Dodano lepsze media queries dla ekranów desktop z `margin: 0 auto`
+  - Poprawiono CSS variables dla `--max-width` z lepszym calc() dla narrow screens
+  - Home description nie używa już własnej max-width 400px (teraz 100% z Layout)
+
+### 🔧 Zmiany techniczne
+
+- **📦 Wersja 0.1.4** - Aktualizacja package.json
+- **🎯 Layout.module.css**: Dodano explicite `max-width: 480px` i `margin: 0 auto` dla desktop
+- **🌐 globals.css**: Ulepszone media queries dla spójnego centrowania
+- **🏠 Home.module.css**: Usunięto konflictujące max-width z heroDescription
+
+### 📁 Bug fix dla Issue #13
+
+- "Ekran nie jest wyśrodkowany w wersji desktopowej" - ROZWIĄZANY ✅
+
 ## [0.1.3] - 2025-08-21
 
 ### ✨ Nowe funkcjonalności

@@ -266,6 +266,29 @@ Stworzyć funkcjonalną mechanikę losowania i wyświetlania kart botów z pełn
   - [x] Asset optimization w build pipeline
   - [x] Mobile-first compactness design
 
+### Wersja 0.1.4 - Desktop centering bugfix ✅ UKOŃCZONA
+
+#### 🐛 Bug Fixes ✅
+
+- [x] **Desktop layout centering (Issue #13)**
+
+  - [x] Naprawiono problem z centrowaniem na ekranach >480px
+  - [x] Unified max-width system - wszystkie ekrany używają 480px
+  - [x] Enhanced media queries dla desktop z explicitnym `margin: 0 auto`
+  - [x] Poprawiono CSS variables w globals.css
+  - [x] Usunięto conflicting max-width z Home.module.css (400px → 100%)
+
+- [x] **Layout consistency**
+
+  - [x] Spójny system szerokości między Home, Game i Layout
+  - [x] Lepsze responsywne calc() dla narrow screens
+  - [x] Explicitne centrowanie w Layout.module.css dla desktop
+
+- [x] **Technical improvements**
+  - [x] Version bump to 0.1.4 w package.json
+  - [x] Documentation update w CHANGELOG.md
+  - [x] Enhanced CSS architecture dla desktop consistency
+
 ---
 
 ## 🎯 Wersja 0.2.0 - Zapis i wczytywanie gry

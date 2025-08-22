@@ -28,7 +28,10 @@
   --border-radius: 8px;
 
   /* Responsiveness */
-  --max-width: min(480px, 100vw); /* Never exceed viewport width */
+  --max-width: min(
+    480px,
+    calc(100vw - 2rem)
+  ); /* Ensure space for margins on narrow screens */
   --padding: min(1rem, 4vw); /* Responsive padding for very small screens */
   --gap: 0.5rem;
 
@@ -70,6 +73,8 @@ body {
   min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
@@ -77,6 +82,9 @@ body {
   min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Typografia */
@@ -288,6 +296,12 @@ button:active {
 
   h1 {
     font-size: 2.5rem;
+  }
+
+  /* Enhance centering on desktop */
+  :root {
+    --max-width: 480px; /* Fixed width on desktop for consistency */
+    --padding: 2rem; /* More padding on desktop */
   }
 }
 
