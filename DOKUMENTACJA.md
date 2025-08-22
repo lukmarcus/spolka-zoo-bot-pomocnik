@@ -302,7 +302,7 @@ interface BotCard {
 - Spójne centrowanie między wszystkimi ekranami aplikacji
 - Enhanced CSS architecture dla desktop consistency
 
-**Naprawione błędy v0.1.4.1**:
+**Dodatkowo naprawione w v0.1.4**:
 
 - ✅ **Full-screen background coverage (Issue #14)**:
 
@@ -310,13 +310,27 @@ interface BotCard {
   - Rozwiązanie: Przeniesiono aplikację tła z Layout component na body element
   - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
   - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
-  - Ulepszona hierarchia z-index dla proper layering
 
-**Zmodyfikowane pliki v0.1.4.1**:
+- ✅ **Layout width consistency (Issue #15)**:
 
-- ✅ Layout.tsx - dodano useEffect dla dynamicznego zarządzania klasami tła na body
-- ✅ globals.css - refaktor background utilities (aplikacja na body, nie Layout)
-- ✅ Layout.module.css - dodano positioning i z-index dla proper layering
+  - Problem: Niespójne szerokości elementów na różnych ekranach (BotCard 400px, Game buttons 300px)
+  - Rozwiązanie: Unified Layout max-width system dla wszystkich komponentów
+  - BotCard: zmieniono max-width z 400px na 100% dla pełnego wykorzystania Layout
+  - Game buttons: usunięto ograniczenie max-width 300px dla spójności
+
+- ✅ **Game state reset bug (Issue #16)**:
+  - Problem: Stan gry nie był resetowany przy powrocie do menu (mimo modal warning)
+  - Rozwiązanie: Dodano wywołanie `game.resetGame()` w funkcji `confirmExit()`
+  - Stan gry jest teraz prawidłowo resetowany przed nawigacją do menu
+
+**Wszystkie zmodyfikowane pliki w v0.1.4**:
+
+- ✅ Layout.tsx - useEffect dla dynamicznego zarządzania klasami tła na body
+- ✅ globals.css - refaktor background utilities, enhanced media queries
+- ✅ Layout.module.css - positioning, z-index, explicitne max-width dla desktop
+- ✅ BotCard.module.css - max-width 400px → 100% dla Layout consistency
+- ✅ Game.module.css - usunięto max-width constraints, zwiększono card-reverse
+- ✅ Game.tsx - dodano `game.resetGame()` call w `confirmExit()`
 
 ---
 

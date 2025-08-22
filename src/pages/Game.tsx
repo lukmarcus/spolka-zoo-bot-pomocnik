@@ -26,6 +26,7 @@ const Game: React.FC = () => {
 
   const confirmExit = () => {
     setShowExitModal(false);
+    game.resetGame(); // Reset game state before returning to menu
     navigate("/");
   };
 

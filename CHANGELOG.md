@@ -19,9 +19,13 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### 🔧 Zmiany techniczne
 
 - **📦 Wersja 0.1.4** - Aktualizacja package.json
-- **🎯 Layout.module.css**: Dodano explicite `max-width: 480px` i `margin: 0 auto` dla desktop
-- **🌐 globals.css**: Ulepszone media queries dla spójnego centrowania
+- **🎯 Layout.module.css**: Dodano explicite `max-width: 480px` i `margin: 0 auto` dla desktop, positioning i z-index
+- **🌐 globals.css**: Ulepszone media queries dla spójnego centrowania, refaktor background utilities
 - **🏠 Home.module.css**: Usunięto konflictujące max-width z heroDescription
+- **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
+- **🎨 BotCard.module.css**: Zmieniono max-width z 400px na 100% dla Layout consistency
+- **🎮 Game.module.css**: Usunięto ograniczenie max-width 300px z przycisków, zwiększono card-reverse
+- **⚛️ Game.tsx**: Dodano `game.resetGame()` call w `confirmExit()` dla proper state management
 
 ### 📁 Bug fix dla Issue #13
 
@@ -31,16 +35,39 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - "Tło nie zajmuje całego ekranu i nie jest wyśrodkowane" - ROZWIĄZANY ✅
 
-### 🐛 Naprawione błędy (v0.1.4.1)
+### 📁 Bug fix dla Issue #15
+
+- "Niespójne szerokości elementów na różnych ekranach" - ROZWIĄZANY ✅
+
+### 📁 Bug fix dla Issue #16
+
+- "Stan gry nie jest resetowany przy powrocie do menu" - ROZWIĄZANY ✅
+
+### 🐛 Naprawione błędy
 
 - **🎨 Poprawione tła pełnoekranowe**
+
   - Naprawiono problem z tłami nie pokrywającymi całego ekranu (Issue #14)
   - Przeniesiono aplikację tła z Layout component na body element dla full-screen coverage
   - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
   - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
   - Ulepszona hierarchia z-index (Layout z-index: 1, overlay z-index: 0)
 
-### 🔧 Zmiany techniczne (v0.1.4.1)
+- **� Spójność układu na różnych ekranach**
+
+  - Naprawiono niespójne szerokości elementów między ekranami (Issue #15)
+  - BotCard: zmieniono max-width z 400px na 100% dla pełnego wykorzystania Layout
+  - Game buttons: usunięto ograniczenie max-width 300px dla spójności z Layout
+  - Game card-reverse: zwiększono max-width z 200px na 250px dla lepszej proporcji
+  - Wszystkie komponenty używają teraz unified Layout max-width system (480px)
+
+- **🎮 Poprawiony reset stanu gry**
+  - Naprawiono problem z nieresetowaniem stanu gry przy powrocie do menu (Issue #16)
+  - Dodano wywołanie `game.resetGame()` w funkcji `confirmExit()` w Game.tsx
+  - Modal ostrzeżenia pozostaje aktywny dla informacji użytkownika
+  - Stan gry jest teraz prawidłowo resetowany przed nawigacją do menu
+
+### 🔧 Zmiany techniczne
 
 - **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
 - **🌐 globals.css**: Refaktor background utilities - aplikacja na body, nie Layout
