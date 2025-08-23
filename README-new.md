@@ -64,15 +64,15 @@ npm run preview # Podgląd builda
 
 ## 🗓️ Plan rozwoju
 
-| Wersja | Status       | Opis                                                  |
-| ------ | ------------ | ----------------------------------------------------- |
+| Wersja | Status       | Opis                                                      |
+| ------ | ------------ | --------------------------------------------------------- |
 | 0.2.0  | ✅ Ukończona | **Save/Load system (localStorage-only)** ⚠️ bugfix needed |
 | 0.2.1  | 🔜 Planowana | Cross-device kody gry - naprawienie systemu udostępniania |
-| 0.2.2  | 🔜 Planowana | UX improvements modali - uproszczenie interfejsu |
-| 0.2.3  | 🔜 Planowana | Optymalizacja długości kodów (custom encoding) |
-| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                              |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart                                     |
+| 0.2.2  | 🔜 Planowana | UX improvements modali - uproszczenie interfejsu          |
+| 0.2.3  | 🔜 Planowana | Optymalizacja długości kodów (custom encoding)            |
+| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                                  |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                             |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart                                         |
 
 **Szczegóły techniczne**: Zobacz [`DOCS.md`](./DOCS.md)  
 **Historia zmian**: Zobacz [`CHANGELOG.md`](./CHANGELOG.md)

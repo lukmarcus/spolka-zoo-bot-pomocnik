@@ -28,12 +28,6 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Brak cross-device**: Nie można udostępniać kodów między urządzeniami
 - **Długie kody**: Base64 format generuje nieczytelne kody (~175 znaków)
 
-### 🔮 Planowane poprawki
-
-- **v0.2.1**: Cross-device functionality - embedding danych w kodach
-- **v0.2.2**: UX improvements - uproszczenie interfejsu modali
-- **v0.2.3**: Custom hex encoding - optymalizacja długości kodów (25 znaków)
-
 ### 🏗️ Zmiany architektoniczne
 
 - **🧩 BaseModal component**
