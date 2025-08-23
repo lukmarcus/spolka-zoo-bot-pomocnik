@@ -21,6 +21,7 @@ export interface GameContextType {
   shuffleDeck: () => void;
   resetGame: () => void;
   newGame: () => void;
+  loadGame: (gameState: GameState) => void;
   getCurrentCard: () => number | null;
   isGameStarted: () => boolean;
   isDeckExhausted: () => boolean;

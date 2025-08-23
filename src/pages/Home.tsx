@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+import LoadGameModal from "../components/LoadGameModal";
+import { useGame } from "../context/GameContext";
+import type { GameState } from "../types";
 import styles from "./Home.module.css";
 import packageJson from "../../package.json";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { loadGame } = useGame();
+  const [isLoadModalOpen, setIsLoadModalOpen] = useState(false);
 
   const menuOptions = [
     {
@@ -19,11 +24,8 @@ const Home: React.FC = () => {
       id: "load-game",
       title: "Wczytaj grę",
       description: "Użyj kodu gry",
-      action: () => {
-        // TODO: Implementation in v0.2.0
-        alert("Funkcja będzie dostępna w wersji 0.2.0");
-      },
-      disabled: true,
+      action: () => setIsLoadModalOpen(true),
+      disabled: false,
     },
     {
       id: "settings",
@@ -80,6 +82,16 @@ const Home: React.FC = () => {
           </ul>
         </div>
       </div>
+
+      <LoadGameModal
+        isOpen={isLoadModalOpen}
+        onClose={() => setIsLoadModalOpen(false)}
+        onLoadGame={(gameState: GameState) => {
+          loadGame(gameState);
+          setIsLoadModalOpen(false);
+          navigate("/game");
+        }}
+      />
     </Layout>
   );
 };
