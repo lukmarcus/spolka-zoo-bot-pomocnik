@@ -27,11 +27,17 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 **Funkcjonalności**:
 
 - [x] **System zapisywania**: Automatyczne zapisywanie stanu w localStorage
-- [x] **Kody gry**: Generowanie Base64 kodów z checksumami do udostępniania
+- [x] **Kody gry**: Generowanie kodów z checksumami
 - [x] **Modale Save/Load**: ShareGameModal i LoadGameModal z BaseModal
 - [x] **Walidacja**: Bezpieczne wczytywanie z walidacją formatów i checksumów
 - [x] **UX**: Kopiowanie do schowka, instrukcje użycia, komunikaty błędów
 - [x] **Integracja**: Aktywne przyciski w Home.tsx i Game.tsx
+
+**⚠️ Znane problemy v0.2.0**:
+
+- **localStorage-only system**: Kody działają tylko w tej samej przeglądarce
+- **Brak cross-device**: Nie można udostępniać kodów między urządzeniami
+- **Długie kody**: Base64 format generuje długie, nieczytelne kody
 
 **Komponenty utworzone**:
 
@@ -50,8 +56,14 @@ Aplikacja webowa pomocnicza do gry planszowej "Spółka ZOO" - zastępuje fizycz
 
 - **Serialization**: `GameState` → Base64 string z checksumami
 - **Deserialization**: Base64 string → `GameState` z walidacją
-- **Storage**: localStorage dla auto-save, clipboard API dla kodów
+- **Storage**: localStorage dla auto-save i kodów gry
 - **Modular CSS**: Reużywanie ConfirmModal.module.css dla spójności
+
+**Planowane poprawki v0.2.1+**:
+
+- [ ] **Cross-device kody**: Embedding danych w kodach zamiast localStorage references
+- [ ] **Krótsze kody**: Custom hex encoding dla optymalizacji długości
+- [ ] **Lepszy UX**: Uproszczenie interfejsu modali
 
 ---
 

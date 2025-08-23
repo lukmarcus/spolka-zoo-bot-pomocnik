@@ -12,15 +12,27 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **💾 System zapisywania i wczytywania gry**
 
   - Automatyczne zapisywanie stanu gry w localStorage
-  - Możliwość udostępniania gry poprzez kody gry
-  - Import/export stanu gry między urządzeniami
-  - Base64 encoding z checksumami dla bezpiecznego przesyłania
+  - Możliwość generowania kodów gry (localStorage-only)
+  - Base64 encoding z checksumami dla bezpiecznego kodowania
+  - ⚠️ **Ograniczenia**: Kody działają tylko w tej samej przeglądarce
 
 - **🔗 Modale udostępniania i wczytywania**
-  - ShareGameModal - generowanie kodów do udostępniania
-  - LoadGameModal - wczytywanie gry z kodów
+  - ShareGameModal - generowanie kodów do zapisywania stanu
+  - LoadGameModal - wczytywanie gry z lokalnych kodów
   - Walidacja kodów gry z odpowiednimi komunikatami błędów
   - Kopiowanie do schowka z wizualnym potwierdzeniem
+
+### ⚠️ Znane ograniczenia v0.2.0
+
+- **localStorage-only system**: Kody działają tylko w tej samej przeglądarce
+- **Brak cross-device**: Nie można udostępniać kodów między urządzeniami
+- **Długie kody**: Base64 format generuje nieczytelne kody (~175 znaków)
+
+### 🔮 Planowane poprawki
+
+- **v0.2.1**: Cross-device functionality - embedding danych w kodach
+- **v0.2.2**: UX improvements - uproszczenie interfejsu modali
+- **v0.2.3**: Custom hex encoding - optymalizacja długości kodów (25 znaków)
 
 ### 🏗️ Zmiany architektoniczne
 

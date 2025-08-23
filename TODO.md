@@ -38,10 +38,73 @@ Lista zadań do wykonania w projekcie Spółka ZOO Bot Pomocnik.
 ### Zrealizowane funkcje ✅
 
 - ✅ **Automatyczne zapisywanie** - brak konieczności ręcznego save
-- ✅ **Cross-device sharing** - kody gry działają między urządzeniami
+- ⚠️ **Kody gry** - działają tylko w tej samej przeglądarce (localStorage-only)
 - ✅ **Bezpieczna walidacja** - checksumы i format validation
 - ✅ **User-friendly UX** - instrukcje, komunikaty, kopiowanie jednym klikiem
 - ✅ **Architektura modułowa** - reużywalne komponenty i utilities
+
+### ⚠️ Znane problemy v0.2.0
+
+- **localStorage-only**: Kody nie działają cross-device
+- **Długie kody**: Base64 format generuje nieczytelne kody
+- **Modal UX**: Interface może być over-engineered dla prostej copy/paste operacji
+
+### 🔜 Planowane poprawki v0.2.1+
+
+- [ ] **Cross-device kody**: Embedding danych w kodach zamiast localStorage references
+- [ ] **Custom encoding**: Hex encoding dla krótszych kodów (25 vs 175 znaków)
+- [ ] **UX improvements**: Uproszczenie interfejsu modali
+
+---
+
+## 🎯 Wersja 0.2.1 - Cross-device kody gry 🔜 PLANOWANA
+
+### Must Have
+
+- [ ] **Naprawienie systemu kodów**
+
+  - [ ] Usunięcie localStorage dependency z kodów gry
+  - [ ] Embedding rzeczywistych danych w kodach Base64
+  - [ ] Testy cross-device functionality
+
+- [ ] **LZ-String compression (opcja A)**
+
+  - [ ] Instalacja lz-string dependency
+  - [ ] Implementacja compressToBase64()
+  - [ ] Redukcja długości kodów z 196 do ~175 znaków
+
+- [ ] **Custom hex encoding (opcja B)**
+  - [ ] Implementacja custom hex serialization
+  - [ ] Ultra-kompaktowe kody (~25 znaków vs 175)
+  - [ ] Backwards compatibility z v0.2.0 formatami
+
+### Cel: Działające cross-device kody gry
+
+---
+
+## 🎯 Wersja 0.2.2 - UX improvements modali 🔜 PLANOWANA
+
+### Must Have
+
+- [ ] **Uproszczenie interfejsu save/load**
+  - [ ] Analiza "over-engineered" modali
+  - [ ] Prostszy single-button approach?
+  - [ ] Lepsze instrukcje użycia
+
+### Cel: Intuicyjniejszy system udostępniania
+
+---
+
+## 🎯 Wersja 0.2.3 - Optymalizacja kodów 🔜 PLANOWANA
+
+### Nice to Have
+
+- [ ] **Final optimization kodów**
+  - [ ] Custom hex encoding jeśli nie w v0.2.1
+  - [ ] Najkrótsze możliwe kody dla GameState
+  - [ ] Preparing dla multi-bot format v0.3.0
+
+### Cel: Optymalne kody przed rozbudową o multi-bot
 
 ---
 

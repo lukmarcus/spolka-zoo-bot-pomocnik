@@ -20,22 +20,29 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 ## 🚀 Status rozwoju
 
 **Aktualna wersja**: 0.2.0 ✅  
-**Status**: Save/Load functionality implemented  
-**Następna wersja**: TBD
+**Status**: Save/Load system implemented (localStorage-only)  
+**Znane problemy**: Kody nie działają cross-device ⚠️  
+**Następna wersja**: 0.2.1 - Cross-device functionality
 
 ## ✨ What's New v0.2.0
 
 💾 **Save & Load System**:
 
 - **Automatyczne zapisywanie**: Stan gry automatycznie zapisuje się w localStorage
-- **Kody gry**: Generowanie i udostępnianie gry poprzez kody Base64
-- **Import/Export**: Możliwość przenoszenia gry między urządzeniami
+- **Kody gry**: Generowanie kodów do zapisywania stanu gry
+- **Import/Export**: Zapisywanie i wczytywanie gry w tej samej przeglądarce
 - **Walidacja**: Bezpieczne wczytywanie z checksumami i walidacją
+
+⚠️ **Znane ograniczenia v0.2.0**:
+
+- **Kody działają tylko lokalnie**: Nie można udostępniać kodów między urządzeniami
+- **localStorage dependency**: Kody wymagają danych z tej samej przeglądarki
+- **Planowane naprawy w v0.2.1+**: Cross-device functionality, krótsze kody
 
 🔗 **Nowe modale**:
 
-- **ShareGameModal**: Generowanie kodów do udostępniania stanu gry
-- **LoadGameModal**: Wczytywanie gry z otrzymanych kodów
+- **ShareGameModal**: Generowanie kodów do zapisywania stanu gry
+- **LoadGameModal**: Wczytywanie gry z lokalnych kodów
 - **BaseModal**: Uniwersalny system modali z reużywalnymi stylami
 
 🎮 **Ulepszone UX**:
@@ -83,17 +90,21 @@ Gra **automatycznie zapisuje** się w lokalnej pamięci przeglądarki podczas ka
 
 ### 🔗 Udostępnianie gry
 
+**⚠️ OGRANICZENIE v0.2.0**: Kody działają tylko w tej samej przeglądarce
+
 1. **Podczas gry** kliknij przycisk **"🔗 Udostępnij grę"**
 2. W modalU kliknij **"📝 Wygeneruj kod gry"**
 3. **Skopiuj** wygenerowany kod (przycisk 📋)
-4. **Prześlij** kod innemu graczowi (SMS, email, messenger)
+4. **Kod działa tylko w tej przeglądarce** - nie można wysłać innemu graczowi
 
 ### 📥 Wczytywanie otrzymanej gry
 
+**⚠️ OGRANICZENIE v0.2.0**: Tylko kody z tej samej przeglądarki
+
 1. **W menu głównym** kliknij **"📥 Wczytaj grę"**
-2. **Wprowadź kod** otrzymany od innego gracza
+2. **Wprowadź kod** wygenerowany wcześniej **w tej przeglądarce**
 3. Kliknij **"📥 Wczytaj grę"** lub naciśnij **Enter**
-4. Gra zostanie wczytana w identycznym stanie!
+4. Gra zostanie wczytana jeśli kod istnieje w pamięci przeglądarki
 
 ### 🔒 Bezpieczeństwo
 
@@ -101,6 +112,12 @@ Gra **automatycznie zapisuje** się w lokalnej pamięci przeglądarki podczas ka
 - **Walidacja** nieprawidłowych kodów z komunikatami błędów
 - **Automatyczne formatowanie** - tylko prawidłowe znaki
 - **Brak możliwości** uszkodzenia stanu gry przez błędny kod
+
+### 🚧 **Planowane poprawki w v0.2.1+**
+
+- **Cross-device kody**: Kody będą działać między różnymi urządzeniami
+- **Krótsze kody**: Optymalizacja długości kodów gry
+- **Lepszy UX**: Uproszczenie interfejsu modali
 
 ## ✨ What's New v0.1.4
 
@@ -229,21 +246,24 @@ Zawiera:
 
 ## 🗓️ Plan rozwoju
 
-| Wersja | Status       | Opis                                                  |
-| ------ | ------------ | ----------------------------------------------------- |
-| 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja                 |
-| 0.0.2  | ✅ Ukończona | Responsywność WCAG 320px compliance                   |
-| 0.0.3  | ✅ Ukończona | Poprawki wizualne i CSS refactoring                   |
-| 0.1.0  | ✅ Ukończona | **Mechanika kart - losowanie, tasowanie, dobieranie** |
-| 0.1.1  | ✅ Ukończona | **UX improvements - uproszczenie interfejsu gry**     |
-| 0.1.2  | ✅ Ukończona | Niestandardowe modale (zamiast window.confirm)        |
-| 0.1.3  | ✅ Ukończona | **Grafiki tła i optymalizacja interfejsu**            |
-| 0.1.4  | ✅ Ukończona | **Complete bugfix cycle - 4 issues resolved**         |
-| 0.2.0  | 🔜 Planowana | Zapis i wczytywanie stanu gry (LocalStorage + kody)   |
-| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                              |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart                                     |
-| ...    |              | Zobacz [DOKUMENTACJA.md](./DOKUMENTACJA.md)           |
+| Wersja | Status       | Opis                                                      |
+| ------ | ------------ | --------------------------------------------------------- |
+| 0.0.1  | ✅ Ukończona | Setup projektu i podstawowa nawigacja                     |
+| 0.0.2  | ✅ Ukończona | Responsywność WCAG 320px compliance                       |
+| 0.0.3  | ✅ Ukończona | Poprawki wizualne i CSS refactoring                       |
+| 0.1.0  | ✅ Ukończona | **Mechanika kart - losowanie, tasowanie, dobieranie**     |
+| 0.1.1  | ✅ Ukończona | **UX improvements - uproszczenie interfejsu gry**         |
+| 0.1.2  | ✅ Ukończona | Niestandardowe modale (zamiast window.confirm)            |
+| 0.1.3  | ✅ Ukończona | **Grafiki tła i optymalizacja interfejsu**                |
+| 0.1.4  | ✅ Ukończona | **Complete bugfix cycle - 4 issues resolved**             |
+| 0.2.0  | ✅ Ukończona | **Save/Load system (localStorage-only)** ⚠️ bugfix needed |
+| 0.2.1  | 🔜 Planowana | Cross-device kody gry - naprawienie systemu udostępniania |
+| 0.2.2  | 🔜 Planowana | UX improvements modali - uproszczenie interfejsu          |
+| 0.2.3  | 🔜 Planowana | Optymalizacja długości kodów (custom encoding)            |
+| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                                  |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                             |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart                                         |
+| ...    |              | Zobacz [DOKUMENTACJA.md](./DOKUMENTACJA.md)               |
 
 ## 🎨 Wygląd aplikacji
 
