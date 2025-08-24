@@ -60,21 +60,20 @@ export function generateShareableCode(gameState: GameState): string {
 
     if (botCount === 1) {
       // Single bot format: ZOO + sequence + position (17 chars)
-      return GAME_CODE_PREFIX + encodedSequence + encodedPosition;
+        return (GAME_CODE_PREFIX + encodedSequence + encodedPosition).toUpperCase();
     } else {
       // Multi-bot format: ZOO + sequence + position + botCount + currentBot (19 chars)
       const encodedBotCount = botCount.toString();
       const encodedCurrentBot = currentBot.toString();
-      return (
-        GAME_CODE_PREFIX +
-        encodedSequence +
-        encodedPosition +
-        encodedBotCount +
-        encodedCurrentBot
-      );
+        return (
+          GAME_CODE_PREFIX +
+          encodedSequence +
+          encodedPosition +
+          encodedBotCount +
+          encodedCurrentBot
+        ).toUpperCase();
     }
-  } catch (error) {
-    console.error("Failed to generate shareable code:", error);
+  } catch {
     throw new Error("Failed to generate game code");
   }
 }
@@ -86,21 +85,16 @@ export function generateShareableCode(gameState: GameState): string {
  * - 19 chars: ZOO + 16 data chars (2-4 bots)
  */
 export function loadFromShareableCode(gameCode: string): GameState | null {
-  console.log("🚀 loadFromShareableCode called with:", gameCode);
-
   // Convert to lowercase to handle uppercase input from UI
   const normalizedCode = gameCode.toLowerCase();
-  console.log("🔄 Normalized to:", normalizedCode);
 
   try {
     // Validate format
     if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
-      console.warn("❌ Invalid game code: missing ZOO prefix");
       return null;
     }
 
     const dataSection = normalizedCode.slice(3); // Remove "ZOO" prefix
-    console.log("📊 Data section:", dataSection, "length:", dataSection.length);
 
     // Auto-detect format based on length
     let cardSequence: number[];
@@ -130,15 +124,9 @@ export function loadFromShareableCode(gameCode: string): GameState | null {
         currentBot < 1 ||
         currentBot > botCount
       ) {
-        console.warn(
-          `Invalid bot configuration: ${botCount} bots, current bot ${currentBot}`
-        );
         return null;
       }
     } else {
-      console.warn(
-        `Invalid game code: expected 14 or 16 data chars, got ${dataSection.length}`
-      );
       return null;
     }
 
@@ -155,8 +143,7 @@ export function loadFromShareableCode(gameCode: string): GameState | null {
     };
 
     return gameState;
-  } catch (error) {
-    console.error("Failed to load from shareable code:", error);
+  } catch {
     return null;
   }
 }
@@ -169,8 +156,8 @@ export function autoSaveGameState(gameState: GameState): void {
     const serialized = JSON.stringify(gameState);
     localStorage.setItem(AUTO_SAVE_KEY, serialized);
     localStorage.setItem(STORAGE_KEY, serialized); // Backup
-  } catch (error) {
-    console.error("Failed to auto-save game state:", error);
+  } catch {
+    // Silently fail
   }
 }
 
@@ -191,8 +178,7 @@ export function loadAutoSavedGameState(): GameState | null {
     }
 
     return null;
-  } catch (error) {
-    console.error("Failed to load auto-saved game state:", error);
+  } catch {
     return null;
   }
 }
@@ -215,44 +201,23 @@ export function clearAllSavedData(): void {
  * Validate game code format for v0.2.1
  */
 export function isValidGameCode(code: string): boolean {
-  console.log("🔍 isValidGameCode called with:", code);
-
   // Convert to lowercase to handle uppercase input from UI
   const normalizedCode = code.toLowerCase();
-  console.log("🔄 Normalized to:", normalizedCode);
 
   if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
-    console.log("❌ Missing ZOO prefix");
     return false;
   }
 
   const dataSection = normalizedCode.slice(3);
-  console.log("📊 Data section:", dataSection, "length:", dataSection.length);
 
   // Support both single bot (14 chars) and multi-bot (16 chars) formats
   if (dataSection.length !== 14 && dataSection.length !== 16) {
-    console.log("❌ Invalid length:", dataSection.length, "expected 14 or 16");
     return false;
   }
 
   // Validate all characters are valid (0-9, a-c)
   const validChars = /^[0-9a-c]+$/;
-  const isValidPattern = validChars.test(dataSection);
-  console.log("🔤 Pattern test [0-9a-c]:", isValidPattern);
-
-  if (!isValidPattern) {
-    // Debug invalid characters
-    for (let i = 0; i < dataSection.length; i++) {
-      const char = dataSection[i];
-      const charValid = /[0-9a-c]/.test(char);
-      if (!charValid) {
-        console.log("❌ Invalid character at position", i, ":", char);
-      }
-    }
-  }
-
-  console.log("✅ Final result:", isValidPattern);
-  return isValidPattern;
+  return validChars.test(dataSection);
 }
 
 /**
@@ -275,8 +240,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
       textArea.remove();
       return true;
     }
-  } catch (error) {
-    console.error("Failed to copy to clipboard:", error);
+  } catch {
     return false;
   }
 }

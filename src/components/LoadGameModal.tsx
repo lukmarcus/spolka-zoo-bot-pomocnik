@@ -51,8 +51,7 @@ export default function LoadGameModal({
       } else {
         setError("Nie udało się wczytać gry. Sprawdź kod i spróbuj ponownie.");
       }
-    } catch (error) {
-      console.error("Failed to load game:", error);
+    } catch {
       setError("Nie udało się wczytać gry. Sprawdź kod i spróbuj ponownie.");
     } finally {
       setIsLoading(false);
