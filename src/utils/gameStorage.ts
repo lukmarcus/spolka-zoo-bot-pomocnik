@@ -211,13 +211,13 @@ export function isValidGameCode(code: string): boolean {
 
   const dataSection = code.slice(3);
 
-  // Currently only support single bot (14 chars)
-  if (dataSection.length !== 14) {
+  // Support both single bot (14 chars) and multi-bot (16 chars) formats
+  if (dataSection.length !== 14 && dataSection.length !== 16) {
     return false;
   }
 
-  // Validate all characters are valid (1-9, a-d)
-  const validChars = /^[1-9a-d]+$/;
+  // Validate all characters are valid (0-9, a-c)
+  const validChars = /^[0-9a-c]+$/;
   return validChars.test(dataSection);
 }
 
