@@ -9,6 +9,7 @@ const AUTO_SAVE_KEY = "zoo-bot-auto-save";
 
 // Game code utilities
 const GAME_CODE_PREFIX = "ZOO";
+const GAME_CODE_PREFIX_LOWER = "zoo";
 
 /**
  * Encode card number (0-12) to alphanumeric char (0-9, a-c)
@@ -25,14 +26,16 @@ function encodeCard(cardIndex: number): string {
 }
 
 /**
- * Decode alphanumeric char (0-9, a-c) to card number (0-12)
+ * Decode alphanumeric char (0-9, a-c or A-C) to card number (0-12)
  */
 function decodeCard(char: string): number {
   if (char >= "0" && char <= "9") {
     return parseInt(char);
   }
-  if (char >= "a" && char <= "c") {
-    return char.charCodeAt(0) - 97 + 10;
+  // Handle both lowercase and uppercase
+  const lowerChar = char.toLowerCase();
+  if (lowerChar >= "a" && lowerChar <= "c") {
+    return lowerChar.charCodeAt(0) - 97 + 10;
   }
   throw new Error(`Invalid card character: ${char}. Must be 0-9 or a-c.`);
 }
@@ -83,14 +86,21 @@ export function generateShareableCode(gameState: GameState): string {
  * - 19 chars: ZOO + 16 data chars (2-4 bots)
  */
 export function loadFromShareableCode(gameCode: string): GameState | null {
+  console.log("🚀 loadFromShareableCode called with:", gameCode);
+
+  // Convert to lowercase to handle uppercase input from UI
+  const normalizedCode = gameCode.toLowerCase();
+  console.log("🔄 Normalized to:", normalizedCode);
+
   try {
     // Validate format
-    if (!gameCode.startsWith(GAME_CODE_PREFIX)) {
-      console.warn("Invalid game code: missing ZOO prefix");
+    if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
+      console.warn("❌ Invalid game code: missing ZOO prefix");
       return null;
     }
 
-    const dataSection = gameCode.slice(3); // Remove "ZOO" prefix
+    const dataSection = normalizedCode.slice(3); // Remove "ZOO" prefix
+    console.log("📊 Data section:", dataSection, "length:", dataSection.length);
 
     // Auto-detect format based on length
     let cardSequence: number[];
@@ -205,20 +215,44 @@ export function clearAllSavedData(): void {
  * Validate game code format for v0.2.1
  */
 export function isValidGameCode(code: string): boolean {
-  if (!code.startsWith(GAME_CODE_PREFIX)) {
+  console.log("🔍 isValidGameCode called with:", code);
+
+  // Convert to lowercase to handle uppercase input from UI
+  const normalizedCode = code.toLowerCase();
+  console.log("🔄 Normalized to:", normalizedCode);
+
+  if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
+    console.log("❌ Missing ZOO prefix");
     return false;
   }
 
-  const dataSection = code.slice(3);
+  const dataSection = normalizedCode.slice(3);
+  console.log("📊 Data section:", dataSection, "length:", dataSection.length);
 
   // Support both single bot (14 chars) and multi-bot (16 chars) formats
   if (dataSection.length !== 14 && dataSection.length !== 16) {
+    console.log("❌ Invalid length:", dataSection.length, "expected 14 or 16");
     return false;
   }
 
   // Validate all characters are valid (0-9, a-c)
   const validChars = /^[0-9a-c]+$/;
-  return validChars.test(dataSection);
+  const isValidPattern = validChars.test(dataSection);
+  console.log("🔤 Pattern test [0-9a-c]:", isValidPattern);
+
+  if (!isValidPattern) {
+    // Debug invalid characters
+    for (let i = 0; i < dataSection.length; i++) {
+      const char = dataSection[i];
+      const charValid = /[0-9a-c]/.test(char);
+      if (!charValid) {
+        console.log("❌ Invalid character at position", i, ":", char);
+      }
+    }
+  }
+
+  console.log("✅ Final result:", isValidPattern);
+  return isValidPattern;
 }
 
 /**

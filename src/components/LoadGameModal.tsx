@@ -23,7 +23,8 @@ export default function LoadGameModal({
   const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    // Allow all alphanumeric characters (ZOO prefix + 0-9, A-C for data)
+    const value = e.target.value.toUpperCase().replace(/[^0-9A-Z]/g, "");
     setGameCode(value);
     setError(null);
   };
