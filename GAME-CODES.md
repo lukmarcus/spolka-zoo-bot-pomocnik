@@ -2,9 +2,10 @@
 
 ## 📖 Specyfikacja systemu kodów gry v0.2.1
 
-### 🎯 Cel
+Kody gry są zawsze generowane i akceptowane wyłącznie wielkimi literami (ZOO + 0-9, A-C).
 
-Stworzenie ultra-kompaktowego systemu kodów gry, który pozwala na zapisanie i przywrócenie stanu gry przy użyciu minimalnej liczby znaków, umożliwiając łatwe udostępnianie między urządzeniami.
+- Kod gry jest zawsze generowany wielkimi literami, niezależnie od urządzenia czy przeglądarki.
+- Wklejanie kodu do pola wczytywania akceptuje tylko wielkie litery.
 
 ---
 
@@ -13,7 +14,7 @@ Stworzenie ultra-kompaktowego systemu kodów gry, który pozwala na zapisanie i 
 ### Podstawowe założenia
 
 - **Jedna talia**: 13 kart oznaczonych indeksami 0-12
-- **Alfanumeryczne kodowanie**: Użycie znaków 0-9 oraz a-c (łącznie 13 symboli)  
+- **Alfanumeryczne kodowanie**: Użycie znaków 0-9 oraz A-C (łącznie 13 symboli)
 - **Zakres botów**: 1-4 boty zgodnie z ograniczeniami gry
 - **Optymalizacja**: 1 bot = 17 znaków, 2-4 boty = 19 znaków
 - **Brak historii**: System zapisuje tylko aktualny stan talii, nie przechowuje historii przetasowań
@@ -26,9 +27,9 @@ Indeks karty → Symbol
 0 → 0     7 → 7
 1 → 1     8 → 8
 2 → 2     9 → 9
-3 → 3    10 → a
-4 → 4    11 → b
-5 → 5    12 → c
+3 → 3    10 → A
+4 → 4    11 → B
+5 → 5    12 → C
 6 → 6
 ```
 
@@ -188,7 +189,7 @@ function loadFromShareableCode(gameCode: string): GameState | null;
 
 - Sprawdzenie prefixu `ZOO`
 - Walidacja długości kodu (17 znaków dla 1 bota)
-- Walidacja znaków (tylko 1-9, a-d)
+- Walidacja znaków (tylko 1-9, A-C)
 - Sprawdzenie poprawności indeksów kart
 
 ---

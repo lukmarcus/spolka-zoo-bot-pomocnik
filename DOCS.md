@@ -1,5 +1,18 @@
 # Spółka ZOO - Bot Pomocnik
 
+## 🎯 Plan rozwoju - przyszłe wersje
+
+| Wersja | Status       | Opis                                     | Szczegóły techniczne                           |
+| ------ | ------------ | ---------------------------------------- | ---------------------------------------------- |
+| 0.2.1  | ✅ Ukończona | Cross-device kody gry                    | Ultra-kompaktowy system ZOO                    |
+| 0.2.2  | 🔜 Planowana | Poprawki modali kopiowania               | UX improvements                                |
+| 0.2.3  | 🔜 Planowana | Wykrywanie stanu gry + modal wczytywania | Game state detection + load modal improvements |
+| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                 | Multi-bot architecture                         |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota            | Individual bot decks                           |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart                        | Card visualization system                      |
+
+### 🎯 Plan rozwoju - szczegóły techniczne
+
 ## 📚 Dokumentacja techniczna
 
 ### 🏗️ Architektura
@@ -26,31 +39,42 @@ src/
 └── assets/            # Obrazy, ikony, czcionki
 ```
 
-## 🎯 Plan rozwoju
+## 🎯 Plan rozwoju - szczegóły techniczne
 
-### v0.2.1 - Cross-device kody gry 🔜
+### v0.2.1 (current) - Ultra-kompaktowy system kodów
 
-**Cel**: Naprawienie systemu kodów dla działania między urządzeniami
+**Cel**: Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C), zawierają pełne dane gry, są cross-device i mają minimalną długość.
 
-- [ ] Usunięcie localStorage dependency z kodów gry
-- [ ] Embedding rzeczywistych danych w kodach Base64
-- [ ] LZ-String compression ALBO custom hex encoding
-- [ ] Testy cross-device functionality
+- ✅ Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
+- ✅ Przykład: `ZOOA0CB5938416274`
+- ✅ System automatycznie rozpoznaje tryb gry na podstawie długości kodu
+- ✅ Usunięcie localStorage dependency z kodów gry
+- ✅ Embedding rzeczywistych danych w kodach
 
-### v0.2.2 - UX improvements 🔜
+### v0.2.2 - Poprawki modali kopiowania kodu 🔜
 
-**Cel**: Uproszczenie interfejsu modali
+**Cel**: Uproszczenie i poprawa UX modali kopiowania
 
-- [ ] Analiza "over-engineered" modali
-- [ ] Prostszy single-button approach
-- [ ] Lepsze instrukcje użycia
+- [ ] Analiza problemów z ShareGameModal
+- [ ] Prostszy interface kopiowania
+- [ ] Lepsze komunikaty i instrukcje użycia
+- [ ] Optymalizacja przycisków i animacji
 
-### v0.2.3 - Optymalizacja kodów 🔜
+### v0.2.3 - Wykrywanie stanu gry + modal wczytywania 🔜
 
-**Cel**: Najkrótsze możliwe kody
+**Cel**: Wykrywanie stanu gry przed wczytaniem + poprawa UX LoadGameModal
 
-- [ ] Custom hex encoding (25 vs 175 znaków)
-- [ ] Preparing dla multi-bot format v0.3.0
+- [ ] **Wykrywanie stanu gry na podstawie kodu**
+  - Dekodowanie kodu bez pełnego wczytywania gry
+  - Podgląd podstawowych informacji (liczba botów, runda, postęp)
+  - Walidacja czy kod jest prawidłowy przed próbą wczytania
+- [ ] **Poprawki modalu wczytywania**
+  - Lepszy interfejs wprowadzania kodu
+  - Komunikaty błędów i instrukcje użycia
+  - Optymalizacja przycisków i animacji
+- [ ] **Przygotowanie pod multi-bot format v0.3.0**
+  - Rozpoznawanie kodów 1-4 botów
+  - Preparing infrastructure dla przyszłych rozszerzeń
 
 ### v0.3.0 - Wiele botów 🔜
 
@@ -79,44 +103,24 @@ src/
 
 ## 🔧 Save/Load System Architecture
 
-### v0.2.0 (current) - localStorage-only
+### v0.2.1 (current) - Ultra-kompaktowy system kodów
 
-```typescript
-// ZEPSUTY SYSTEM - tylko lokalne kody
-generateShareableCode() → localStorage.setItem(code, data) → zwraca krótki kod
-loadFromShareableCode() → localStorage.getItem(code) → działa tylko lokalnie
-```
+**Cel**: Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C), zawierają pełne dane gry, są cross-device i mają minimalną długość.
 
-**Problem**: Kody typu `ZOOABC123` nie zawierają danych!
-
-### v0.2.1 (planned) - Embedded data
-
-**Opcja A - LZ-String**:
-
-```typescript
-// 175 znaków, przetestowane
-gameState → JSON → LZ.compressToBase64() → ZOO + base64string
-```
-
-**Opcja B - Custom hex**:
-
-```typescript
-// 25 znaków, ultra-kompaktowe
-gameState → custom hex encoding → ZOO + hexstring
-// Przykład: ZOO572B08391C64A5572B0811
-```
+- Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
+- Przykład: `ZOOA0CB5938416274`
+- System automatycznie rozpoznaje tryb gry na podstawie długości kodu
 
 ### GameState Structure
 
 ```typescript
 interface GameState {
-  currentCardIndex: number; // 0-12 (4 bity)
-  cardSequence: number[]; // 13 kart * 4 bity = 52 bity
-  usedCards: number[]; // max 13 * 4 bity = 52 bity
-  shuffleCount: number; // 0-255 (8 bitów)
-  gameStarted: boolean; // 1 bit
+  currentCardIndex: number; // 0-12
+  cardSequence: number[]; // 13 kart, permutacja 0-12
+  usedCards: number[]; // karty użyte w bieżącej rundzie
+  botCount?: number; // liczba botów (opcjonalnie)
+  currentBot?: number; // aktualny bot (opcjonalnie)
 }
-// Razem: ~117 bitów = 15 bajtów = 20 znaków Base64
 ```
 
 ## 🎮 Komponenty

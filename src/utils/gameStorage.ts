@@ -60,18 +60,22 @@ export function generateShareableCode(gameState: GameState): string {
 
     if (botCount === 1) {
       // Single bot format: ZOO + sequence + position (17 chars)
-        return (GAME_CODE_PREFIX + encodedSequence + encodedPosition).toUpperCase();
+      return (
+        GAME_CODE_PREFIX +
+        encodedSequence +
+        encodedPosition
+      ).toUpperCase();
     } else {
       // Multi-bot format: ZOO + sequence + position + botCount + currentBot (19 chars)
       const encodedBotCount = botCount.toString();
       const encodedCurrentBot = currentBot.toString();
-        return (
-          GAME_CODE_PREFIX +
-          encodedSequence +
-          encodedPosition +
-          encodedBotCount +
-          encodedCurrentBot
-        ).toUpperCase();
+      return (
+        GAME_CODE_PREFIX +
+        encodedSequence +
+        encodedPosition +
+        encodedBotCount +
+        encodedCurrentBot
+      ).toUpperCase();
     }
   } catch {
     throw new Error("Failed to generate game code");
