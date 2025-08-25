@@ -27,8 +27,7 @@ export default function ShareGameModal({
     try {
       const code = generateShareableCode(gameState);
       setGameCode(code);
-    } catch (error) {
-      console.error("Failed to generate game code:", error);
+    } catch {
       alert("Nie udało się wygenerować kodu gry. Spróbuj ponownie.");
     } finally {
       setIsGenerating(false);

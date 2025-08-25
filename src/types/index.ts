@@ -11,8 +11,11 @@ export interface GameState {
   currentCardIndex: number; // current position in deck (0-12)
   cardSequence: number[]; // shuffled card sequence (0-12)
   usedCards: number[]; // used cards in this round
-  shuffleCount: number; // how many times shuffled
-  gameStarted: boolean; // whether game has been started
+  // v0.2.1+ multi-bot support (optional)
+  botCount?: number; // 1-4 bots (default: 1)
+  currentBot?: number; // 1-4 current bot (default: 1)
+  // shuffleCount removed - not needed in v0.2.1
+  // gameStarted removed - code existence = game started
 }
 
 export interface GameContextType {
@@ -23,9 +26,9 @@ export interface GameContextType {
   newGame: () => void;
   loadGame: (gameState: GameState) => void;
   getCurrentCard: () => number | null;
-  isGameStarted: () => boolean;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;
+  // isGameStarted removed - determined by currentCardIndex >= 0
 }
 
 // Additional types for future multi-bot functionality

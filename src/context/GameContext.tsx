@@ -38,8 +38,8 @@ function getInitialState(): GameState {
     currentCardIndex: -1,
     cardSequence: [],
     usedCards: [],
-    shuffleCount: 0,
-    gameStarted: false,
+    botCount: 1,
+    currentBot: 1,
   };
 }
 
@@ -54,12 +54,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...initialState,
         cardSequence: shuffledSequence,
-        gameStarted: true,
+        currentCardIndex: 0, // Start at first card
       };
     }
 
     case "DRAW_CARD": {
-      if (!state.gameStarted) {
+      // Game is started if cardSequence is not empty
+      if (state.cardSequence.length === 0) {
         return state;
       }
 
@@ -85,7 +86,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         currentCardIndex: 0,
         cardSequence: generateShuffledSequence(),
         usedCards: [],
-        shuffleCount: state.shuffleCount + 1,
       };
     }
 
@@ -126,8 +126,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     loadGame: (gameState: GameState) =>
       dispatch({ type: "LOAD_GAME", payload: gameState }),
     getCurrentCard: () => {
+      // Game is started if cardSequence is not empty and currentCardIndex is valid
       if (
-        !state.gameStarted ||
+        state.cardSequence.length === 0 ||
         state.currentCardIndex < 0 ||
         state.currentCardIndex >= state.cardSequence.length
       ) {
@@ -135,7 +136,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
       }
       return state.cardSequence[state.currentCardIndex];
     },
-    isGameStarted: () => state.gameStarted,
     isDeckExhausted: () => state.currentCardIndex >= TOTAL_CARDS - 1,
     getCardsRemaining: () =>
       Math.max(0, TOTAL_CARDS - (state.currentCardIndex + 1)),

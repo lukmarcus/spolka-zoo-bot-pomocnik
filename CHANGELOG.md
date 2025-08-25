@@ -5,6 +5,51 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-08-25
+
+### ✨ Nowe funkcje
+
+- **💾 Ultra-kompaktowy system kodów gry**
+
+  - Kody gry mają zawsze wielkie litery (ZOO + 0-9, A-C)
+  - Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
+  - Kody są w pełni cross-device (można je przesyłać między urządzeniami)
+  - System automatycznie rozpoznaje tryb gry na podstawie długości kodu
+  - Przykład kodu: `ZOOA0CB5938416274`
+  - 90% redukcja długości względem systemów Base64/LZ-String
+
+- **🔗 Cross-device compatibility**
+  - Kody zawierają pełne dane gry (nie wymagają localStorage)
+  - Działają między różnymi urządzeniami i przeglądarkami
+  - Walidacja format wielkich liter w UI wczytywania
+
+### 🏗️ Zmiany architektoniczne
+
+- **🧩 GameState interface**
+
+  - Usunięto `shuffleCount` i `gameStarted` (niepotrzebne w nowym systemie)
+  - Dodano opcjonalne `botCount` i `currentBot` dla przyszłych wersji
+  - Uproszczenie struktury danych
+
+- **🛠️ Utilities gameStorage**
+  - `encodeCard()` / `decodeCard()` - mapowanie 0-12 na 0-9,A-C
+  - `generateShareableCode()` - tworzenie kodów zawsze wielkimi literami
+  - `loadFromShareableCode()` - wczytywanie z obsługą case-insensitive
+  - `isValidGameCode()` - walidacja formatu i długości
+  - Usunięto dependency na localStorage w kodach
+
+### 🎮 Interfejs użytkownika
+
+- **📝 ShareGameModal** - Generowanie kodów zawsze wielkimi literami
+- **📥 LoadGameModal** - Akceptowanie wielkich liter, walidacja ZOO prefixu
+- **🏠 Home.tsx** - Aktualizacja sekcji wersji na v0.2.1
+
+### 🔧 Zmiany techniczne
+
+- **📦 Wersja 0.2.1** - Aktualizacja package.json
+- **🧹 Czyszczenie kodu** - Usunięto wszystkie console.log z produkcji
+- **📋 Dokumentacja** - Aktualizacja README.md, DOCS.md, GAME-CODES.md
+
 ## [0.2.0] - 2025-08-23
 
 ### ✨ Nowe funkcje

@@ -17,10 +17,9 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.2.0 ✅  
-**Status**: Save/Load system implemented (localStorage-only)  
-**Znane problemy**: Kody nie działają cross-device ⚠️  
-**Następna wersja**: 0.2.1 - Cross-device functionality
+**Aktualna wersja**: 0.2.1 ✅  
+**Status**: Ultra-kompaktowy system kodów gry (cross-device, wielkie litery)  
+**Następna wersja**: 0.2.2 - Poprawki modali kopiowania kodu
 
 ## 📖 Instrukcja obsługi
 
@@ -30,17 +29,17 @@ Gra **automatycznie zapisuje** się w lokalnej pamięci przeglądarki podczas ka
 
 ### 🔗 Udostępnianie gry
 
-**⚠️ OGRANICZENIE v0.2.0**: Kody działają tylko w tej samej przeglądarce
+Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C) i można je przesyłać między urządzeniami.
 
 1. **Podczas gry** kliknij przycisk **"🔗 Udostępnij grę"**
-2. **Skopiuj** wygenerowany kod
-3. **Kod działa tylko w tej przeglądarce** - nie można wysłać innemu graczowi
+2. **Skopiuj** wygenerowany kod (np. `ZOOA0CB5938416274`)
+3. Kod działa na dowolnym urządzeniu i przeglądarce
 
 ### 📥 Wczytywanie gry
 
 1. **W menu głównym** kliknij **"📥 Wczytaj grę"**
-2. **Wprowadź kod** wygenerowany wcześniej **w tej przeglądarce**
-3. Gra zostanie wczytana jeśli kod istnieje w pamięci przeglądarki
+2. **Wprowadź kod** wygenerowany wcześniej (wielkie litery)
+3. Gra zostanie wczytana jeśli kod jest poprawny
 
 ## 📋 Szybki start
 
@@ -62,20 +61,11 @@ npm run lint    # Sprawdzenie linting
 npm run preview # Podgląd builda
 ```
 
-## 🗓️ Plan rozwoju
+## � Dokumentacja
 
-| Wersja | Status       | Opis                                                  |
-| ------ | ------------ | ----------------------------------------------------- |
-| 0.2.0  | ✅ Ukończona | **Save/Load system (localStorage-only)** ⚠️ bugfix needed |
-| 0.2.1  | 🔜 Planowana | Cross-device kody gry - naprawienie systemu udostępniania |
-| 0.2.2  | 🔜 Planowana | UX improvements modali - uproszczenie interfejsu |
-| 0.2.3  | 🔜 Planowana | Optymalizacja długości kodów (custom encoding) |
-| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                              |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota                         |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart                                     |
-
-**Szczegóły techniczne**: Zobacz [`DOCS.md`](./DOCS.md)  
-**Historia zmian**: Zobacz [`CHANGELOG.md`](./CHANGELOG.md)
+- 📚 **[DOCS.md](DOCS.md)** - Plan rozwoju i przyszłe funkcjonalności
+- � **[CHANGELOG.md](CHANGELOG.md)** - Historia zmian i wprowadzonych funkcji  
+- 🎮 **[GAME-CODES.md](GAME-CODES.md)** - Instrukcja systemu kodów gry
 
 ## 🛠️ Technologie
 

@@ -17,7 +17,8 @@ const Game: React.FC = () => {
 
   // Auto-start game when component mounts
   useEffect(() => {
-    if (!game.isGameStarted()) {
+    // Game is started if cardSequence is not empty
+    if (game.state.cardSequence.length === 0) {
       game.newGame();
     }
   }, [game]);
@@ -99,11 +100,6 @@ const Game: React.FC = () => {
                   ? `0/${BOT_CARDS.length}`
                   : `${game.state.currentCardIndex + 1}/${BOT_CARDS.length}`}
               </span>
-              {game.state.shuffleCount > 0 && (
-                <span className={styles.shuffleInfo}>
-                  Przetasowano: {game.state.shuffleCount}x
-                </span>
-              )}
             </div>
           </div>
 
@@ -150,7 +146,7 @@ const Game: React.FC = () => {
           <button
             className="btn-tertiary"
             onClick={() => setShowShareModal(true)}
-            disabled={!game.isGameStarted()}
+            disabled={game.state.cardSequence.length === 0}
           >
             📤 Udostępnij grę
           </button>

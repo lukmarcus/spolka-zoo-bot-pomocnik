@@ -1,5 +1,5 @@
 // Game Storage utilities for save/load functionality
-// v0.2.0 - Save and load game state
+// v0.2.1 - Ultra-compact custom encoding system
 
 import type { GameState } from "../types";
 
@@ -9,132 +9,147 @@ const AUTO_SAVE_KEY = "zoo-bot-auto-save";
 
 // Game code utilities
 const GAME_CODE_PREFIX = "ZOO";
-const GAME_CODE_LENGTH = 6;
+const GAME_CODE_PREFIX_LOWER = "zoo";
 
 /**
- * Interface for serialized game data
+ * Encode card number (0-12) to alphanumeric char (0-9, a-c)
  */
-export interface SerializedGameData {
-  version: string;
-  timestamp: number;
-  gameState: GameState;
-  checksum: string;
-}
-
-/**
- * Generate a random game code
- */
-function generateGameCode(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let result = GAME_CODE_PREFIX;
-
-  for (let i = 0; i < GAME_CODE_LENGTH; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+function encodeCard(cardIndex: number): string {
+  if (cardIndex < 0 || cardIndex > 12) {
+    throw new Error(`Invalid card index: ${cardIndex}. Must be 0-12.`);
   }
 
-  return result;
+  // 0-9 → '0'-'9', 10-12 → 'a'-'c'
+  return cardIndex <= 9
+    ? cardIndex.toString()
+    : String.fromCharCode(97 + cardIndex - 10);
 }
 
 /**
- * Calculate simple checksum for data validation
+ * Decode alphanumeric char (0-9, a-c or A-C) to card number (0-12)
  */
-function calculateChecksum(data: string): string {
-  let hash = 0;
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32-bit integer
+function decodeCard(char: string): number {
+  if (char >= "0" && char <= "9") {
+    return parseInt(char);
   }
-  return Math.abs(hash).toString(16).padStart(8, "0");
-}
-
-/**
- * Serialize game state to Base64 string
- */
-export function serializeGameState(gameState: GameState): string {
-  const data: SerializedGameData = {
-    version: "0.2.0",
-    timestamp: Date.now(),
-    gameState,
-    checksum: "",
-  };
-
-  const jsonString = JSON.stringify(data);
-  data.checksum = calculateChecksum(jsonString);
-
-  const finalJsonString = JSON.stringify(data);
-  return btoa(finalJsonString);
-}
-
-/**
- * Deserialize Base64 string to game state
- */
-export function deserializeGameState(base64Data: string): GameState | null {
-  try {
-    const jsonString = atob(base64Data);
-    const data: SerializedGameData = JSON.parse(jsonString);
-
-    // Validate structure
-    if (!data.gameState || typeof data.timestamp !== "number") {
-      return null;
-    }
-
-    // Validate checksum
-    const dataForChecksum = { ...data, checksum: "" };
-    const expectedChecksum = calculateChecksum(JSON.stringify(dataForChecksum));
-
-    if (data.checksum !== expectedChecksum) {
-      console.warn("Game data checksum mismatch");
-      return null;
-    }
-
-    return data.gameState;
-  } catch (error) {
-    console.error("Failed to deserialize game state:", error);
-    return null;
+  // Handle both lowercase and uppercase
+  const lowerChar = char.toLowerCase();
+  if (lowerChar >= "a" && lowerChar <= "c") {
+    return lowerChar.charCodeAt(0) - 97 + 10;
   }
+  throw new Error(`Invalid card character: ${char}. Must be 0-9 or a-c.`);
 }
 
 /**
- * Generate shareable game code from game state
+ * Generate ultra-compact game code from game state
+ * Format for 1 bot: ZOO + 13 chars (card sequence) + 1 char (current position) = 17 chars total
+ * Format for 2-4 bots: ZOO + 13 chars + 1 char + 2 chars (bot info) = 19 chars total
+ * Example: ZOO72b08391c64a55 (1 bot, 17 chars)
  */
 export function generateShareableCode(gameState: GameState): string {
-  const serialized = serializeGameState(gameState);
-  const gameCode = generateGameCode();
+  try {
+    // Encode card sequence (13 cards)
+    const encodedSequence = gameState.cardSequence.map(encodeCard).join("");
 
-  // Store in localStorage with game code as key
-  const codeKey = `game-code-${gameCode}`;
-  localStorage.setItem(codeKey, serialized);
+    // Encode current position in deck
+    const encodedPosition = encodeCard(gameState.currentCardIndex);
 
-  // Clean up old codes (keep only last 10)
-  const allKeys = Object.keys(localStorage).filter((key) =>
-    key.startsWith("game-code-")
-  );
-  if (allKeys.length > 10) {
-    allKeys.slice(0, allKeys.length - 10).forEach((key) => {
-      localStorage.removeItem(key);
-    });
+    // Check if multi-bot format is needed
+    const botCount = gameState.botCount || 1;
+    const currentBot = gameState.currentBot || 1;
+
+    if (botCount === 1) {
+      // Single bot format: ZOO + sequence + position (17 chars)
+      return (
+        GAME_CODE_PREFIX +
+        encodedSequence +
+        encodedPosition
+      ).toUpperCase();
+    } else {
+      // Multi-bot format: ZOO + sequence + position + botCount + currentBot (19 chars)
+      const encodedBotCount = botCount.toString();
+      const encodedCurrentBot = currentBot.toString();
+      return (
+        GAME_CODE_PREFIX +
+        encodedSequence +
+        encodedPosition +
+        encodedBotCount +
+        encodedCurrentBot
+      ).toUpperCase();
+    }
+  } catch {
+    throw new Error("Failed to generate game code");
   }
-
-  return gameCode;
 }
 
 /**
- * Load game state from shareable code
+ * Load game state from ultra-compact code
+ * Supports v0.2.1+ format:
+ * - 17 chars: ZOO + 14 data chars (1 bot)
+ * - 19 chars: ZOO + 16 data chars (2-4 bots)
  */
 export function loadFromShareableCode(gameCode: string): GameState | null {
-  if (!gameCode.startsWith(GAME_CODE_PREFIX)) {
+  // Convert to lowercase to handle uppercase input from UI
+  const normalizedCode = gameCode.toLowerCase();
+
+  try {
+    // Validate format
+    if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
+      return null;
+    }
+
+    const dataSection = normalizedCode.slice(3); // Remove "ZOO" prefix
+
+    // Auto-detect format based on length
+    let cardSequence: number[];
+    let currentCardIndex: number;
+    let botCount = 1;
+    let currentBot = 1;
+
+    if (dataSection.length === 14) {
+      // Single bot format (17 chars total: ZOO + 14 data)
+      const sequenceSection = dataSection.slice(0, 13);
+      cardSequence = sequenceSection.split("").map(decodeCard);
+      currentCardIndex = decodeCard(dataSection.slice(13));
+    } else if (dataSection.length === 16) {
+      // Multi-bot format (19 chars total: ZOO + 16 data)
+      const sequenceSection = dataSection.slice(0, 13);
+      cardSequence = sequenceSection.split("").map(decodeCard);
+      currentCardIndex = decodeCard(dataSection.slice(13, 14));
+
+      // Decode bot information
+      botCount = parseInt(dataSection.slice(14, 15));
+      currentBot = parseInt(dataSection.slice(15, 16));
+
+      // Validate bot numbers
+      if (
+        botCount < 2 ||
+        botCount > 4 ||
+        currentBot < 1 ||
+        currentBot > botCount
+      ) {
+        return null;
+      }
+    } else {
+      return null;
+    }
+
+    // Calculate used cards based on current position
+    const usedCards = cardSequence.slice(0, currentCardIndex);
+
+    // Construct game state
+    const gameState: GameState = {
+      currentCardIndex,
+      cardSequence,
+      usedCards,
+      botCount,
+      currentBot,
+    };
+
+    return gameState;
+  } catch {
     return null;
   }
-
-  const codeKey = `game-code-${gameCode}`;
-  const serialized = localStorage.getItem(codeKey);
-
-  if (!serialized) {
-    return null;
-  }
-
-  return deserializeGameState(serialized);
 }
 
 /**
@@ -142,11 +157,11 @@ export function loadFromShareableCode(gameCode: string): GameState | null {
  */
 export function autoSaveGameState(gameState: GameState): void {
   try {
-    const serialized = serializeGameState(gameState);
+    const serialized = JSON.stringify(gameState);
     localStorage.setItem(AUTO_SAVE_KEY, serialized);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
-  } catch (error) {
-    console.error("Failed to auto-save game state:", error);
+    localStorage.setItem(STORAGE_KEY, serialized); // Backup
+  } catch {
+    // Silently fail
   }
 }
 
@@ -157,18 +172,17 @@ export function loadAutoSavedGameState(): GameState | null {
   try {
     const serialized = localStorage.getItem(AUTO_SAVE_KEY);
     if (serialized) {
-      return deserializeGameState(serialized);
+      return JSON.parse(serialized) as GameState;
     }
 
-    // Fallback to old format
+    // Fallback to old key
     const oldFormat = localStorage.getItem(STORAGE_KEY);
     if (oldFormat) {
       return JSON.parse(oldFormat) as GameState;
     }
 
     return null;
-  } catch (error) {
-    console.error("Failed to load auto-saved game state:", error);
+  } catch {
     return null;
   }
 }
@@ -180,7 +194,7 @@ export function clearAllSavedData(): void {
   localStorage.removeItem(AUTO_SAVE_KEY);
   localStorage.removeItem(STORAGE_KEY);
 
-  // Clear game codes
+  // Clear v0.2.0 game codes (no longer supported)
   const allKeys = Object.keys(localStorage).filter((key) =>
     key.startsWith("game-code-")
   );
@@ -188,13 +202,26 @@ export function clearAllSavedData(): void {
 }
 
 /**
- * Validate game code format
+ * Validate game code format for v0.2.1
  */
 export function isValidGameCode(code: string): boolean {
-  const regex = new RegExp(
-    `^${GAME_CODE_PREFIX}[A-Z0-9]{${GAME_CODE_LENGTH}}$`
-  );
-  return regex.test(code.toUpperCase());
+  // Convert to lowercase to handle uppercase input from UI
+  const normalizedCode = code.toLowerCase();
+
+  if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
+    return false;
+  }
+
+  const dataSection = normalizedCode.slice(3);
+
+  // Support both single bot (14 chars) and multi-bot (16 chars) formats
+  if (dataSection.length !== 14 && dataSection.length !== 16) {
+    return false;
+  }
+
+  // Validate all characters are valid (0-9, a-c)
+  const validChars = /^[0-9a-c]+$/;
+  return validChars.test(dataSection);
 }
 
 /**
@@ -217,8 +244,14 @@ export async function copyToClipboard(text: string): Promise<boolean> {
       textArea.remove();
       return true;
     }
-  } catch (error) {
-    console.error("Failed to copy to clipboard:", error);
+  } catch {
     return false;
   }
 }
+
+// Legacy v0.2.0 functions removed:
+// - serializeGameState()
+// - deserializeGameData()
+// - generateGameCode()
+// - calculateChecksum()
+// These are no longer needed with the new ultra-compact system
