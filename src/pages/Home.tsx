@@ -9,15 +9,20 @@ import packageJson from "../../package.json";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { loadGame } = useGame();
+  const { loadGame, newGame } = useGame();
   const [isLoadModalOpen, setIsLoadModalOpen] = useState(false);
+
+  const handleStartGame = () => {
+    newGame(); // Always start fresh game
+    navigate("/game");
+  };
 
   const menuOptions = [
     {
       id: "start-game",
       title: "Rozpocznij grę",
       description: "Uruchom boty z kartami",
-      action: () => navigate("/game"),
+      action: handleStartGame,
       primary: true,
     },
     {
@@ -79,6 +84,8 @@ const Home: React.FC = () => {
             <li>✅ WCAG 320px compliance</li>
             <li>✅ Mechanika kart (v0.1.0)</li>
             <li>✅ Zapis/wczytywanie (v0.2.0)</li>
+            <li>✅ Cross-device kody gry (v0.2.1)</li>
+            <li>✅ Uproszczone kopiowanie (v0.2.2)</li>
             <li>⏳ Multi-bot support (v0.3.0+ roadmap)</li>
           </ul>
         </div>

@@ -5,6 +5,49 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2025-08-25
+
+### ✨ Nowe funkcje
+
+- **📋 Uproszczone kopiowanie kodu gry**
+  - Przycisk "Kopiuj stan gry" bezpośrednio w grze
+  - Przycisk "Kopiuj kod" w modalu wyjścia do menu
+  - Automatyczny toast z potwierdzeniem kopiowania
+  - Kopiowanie dostępne tylko po dobraniu pierwszej karty
+
+### 🏗️ Zmiany architektoniczne
+
+- **🗑️ Usunięto ShareGameModal**
+  - Zastąpiono prostymi przyciskami kopiowania
+  - Zmniejszono złożożność kodu o ~180 linii
+  - Uproszczono UX z 3 kroków do 1 kroku
+
+### 🎮 Interfejs użytkownika
+
+- **🔧 Optymalizacja przycisków**
+  - Zmniejszono poziomy padding: 1.5rem → 1rem (przyciski ogólne)
+  - Zmniejszono poziomy padding: 2rem → 1.25rem (przyciski w grze)
+  - Lepsze proporcje wizualne
+
+### 🐛 Poprawki błędów
+
+- **⚠️ KRYTYCZNY: Naprawiono stan nowej gry**
+  - Nowa gra zawsze zaczyna od czystego stanu (currentCardIndex: -1)
+  - Usunięto przeciekanie danych między grami
+  - Home.tsx wywołuje newGame() przed nawigacją do gry
+
+### 🔧 Zmiany techniczne
+
+- **🧩 GameContext**
+
+  - Dodano funkcję getCleanState() dla czystego stanu
+  - NEW_GAME i RESET_GAME używają getCleanState() zamiast initialState
+  - Poprawiono logikę inicjalizacji gry
+
+- **🔧 Nowe funkcje utility**
+  - copyGameCodeToClipboard() - prosty interface kopiowania z komunikatami
+  - Automatyczne generowanie i kopiowanie kodu w jednym kroku
+
 ## [0.2.1] - 2025-08-25
 
 ### ✨ Nowe funkcje

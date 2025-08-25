@@ -43,6 +43,17 @@ function getInitialState(): GameState {
   };
 }
 
+// Get clean state for new game
+function getCleanState(): GameState {
+  return {
+    currentCardIndex: -1,
+    cardSequence: [],
+    usedCards: [],
+    botCount: 1,
+    currentBot: 1,
+  };
+}
+
 // Initial game state
 const initialState: GameState = getInitialState();
 
@@ -51,10 +62,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "NEW_GAME": {
       const shuffledSequence = generateShuffledSequence();
+      const cleanState = getCleanState();
       return {
-        ...initialState,
+        ...cleanState,
         cardSequence: shuffledSequence,
-        currentCardIndex: 0, // Start at first card
+        currentCardIndex: -1, // Start before first card
       };
     }
 
@@ -90,7 +102,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "RESET_GAME":
-      return initialState;
+      return getCleanState();
 
     case "LOAD_GAME":
       return action.payload;

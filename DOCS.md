@@ -2,14 +2,14 @@
 
 ## 🎯 Plan rozwoju - przyszłe wersje
 
-| Wersja | Status       | Opis                                     | Szczegóły techniczne                           |
-| ------ | ------------ | ---------------------------------------- | ---------------------------------------------- |
-| 0.2.1  | ✅ Ukończona | Cross-device kody gry                    | Ultra-kompaktowy system ZOO                    |
-| 0.2.2  | 🔜 Planowana | Poprawki modali kopiowania               | UX improvements                                |
-| 0.2.3  | 🔜 Planowana | Wykrywanie stanu gry + modal wczytywania | Game state detection + load modal improvements |
-| 0.3.0  | 🔜 Planowana | Wsparcie dla wielu botów                 | Multi-bot architecture                         |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota            | Individual bot decks                           |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart                        | Card visualization system                      |
+| Wersja | Status | Opis | Szczegóły techniczne |
+| ------ | ------------ | ---------------------------------------- | ---------------------------------------------- | |
+| 0.2.2 | ✅ Ukończona | Uproszczenie kopiowania kodów | Usunięto modal, dodano przyciski + bug fixes |
+| 0.2.3 | 🔜 Planowana | Wykrywanie stanu gry + modal wczytywania | Game state detection + load modal improvements |
+| 0.2.4 | 🔜 Planowana | Poprawki UI/UX | Toast animations, button styling improvements |
+| 0.3.0 | 🔜 Planowana | Wsparcie dla wielu botów | Multi-bot architecture |
+| 0.4.0 | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks |
+| 0.5.0 | 🔜 Planowana | Wizualizacja kart | Card visualization system |
 
 ### 🎯 Plan rozwoju - szczegóły techniczne
 
@@ -51,14 +51,15 @@ src/
 - ✅ Usunięcie localStorage dependency z kodów gry
 - ✅ Embedding rzeczywistych danych w kodach
 
-### v0.2.2 - Poprawki modali kopiowania kodu 🔜
+### v0.2.2 - Uproszczenie kopiowania kodów ✅
 
 **Cel**: Uproszczenie i poprawa UX modali kopiowania
 
-- [ ] Analiza problemów z ShareGameModal
-- [ ] Prostszy interface kopiowania
-- [ ] Lepsze komunikaty i instrukcje użycia
-- [ ] Optymalizacja przycisków i animacji
+- ✅ Analiza problemów z ShareGameModal → USUNIĘTO MODAL
+- ✅ Prostszy interface kopiowania → Jeden przycisk w grze + jeden w modalu wyjścia
+- ✅ Lepsze komunikaty i instrukcje użycia → Toast z potwierdzeniem kopiowania
+- ✅ Optymalizacja przycisków i animacji → Zmniejszono padding, dodano toast
+- ✅ **BONUS**: Naprawiono krytyczny bug stanu nowej gry
 
 ### v0.2.3 - Wykrywanie stanu gry + modal wczytywania 🔜
 
@@ -75,6 +76,22 @@ src/
 - [ ] **Przygotowanie pod multi-bot format v0.3.0**
   - Rozpoznawanie kodów 1-4 botów
   - Preparing infrastructure dla przyszłych rozszerzeń
+
+### v0.2.4 - Poprawki UI/UX 🔜
+
+**Cel**: Polerowanie interfejsu użytkownika
+
+- [ ] **Poprawki toastu kopiowania**
+  - Animacja znikania (fade out)
+  - Lepszy wygląd (cień, zaokrąglenia)
+  - Responsywność na małych ekranach
+- [ ] **Styling przycisków kopiowania**
+  - Lepsze pozycjonowanie w modalu wyjścia
+  - Konsystentne ikony i kolory
+  - Hover effects i animacje
+- [ ] **Drobne poprawki UX**
+  - Lepsze komunikaty błędów
+  - Improved accessibility
 
 ### v0.3.0 - Wiele botów 🔜
 

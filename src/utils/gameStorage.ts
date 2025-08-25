@@ -249,6 +249,24 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
+/**
+ * Simple function to copy game code to clipboard with user feedback
+ * Returns user-friendly message for display
+ */
+export async function copyGameCodeToClipboard(
+  gameState: GameState
+): Promise<string> {
+  try {
+    const code = generateShareableCode(gameState);
+    const success = await copyToClipboard(code);
+    return success
+      ? "✅ Stan gry skopiowany do schowka!"
+      : "❌ Nie udało się skopiować. Spróbuj ponownie.";
+  } catch {
+    return "❌ Błąd podczas generowania kodu gry.";
+  }
+}
+
 // Legacy v0.2.0 functions removed:
 // - serializeGameState()
 // - deserializeGameData()
