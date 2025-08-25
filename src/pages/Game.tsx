@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/GameContext";
 import { BOT_CARDS } from "../data/botCards";
+import { copyGameCodeToClipboard } from "../utils/gameStorage";
 import Layout from "../components/Layout";
 import BotCard from "../components/BotCard";
 import ConfirmModal from "../components/ConfirmModal";
-import ShareGameModal from "../components/ShareGameModal";
 import styles from "./Game.module.css";
 import cardReverseImg from "../assets/images/interface/card-reverse.jpg";
 
@@ -13,7 +13,7 @@ const Game: React.FC = () => {
   const navigate = useNavigate();
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
+  const [copyMessage, setCopyMessage] = useState<string>("");
 
   // Auto-start game when component mounts
   useEffect(() => {
@@ -35,6 +35,12 @@ const Game: React.FC = () => {
 
   const cancelExit = () => {
     setShowExitModal(false);
+  };
+
+  const handleCopyGameCode = async () => {
+    const message = await copyGameCodeToClipboard(game.state);
+    setCopyMessage(message);
+    setTimeout(() => setCopyMessage(""), 3000);
   };
 
   const currentCardId = game.getCurrentCard();
@@ -141,16 +147,16 @@ const Game: React.FC = () => {
 
         <div className={styles.bottomControls}>
           <button className="btn-secondary" onClick={handleBackToMenu}>
-            ← Powrót do menu
+            ← Wróć do menu
           </button>
-          <button
-            className="btn-tertiary"
-            onClick={() => setShowShareModal(true)}
-            disabled={game.state.cardSequence.length === 0}
-          >
-            📤 Udostępnij grę
-          </button>
+          {game.state.currentCardIndex >= 0 && (
+            <button className="btn-tertiary" onClick={handleCopyGameCode}>
+              📋 Kopiuj stan gry
+            </button>
+          )}
         </div>
+
+        {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
       </div>
 
       <ConfirmModal
@@ -160,12 +166,12 @@ const Game: React.FC = () => {
         cancelText="Nie"
         onConfirm={confirmExit}
         onCancel={cancelExit}
-      />
-
-      <ShareGameModal
-        isOpen={showShareModal}
-        onClose={() => setShowShareModal(false)}
-        gameState={game.state}
+        copyButtonText={
+          game.state.currentCardIndex >= 0 ? "Kopiuj kod" : undefined
+        }
+        onCopy={
+          game.state.currentCardIndex >= 0 ? handleCopyGameCode : undefined
+        }
       />
     </Layout>
   );

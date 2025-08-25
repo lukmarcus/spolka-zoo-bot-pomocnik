@@ -9,6 +9,8 @@ interface ConfirmModalProps {
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
+  copyButtonText?: string;
+  onCopy?: () => void;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -19,6 +21,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   cancelText = "Anuluj",
   onConfirm,
   onCancel,
+  copyButtonText,
+  onCopy,
 }) => {
   if (!isOpen) return null;
 
@@ -60,6 +64,15 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           >
             {cancelText}
           </button>
+          {copyButtonText && onCopy && (
+            <button
+              className={`${styles.button} ${styles.button}`}
+              onClick={onCopy}
+              style={{ background: "var(--color-secondary)", color: "white" }}
+            >
+              {copyButtonText}
+            </button>
+          )}
           <button
             className={`${styles.button} ${styles.confirmButton}`}
             onClick={onConfirm}
