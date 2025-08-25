@@ -17,9 +17,9 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.2.1 ✅  
-**Status**: Ultra-kompaktowy system kodów gry (cross-device, wielkie litery)  
-**Następna wersja**: 0.2.2 - Poprawki modali kopiowania kodu
+**Aktualna wersja**: 0.2.2 ✅  
+**Status**: Uproszczone kopiowanie kodu gry (jeden przycisk, bez modali)  
+**Następna wersja**: 0.2.3 - Wykrywanie stanu gry przed wczytaniem
 
 ## 📖 Instrukcja obsługi
 

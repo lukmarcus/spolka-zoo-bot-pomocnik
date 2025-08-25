@@ -84,6 +84,8 @@ const Home: React.FC = () => {
             <li>✅ WCAG 320px compliance</li>
             <li>✅ Mechanika kart (v0.1.0)</li>
             <li>✅ Zapis/wczytywanie (v0.2.0)</li>
+            <li>✅ Cross-device kody gry (v0.2.1)</li>
+            <li>✅ Uproszczone kopiowanie (v0.2.2)</li>
             <li>⏳ Multi-bot support (v0.3.0+ roadmap)</li>
           </ul>
         </div>
