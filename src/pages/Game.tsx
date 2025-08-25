@@ -15,9 +15,9 @@ const Game: React.FC = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string>("");
 
-  // Auto-start game when component mounts
+  // Auto-start game when component mounts (if needed)
   useEffect(() => {
-    // Game is started if cardSequence is not empty
+    // Ensure game is started - fallback for direct navigation
     if (game.state.cardSequence.length === 0) {
       game.newGame();
     }
@@ -167,7 +167,7 @@ const Game: React.FC = () => {
         onConfirm={confirmExit}
         onCancel={cancelExit}
         copyButtonText={
-          game.state.currentCardIndex >= 0 ? "Kopiuj kod" : undefined
+          game.state.currentCardIndex >= 0 ? "Kopiuj stan gry" : undefined
         }
         onCopy={
           game.state.currentCardIndex >= 0 ? handleCopyGameCode : undefined

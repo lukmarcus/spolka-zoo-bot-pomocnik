@@ -9,15 +9,20 @@ import packageJson from "../../package.json";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { loadGame } = useGame();
+  const { loadGame, newGame } = useGame();
   const [isLoadModalOpen, setIsLoadModalOpen] = useState(false);
+
+  const handleStartGame = () => {
+    newGame(); // Always start fresh game
+    navigate("/game");
+  };
 
   const menuOptions = [
     {
       id: "start-game",
       title: "Rozpocznij grę",
       description: "Uruchom boty z kartami",
-      action: () => navigate("/game"),
+      action: handleStartGame,
       primary: true,
     },
     {
