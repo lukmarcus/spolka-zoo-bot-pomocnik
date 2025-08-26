@@ -1,11 +1,11 @@
 // LoadGameModal - Component for loading game state from code
-// v0.2.0 - Save and load game functionality
+// v0.2.3 - Game state preview and improved UX
 
 import { useState } from "react";
 import BaseModal from "./BaseModal";
 import styles from "./ConfirmModal.module.css"; // Use existing modal styles
-import { loadFromShareableCode, isValidGameCode } from "../utils/gameStorage";
-import type { GameState } from "../types";
+import { loadFromShareableCode, previewGameCode } from "../utils/gameStorage";
+import type { GameState, GameCodePreview } from "../types";
 
 interface LoadGameModalProps {
   isOpen: boolean;
@@ -21,12 +21,24 @@ export default function LoadGameModal({
   const [gameCode, setGameCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [gamePreview, setGamePreview] = useState<GameCodePreview | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Allow all alphanumeric characters (ZOO prefix + 0-9, A-C for data)
     const value = e.target.value.toUpperCase().replace(/[^0-9A-Z]/g, "");
     setGameCode(value);
     setError(null);
+
+    // Preview game state if code is long enough
+    if (value.length >= 14) {
+      const preview = previewGameCode(value);
+      setGamePreview(preview);
+      if (!preview.isValid) {
+        setError(preview.errorMessage || "Nieprawidłowy kod gry");
+      }
+    } else {
+      setGamePreview(null);
+    }
   };
 
   const handleLoadGame = async () => {
@@ -35,8 +47,9 @@ export default function LoadGameModal({
       return;
     }
 
-    if (!isValidGameCode(gameCode)) {
-      setError("Nieprawidłowy format kodu gry");
+    const preview = previewGameCode(gameCode);
+    if (!preview.isValid) {
+      setError(preview.errorMessage || "Nieprawidłowy format kodu gry");
       return;
     }
 
@@ -124,6 +137,52 @@ export default function LoadGameModal({
             >
               ⚠️ {error}
             </p>
+          )}
+
+          {gamePreview && gamePreview.isValid && (
+            <div
+              style={{
+                background: "#e8f5e8",
+                border: "1px solid #28a745",
+                borderRadius: "var(--border-radius)",
+                padding: "0.75rem",
+                margin: "0.75rem 0",
+              }}
+            >
+              <h4
+                style={{
+                  margin: "0 0 0.5rem 0",
+                  color: "#155724",
+                  fontSize: "0.9rem",
+                }}
+              >
+                ✅ Podgląd stanu gry
+              </h4>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "0.5rem",
+                  fontSize: "0.85rem",
+                  color: "#155724",
+                }}
+              >
+                <div>
+                  <strong>Postęp:</strong> {gamePreview.gameProgress}
+                </div>
+                <div>
+                  <strong>Boty:</strong> {gamePreview.botCount}
+                </div>
+                <div>
+                  <strong>Status:</strong>{" "}
+                  {gamePreview.isDeckExhausted
+                    ? "Talia wyczerpana"
+                    : gamePreview.isGameStarted
+                    ? "Gra w toku"
+                    : "Początek gry"}
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

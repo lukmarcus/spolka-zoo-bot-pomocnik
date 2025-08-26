@@ -1,7 +1,7 @@
 // Game Storage utilities for save/load functionality
-// v0.2.1 - Ultra-compact custom encoding system
+// v0.2.3 - Game code preview and detection functionality
 
-import type { GameState } from "../types";
+import type { GameState, GameCodePreview } from "../types";
 
 // Storage keys
 const STORAGE_KEY = "zoo-bot-game-state";
@@ -199,6 +199,119 @@ export function clearAllSavedData(): void {
     key.startsWith("game-code-")
   );
   allKeys.forEach((key) => localStorage.removeItem(key));
+}
+
+/**
+ * Preview game code without full decoding - v0.2.3 feature
+ * Returns basic information about the game state without loading it
+ */
+export function previewGameCode(code: string): GameCodePreview {
+  // Initial validation
+  if (!code || typeof code !== "string") {
+    return {
+      isValid: false,
+      errorMessage: "Kod gry jest pusty",
+      botCount: 1,
+      currentCardIndex: -1,
+      totalCards: 13,
+      gameProgress: "0/13",
+      isGameStarted: false,
+      isDeckExhausted: false,
+    };
+  }
+
+  // Normalize code (handle both cases)
+  const normalizedCode = code.toLowerCase().trim();
+
+  // Check prefix
+  if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
+    return {
+      isValid: false,
+      errorMessage: "Kod musi zaczynać się od 'ZOO'",
+      botCount: 1,
+      currentCardIndex: -1,
+      totalCards: 13,
+      gameProgress: "0/13",
+      isGameStarted: false,
+      isDeckExhausted: false,
+    };
+  }
+
+  const dataSection = normalizedCode.slice(3);
+
+  // Validate length (14 chars for 1 bot, 16 chars for 2-4 bots)
+  if (dataSection.length !== 14 && dataSection.length !== 16) {
+    return {
+      isValid: false,
+      errorMessage: `Nieprawidłowa długość kodu (${
+        dataSection.length + 3
+      } znaków)`,
+      botCount: 1,
+      currentCardIndex: -1,
+      totalCards: 13,
+      gameProgress: "0/13",
+      isGameStarted: false,
+      isDeckExhausted: false,
+    };
+  }
+
+  // Validate characters
+  const validChars = /^[0-9a-c]+$/;
+  if (!validChars.test(dataSection)) {
+    return {
+      isValid: false,
+      errorMessage: "Kod zawiera nieprawidłowe znaki",
+      botCount: 1,
+      currentCardIndex: -1,
+      totalCards: 13,
+      gameProgress: "0/13",
+      isGameStarted: false,
+      isDeckExhausted: false,
+    };
+  }
+
+  try {
+    let currentCardIndex: number;
+    let botCount: number;
+
+    if (dataSection.length === 14) {
+      // Single bot format: 13 chars (sequence) + 1 char (position)
+      currentCardIndex = decodeCard(dataSection.slice(13));
+      botCount = 1;
+    } else {
+      // Multi-bot format: 13 chars + 1 char (position) + 2 chars (bot info)
+      currentCardIndex = decodeCard(dataSection.slice(13, 14));
+      // Decode bot count from position 15
+      botCount = decodeCard(dataSection.slice(14, 15)) + 1; // +1 because encoded as 0-3
+    }
+
+    const totalCards = 13;
+    const cardsDrawn = Math.max(0, currentCardIndex + 1);
+    const gameProgress = `${cardsDrawn}/${totalCards}`;
+    const isGameStarted = currentCardIndex >= 0;
+    const isDeckExhausted = currentCardIndex >= totalCards - 1;
+
+    return {
+      isValid: true,
+      botCount,
+      currentCardIndex,
+      totalCards,
+      gameProgress,
+      isGameStarted,
+      isDeckExhausted,
+    };
+  } catch {
+    return {
+      isValid: false,
+      errorMessage: "Błąd dekodowania kodu gry",
+      botCount: 1,
+      currentCardIndex: -1,
+      totalCards: 13,
+      gameProgress: "0/13",
+      isGameStarted: false,
+      isDeckExhausted: false,
+    };
+  }
 }
 
 /**

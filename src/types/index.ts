@@ -18,6 +18,17 @@ export interface GameState {
   // gameStarted removed - code existence = game started
 }
 
+export interface GameCodePreview {
+  isValid: boolean;
+  errorMessage?: string;
+  botCount: number;
+  currentCardIndex: number;
+  totalCards: number;
+  gameProgress: string; // "0/13", "5/13", etc.
+  isGameStarted: boolean;
+  isDeckExhausted: boolean;
+}
+
 export interface GameContextType {
   state: GameState;
   drawCard: () => void;
