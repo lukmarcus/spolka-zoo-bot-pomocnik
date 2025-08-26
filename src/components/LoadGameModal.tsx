@@ -86,105 +86,99 @@ export default function LoadGameModal({
   return (
     <BaseModal
       isOpen={isOpen}
-      title="📥 Wczytaj grę"
+      title="📥 Wczytaj stan gry"
       onClose={handleClose}
       maxWidth="500px"
     >
       <div className={styles.content}>
-        <p className={styles.message}>
-          Wprowadź kod gry, aby wczytać stan gry udostępniony przez innego
-          gracza.
-        </p>
+        <label
+          style={{
+            display: "block",
+            marginBottom: "0.5rem",
+            fontWeight: "500",
+            color: "var(--text-primary)",
+          }}
+        >
+          Stan gry:
+        </label>
+        <input
+          type="text"
+          value={gameCode}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Wprowadź skopiowany wcześniej stan gry"
+          style={{
+            width: "100%",
+            padding: "0.75rem",
+            border: `1px solid ${error ? "#dc3545" : "var(--card-border)"}`,
+            borderRadius: "var(--border-radius)",
+            fontFamily: "monospace",
+            fontSize: "0.9rem",
+            background: error ? "#fff5f5" : "white",
+            textTransform: "uppercase",
+            marginBottom: "1rem",
+          }}
+          disabled={isLoading}
+          autoFocus
+        />
 
-        <div style={{ margin: "1.5rem 0" }}>
-          <label
+        {error && (
+          <p
             style={{
-              display: "block",
-              marginBottom: "0.5rem",
-              fontWeight: "500",
-              color: "var(--text-primary)",
+              color: "#dc3545",
+              fontSize: "0.85rem",
+              margin: "0.5rem 0 0 0",
             }}
           >
-            Kod gry:
-          </label>
-          <input
-            type="text"
-            value={gameCode}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Wprowadź kod gry (np. ABCD1234...)"
-            style={{
-              width: "100%",
-              padding: "0.75rem",
-              border: `1px solid ${error ? "#dc3545" : "var(--card-border)"}`,
-              borderRadius: "var(--border-radius)",
-              fontFamily: "monospace",
-              fontSize: "0.9rem",
-              background: error ? "#fff5f5" : "white",
-              textTransform: "uppercase",
-            }}
-            disabled={isLoading}
-            autoFocus
-          />
+            ⚠️ {error}
+          </p>
+        )}
 
-          {error && (
-            <p
+        {gamePreview && gamePreview.isValid && (
+          <div
+            style={{
+              background: "#e8f5e8",
+              border: "1px solid #28a745",
+              borderRadius: "var(--border-radius)",
+              padding: "0.75rem",
+              margin: "0.75rem 0",
+            }}
+          >
+            <h4
               style={{
-                color: "#dc3545",
-                fontSize: "0.85rem",
-                margin: "0.5rem 0 0 0",
+                margin: "0 0 0.5rem 0",
+                color: "#155724",
+                fontSize: "0.9rem",
               }}
             >
-              ⚠️ {error}
-            </p>
-          )}
-
-          {gamePreview && gamePreview.isValid && (
+              ✅ Podgląd stanu gry
+            </h4>
             <div
               style={{
-                background: "#e8f5e8",
-                border: "1px solid #28a745",
-                borderRadius: "var(--border-radius)",
-                padding: "0.75rem",
-                margin: "0.75rem 0",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "0.5rem",
+                fontSize: "0.85rem",
+                color: "#155724",
               }}
             >
-              <h4
-                style={{
-                  margin: "0 0 0.5rem 0",
-                  color: "#155724",
-                  fontSize: "0.9rem",
-                }}
-              >
-                ✅ Podgląd stanu gry
-              </h4>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "0.5rem",
-                  fontSize: "0.85rem",
-                  color: "#155724",
-                }}
-              >
-                <div>
-                  <strong>Postęp:</strong> {gamePreview.gameProgress}
-                </div>
-                <div>
-                  <strong>Boty:</strong> {gamePreview.botCount}
-                </div>
-                <div>
-                  <strong>Status:</strong>{" "}
-                  {gamePreview.isDeckExhausted
-                    ? "Talia wyczerpana"
-                    : gamePreview.isGameStarted
-                    ? "Gra w toku"
-                    : "Początek gry"}
-                </div>
+              <div>
+                <strong>Postęp:</strong> {gamePreview.gameProgress}
+              </div>
+              <div>
+                <strong>Boty:</strong> {gamePreview.botCount}
+              </div>
+              <div>
+                <strong>Status:</strong>{" "}
+                {gamePreview.isDeckExhausted
+                  ? "Talia wyczerpana"
+                  : gamePreview.isGameStarted
+                  ? "Gra w toku"
+                  : "Początek gry"}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div
           style={{
@@ -192,6 +186,7 @@ export default function LoadGameModal({
             padding: "1rem",
             borderRadius: "var(--border-radius)",
             border: "1px solid var(--card-border)",
+            marginTop: "1rem",
           }}
         >
           <h4
@@ -200,7 +195,7 @@ export default function LoadGameModal({
               color: "var(--text-primary)",
             }}
           >
-            Jak wczytać grę:
+            Jak wczytać stan gry:
           </h4>
           <ol
             style={{
@@ -209,10 +204,11 @@ export default function LoadGameModal({
               color: "var(--text-primary)",
             }}
           >
-            <li>Otrzymaj kod gry od innego gracza</li>
-            <li>Wprowadź kod w polu powyżej</li>
-            <li>Kliknij "Wczytaj grę" lub naciśnij Enter</li>
-            <li>Gra zostanie wczytana w udostępnionym stanie</li>
+            <li>Skopiuj stan gry z trwającej rozgrywki</li>
+            <li>Wprowadź stan gry w polu powyżej</li>
+            <li>Zweryfikuj poprawność stanu gry</li>
+            <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
+            <li>Gra zostanie wczytana w zapisanym stanie</li>
           </ol>
         </div>
       </div>
@@ -230,7 +226,7 @@ export default function LoadGameModal({
           onClick={handleLoadGame}
           disabled={isLoading || !gameCode.trim()}
         >
-          {isLoading ? "🔄 Wczytywanie..." : "📥 Wczytaj grę"}
+          {isLoading ? "🔄 Wczytywanie..." : "📥 Wczytaj stan gry"}
         </button>
       </div>
     </BaseModal>
