@@ -11,15 +11,17 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - 🤖 Losowanie kart botów z talii 13 kart
 - 🎲 Tasowanie i dobieranie kolejnych kart
 - 🔄 Reset i przetasowanie talii
-- 💾 **NOWE**: Zapisywanie i wczytywanie stanu gry (localStorage)
-- 🔗 **NOWE**: Kody gry (tylko w tej samej przeglądarce)
+- 💾 Zapisywanie i wczytywanie stanu gry (localStorage)
+- 🔗 Udostępnianie gry przez kompaktowe kody (cross-device)
+- 🔍 **NOWE**: Live preview stanu gry przed wczytaniem
+- ⚡ **NOWE**: Inteligentna walidacja kodów gry w czasie rzeczywistym
 - 📱 Responsywny design dla telefonów (320px+)
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.2.2 ✅  
-**Status**: Uproszczone kopiowanie kodu gry (jeden przycisk, bez modali)  
-**Następna wersja**: 0.2.3 - Wykrywanie stanu gry przed wczytaniem
+**Aktualna wersja**: 0.2.3 ✅  
+**Status**: Podgląd stanu gry w LoadGameModal z live preview  
+**Następna wersja**: 0.2.4 - Poprawki UI/UX (toast animacje, button styling)
 
 ## 📖 Instrukcja obsługi
 
@@ -31,15 +33,17 @@ Gra **automatycznie zapisuje** się w lokalnej pamięci przeglądarki podczas ka
 
 Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C) i można je przesyłać między urządzeniami.
 
-1. **Podczas gry** kliknij przycisk **"🔗 Udostępnij grę"**
-2. **Skopiuj** wygenerowany kod (np. `ZOOA0CB5938416274`)
+1. **Podczas gry** kliknij przycisk **"Kopiuj stan gry"**
+2. **Kod jest automatycznie skopiowany** do schowka (np. `ZOOA0CB5938416274`)
 3. Kod działa na dowolnym urządzeniu i przeglądarce
 
 ### 📥 Wczytywanie gry
 
 1. **W menu głównym** kliknij **"📥 Wczytaj grę"**
-2. **Wprowadź kod** wygenerowany wcześniej (wielkie litery)
-3. Gra zostanie wczytana jeśli kod jest poprawny
+2. **Wprowadź kod** wygenerowany wcześniej
+3. **Preview pokazuje** liczbę botów, aktualnego bota i postęp gry
+4. Przycisk aktywny tylko przy prawidłowym kodzie
+5. Gra zostanie wczytana w zapisanym stanie
 
 ## 📋 Szybki start
 
