@@ -1,0 +1,167 @@
+/* LoadGameModal Styles */
+/* v0.2.3 - Dedicated styles for load game modal */
+
+.content {
+  padding: 1.5rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  font-family: monospace;
+  font-size: 0.9rem;
+  background: white;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--card-border);
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--button-primary);
+  box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+}
+
+.input.error {
+  border-color: #dc3545;
+  background: #fff5f5;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.5rem 0;
+}
+
+.preview {
+  background: #e8f5e8;
+  border: 1px solid #28a745;
+  border-radius: var(--border-radius);
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.previewTitle {
+  margin: 0 0 0.5rem 0;
+  color: #155724;
+  font-size: 0.9rem;
+}
+
+.previewContent {
+  font-size: 0.85rem;
+  color: #155724;
+  line-height: 1.4;
+}
+
+.previewItem {
+  margin-bottom: 0.25rem;
+}
+
+.previewItem:last-child {
+  margin-bottom: 0;
+}
+
+.deckExhausted {
+  color: #d63384;
+  font-weight: 500;
+}
+
+.instructions {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--card-border);
+  margin-top: 1.5rem;
+}
+
+.instructionsTitle {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.instructionsList {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-primary);
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f9f9f9;
+  border-top: 1px solid var(--card-border);
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  border: 1px solid;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.cancelButton {
+  background: transparent;
+  border-color: var(--card-border);
+  color: var(--text-primary);
+}
+
+.cancelButton:hover {
+  background: #f0f0f0;
+  border-color: var(--button-secondary);
+}
+
+.confirmButton {
+  background: var(--button-primary);
+  border-color: var(--button-primary);
+  color: white;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #6d3410;
+  border-color: #6d3410;
+  transform: translateY(-1px);
+}
+
+.confirmButton:disabled {
+  background: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .button {
+    width: 100%;
+    padding: 1rem;
+    font-size: var(--font-size-base);
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .instructions {
+    margin-top: 1rem;
+  }
+}

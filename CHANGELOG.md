@@ -5,6 +5,52 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2025-08-27
+
+### ✨ Nowe funkcje
+
+- **🔍 Podgląd stanu gry w LoadGameModal**
+  - Live preview kodu gry podczas wpisywania
+  - Preview pokazuje: liczbę botów, typ talii, aktualnego bota, progress kart
+
+- **⚡ Ulepszona walidacja kodu gry**
+  - Walidacja od pierwszego znaku (prefix "ZOO")
+  - Uproszczone komunikaty błędów: "Prawidłowy format kodu to ZOO + 0-9 i A-C"
+
+- **🎯 Inteligentny przycisk wczytywania**
+  - Aktywny tylko przy prawidłowym kodzie gry
+  - Brak możliwości wczytania nieprawidłowych kodów
+
+### 🎨 Zmiany interfejsu
+
+- **📱 Dedykowane style CSS**
+  - LoadGameModal.module.css - własny plik stylów
+  - Lepsza organizacja stylów (każdy komponent ma własne style)
+
+- **🔧 Optymalizacja layoutu**
+  - Usunięto redundantny tekst wprowadzający
+  - Kompaktowy preview z czytelnym formatowaniem
+
+### 🏗️ Zmiany techniczne
+
+- **🔧 Rozszerzony GameCodePreview interface**
+  - Dodane pole currentBot dla obsługi wielu botów
+  - Przygotowanie pod przyszłe funkcjonalności
+
+- **🧩 Funkcja previewGameCode**
+  - Dekodowanie aktualnego bota z kodu gry
+  - Comprehensive error handling z jasnymi komunikatami
+
+### 📐 Poprawki UX
+
+- **⌨️ Lepsze zachowanie input-a**
+  - Zachowanie pozycji kursora podczas filtrowania znaków
+  - Natychmiastowa walidacja bez opóźnień
+
+- **📊 Informacyjny preview**
+  - Dla 1 bota: liczba botów + aktualna karta
+  - Ostrzeżenie o wyczerpaniu talii (🏁 Talia wyczerpana)
+
 ## [0.2.2] - 2025-08-25
 
 ### ✨ Nowe funkcje

@@ -4,8 +4,7 @@
 
 | Wersja | Status | Opis | Szczegóły techniczne |
 | ------ | ------------ | ---------------------------------------- | ---------------------------------------------- | |
-| 0.2.2 | ✅ Ukończona | Uproszczenie kopiowania kodów | Usunięto modal, dodano przyciski + bug fixes |
-| 0.2.3 | 🔜 Planowana | Wykrywanie stanu gry + modal wczytywania | Game state detection + load modal improvements |
+| 0.2.3 | ✅ Ukończona | Live preview stanu gry + modal improvements | Game state detection + dedykowane CSS + UX |
 | 0.2.4 | 🔜 Planowana | Poprawki UI/UX | Toast animations, button styling improvements |
 | 0.3.0 | 🔜 Planowana | Wsparcie dla wielu botów | Multi-bot architecture |
 | 0.4.0 | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks |
@@ -41,41 +40,32 @@ src/
 
 ## 🎯 Plan rozwoju - szczegóły techniczne
 
-### v0.2.1 (current) - Ultra-kompaktowy system kodów
-
-**Cel**: Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C), zawierają pełne dane gry, są cross-device i mają minimalną długość.
-
-- ✅ Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
-- ✅ Przykład: `ZOOA0CB5938416274`
-- ✅ System automatycznie rozpoznaje tryb gry na podstawie długości kodu
-- ✅ Usunięcie localStorage dependency z kodów gry
-- ✅ Embedding rzeczywistych danych w kodach
-
-### v0.2.2 - Uproszczenie kopiowania kodów ✅
-
-**Cel**: Uproszczenie i poprawa UX modali kopiowania
-
-- ✅ Analiza problemów z ShareGameModal → USUNIĘTO MODAL
-- ✅ Prostszy interface kopiowania → Jeden przycisk w grze + jeden w modalu wyjścia
-- ✅ Lepsze komunikaty i instrukcje użycia → Toast z potwierdzeniem kopiowania
-- ✅ Optymalizacja przycisków i animacji → Zmniejszono padding, dodano toast
-- ✅ **BONUS**: Naprawiono krytyczny bug stanu nowej gry
-
-### v0.2.3 - Wykrywanie stanu gry + modal wczytywania 🔜
+### v0.2.3 - Live preview stanu gry + modal improvements ✅
 
 **Cel**: Wykrywanie stanu gry przed wczytaniem + poprawa UX LoadGameModal
 
-- [ ] **Wykrywanie stanu gry na podstawie kodu**
-  - Dekodowanie kodu bez pełnego wczytywania gry
-  - Podgląd podstawowych informacji (liczba botów, runda, postęp)
+- ✅ **Wykrywanie stanu gry na podstawie kodu**
+  - Dekodowanie kodu bez pełnego wczytywania gry (previewGameCode funkcja)
+  - Podgląd informacji: liczba botów, aktualny bot, postęp gry, status talii
+  - Live preview podczas wpisywania kodu w czasie rzeczywistym
   - Walidacja czy kod jest prawidłowy przed próbą wczytania
-- [ ] **Poprawki modalu wczytywania**
-  - Lepszy interfejs wprowadzania kodu
-  - Komunikaty błędów i instrukcje użycia
-  - Optymalizacja przycisków i animacji
-- [ ] **Przygotowanie pod multi-bot format v0.3.0**
+- ✅ **Poprawki modalu wczytywania**
+  - Lepszy interfejs wprowadzania kodu z live preview
+  - Inteligentna walidacja od pierwszego znaku (prefix "ZOO")
+  - Filtrowanie nieprawidłowych znaków w czasie rzeczywistym
+  - Zachowanie pozycji kursora podczas edycji
+  - Uproszczone komunikaty błędów
+  - Przycisk aktywny tylko przy prawidłowym kodzie
+- ✅ **Dedykowany CSS module**
+  - LoadGameModal.module.css - własny plik stylów
+  - Zastąpienie inline styles klasami CSS
+  - Responsive design z mobile-first approach
+  - Lepsza organizacja stylów
+- ✅ **Przygotowanie pod multi-bot format v0.3.0**
   - Rozpoznawanie kodów 1-4 botów
-  - Preparing infrastructure dla przyszłych rozszerzeń
+  - Wyświetlanie aktualnego bota dla multi-bot
+  - Rozszerzone GameCodePreview interface (currentBot field)
+  - Infrastructure dla przyszłych rozszerzeń
 
 ### v0.2.4 - Poprawki UI/UX 🔜
 
@@ -120,12 +110,14 @@ src/
 
 ## 🔧 Save/Load System Architecture
 
-### v0.2.1 (current) - Ultra-kompaktowy system kodów
+### v0.2.3 (current) - Ultra-kompaktowy system kodów + live preview
 
-**Cel**: Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C), zawierają pełne dane gry, są cross-device i mają minimalną długość.
+**Cel**: Kody gry z live preview i inteligentną walidacją. System automatycznie wykrywa stan gry przed wczytaniem.
 
 - Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
 - Przykład: `ZOOA0CB5938416274`
+- Live preview: liczba botów, aktualny bot, postęp gry
+- Walidacja w czasie rzeczywistym od pierwszego znaku
 - System automatycznie rozpoznaje tryb gry na podstawie długości kodu
 
 ### GameState Structure
@@ -146,13 +138,13 @@ interface GameState {
 
 Uniwersalny modal bazujący na ConfirmModal.module.css
 
-### ShareGameModal
-
-Modal do generowania kodów gry z przyciskiem kopiowania
-
 ### LoadGameModal
 
-Modal do wczytywania gry z walidacją kodów
+Modal do wczytywania gry z:
+- Live preview stanu gry (GameCodePreview)
+- Inteligentną walidacją w czasie rzeczywistym  
+- Dedykowanymi stylami CSS (LoadGameModal.module.css)
+- Obsługą multi-bot format (currentBot detection)
 
 ### GameContext
 
