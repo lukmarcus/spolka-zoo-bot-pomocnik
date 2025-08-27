@@ -24,20 +24,56 @@ export default function LoadGameModal({
   const [gamePreview, setGamePreview] = useState<GameCodePreview | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Allow all alphanumeric characters (ZOO prefix + 0-9, A-C for data)
-    const value = e.target.value.toUpperCase().replace(/[^0-9A-Z]/g, "");
-    setGameCode(value);
+    const rawValue = e.target.value.toUpperCase();
+
+    // Filter only allowed characters: 0-9, A-Z (but only 0-9,A-C are valid in the data part)
+    const filteredValue = rawValue.replace(/[^0-9A-Z]/g, "");
+
+    setGameCode(filteredValue);
+    setGamePreview(null);
     setError(null);
 
-    // Preview game state if code is long enough
-    if (value.length >= 14) {
-      const preview = previewGameCode(value);
+    // Validate from the first character
+    if (filteredValue.length === 0) {
+      // No error for empty input
+      return;
+    }
+
+    // Check if starts with ZOO
+    if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
+      setError("Kod musi zaczynać się od 'ZOO'");
+      return;
+    }
+
+    if (filteredValue.length >= 2 && !filteredValue.startsWith("ZO")) {
+      setError("Kod musi zaczynać się od 'ZOO'");
+      return;
+    }
+
+    if (filteredValue.length >= 3 && !filteredValue.startsWith("ZOO")) {
+      setError("Kod musi zaczynać się od 'ZOO'");
+      return;
+    }
+
+    // Check for invalid characters in data part (after ZOO)
+    if (filteredValue.length > 3) {
+      const dataPart = filteredValue.substring(3);
+      const invalidChars = dataPart.replace(/[0-9A-C]/g, "");
+      if (invalidChars.length > 0) {
+        setError(
+          `Nieprawidłowe znaki w kodzie: ${invalidChars}. Dozwolone: 0-9, A-C`
+        );
+        return;
+      }
+    }
+
+    // Preview game state if code is potentially complete
+    if (filteredValue.length >= 14) {
+      const preview = previewGameCode(filteredValue);
       setGamePreview(preview);
       if (!preview.isValid) {
         setError(preview.errorMessage || "Nieprawidłowy kod gry");
       }
-    } else {
-      setGamePreview(null);
     }
   };
 
@@ -82,6 +118,9 @@ export default function LoadGameModal({
       handleLoadGame();
     }
   };
+
+  // Check if the current code is valid for button activation
+  const isCodeValid = gamePreview?.isValid || false;
 
   return (
     <BaseModal
@@ -224,7 +263,7 @@ export default function LoadGameModal({
         <button
           className={`${styles.button} ${styles.confirmButton}`}
           onClick={handleLoadGame}
-          disabled={isLoading || !gameCode.trim()}
+          disabled={isLoading || !isCodeValid}
         >
           {isLoading ? "🔄 Wczytywanie..." : "📥 Wczytaj stan gry"}
         </button>
