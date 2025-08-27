@@ -161,7 +161,7 @@ export default function LoadGameModal({
             fontSize: "0.9rem",
             background: error ? "#fff5f5" : "white",
             textTransform: "uppercase",
-            marginBottom: "1rem",
+            marginBottom: "0.5rem",
           }}
           disabled={isLoading}
           autoFocus
@@ -172,7 +172,7 @@ export default function LoadGameModal({
             style={{
               color: "#dc3545",
               fontSize: "0.85rem",
-              margin: "0.5rem 0 0 0",
+              margin: "0.25rem 0 0.5rem 0",
             }}
           >
             ⚠️ {error}
@@ -186,7 +186,7 @@ export default function LoadGameModal({
               border: "1px solid #28a745",
               borderRadius: "var(--border-radius)",
               padding: "0.75rem",
-              margin: "0.75rem 0",
+              margin: "0.5rem 0",
             }}
           >
             <h4
@@ -200,27 +200,38 @@ export default function LoadGameModal({
             </h4>
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "0.5rem",
                 fontSize: "0.85rem",
                 color: "#155724",
+                lineHeight: "1.4",
               }}
             >
-              <div>
-                <strong>Postęp:</strong> {gamePreview.gameProgress}
-              </div>
-              <div>
-                <strong>Boty:</strong> {gamePreview.botCount}
-              </div>
-              <div>
-                <strong>Status:</strong>{" "}
-                {gamePreview.isDeckExhausted
-                  ? "Talia wyczerpana"
-                  : gamePreview.isGameStarted
-                  ? "Gra w toku"
-                  : "Początek gry"}
-              </div>
+              {gamePreview.botCount === 1 ? (
+                <>
+                  <div>
+                    <strong>Liczba botów:</strong> 1
+                  </div>
+                  <div>
+                    <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <strong>Liczba botów:</strong> {gamePreview.botCount}
+                  </div>
+                  <div>
+                    <strong>Talia:</strong> wspólna
+                  </div>
+                  <div>
+                    <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
+                  </div>
+                </>
+              )}
+              {gamePreview.isDeckExhausted && (
+                <div style={{ color: "#d63384", fontWeight: "500" }}>
+                  🏁 Talia wyczerpana
+                </div>
+              )}
             </div>
           </div>
         )}
