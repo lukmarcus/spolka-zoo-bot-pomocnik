@@ -25,6 +25,8 @@ export default function LoadGameModal({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.toUpperCase();
+    const inputElement = e.target;
+    const cursorPosition = inputElement.selectionStart;
 
     // Filter only allowed characters: 0-9, A-Z (but only 0-9,A-C are valid in the data part)
     const filteredValue = rawValue.replace(/[^0-9A-Z]/g, "");
@@ -32,6 +34,13 @@ export default function LoadGameModal({
     setGameCode(filteredValue);
     setGamePreview(null);
     setError(null);
+
+    // Restore cursor position after filtering
+    setTimeout(() => {
+      if (inputElement && cursorPosition !== null) {
+        inputElement.setSelectionRange(cursorPosition, cursorPosition);
+      }
+    }, 0);
 
     // Validate from the first character
     if (filteredValue.length === 0) {
@@ -41,17 +50,17 @@ export default function LoadGameModal({
 
     // Check if starts with ZOO
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
-      setError("Kod musi zaczynać się od 'ZOO'");
+      setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
       return;
     }
 
     if (filteredValue.length >= 2 && !filteredValue.startsWith("ZO")) {
-      setError("Kod musi zaczynać się od 'ZOO'");
+      setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
       return;
     }
 
     if (filteredValue.length >= 3 && !filteredValue.startsWith("ZOO")) {
-      setError("Kod musi zaczynać się od 'ZOO'");
+      setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
       return;
     }
 
@@ -60,9 +69,7 @@ export default function LoadGameModal({
       const dataPart = filteredValue.substring(3);
       const invalidChars = dataPart.replace(/[0-9A-C]/g, "");
       if (invalidChars.length > 0) {
-        setError(
-          `Nieprawidłowe znaki w kodzie: ${invalidChars}. Dozwolone: 0-9, A-C`
-        );
+        setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
         return;
       }
     }
@@ -76,7 +83,6 @@ export default function LoadGameModal({
       }
     }
   };
-
   const handleLoadGame = async () => {
     if (!gameCode.trim()) {
       setError("Wprowadź kod gry");
