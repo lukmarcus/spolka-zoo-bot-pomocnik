@@ -212,6 +212,7 @@ export function previewGameCode(code: string): GameCodePreview {
       isValid: false,
       errorMessage: "Kod gry jest pusty",
       botCount: 1,
+      currentBot: undefined,
       currentCardIndex: -1,
       totalCards: 13,
       gameProgress: "0/13",
@@ -229,6 +230,7 @@ export function previewGameCode(code: string): GameCodePreview {
       isValid: false,
       errorMessage: "Kod musi zaczynać się od 'ZOO'",
       botCount: 1,
+      currentBot: undefined,
       currentCardIndex: -1,
       totalCards: 13,
       gameProgress: "0/13",
@@ -247,6 +249,7 @@ export function previewGameCode(code: string): GameCodePreview {
         dataSection.length + 3
       } znaków)`,
       botCount: 1,
+      currentBot: undefined,
       currentCardIndex: -1,
       totalCards: 13,
       gameProgress: "0/13",
@@ -262,6 +265,7 @@ export function previewGameCode(code: string): GameCodePreview {
       isValid: false,
       errorMessage: "Kod zawiera nieprawidłowe znaki",
       botCount: 1,
+      currentBot: undefined,
       currentCardIndex: -1,
       totalCards: 13,
       gameProgress: "0/13",
@@ -273,16 +277,20 @@ export function previewGameCode(code: string): GameCodePreview {
   try {
     let currentCardIndex: number;
     let botCount: number;
+    let currentBot: number | undefined;
 
     if (dataSection.length === 14) {
       // Single bot format: 13 chars (sequence) + 1 char (position)
       currentCardIndex = decodeCard(dataSection.slice(13));
       botCount = 1;
+      currentBot = undefined; // No current bot for single bot
     } else {
-      // Multi-bot format: 13 chars + 1 char (position) + 2 chars (bot info)
+      // Multi-bot format: 13 chars + 1 char (position) + 1 char (botCount) + 1 char (currentBot)
       currentCardIndex = decodeCard(dataSection.slice(13, 14));
-      // Decode bot count from position 15
-      botCount = decodeCard(dataSection.slice(14, 15)) + 1; // +1 because encoded as 0-3
+      // Decode bot count from position 14
+      botCount = parseInt(dataSection.slice(14, 15));
+      // Decode current bot from position 15
+      currentBot = parseInt(dataSection.slice(15, 16));
     }
 
     const totalCards = 13;
@@ -294,6 +302,7 @@ export function previewGameCode(code: string): GameCodePreview {
     return {
       isValid: true,
       botCount,
+      currentBot,
       currentCardIndex,
       totalCards,
       gameProgress,
@@ -305,6 +314,7 @@ export function previewGameCode(code: string): GameCodePreview {
       isValid: false,
       errorMessage: "Błąd dekodowania kodu gry",
       botCount: 1,
+      currentBot: undefined,
       currentCardIndex: -1,
       totalCards: 13,
       gameProgress: "0/13",

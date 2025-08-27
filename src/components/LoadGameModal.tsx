@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import BaseModal from "./BaseModal";
-import styles from "./ConfirmModal.module.css"; // Use existing modal styles
+import styles from "./LoadGameModal.module.css";
 import { loadFromShareableCode, previewGameCode } from "../utils/gameStorage";
 import type { GameState, GameCodePreview } from "../types";
 
@@ -136,99 +136,55 @@ export default function LoadGameModal({
       maxWidth="500px"
     >
       <div className={styles.content}>
-        <label
-          style={{
-            display: "block",
-            marginBottom: "0.5rem",
-            fontWeight: "500",
-            color: "var(--text-primary)",
-          }}
-        >
-          Stan gry:
-        </label>
+        <label className={styles.label}>Stan gry:</label>
         <input
           type="text"
           value={gameCode}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="Wprowadź skopiowany wcześniej stan gry"
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            border: `1px solid ${error ? "#dc3545" : "var(--card-border)"}`,
-            borderRadius: "var(--border-radius)",
-            fontFamily: "monospace",
-            fontSize: "0.9rem",
-            background: error ? "#fff5f5" : "white",
-            textTransform: "uppercase",
-            marginBottom: "0.5rem",
-          }}
+          className={`${styles.input} ${error ? styles.error : ""}`}
           disabled={isLoading}
           autoFocus
         />
 
-        {error && (
-          <p
-            style={{
-              color: "#dc3545",
-              fontSize: "0.85rem",
-              margin: "0.25rem 0 0.5rem 0",
-            }}
-          >
-            ⚠️ {error}
-          </p>
-        )}
+        {error && <p className={styles.error}>⚠️ {error}</p>}
 
         {gamePreview && gamePreview.isValid && (
-          <div
-            style={{
-              background: "#e8f5e8",
-              border: "1px solid #28a745",
-              borderRadius: "var(--border-radius)",
-              padding: "0.75rem",
-              margin: "0.5rem 0",
-            }}
-          >
-            <h4
-              style={{
-                margin: "0 0 0.5rem 0",
-                color: "#155724",
-                fontSize: "0.9rem",
-              }}
-            >
-              ✅ Podgląd stanu gry
-            </h4>
-            <div
-              style={{
-                fontSize: "0.85rem",
-                color: "#155724",
-                lineHeight: "1.4",
-              }}
-            >
+          <div className={styles.preview}>
+            <h4 className={styles.previewTitle}>✅ Podgląd stanu gry</h4>
+            <div className={styles.previewContent}>
               {gamePreview.botCount === 1 ? (
                 <>
-                  <div>
+                  <div className={styles.previewItem}>
                     <strong>Liczba botów:</strong> 1
                   </div>
-                  <div>
+                  <div className={styles.previewItem}>
                     <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
                   </div>
                 </>
               ) : (
                 <>
-                  <div>
+                  <div className={styles.previewItem}>
                     <strong>Liczba botów:</strong> {gamePreview.botCount}
                   </div>
-                  <div>
+                  <div className={styles.previewItem}>
                     <strong>Talia:</strong> wspólna
                   </div>
-                  <div>
+                  {gamePreview.currentBot && (
+                    <div className={styles.previewItem}>
+                      <strong>Aktualny bot:</strong> {gamePreview.currentBot}
+                    </div>
+                  )}
+                  <div className={styles.previewItem}>
                     <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
                   </div>
                 </>
               )}
               {gamePreview.isDeckExhausted && (
-                <div style={{ color: "#d63384", fontWeight: "500" }}>
+                <div
+                  className={`${styles.previewItem} ${styles.deckExhausted}`}
+                >
                   🏁 Talia wyczerpana
                 </div>
               )}
@@ -236,30 +192,9 @@ export default function LoadGameModal({
           </div>
         )}
 
-        <div
-          style={{
-            background: "#f9f9f9",
-            padding: "1rem",
-            borderRadius: "var(--border-radius)",
-            border: "1px solid var(--card-border)",
-            marginTop: "1rem",
-          }}
-        >
-          <h4
-            style={{
-              margin: "0 0 0.5rem 0",
-              color: "var(--text-primary)",
-            }}
-          >
-            Jak wczytać stan gry:
-          </h4>
-          <ol
-            style={{
-              margin: "0",
-              paddingLeft: "1.25rem",
-              color: "var(--text-primary)",
-            }}
-          >
+        <div className={styles.instructions}>
+          <h4 className={styles.instructionsTitle}>Jak wczytać stan gry:</h4>
+          <ol className={styles.instructionsList}>
             <li>Skopiuj stan gry z trwającej rozgrywki</li>
             <li>Wprowadź stan gry w polu powyżej</li>
             <li>Zweryfikuj poprawność stanu gry</li>

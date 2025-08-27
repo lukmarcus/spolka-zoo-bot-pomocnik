@@ -22,6 +22,7 @@ export interface GameCodePreview {
   isValid: boolean;
   errorMessage?: string;
   botCount: number;
+  currentBot?: number; // Current active bot (1-based)
   currentCardIndex: number;
   totalCards: number;
   gameProgress: string; // "0/13", "5/13", etc.
