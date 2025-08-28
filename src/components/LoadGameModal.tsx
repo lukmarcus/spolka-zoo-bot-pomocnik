@@ -116,6 +116,7 @@ export default function LoadGameModal({
   const handleClose = () => {
     setGameCode("");
     setError(null);
+    setGamePreview(null);
     onClose();
   };
 
