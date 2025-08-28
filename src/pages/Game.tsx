@@ -33,6 +33,19 @@ const Game: React.FC = () => {
     navigate("/");
   };
 
+  const confirmExitWithCopy = async () => {
+    // First copy the game code
+    const message = await copyGameCodeToClipboard(game.state);
+    setCopyMessage(message);
+
+    // Then exit after a short delay to show the toast
+    setTimeout(() => {
+      setShowExitModal(false);
+      game.resetGame();
+      navigate("/");
+    }, 500); // Short delay to see the copy confirmation
+  };
+
   const cancelExit = () => {
     setShowExitModal(false);
   };
@@ -161,17 +174,17 @@ const Game: React.FC = () => {
 
       <ConfirmModal
         isOpen={showExitModal}
-        message="Czy na pewno wrócić do głównego menu? Stan gry zostanie utracony."
-        confirmText="Tak"
-        cancelText="Nie"
-        onConfirm={confirmExit}
+        message="Czy na pewno wrócić do głównego menu?"
+        confirmText={
+          game.state.currentCardIndex >= 0
+            ? "📋 Skopiuj stan gry i wyjdź"
+            : "Tak, wyjdź"
+        }
+        cancelText="Anuluj"
+        onConfirm={
+          game.state.currentCardIndex >= 0 ? confirmExitWithCopy : confirmExit
+        }
         onCancel={cancelExit}
-        copyButtonText={
-          game.state.currentCardIndex >= 0 ? "Kopiuj stan gry" : undefined
-        }
-        onCopy={
-          game.state.currentCardIndex >= 0 ? handleCopyGameCode : undefined
-        }
       />
     </Layout>
   );
