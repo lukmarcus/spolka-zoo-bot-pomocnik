@@ -174,10 +174,10 @@ const Game: React.FC = () => {
 
       <ConfirmModal
         isOpen={showExitModal}
-        message="Czy na pewno wrócić do głównego menu?"
+        message="Czy na pewno chcesz wyjść do głównego menu?"
         confirmText={
           game.state.currentCardIndex >= 0
-            ? "📋 Skopiuj stan gry i wyjdź"
+            ? "📋 Tak, skopiuj stan gry i wyjdź"
             : "Tak, wyjdź"
         }
         cancelText="Anuluj"

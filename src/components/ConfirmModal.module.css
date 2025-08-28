@@ -78,10 +78,10 @@
 .actions {
   display: flex;
   gap: 1rem;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1rem;
   background: #f9f9f9;
   border-top: 1px solid var(--card-border);
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .button {
@@ -122,7 +122,6 @@
   background: var(--button-secondary);
   border-color: var(--button-secondary);
   color: white;
-  order: -1; /* Position copy button on the left */
 }
 
 .copyButton:hover {
