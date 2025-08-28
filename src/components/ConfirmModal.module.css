@@ -118,6 +118,19 @@
   transform: translateY(-1px);
 }
 
+.copyButton {
+  background: var(--button-secondary);
+  border-color: var(--button-secondary);
+  color: white;
+  order: -1; /* Position copy button on the left */
+}
+
+.copyButton:hover {
+  background: #b8732a;
+  border-color: #b8732a;
+  transform: translateY(-1px);
+}
+
 /* Mobile Responsive */
 @media (max-width: 480px) {
   .modal {

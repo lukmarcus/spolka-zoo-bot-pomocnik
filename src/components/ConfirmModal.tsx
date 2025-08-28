@@ -66,9 +66,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </button>
           {copyButtonText && onCopy && (
             <button
-              className={`${styles.button} ${styles.button}`}
+              className={`${styles.button} ${styles.copyButton}`}
               onClick={onCopy}
-              style={{ background: "var(--color-secondary)", color: "white" }}
             >
               {copyButtonText}
             </button>
