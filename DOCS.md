@@ -4,8 +4,7 @@
 
 | Wersja | Status | Opis | Szczegóły techniczne |
 | ------ | ------------ | ---------------------------------------- | ---------------------------------------------- | |
-| 0.2.3 | ✅ Ukończona | Live preview stanu gry + modal improvements | Game state detection + dedykowane CSS + UX |
-| 0.2.4 | 🔜 Planowana | Poprawki UI/UX | Toast animations, button styling improvements |
+| 0.2.4 | ✅ Aktualna | Poprawki UI/UX | Toast animations, uproszczony modal wyjścia, bug fixes |
 | 0.3.0 | 🔜 Planowana | Wsparcie dla wielu botów | Multi-bot architecture |
 | 0.4.0 | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks |
 | 0.5.0 | 🔜 Planowana | Wizualizacja kart | Card visualization system |
@@ -40,48 +39,27 @@ src/
 
 ## 🎯 Plan rozwoju - szczegóły techniczne
 
-### v0.2.3 - Live preview stanu gry + modal improvements ✅
-
-**Cel**: Wykrywanie stanu gry przed wczytaniem + poprawa UX LoadGameModal
-
-- ✅ **Wykrywanie stanu gry na podstawie kodu**
-  - Dekodowanie kodu bez pełnego wczytywania gry (previewGameCode funkcja)
-  - Podgląd informacji: liczba botów, aktualny bot, postęp gry, status talii
-  - Live preview podczas wpisywania kodu w czasie rzeczywistym
-  - Walidacja czy kod jest prawidłowy przed próbą wczytania
-- ✅ **Poprawki modalu wczytywania**
-  - Lepszy interfejs wprowadzania kodu z live preview
-  - Inteligentna walidacja od pierwszego znaku (prefix "ZOO")
-  - Filtrowanie nieprawidłowych znaków w czasie rzeczywistym
-  - Zachowanie pozycji kursora podczas edycji
-  - Uproszczone komunikaty błędów
-  - Przycisk aktywny tylko przy prawidłowym kodzie
-- ✅ **Dedykowany CSS module**
-  - LoadGameModal.module.css - własny plik stylów
-  - Zastąpienie inline styles klasami CSS
-  - Responsive design z mobile-first approach
-  - Lepsza organizacja stylów
-- ✅ **Przygotowanie pod multi-bot format v0.3.0**
-  - Rozpoznawanie kodów 1-4 botów
-  - Wyświetlanie aktualnego bota dla multi-bot
-  - Rozszerzone GameCodePreview interface (currentBot field)
-  - Infrastructure dla przyszłych rozszerzeń
-
-### v0.2.4 - Poprawki UI/UX 🔜
+### v0.2.4 - Poprawki UI/UX ✅
 
 **Cel**: Polerowanie interfejsu użytkownika
 
-- [ ] **Poprawki toastu kopiowania**
-  - Animacja znikania (fade out)
-  - Lepszy wygląd (cień, zaokrąglenia)
+- ✅ **Poprawki toastu kopiowania**
+  - Animacja znikania (fade out) - automatyczne po 2.5s
+  - Lepszy wygląd (box-shadow, proper CSS variables)
   - Responsywność na małych ekranach
-- [ ] **Styling przycisków kopiowania**
-  - Lepsze pozycjonowanie w modalu wyjścia
-  - Konsystentne ikony i kolory
-  - Hover effects i animacje
-- [ ] **Drobne poprawki UX**
-  - Lepsze komunikaty błędów
-  - Improved accessibility
+  - Smooth animacje (toastSlideUp, toastFadeOut)
+- ✅ **Uproszczony modal wyjścia**
+  - Zmniejszono liczbę przycisków z 3 do 2
+  - Kombinacja "Tak" + "Kopiuj" w jeden przycisk
+  - Wycentrowane przyciski (justify-content: center)
+  - Naturalny komunikat: "Czy chcesz wyjść do głównego menu?"
+- ✅ **Styling przycisków kopiowania**
+  - Dodano .btn-tertiary style w globals.css
+  - Konsystentne hover effects i animacje
+  - Usunięto niepotrzebny order: -1
+- ✅ **Bug fixes i UX improvements**
+  - Naprawiono reset gamePreview w LoadGameModal
+  - Lepsze komunikaty w modalu wyjścia
 
 ### v0.3.0 - Wiele botów 🔜
 
@@ -110,9 +88,9 @@ src/
 
 ## 🔧 Save/Load System Architecture
 
-### v0.2.3 (current) - Ultra-kompaktowy system kodów + live preview
+### v0.2.4 (current) - Ultra-kompaktowy system kodów + live preview + UI improvements
 
-**Cel**: Kody gry z live preview i inteligentną walidacją. System automatycznie wykrywa stan gry przed wczytaniem.
+**Cel**: Kody gry z live preview, inteligentną walidacją i poprawkami UI/UX. System automatycznie wykrywa stan gry przed wczytaniem.
 
 - Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
 - Przykład: `ZOOA0CB5938416274`
@@ -141,8 +119,9 @@ Uniwersalny modal bazujący na ConfirmModal.module.css
 ### LoadGameModal
 
 Modal do wczytywania gry z:
+
 - Live preview stanu gry (GameCodePreview)
-- Inteligentną walidacją w czasie rzeczywistym  
+- Inteligentną walidacją w czasie rzeczywistym
 - Dedykowanymi stylami CSS (LoadGameModal.module.css)
 - Obsługą multi-bot format (currentBot detection)
 

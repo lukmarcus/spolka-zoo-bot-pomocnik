@@ -212,17 +212,19 @@
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--color-primary);
+  background: var(--button-primary);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   font-size: var(--font-size-sm);
   font-weight: 500;
   z-index: 1000;
-  animation: slideUp 0.3s ease-out;
+  box-shadow: var(--shadow-medium);
+  animation: toastSlideUp 0.3s ease-out,
+    toastFadeOut 0.5s ease-out 2.5s forwards;
 }
 
-@keyframes slideUp {
+@keyframes toastSlideUp {
   from {
     opacity: 0;
     transform: translateX(-50%) translateY(20px);
@@ -230,5 +232,49 @@
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes toastFadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+/* Mobile responsiveness for toast */
+@media (max-width: 480px) {
+  .copyMessage {
+    bottom: 80px;
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    width: auto;
+  }
+
+  @keyframes toastSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes toastFadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
   }
 }

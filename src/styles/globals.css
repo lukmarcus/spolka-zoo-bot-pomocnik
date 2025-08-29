@@ -156,6 +156,18 @@ button:active {
   background: #b8732a;
 }
 
+.btn-tertiary {
+  background: var(--button-secondary);
+  color: white;
+  font-size: 0.9rem;
+  padding: 0.625rem 1rem;
+}
+
+.btn-tertiary:hover {
+  background: #b8732a;
+  transform: translateY(-1px);
+}
+
 .btn-danger {
   background: var(--danger);
   color: white;

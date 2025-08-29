@@ -19,9 +19,9 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.2.3 ✅  
-**Status**: Podgląd stanu gry w LoadGameModal z live preview  
-**Następna wersja**: 0.2.4 - Poprawki UI/UX (toast animacje, button styling)
+**Aktualna wersja**: 0.2.4 ✅  
+**Status**: Poprawki UI/UX - uproszczony modal wyjścia, lepsze animacje toasta  
+**Następna wersja**: 0.3.0 - Obsługa wielu botów (2-4)
 
 ## 📖 Instrukcja obsługi
 
@@ -68,7 +68,7 @@ npm run preview # Podgląd builda
 ## � Dokumentacja
 
 - 📚 **[DOCS.md](DOCS.md)** - Plan rozwoju i przyszłe funkcjonalności
-- � **[CHANGELOG.md](CHANGELOG.md)** - Historia zmian i wprowadzonych funkcji  
+- � **[CHANGELOG.md](CHANGELOG.md)** - Historia zmian i wprowadzonych funkcji
 - 🎮 **[GAME-CODES.md](GAME-CODES.md)** - Instrukcja systemu kodów gry
 
 ## 🛠️ Technologie

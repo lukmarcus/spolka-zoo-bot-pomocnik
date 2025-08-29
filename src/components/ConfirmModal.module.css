@@ -78,10 +78,10 @@
 .actions {
   display: flex;
   gap: 1rem;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1rem;
   background: #f9f9f9;
   border-top: 1px solid var(--card-border);
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .button {
@@ -115,6 +115,18 @@
 .confirmButton:hover {
   background: #6d3410;
   border-color: #6d3410;
+  transform: translateY(-1px);
+}
+
+.copyButton {
+  background: var(--button-secondary);
+  border-color: var(--button-secondary);
+  color: white;
+}
+
+.copyButton:hover {
+  background: #b8732a;
+  border-color: #b8732a;
   transform: translateY(-1px);
 }
 
