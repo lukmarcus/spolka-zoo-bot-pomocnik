@@ -5,15 +5,52 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2025-08-29
+
+### 🎨 Poprawki UI/UX
+
+- **✨ Ulepszone animacje toasta kopiowania**
+
+  - Automatyczne znikanie po 2.5s z animacją fade out
+  - Lepszy wygląd z box-shadow i proper CSS variables
+  - Poprawiona responsywność na małych ekranach
+  - Smooth animacje slide up i fade out
+
+- **🔧 Uproszczony modal wyjścia do menu**
+
+  - Zmniejszono liczbę przycisków z 3 do 2
+  - Kombinacja "Tak" + "Kopiuj stan gry" w jeden przycisk
+  - Wycentrowane przyciski zamiast wyrównania do prawej
+  - Naturalny komunikat: "Czy chcesz wyjść do głównego menu?"
+
+- **🎯 Poprawki przycisków kopiowania**
+  - Dodano dedykowany styl `.btn-tertiary` w globals.css
+  - Konsystentne hover effects i animacje
+  - Lepsze pozycjonowanie i kolory
+
+### 🐛 Poprawki błędów
+
+- **🔍 Bug fix w LoadGameModal**
+  - Naprawiono problem z niersetowaniem podglądu gry przy zamykaniu modalu
+  - Teraz `gamePreview` jest poprawnie czyszczony przy `handleClose()`
+
+### 📐 Usprawnienia UX
+
+- **💬 Lepsze komunikaty**
+  - "Czy chcesz wyjść do głównego menu?" zamiast "Czy na pewno wrócić..."
+  - "Tak, skopiuj stan gry i wyjdź" - jasna akcja kombinowana
+
 ## [0.2.3] - 2025-08-27
 
 ### ✨ Nowe funkcje
 
 - **🔍 Podgląd stanu gry w LoadGameModal**
+
   - Live preview kodu gry podczas wpisywania
   - Preview pokazuje: liczbę botów, typ talii, aktualnego bota, progress kart
 
 - **⚡ Ulepszona walidacja kodu gry**
+
   - Walidacja od pierwszego znaku (prefix "ZOO")
   - Uproszczone komunikaty błędów: "Prawidłowy format kodu to ZOO + 0-9 i A-C"
 
@@ -24,6 +61,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### 🎨 Zmiany interfejsu
 
 - **📱 Dedykowane style CSS**
+
   - LoadGameModal.module.css - własny plik stylów
   - Lepsza organizacja stylów (każdy komponent ma własne style)
 
@@ -34,6 +72,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### 🏗️ Zmiany techniczne
 
 - **🔧 Rozszerzony GameCodePreview interface**
+
   - Dodane pole currentBot dla obsługi wielu botów
   - Przygotowanie pod przyszłe funkcjonalności
 
@@ -44,6 +83,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### 📐 Poprawki UX
 
 - **⌨️ Lepsze zachowanie input-a**
+
   - Zachowanie pozycji kursora podczas filtrowania znaków
   - Natychmiastowa walidacja bez opóźnień
 
