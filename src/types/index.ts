@@ -14,6 +14,8 @@ export interface GameState {
   // v0.2.1+ multi-bot support (optional)
   botCount?: number; // 1-4 bots (default: 1)
   currentBot?: number; // 1-4 current bot (default: 1)
+  // v0.3.0+ bot selection
+  botsSelected?: boolean; // whether user selected number of bots
   // shuffleCount removed - not needed in v0.2.1
   // gameStarted removed - code existence = game started
 }
@@ -37,6 +39,7 @@ export interface GameContextType {
   resetGame: () => void;
   newGame: () => void;
   loadGame: (gameState: GameState) => void;
+  selectBots: (count: number) => void; // v0.3.0+ bot selection
   getCurrentCard: () => number | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;

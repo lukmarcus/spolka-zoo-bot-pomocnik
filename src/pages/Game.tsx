@@ -69,6 +69,16 @@ const Game: React.FC = () => {
 
     // Stan początkowy - brak wylosowanej karty (0/13)
     if (currentIndex === -1) {
+      // v0.3.0+ Check if bots are selected
+      if (!game.state.botsSelected) {
+        return {
+          text: "🤖 Wybierz liczbę botów",
+          action: () => {}, // Disabled - will show bot selection UI instead
+          disabled: true,
+          className: "btn-secondary",
+        };
+      }
+
       return {
         text: "🎯 Dobierz pierwszą kartę",
         action: game.drawCard,
@@ -128,15 +138,40 @@ const Game: React.FC = () => {
             ) : (
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
-                  <div className={styles.cardReverse}>
-                    <img
-                      src={cardReverseImg}
-                      alt="Zakryty stos kart"
-                      className={styles.cardReverseImage}
-                    />
-                    <h3>Gotowy do gry</h3>
-                    <p>Naciśnij przycisk, aby wylosować pierwszą kartę.</p>
-                  </div>
+                  !game.state.botsSelected ? (
+                    // v0.3.0+ Bot selection UI
+                    <div className={styles.botSelection}>
+                      <h3>Wybierz liczbę botów</h3>
+                      <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
+                      <div className={styles.botButtons}>
+                        {[1, 2, 3, 4].map((count) => (
+                          <button
+                            key={count}
+                            className="btn-primary"
+                            onClick={() => game.selectBots(count)}
+                          >
+                            {count} {count === 1 ? "bot" : "boty"}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    // Ready to start game
+                    <div className={styles.cardReverse}>
+                      <img
+                        src={cardReverseImg}
+                        alt="Zakryty stos kart"
+                        className={styles.cardReverseImage}
+                      />
+                      <h3>Gotowy do gry</h3>
+                      <p>
+                        {game.state.botCount === 1
+                          ? "1 bot, jedna talia"
+                          : `${game.state.botCount} boty, wspólna talia`}
+                      </p>
+                      <p>Naciśnij przycisk, aby wylosować pierwszą kartę.</p>
+                    </div>
+                  )
                 ) : (
                   <>
                     <h3>Koniec talii</h3>

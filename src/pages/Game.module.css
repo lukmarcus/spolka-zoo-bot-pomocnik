@@ -278,3 +278,61 @@
     }
   }
 }
+
+/* v0.3.0+ Bot Selection Styles */
+.botSelection {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.botSelection h3 {
+  color: var(--color-secondary);
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-lg);
+}
+
+.botSelection p {
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+}
+
+.botButtons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.botButtons button {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 60px;
+  transition: all 0.2s ease;
+}
+
+.botButtons button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Mobile responsive for bot selection */
+@media (max-width: 480px) {
+  .botSelection {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .botButtons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    max-width: 280px;
+  }
+
+  .botButtons button {
+    padding: 0.875rem;
+    font-size: 0.9rem;
+    min-height: 50px;
+  }
+}
