@@ -23,7 +23,7 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 **Aktualna wersja**: 0.3.0 ✅  
 **Status**: Multi-bot support - obsługa 1-4 botów z jedną talią  
-**Następna wersja**: 0.3.1 - Poprawki i usprawnienia multi-bot
+**Następna wersja**: 0.3.1 - Krytyczne poprawki UX (naprawienie problemów v0.3.0)
 
 ## 📖 Instrukcja obsługi
 

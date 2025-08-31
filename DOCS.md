@@ -5,26 +5,42 @@
 | Wersja | Status       | Opis                          | Szczegóły techniczne                       |
 | ------ | ------------ | ----------------------------- | ------------------------------------------ |
 | 0.3.0  | ✅ Aktualna  | Wsparcie dla wielu botów      | Multi-bot architecture z jedną talią       |
-| 0.3.1  | 🔜 Planowana | Poprawki multi-bot            | Bug fixes, UX improvements dla wielu botów |
+| 0.3.1  | � Krytyczna  | Naprawienie UX v0.3.0         | Usunięcie bugów i niepotrzebnych elementów |
+| 0.3.2  | 🎯 Ważna     | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką     |
 | 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks                       |
 | 0.5.0  | 🔜 Planowana | Wizualizacja kart             | Card visualization system                  |
 
-### v0.3.1 - Poprawki multi-bot 🔜
+### v0.3.1 - Krytyczne poprawki UX 🚨
 
-**Cel**: Polerowanie funkcjonalności wielu botów i poprawki UX
+**Cel**: Naprawienie fundamentalnych problemów UX w v0.3.0
 
-- [ ] **Potencjalne poprawki multi-bot**
-  - Optymalizacja przełączania botów na mobile
-  - Lepsze visual feedback przy zmianie bota
-  - Edge case handling (np. przełączanie przy wyczerpaniu talii)
-- [ ] **UX improvements**
-  - Keyboard shortcuts dla przełączania botów (1-4)
-  - Better accessibility dla screen readers
-  - Tooltip hints dla nowych użytkowników
-- [ ] **Code quality**
-  - Refaktoring multi-bot logic
-  - Performance optimization
-  - Extended test coverage
+- [ ] **Usunięcie niepotrzebnych elementów**
+  - Usuń "Ustawienia" z menu głównego (wybór botów jest w grze)
+  - Usuń licznik kart z ekranu wyboru botów (gra się jeszcze nie zaczęła)
+  - Usuń modal potwierdzenia przy powrocie z ekranu wyboru botów
+- [ ] **Naprawienie nawigacji**
+  - Powrót z ekranu wyboru botów → menu główne (bez modalu)
+  - Powrót z gry → menu główne (nie do wyboru botów)
+  - Prosty "Back" button bez dodatkowych pytań
+- [ ] **Bug fixes**
+  - Napraw aktywację przycisku po wyborze liczby botów
+  - Napraw wielokrotne klikanie w przyciski botów
+
+### v0.3.2 - Przeprojektowanie logiki gry 🎯
+
+**Cel**: Poprawa logiki gry zgodnie z zasadami planszówki
+
+- [ ] **Nowa logika przełączania botów**
+  - Usuń manual przełącznik botów (niepotrzebny)
+  - Dodaj automatyczną kolejność botów
+  - Wskaźnik "Bot X wykonuje akcję" zamiast przełącznika
+- [ ] **Nowe przyciski akcji**
+  - "Dobierz kartę" - dla aktualnego bota
+  - "Następny bot" - jeśli aktualny bot może wykonać akcję
+  - "Kolejna karta" - jeśli bot nie może wykonać akcji z karty
+- [ ] **Poprawiona mechanika gry**
+  - Zgodność z zasadami planszówki
+  - Jasny flow: dobieranie → sprawdzenie → akcja → następny bot/kolejna karta
 
 ### v0.4.0 - Osobne talie 🔜
 
