@@ -40,6 +40,7 @@ export interface GameContextType {
   newGame: () => void;
   loadGame: (gameState: GameState) => void;
   selectBots: (count: number) => void; // v0.3.0+ bot selection
+  switchBot: (botNumber: number) => void; // v0.3.0+ bot switching
   getCurrentCard: () => number | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;

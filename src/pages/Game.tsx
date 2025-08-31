@@ -129,6 +129,34 @@ const Game: React.FC = () => {
                   ? `0/${BOT_CARDS.length}`
                   : `${game.state.currentCardIndex + 1}/${BOT_CARDS.length}`}
               </span>
+              {game.state.botsSelected &&
+                game.state.botCount &&
+                game.state.botCount > 1 && (
+                  <div className={styles.botInfo}>
+                    <span>
+                      Bot {game.state.currentBot}/{game.state.botCount}
+                    </span>
+                    <div className={styles.botSwitcher}>
+                      {Array.from(
+                        { length: game.state.botCount },
+                        (_, i) => i + 1
+                      ).map((botNumber) => (
+                        <button
+                          key={botNumber}
+                          className={`${styles.botButton} ${
+                            game.state.currentBot === botNumber
+                              ? styles.active
+                              : ""
+                          }`}
+                          onClick={() => game.switchBot(botNumber)}
+                          title={`Przełącz na Bot ${botNumber}`}
+                        >
+                          {botNumber}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
 

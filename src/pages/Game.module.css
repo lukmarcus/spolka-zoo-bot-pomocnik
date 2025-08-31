@@ -40,6 +40,54 @@
   font-weight: 500;
 }
 
+.botInfo {
+  background: var(--button-secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.botSwitcher {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.botButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.botButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.botButton.active {
+  background: white;
+  color: var(--button-secondary);
+  border-color: white;
+}
+
+.botButton.active:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .remainingCards {
   color: var(--color-text);
   font-size: var(--font-size-sm);

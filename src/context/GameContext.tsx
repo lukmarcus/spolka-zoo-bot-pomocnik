@@ -26,7 +26,8 @@ type GameAction =
   | { type: "RESET_GAME" }
   | { type: "NEW_GAME" }
   | { type: "LOAD_GAME"; payload: GameState }
-  | { type: "SELECT_BOTS"; payload: number }; // v0.3.0+ bot count selection
+  | { type: "SELECT_BOTS"; payload: number } // v0.3.0+ bot count selection
+  | { type: "SWITCH_BOT"; payload: number }; // v0.3.0+ switch current bot
 
 // Get initial state (with auto-save restore)
 function getInitialState(): GameState {
@@ -120,6 +121,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case "SWITCH_BOT": {
+      return {
+        ...state,
+        currentBot: action.payload,
+      };
+    }
+
     default:
       return state;
   }
@@ -152,6 +160,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({ type: "LOAD_GAME", payload: gameState }),
     selectBots: (count: number) =>
       dispatch({ type: "SELECT_BOTS", payload: count }),
+    switchBot: (botNumber: number) =>
+      dispatch({ type: "SWITCH_BOT", payload: botNumber }),
     getCurrentCard: () => {
       // Game is started if cardSequence is not empty and currentCardIndex is valid
       if (
