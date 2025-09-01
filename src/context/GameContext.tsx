@@ -30,7 +30,11 @@ type GameAction =
 function getInitialState(): GameState {
   const autoSaved = loadAutoSavedGameState();
   if (autoSaved) {
-    return autoSaved;
+    // Ensure botsSelected is set for auto-saved games
+    return {
+      ...autoSaved,
+      botsSelected: autoSaved.botCount ? true : false,
+    };
   }
 
   return {
@@ -39,6 +43,7 @@ function getInitialState(): GameState {
     usedCards: [],
     botCount: 1,
     currentBot: 1,
+    botsSelected: false, // v0.3.0+ require bot selection for new games
   };
 }
 
