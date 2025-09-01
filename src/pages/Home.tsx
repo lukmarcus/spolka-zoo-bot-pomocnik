@@ -32,16 +32,6 @@ const Home: React.FC = () => {
       action: () => setIsLoadModalOpen(true),
       disabled: false,
     },
-    {
-      id: "settings",
-      title: "Ustawienia",
-      description: "Liczba botów, tryb gry",
-      action: () => {
-        // TODO: Implementation in future version
-        alert("Funkcja będzie dostępna w przyszłej wersji");
-      },
-      disabled: true,
-    },
   ];
 
   return (
