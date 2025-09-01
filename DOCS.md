@@ -2,16 +2,118 @@
 
 ## 🎯 Plan rozwoju - przyszłe wersje
 
-| Wersja | Status | Opis | Szczegóły techniczne |
-| ------ | ------------ | ---------------------------------------- | ---------------------------------------------- | |
-| 0.2.4 | ✅ Aktualna | Poprawki UI/UX | Toast animations, uproszczony modal wyjścia, bug fixes |
-| 0.3.0 | 🔜 Planowana | Wsparcie dla wielu botów | Multi-bot architecture |
-| 0.4.0 | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks |
-| 0.5.0 | 🔜 Planowana | Wizualizacja kart | Card visualization system |
+| Wersja | Status       | Opis                          | Szczegóły techniczne                       |
+| ------ | ------------ | ----------------------------- | ------------------------------------------ |
+| 0.3.0  | ✅ Aktualna  | Wsparcie dla wielu botów      | Multi-bot architecture z jedną talią       |
+| 0.3.1  | � Krytyczna  | Naprawienie UX v0.3.0         | Usunięcie bugów i niepotrzebnych elementów |
+| 0.3.2  | 🎯 Ważna     | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką     |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks                       |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart             | Card visualization system                  |
 
-### 🎯 Plan rozwoju - szczegóły techniczne
+### v0.3.1 - Krytyczne poprawki UX 🚨
 
-## 📚 Dokumentacja techniczna
+**Cel**: Naprawienie fundamentalnych problemów UX w v0.3.0
+
+- [ ] **Usunięcie niepotrzebnych elementów**
+  - Usuń "Ustawienia" z menu głównego (wybór botów jest w grze)
+  - Usuń licznik kart z ekranu wyboru botów (gra się jeszcze nie zaczęła)
+  - Usuń modal potwierdzenia przy powrocie z ekranu wyboru botów
+- [ ] **Naprawienie nawigacji**
+  - Powrót z ekranu wyboru botów → menu główne (bez modalu)
+  - Powrót z gry → menu główne (nie do wyboru botów)
+  - Prosty "Back" button bez dodatkowych pytań
+- [ ] **Bug fixes**
+  - Napraw aktywację przycisku po wyborze liczby botów
+  - Napraw wielokrotne klikanie w przyciski botów
+
+### v0.3.2 - Przeprojektowanie logiki gry 🎯
+
+**Cel**: Poprawa logiki gry zgodnie z zasadami planszówki
+
+- [ ] **Nowa logika przełączania botów**
+  - Usuń manual przełącznik botów (niepotrzebny)
+  - Dodaj automatyczną kolejność botów
+  - Wskaźnik "Bot X wykonuje akcję" zamiast przełącznika
+- [ ] **Nowe przyciski akcji**
+  - "Dobierz kartę" - dla aktualnego bota
+  - "Następny bot" - jeśli aktualny bot może wykonać akcję
+  - "Kolejna karta" - jeśli bot nie może wykonać akcji z karty
+- [ ] **Poprawiona mechanika gry**
+  - Zgodność z zasadami planszówki
+  - Jasny flow: dobieranie → sprawdzenie → akcja → następny bot/kolejna karta
+
+### v0.4.0 - Osobne talie 🔜
+
+**Cel**: Opcja osobnych talii dla każdego bota
+
+- [ ] **Wybór trybu gry**
+  - "Wspólna talia" (obecny system v0.3.0)
+  - "Osobne talie" (nowy system v0.4.0)
+- [ ] **Zarządzanie wieloma taliami**
+  - Każdy bot ma własną sekwencję kart
+  - Niezależne `currentCardIndex` dla każdego bota
+  - Osobne `usedCards` tracking
+- [ ] **Rozszerzone kodowanie v2**
+  - 17-19 znaków: wspólna talia (v0.3.0)
+  - 29/44/57 znaków: osobne talie (v0.4.0)
+  - Format: [Bot1Sequence][Bot1Pos][Bot2Sequence][Bot2Pos]...[CurrentBot]
+- [ ] **UI mode selection**
+  - Radio buttons w bot selection
+  - Visual indicators dla aktywnego trybu
+  - Tooltip z wyjaśnieniem różnic
+
+**Architektura techniczna**:
+
+```typescript
+interface GameState {
+  mode: "shared" | "individual";
+  botDecks?: BotDeck[]; // Dla trybu individual
+  // ...existing fields dla shared mode
+}
+
+interface BotDeck {
+  botId: number;
+  cardSequence: number[];
+  currentCardIndex: number;
+  usedCards: number[];
+}
+```
+
+### v0.5.0 - Wizualizacja kart 🔜
+
+**Cel**: Graficzne przedstawienie kart zamiast tekstu
+
+- [ ] **Design systemu kart**
+  - SVG/CSS design kart botów
+  - Ikony dla różnych efektów kart
+  - Spójny design language z grą planszową
+- [ ] **Animacje kart**
+  - Smooth animacje dobierania kart
+  - Flip animation przy odsłanianiu karty
+  - Tasowanie deck animation
+- [ ] **Responsive card display**
+  - Adaptive sizing dla różnych ekranów
+  - Touch-friendly interactions
+  - Card preview modal dla małych ekranów
+
+### v0.6.0+ - Zaawansowane funkcje 🔮
+
+**Cel**: Funkcje dla doświadczonych graczy
+
+- [ ] **Game statistics**
+  - Historia ruchów i częstotliwość kart
+  - Analytics dashboard
+  - Export danych do CSV/JSON
+- [ ] **Advanced game modes**
+  - Timer mode z countdown
+  - Tournament mode z wieloma rundami
+  - Practice mode z możliwością undo
+- [ ] **Enhanced save system**
+  - Multiple save slots (slot 1, 2, 3...)
+  - Cloud backup integration
+  - Game session replay
+
+## � Dokumentacja techniczna
 
 ### 🏗️ Architektura
 
@@ -37,121 +139,32 @@ src/
 └── assets/            # Obrazy, ikony, czcionki
 ```
 
-## 🎯 Plan rozwoju - szczegóły techniczne
-
-### v0.2.4 - Poprawki UI/UX ✅
-
-**Cel**: Polerowanie interfejsu użytkownika
-
-- ✅ **Poprawki toastu kopiowania**
-  - Animacja znikania (fade out) - automatyczne po 2.5s
-  - Lepszy wygląd (box-shadow, proper CSS variables)
-  - Responsywność na małych ekranach
-  - Smooth animacje (toastSlideUp, toastFadeOut)
-- ✅ **Uproszczony modal wyjścia**
-  - Zmniejszono liczbę przycisków z 3 do 2
-  - Kombinacja "Tak" + "Kopiuj" w jeden przycisk
-  - Wycentrowane przyciski (justify-content: center)
-  - Naturalny komunikat: "Czy chcesz wyjść do głównego menu?"
-- ✅ **Styling przycisków kopiowania**
-  - Dodano .btn-tertiary style w globals.css
-  - Konsystentne hover effects i animacje
-  - Usunięto niepotrzebny order: -1
-- ✅ **Bug fixes i UX improvements**
-  - Naprawiono reset gamePreview w LoadGameModal
-  - Lepsze komunikaty w modalu wyjścia
-
-### v0.3.0 - Wiele botów 🔜
-
-**Cel**: Support dla 1-4 botów na jednej talii
-
-- [ ] Wybór liczby botów (1-4) w menu
-- [ ] Generowanie imion botów z puli tematycznej
-- [ ] Przełączanie między botami (tabs/swipe)
-- [ ] Rozszerzone kodowanie stanu dla wielu botów
-
-### v0.4.0 - Osobne talie 🔜
-
-**Cel**: Opcja osobnych talii dla każdego bota
-
-- [ ] Wybór trybu: "Jedna talia" vs "Osobne talie"
-- [ ] Zarządzanie wieloma taliami
-- [ ] Format kodu gry v2 dla wielu talii
-
-### v0.5.0 - Wizualizacja kart 🔜
-
-**Cel**: Graficzne przedstawienie kart
-
-- [ ] Design kart botów (CSS/SVG)
-- [ ] Ikony dla różnych efektów kart
-- [ ] Animacje dobierania kart
-
-## 🔧 Save/Load System Architecture
-
-### v0.2.4 (current) - Ultra-kompaktowy system kodów + live preview + UI improvements
-
-**Cel**: Kody gry z live preview, inteligentną walidacją i poprawkami UI/UX. System automatycznie wykrywa stan gry przed wczytaniem.
-
-- Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
-- Przykład: `ZOOA0CB5938416274`
-- Live preview: liczba botów, aktualny bot, postęp gry
-- Walidacja w czasie rzeczywistym od pierwszego znaku
-- System automatycznie rozpoznaje tryb gry na podstawie długości kodu
-
-### GameState Structure
+### 🔧 Aktualna architektura GameState (v0.3.0)
 
 ```typescript
 interface GameState {
-  currentCardIndex: number; // 0-12
+  currentCardIndex: number; // 0-12, pozycja w talii
   cardSequence: number[]; // 13 kart, permutacja 0-12
   usedCards: number[]; // karty użyte w bieżącej rundzie
-  botCount?: number; // liczba botów (opcjonalnie)
-  currentBot?: number; // aktualny bot (opcjonalnie)
+  botsSelected?: boolean; // Czy wybrano liczbę botów (v0.3.0+)
+  botCount?: number; // Liczba botów 1-4 (v0.3.0+)
+  currentBot?: number; // Aktualny bot 1-X (v0.3.0+)
 }
 ```
 
-## 🎮 Komponenty
-
-### BaseModal
-
-Uniwersalny modal bazujący na ConfirmModal.module.css
-
-### LoadGameModal
-
-Modal do wczytywania gry z:
-
-- Live preview stanu gry (GameCodePreview)
-- Inteligentną walidacją w czasie rzeczywistym
-- Dedykowanymi stylami CSS (LoadGameModal.module.css)
-- Obsługą multi-bot format (currentBot detection)
-
-### GameContext
-
-State management z useReducer:
+### 🎮 GameContext Actions
 
 - `DRAW_CARD` - dobieranie karty
 - `SHUFFLE_DECK` - tasowanie talii
 - `RESET_GAME` - reset do stanu początkowego
+- `NEW_GAME` - nowa gra
 - `LOAD_GAME` - wczytywanie stanu gry
+- `SELECT_BOTS` - wybór liczby botów (v0.3.0+)
+- `SWITCH_BOT` - przełączanie aktualnego bota (v0.3.0+)
 
-## 🎨 Design System
+### 💾 System kodów gry
 
-### Kolory (z instrukcji gry)
-
-- **Tło**: Żółto-zielone gradientowe
-- **Nagłówki**: Brązowe (#8B4513)
-- **Karty**: Kremowe tło z pomarańczowo-brązowymi ramkami
-- **Przyciski**: Brązowe z hover effects
-
-### Layout
-
-- **Mobile-first**: 320px+ portrait mode
-- **Desktop**: max-width 480px, wycentrowane
-- **Responsywność**: WCAG 2.1 compliance
-
-### CSS Architecture
-
-- CSS Modules dla komponentów
-- CSS Custom Properties dla kolorów
-- Utility classes dla backgroundów
-- BEM-like naming w modułach
+- **Format**: `ZOO` + sekwencja kart + pozycja + multi-bot data
+- **Długość**: 17 znaków (1 bot) | 19 znaków (2-4 boty)
+- **Przykład**: `ZOOA0CB5938416274`
+- **Cross-device**: Pełna kompatybilność między urządzeniami

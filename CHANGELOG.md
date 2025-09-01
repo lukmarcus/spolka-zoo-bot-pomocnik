@@ -5,6 +5,71 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-09-01
+
+### 🤖 Wsparcie dla wielu botów
+
+- **✨ Nowy system multi-bot**
+
+  - Wybór liczby botów (1-4) bezpośrednio w grze
+  - Przełączanie między botami podczas rozgrywki
+  - Wspólna talia dla wszystkich botów
+  - Brak nazw botów (zgodnie z wymaganiem - kody gry nie obsługują nazw)
+
+- **🎯 UI wyboru botów**
+
+  - Grid layout 2x2 dla przycisków wyboru
+  - Wybór w grze zamiast w menu ustawień
+  - Intuicyjny flow: Start Game → Wybór botów → Gra
+
+- **🔄 Przełączanie botów**
+  - Interactive bot switcher w statusie gry
+  - Aktywny bot highlighting z białym tłem
+  - Hover effects i smooth transitions
+  - Możliwość przełączania w dowolnym momencie gry
+
+### 🏗️ Zmiany architektoniczne
+
+- **🧩 Rozszerzone GameState**
+
+  - `botsSelected?: boolean` - gate dla UI flow
+  - `botCount?: number` - liczba botów (1-4)
+  - `currentBot?: number` - aktualny bot (1-X)
+
+- **⚡ Nowe GameContext actions**
+
+  - `SELECT_BOTS` - wybór liczby botów + generowanie talii
+  - `SWITCH_BOT` - przełączanie aktualnego bota
+
+- **🔗 Rozszerzone kodowanie gry**
+  - Format 17-19 znaków dla multi-bot vs 14 dla single bot
+  - Automatyczne rozpoznawanie trybu na podstawie długości kodu
+  - Backward compatibility z kodami v0.2.x
+
+### 🎨 Zmiany interfejsu
+
+- **📊 Status gry**
+
+  - Wskaźnik "Bot X/Y" tylko dla gier wielobotowych
+  - Kompaktowy layout z przełącznikiem botów
+  - Responsywny design na małych ekranach
+
+- **🎮 Nowe style CSS**
+  - `.botSelection` - interfejs wyboru botów
+  - `.botSwitcher` - przełącznik botów w statusie
+  - `.botButton` - przyciski numerów botów z active state
+
+### 🔧 Zmiany techniczne
+
+- **📐 TypeScript interface updates**
+
+  - `GameContextType` rozszerzone o `selectBots` i `switchBot`
+  - Proper typing dla multi-bot state
+
+- **🎯 UI Flow optimization**
+  - Conditional rendering na podstawie `botsSelected` state
+  - Seamless transition od wyboru botów do gry
+
 ## [0.2.4] - 2025-08-29
 
 ### 🎨 Poprawki UI/UX

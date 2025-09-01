@@ -25,7 +25,9 @@ type GameAction =
   | { type: "SHUFFLE_DECK" }
   | { type: "RESET_GAME" }
   | { type: "NEW_GAME" }
-  | { type: "LOAD_GAME"; payload: GameState };
+  | { type: "LOAD_GAME"; payload: GameState }
+  | { type: "SELECT_BOTS"; payload: number } // v0.3.0+ bot count selection
+  | { type: "SWITCH_BOT"; payload: number }; // v0.3.0+ switch current bot
 
 // Get initial state (with auto-save restore)
 function getInitialState(): GameState {
@@ -51,6 +53,7 @@ function getCleanState(): GameState {
     usedCards: [],
     botCount: 1,
     currentBot: 1,
+    botsSelected: false, // v0.3.0+ require bot selection
   };
 }
 
@@ -61,11 +64,10 @@ const initialState: GameState = getInitialState();
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "NEW_GAME": {
-      const shuffledSequence = generateShuffledSequence();
+      // v0.3.0+ Don't generate sequence until bots are selected
       const cleanState = getCleanState();
       return {
         ...cleanState,
-        cardSequence: shuffledSequence,
         currentCardIndex: -1, // Start before first card
       };
     }
@@ -107,6 +109,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case "LOAD_GAME":
       return action.payload;
 
+    case "SELECT_BOTS": {
+      const shuffledSequence = generateShuffledSequence();
+      return {
+        ...state,
+        botCount: action.payload,
+        currentBot: 1, // Start with first bot
+        botsSelected: true,
+        cardSequence: shuffledSequence,
+        currentCardIndex: -1, // Ready to draw first card
+      };
+    }
+
+    case "SWITCH_BOT": {
+      return {
+        ...state,
+        currentBot: action.payload,
+      };
+    }
+
     default:
       return state;
   }
@@ -137,6 +158,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
     newGame: () => dispatch({ type: "NEW_GAME" }),
     loadGame: (gameState: GameState) =>
       dispatch({ type: "LOAD_GAME", payload: gameState }),
+    selectBots: (count: number) =>
+      dispatch({ type: "SELECT_BOTS", payload: count }),
+    switchBot: (botNumber: number) =>
+      dispatch({ type: "SWITCH_BOT", payload: botNumber }),
     getCurrentCard: () => {
       // Game is started if cardSequence is not empty and currentCardIndex is valid
       if (

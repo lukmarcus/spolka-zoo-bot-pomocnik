@@ -40,6 +40,54 @@
   font-weight: 500;
 }
 
+.botInfo {
+  background: var(--button-secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.botSwitcher {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.botButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.botButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.botButton.active {
+  background: white;
+  color: var(--button-secondary);
+  border-color: white;
+}
+
+.botButton.active:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
 .remainingCards {
   color: var(--color-text);
   font-size: var(--font-size-sm);
@@ -276,5 +324,63 @@
       opacity: 0;
       transform: translateY(-10px);
     }
+  }
+}
+
+/* v0.3.0+ Bot Selection Styles */
+.botSelection {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.botSelection h3 {
+  color: var(--color-secondary);
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-lg);
+}
+
+.botSelection p {
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+}
+
+.botButtons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.botButtons button {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  min-height: 60px;
+  transition: all 0.2s ease;
+}
+
+.botButtons button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Mobile responsive for bot selection */
+@media (max-width: 480px) {
+  .botSelection {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .botButtons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    max-width: 280px;
+  }
+
+  .botButtons button {
+    padding: 0.875rem;
+    font-size: 0.9rem;
+    min-height: 50px;
   }
 }

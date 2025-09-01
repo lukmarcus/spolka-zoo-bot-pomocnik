@@ -37,8 +37,8 @@ const Home: React.FC = () => {
       title: "Ustawienia",
       description: "Liczba botów, tryb gry",
       action: () => {
-        // TODO: Implementation in v0.3.0
-        alert("Funkcja będzie dostępna w wersji 0.3.0");
+        // TODO: Implementation in future version
+        alert("Funkcja będzie dostępna w przyszłej wersji");
       },
       disabled: true,
     },
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
         <h2 className={styles.heroTitle}>Bot Pomocnik</h2>
         <p className={styles.heroDescription}>
           Cyfrowy zamiennik dla kart botów w grze planszowej Spółka ZOO.
-          Zarządzaj 1-4 botami, ich kartami i stanem gry.
+          Zarządzaj 1-4 botami, przełączaj między nimi i udostępniaj stan gry.
         </p>
       </div>
 
@@ -86,7 +86,8 @@ const Home: React.FC = () => {
             <li>✅ Zapis/wczytywanie (v0.2.0)</li>
             <li>✅ Cross-device kody gry (v0.2.1)</li>
             <li>✅ Uproszczone kopiowanie (v0.2.2)</li>
-            <li>⏳ Multi-bot support (v0.3.0+ roadmap)</li>
+            <li>✅ Multi-bot support (v0.3.0)</li>
+            <li>⏳ Osobne talie botów (v0.4.0+ roadmap)</li>
           </ul>
         </div>
       </div>
