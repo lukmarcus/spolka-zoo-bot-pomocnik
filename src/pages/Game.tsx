@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/GameContext";
 import { BOT_CARDS } from "../data/botCards";
@@ -15,13 +15,13 @@ const Game: React.FC = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string>("");
 
-  // Auto-start game when component mounts (if needed)
-  useEffect(() => {
-    // Ensure game is started - fallback for direct navigation
-    if (game.state.cardSequence.length === 0) {
-      game.newGame();
-    }
-  }, [game]);
+  // Auto-start game when component mounts (temporarily disabled to debug infinite re-renders)
+  // useEffect(() => {
+  //   // Ensure game is started - fallback for direct navigation
+  //   if (game.state.cardSequence.length === 0) {
+  //     game.newGame();
+  //   }
+  // }, [game.state.cardSequence.length, game.newGame]);
 
   const handleBackToMenu = () => {
     setShowExitModal(true);

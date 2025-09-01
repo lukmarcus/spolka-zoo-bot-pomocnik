@@ -3,14 +3,11 @@
 
 /* eslint-disable react-refresh/only-export-components */
 
-import { createContext, useReducer, useContext, useEffect } from "react";
+import { createContext, useReducer, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
 import type { GameState, GameContextType } from "../types";
 import { TOTAL_CARDS } from "../data/botCards";
-import {
-  autoSaveGameState,
-  loadAutoSavedGameState,
-} from "../utils/gameStorage";
+import { loadAutoSavedGameState } from "../utils/gameStorage";
 
 // === CONTEXT ===
 
@@ -150,38 +147,45 @@ function generateShuffledSequence(): number[] {
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
-  const contextValue: GameContextType = {
-    state,
-    drawCard: () => dispatch({ type: "DRAW_CARD" }),
-    shuffleDeck: () => dispatch({ type: "SHUFFLE_DECK" }),
-    resetGame: () => dispatch({ type: "RESET_GAME" }),
-    newGame: () => dispatch({ type: "NEW_GAME" }),
-    loadGame: (gameState: GameState) =>
-      dispatch({ type: "LOAD_GAME", payload: gameState }),
-    selectBots: (count: number) =>
-      dispatch({ type: "SELECT_BOTS", payload: count }),
-    switchBot: (botNumber: number) =>
-      dispatch({ type: "SWITCH_BOT", payload: botNumber }),
-    getCurrentCard: () => {
-      // Game is started if cardSequence is not empty and currentCardIndex is valid
-      if (
-        state.cardSequence.length === 0 ||
-        state.currentCardIndex < 0 ||
-        state.currentCardIndex >= state.cardSequence.length
-      ) {
-        return null;
-      }
-      return state.cardSequence[state.currentCardIndex];
-    },
-    isDeckExhausted: () => state.currentCardIndex >= TOTAL_CARDS - 1,
-    getCardsRemaining: () =>
-      Math.max(0, TOTAL_CARDS - (state.currentCardIndex + 1)),
-  };
+  const contextValue: GameContextType = useMemo(
+    () => ({
+      state,
+      drawCard: () => dispatch({ type: "DRAW_CARD" }),
+      shuffleDeck: () => dispatch({ type: "SHUFFLE_DECK" }),
+      resetGame: () => dispatch({ type: "RESET_GAME" }),
+      newGame: () => dispatch({ type: "NEW_GAME" }),
+      loadGame: (gameState: GameState) =>
+        dispatch({ type: "LOAD_GAME", payload: gameState }),
+      selectBots: (count: number) =>
+        dispatch({ type: "SELECT_BOTS", payload: count }),
+      switchBot: (botNumber: number) =>
+        dispatch({ type: "SWITCH_BOT", payload: botNumber }),
+      getCurrentCard: () => {
+        // Game is started if cardSequence is not empty and currentCardIndex is valid
+        if (
+          state.cardSequence.length === 0 ||
+          state.currentCardIndex < 0 ||
+          state.currentCardIndex >= state.cardSequence.length
+        ) {
+          return null;
+        }
+        return state.cardSequence[state.currentCardIndex];
+      },
+      isDeckExhausted: () => state.currentCardIndex >= TOTAL_CARDS - 1,
+      getCardsRemaining: () =>
+        Math.max(0, TOTAL_CARDS - (state.currentCardIndex + 1)),
+    }),
+    [state]
+  );
 
-  // Auto-save game state when it changes
-  useEffect(() => {
-    autoSaveGameState(state);
-  }, [state]);
+  // Auto-save temporarily disabled to debug infinite re-render issue
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     autoSaveGameState(state);
+  //   }, 300); // Debounce by 300ms
+
+  //   return () => clearTimeout(timeoutId);
+  // }, [state]);
 
   return (
     <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
