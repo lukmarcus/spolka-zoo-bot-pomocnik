@@ -23,6 +23,14 @@ const Game: React.FC = () => {
   //   }
   // }, [game.state.cardSequence.length, game.newGame]);
 
+  // v0.3.2 Reset game state on page refresh to ensure clean bot selection
+  React.useEffect(() => {
+    // If we're in an inconsistent state (bots not selected but cards drawn), reset
+    if (!game.state.botsSelected && game.state.currentCardIndex >= 0) {
+      game.resetGame();
+    }
+  }, [game, game.state.botsSelected, game.state.currentCardIndex]);
+
   const handleBackToMenu = () => {
     // v0.3.2 Simplified exit - no modal during bot selection
     if (!game.state.botsSelected) {
@@ -89,19 +97,15 @@ const Game: React.FC = () => {
     const currentIndex = game.state.currentCardIndex;
     const totalCards = BOT_CARDS.length;
 
-    // Stan początkowy - brak wylosowanej karty (0/13)
-    if (currentIndex === -1) {
-      // v0.3.2+ Simplified logic - no button until bots are selected
-      if (!game.state.botsSelected) {
-        return null; // No button shown during bot selection
-      }
+    // v0.3.2+ During bot selection, no button is shown
+    if (!game.state.botsSelected) {
+      return null; // No button shown during bot selection
+    }
 
-      return {
-        text: "🎯 Dobierz pierwszą kartę",
-        action: game.drawCard,
-        disabled: false,
-        className: "btn-primary",
-      };
+    // Stan początkowy - brak wylosowanej karty (0/13) - should not happen in v0.3.2+
+    // because we auto-draw first card after bot selection
+    if (currentIndex === -1) {
+      return null; // This case should not happen anymore
     }
 
     // Ostatnia karta (12/13 - indeks 11)
@@ -184,52 +188,48 @@ const Game: React.FC = () => {
             ) : (
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
-                  !game.state.botsSelected ? (
-                    // v0.3.2 Clean Bot selection UI
-                    <div className={styles.botSelection}>
-                      <div className={styles.botSelectionContent}>
-                        <h3>Wybierz liczbę botów</h3>
-                        <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
-                        <div className={styles.botButtons}>
-                          {[1, 2, 3, 4].map((count) => (
-                            <button
-                              key={count}
-                              className={`${styles.botOption} ${
-                                selectedBotCount === count
-                                  ? styles.selected
-                                  : ""
-                              }`}
-                              onClick={() => handleBotSelection(count)}
-                            >
-                              <span className={styles.botNumber}>{count}</span>
-                              <span className={styles.botLabel}>
-                                {count === 1 ? "bot" : "boty"}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                        <div className={styles.startGameSection}>
-                          {selectedBotCount ? (
-                            <p className={styles.selectedInfo}>
-                              Wybrano: {selectedBotCount}{" "}
-                              {selectedBotCount === 1 ? "bot" : "boty"}
-                            </p>
-                          ) : (
-                            <p className={styles.selectedInfo}>
-                              Wybierz liczbę botów aby rozpocząć
-                            </p>
-                          )}
+                  // v0.3.2 Always show bot selection when no cards are drawn
+                  <div className={styles.botSelection}>
+                    <div className={styles.botSelectionContent}>
+                      <h3>Wybierz liczbę botów</h3>
+                      <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
+                      <div className={styles.botButtons}>
+                        {[1, 2, 3, 4].map((count) => (
                           <button
-                            className={`btn-primary ${styles.startGameButton}`}
-                            onClick={handleStartGame}
-                            disabled={!selectedBotCount}
+                            key={count}
+                            className={`${styles.botOption} ${
+                              selectedBotCount === count ? styles.selected : ""
+                            }`}
+                            onClick={() => handleBotSelection(count)}
                           >
-                            🎯 Rozpocznij grę
+                            <span className={styles.botNumber}>{count}</span>
+                            <span className={styles.botLabel}>
+                              {count === 1 ? "bot" : "boty"}
+                            </span>
                           </button>
-                        </div>
+                        ))}
+                      </div>
+                      <div className={styles.startGameSection}>
+                        {selectedBotCount ? (
+                          <p className={styles.selectedInfo}>
+                            Wybrano: {selectedBotCount}{" "}
+                            {selectedBotCount === 1 ? "bot" : "boty"}
+                          </p>
+                        ) : (
+                          <p className={styles.selectedInfo}>
+                            Wybierz liczbę botów aby rozpocząć
+                          </p>
+                        )}
+                        <button
+                          className={`btn-primary ${styles.startGameButton}`}
+                          onClick={handleStartGame}
+                          disabled={!selectedBotCount}
+                        >
+                          🎯 Rozpocznij grę
+                        </button>
                       </div>
                     </div>
-                  ) : null // No intermediate screen, will auto-draw card
+                  </div>
                 ) : (
                   // Deck exhausted
                   <>
