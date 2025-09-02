@@ -77,6 +77,7 @@ const Home: React.FC = () => {
             <li>✅ Cross-device kody gry (v0.2.1)</li>
             <li>✅ Uproszczone kopiowanie (v0.2.2)</li>
             <li>✅ Multi-bot support (v0.3.0)</li>
+            <li>✅ Krytyczne poprawki UX (v0.3.1)</li>
             <li>⏳ Osobne talie botów (v0.4.0+ roadmap)</li>
           </ul>
         </div>

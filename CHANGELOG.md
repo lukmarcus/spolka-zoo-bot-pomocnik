@@ -5,6 +5,49 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-09-02
+
+### 🐛 Krytyczne poprawki UX v0.3.0
+
+- **🔄 Naprawiono nieskończone re-rendery**
+
+  - Rozwiązano błąd "Maximum update depth exceeded"
+  - Zmemorizowano `contextValue` w GameContext używając `useMemo`
+  - Usunięto problematyczne `useEffect` dependencies w Game.tsx
+  - Tymczasowo wyłączono auto-save aby zapobiec cyklom re-renderowania
+
+- **🎮 Naprawiono flow gry**
+
+  - Przyciski powrotu do menu głównego działają poprawnie
+  - Przejście z menu wyboru botów do menu głównego
+  - Przejście z trwającej gry do menu głównego
+
+- **📊 Poprawiono wyświetlanie licznika kart**
+
+  - Licznik jest ukryty w menu wyboru botów
+  - Licznik jest ukryty na ekranie "Dobierz pierwszą kartę"
+  - Licznik pojawia się dopiero po dobraniu pierwszej karty (1/13, 2/13, itd.)
+
+- **🎛️ Usunięto przycisk "Ustawienia"**
+  - Przycisk "Ustawienia" usunięty z menu głównego (zgodnie z planem UX)
+  - Menu główne ma teraz tylko 2 opcje: "Rozpocznij grę" i "Wczytaj grę"
+
+### 🏗️ Zmiany techniczne
+
+- **⚡ Optymalizacja GameContext**
+
+  - Dodano `useMemo` dla stabilnych referencji funkcji
+  - Poprawiono `getInitialState()` - prawidłowe ustawienie `botsSelected: false`
+  - Tymczasowo wyłączono auto-save dla stabilności
+
+- **🔧 Cleanup niepotrzebnych importów**
+  - Usunięto nieużywane `useEffect` z Game.tsx
+  - Oczyszczono imports w GameContext.tsx
+
+### 📝 Status
+
+**v0.3.1** to **hotfix** dla v0.3.0 naprawiający krytyczne problemy UX które uniemożliwiały korzystanie z aplikacji.
+
 ## [0.3.0] - 2025-09-01
 
 ### 🤖 Wsparcie dla wielu botów
