@@ -64,6 +64,10 @@ const Game: React.FC = () => {
   const handleStartGame = () => {
     if (selectedBotCount) {
       game.selectBots(selectedBotCount);
+      // v0.3.2 Auto-draw first card to skip intermediate screen
+      setTimeout(() => {
+        game.drawCard();
+      }, 100); // Small delay to ensure state is updated
     }
   };
 
@@ -174,59 +178,53 @@ const Game: React.FC = () => {
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
                   !game.state.botsSelected ? (
-                    // v0.3.2 Improved Bot selection UI
-                    <div className={styles.botSelection}>
-                      <h3>Wybierz liczbę botów</h3>
-                      <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
-                      <div className={styles.botButtons}>
-                        {[1, 2, 3, 4].map((count) => (
-                          <button
-                            key={count}
-                            className={`${styles.botOption} ${
-                              selectedBotCount === count ? styles.selected : ""
-                            }`}
-                            onClick={() => handleBotSelection(count)}
-                          >
-                            <span className={styles.botNumber}>{count}</span>
-                            <span className={styles.botLabel}>
-                              {count === 1 ? "bot" : "boty"}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                      {selectedBotCount && (
-                        <div className={styles.startGameSection}>
-                          <p className={styles.selectedInfo}>
-                            Wybrano: {selectedBotCount}{" "}
-                            {selectedBotCount === 1 ? "bot" : "boty"}
-                          </p>
-                          <button
-                            className={`btn-primary ${styles.startGameButton}`}
-                            onClick={handleStartGame}
-                          >
-                            🎯 Rozpocznij grę
-                          </button>
+                    // v0.3.2 Improved Bot selection UI with card background
+                    <div
+                      className={styles.botSelection}
+                      style={{
+                        backgroundImage: `url(${cardReverseImg})`,
+                      }}
+                    >
+                      <div className={styles.botSelectionContent}>
+                        <h3>Wybierz liczbę botów</h3>
+                        <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
+                        <div className={styles.botButtons}>
+                          {[1, 2, 3, 4].map((count) => (
+                            <button
+                              key={count}
+                              className={`${styles.botOption} ${
+                                selectedBotCount === count
+                                  ? styles.selected
+                                  : ""
+                              }`}
+                              onClick={() => handleBotSelection(count)}
+                            >
+                              <span className={styles.botNumber}>{count}</span>
+                              <span className={styles.botLabel}>
+                                {count === 1 ? "bot" : "boty"}
+                              </span>
+                            </button>
+                          ))}
                         </div>
-                      )}
+                        {selectedBotCount && (
+                          <div className={styles.startGameSection}>
+                            <p className={styles.selectedInfo}>
+                              Wybrano: {selectedBotCount}{" "}
+                              {selectedBotCount === 1 ? "bot" : "boty"}
+                            </p>
+                            <button
+                              className={`btn-primary ${styles.startGameButton}`}
+                              onClick={handleStartGame}
+                            >
+                              🎯 Rozpocznij grę
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    // Ready to start game
-                    <div className={styles.cardReverse}>
-                      <img
-                        src={cardReverseImg}
-                        alt="Zakryty stos kart"
-                        className={styles.cardReverseImage}
-                      />
-                      <h3>Gotowy do gry</h3>
-                      <p>
-                        {game.state.botCount === 1
-                          ? "1 bot, jedna talia"
-                          : `${game.state.botCount} boty, wspólna talia`}
-                      </p>
-                      <p>Naciśnij przycisk, aby wylosować pierwszą kartę.</p>
-                    </div>
-                  )
+                  ) : null // No intermediate screen, will auto-draw card
                 ) : (
+                  // Deck exhausted
                   <>
                     <h3>Koniec talii</h3>
                     <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
