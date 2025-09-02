@@ -327,19 +327,20 @@
   }
 }
 
-/* v0.3.2 Improved Bot Selection Styles with Background */
+/* v0.3.2 Clean Bot Selection Styles - Zoo Theme */
 .botSelection {
   text-align: center;
   padding: 2rem 1rem;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
   border-radius: 16px;
-  position: relative;
   min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
 }
 
 .botSelection::before {
@@ -349,36 +350,38 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
-  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.02),
+    rgba(205, 133, 63, 0.03)
+  );
   z-index: 1;
 }
 
 .botSelectionContent {
+  width: 100%;
   position: relative;
   z-index: 2;
-  width: 100%;
 }
 
 .botSelection h3 {
-  color: white;
+  color: var(--text-header);
   margin-bottom: 0.5rem;
   font-size: var(--font-size-lg);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
 }
 
 .botSelection p {
   margin-bottom: 1.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: var(--font-size-base);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .botButtons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  max-width: 300px;
+  max-width: 320px;
   margin: 0 auto 1.5rem auto;
 }
 
@@ -386,28 +389,55 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.25rem 1rem;
-  background: var(--color-background);
-  border: 2px solid var(--color-border);
-  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  background: linear-gradient(135deg, #fff8dc, #f5f5dc);
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  color: var(--color-text);
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.botOption::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.03),
+    rgba(255, 140, 0, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .botOption:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
+  border-color: var(--button-primary);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-medium);
 }
 
+.botOption:hover::before {
+  opacity: 1;
+}
+
 .botOption.selected {
-  border-color: var(--color-primary);
-  background: var(--color-primary);
+  border-color: var(--button-primary);
+  background: linear-gradient(135deg, var(--button-primary), #a0522d);
   color: white;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+}
+
+.botOption.selected::before {
+  display: none;
 }
 
 .botNumber {
@@ -422,34 +452,45 @@
 }
 
 .startGameSection {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 2px solid var(--card-border);
 }
 
 .selectedInfo {
-  color: white;
+  color: var(--text-header);
   font-weight: 600;
   margin-bottom: 1rem;
   font-size: var(--font-size-base);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .startGameButton {
   font-size: 1.1rem;
-  padding: 0.875rem 2rem;
+  padding: 1rem 2.5rem;
   font-weight: 600;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--button-primary), #a0522d);
+  transition: all 0.3s ease;
+}
+
+.startGameButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #7a3f11, #8b4513);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+}
+
+.startGameButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  background: var(--button-secondary);
 }
 
 /* Mobile responsive for bot selection */
 @media (max-width: 480px) {
   .botSelection {
-    padding: 1.5rem 0.5rem;
+    padding: 1.5rem 1rem;
     min-height: 350px;
-    border-radius: 12px;
-  }
-
-  .botSelection::before {
     border-radius: 12px;
   }
 
@@ -460,8 +501,8 @@
   }
 
   .botOption {
-    padding: 1rem 0.75rem;
-    border-radius: 10px;
+    padding: 1.25rem 0.75rem;
+    border-radius: 12px;
   }
 
   .botNumber {
@@ -474,6 +515,6 @@
 
   .startGameButton {
     font-size: 1rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 1.75rem;
   }
 }

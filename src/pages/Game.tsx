@@ -7,7 +7,6 @@ import Layout from "../components/Layout";
 import BotCard from "../components/BotCard";
 import ConfirmModal from "../components/ConfirmModal";
 import styles from "./Game.module.css";
-import cardReverseImg from "../assets/images/interface/card-reverse.jpg";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -186,13 +185,8 @@ const Game: React.FC = () => {
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
                   !game.state.botsSelected ? (
-                    // v0.3.2 Improved Bot selection UI with card background
-                    <div
-                      className={styles.botSelection}
-                      style={{
-                        backgroundImage: `url(${cardReverseImg})`,
-                      }}
-                    >
+                    // v0.3.2 Clean Bot selection UI
+                    <div className={styles.botSelection}>
                       <div className={styles.botSelectionContent}>
                         <h3>Wybierz liczbę botów</h3>
                         <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
@@ -214,20 +208,25 @@ const Game: React.FC = () => {
                             </button>
                           ))}
                         </div>
-                        {selectedBotCount && (
-                          <div className={styles.startGameSection}>
+                        <div className={styles.startGameSection}>
+                          {selectedBotCount ? (
                             <p className={styles.selectedInfo}>
                               Wybrano: {selectedBotCount}{" "}
                               {selectedBotCount === 1 ? "bot" : "boty"}
                             </p>
-                            <button
-                              className={`btn-primary ${styles.startGameButton}`}
-                              onClick={handleStartGame}
-                            >
-                              🎯 Rozpocznij grę
-                            </button>
-                          </div>
-                        )}
+                          ) : (
+                            <p className={styles.selectedInfo}>
+                              Wybierz liczbę botów aby rozpocząć
+                            </p>
+                          )}
+                          <button
+                            className={`btn-primary ${styles.startGameButton}`}
+                            onClick={handleStartGame}
+                            disabled={!selectedBotCount}
+                          >
+                            🎯 Rozpocznij grę
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ) : null // No intermediate screen, will auto-draw card
