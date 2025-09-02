@@ -80,14 +80,9 @@ const Game: React.FC = () => {
 
     // Stan początkowy - brak wylosowanej karty (0/13)
     if (currentIndex === -1) {
-      // v0.3.0+ Check if bots are selected
+      // v0.3.2+ Simplified logic - no button until bots are selected
       if (!game.state.botsSelected) {
-        return {
-          text: "🤖 Wybierz liczbę botów",
-          action: () => {}, // Disabled - will show bot selection UI instead
-          disabled: true,
-          className: "btn-secondary",
-        };
+        return null; // No button shown during bot selection
       }
 
       return {
@@ -242,13 +237,15 @@ const Game: React.FC = () => {
           </div>
 
           <div className={styles.gameControls}>
-            <button
-              className={primaryAction.className}
-              onClick={primaryAction.action}
-              disabled={primaryAction.disabled}
-            >
-              {primaryAction.text}
-            </button>
+            {primaryAction && (
+              <button
+                className={primaryAction.className}
+                onClick={primaryAction.action}
+                disabled={primaryAction.disabled}
+              >
+                {primaryAction.text}
+              </button>
+            )}
           </div>
         </div>
 
