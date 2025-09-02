@@ -14,6 +14,7 @@ const Game: React.FC = () => {
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string>("");
+  const [selectedBotCount, setSelectedBotCount] = useState<number | null>(null);
 
   // Auto-start game when component mounts (temporarily disabled to debug infinite re-renders)
   // useEffect(() => {
@@ -54,6 +55,16 @@ const Game: React.FC = () => {
     const message = await copyGameCodeToClipboard(game.state);
     setCopyMessage(message);
     setTimeout(() => setCopyMessage(""), 3000);
+  };
+
+  const handleBotSelection = (count: number) => {
+    setSelectedBotCount(count);
+  };
+
+  const handleStartGame = () => {
+    if (selectedBotCount) {
+      game.selectBots(selectedBotCount);
+    }
   };
 
   const currentCardId = game.getCurrentCard();
@@ -168,7 +179,7 @@ const Game: React.FC = () => {
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
                   !game.state.botsSelected ? (
-                    // v0.3.0+ Bot selection UI
+                    // v0.3.2 Improved Bot selection UI
                     <div className={styles.botSelection}>
                       <h3>Wybierz liczbę botów</h3>
                       <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
@@ -176,13 +187,32 @@ const Game: React.FC = () => {
                         {[1, 2, 3, 4].map((count) => (
                           <button
                             key={count}
-                            className="btn-primary"
-                            onClick={() => game.selectBots(count)}
+                            className={`${styles.botOption} ${
+                              selectedBotCount === count ? styles.selected : ""
+                            }`}
+                            onClick={() => handleBotSelection(count)}
                           >
-                            {count} {count === 1 ? "bot" : "boty"}
+                            <span className={styles.botNumber}>{count}</span>
+                            <span className={styles.botLabel}>
+                              {count === 1 ? "bot" : "boty"}
+                            </span>
                           </button>
                         ))}
                       </div>
+                      {selectedBotCount && (
+                        <div className={styles.startGameSection}>
+                          <p className={styles.selectedInfo}>
+                            Wybrano: {selectedBotCount}{" "}
+                            {selectedBotCount === 1 ? "bot" : "boty"}
+                          </p>
+                          <button
+                            className={`btn-primary ${styles.startGameButton}`}
+                            onClick={handleStartGame}
+                          >
+                            🎯 Rozpocznij grę
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     // Ready to start game

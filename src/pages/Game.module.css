@@ -327,7 +327,7 @@
   }
 }
 
-/* v0.3.0+ Bot Selection Styles */
+/* v0.3.2 Improved Bot Selection Styles */
 .botSelection {
   text-align: center;
   padding: 2rem 1rem;
@@ -350,20 +350,65 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   max-width: 300px;
-  margin: 0 auto;
+  margin: 0 auto 1.5rem auto;
 }
 
-.botButtons button {
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  min-height: 60px;
+.botOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem;
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: 500;
+  color: var(--color-text);
 }
 
-.botButtons button:hover {
+.botOption:hover {
+  border-color: var(--color-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
+}
+
+.botOption.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.botNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.botLabel {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.startGameSection {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.selectedInfo {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: var(--font-size-base);
+}
+
+.startGameButton {
+  font-size: 1.1rem;
+  padding: 0.875rem 2rem;
+  font-weight: 600;
 }
 
 /* Mobile responsive for bot selection */
@@ -378,9 +423,21 @@
     max-width: 280px;
   }
 
-  .botButtons button {
-    padding: 0.875rem;
-    font-size: 0.9rem;
-    min-height: 50px;
+  .botOption {
+    padding: 1rem 0.75rem;
+    border-radius: 10px;
+  }
+
+  .botNumber {
+    font-size: 1.25rem;
+  }
+
+  .botLabel {
+    font-size: 0.8rem;
+  }
+
+  .startGameButton {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
   }
 }

@@ -2,12 +2,12 @@
 
 ## 🎯 Plan rozwoju - przyszłe wersje
 
-| Wersja | Status       | Opis                          | Szczegóły techniczne                       |
-| ------ | ------------ | ----------------------------- | ------------------------------------------ |
-| 0.3.1  | ✅ Aktualna  | Krytyczne poprawki UX v0.3.0  | Naprawienie re-renderów i nawigacji        |
-| 0.3.2  | 🎯 Następna  | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką     |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks                       |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart             | Card visualization system                  |
+| Wersja | Status       | Opis                          | Szczegóły techniczne                   |
+| ------ | ------------ | ----------------------------- | -------------------------------------- |
+| 0.3.1  | ✅ Aktualna  | Krytyczne poprawki UX v0.3.0  | Naprawienie re-renderów i nawigacji    |
+| 0.3.2  | 🎯 Następna  | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks                   |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart             | Card visualization system              |
 
 ### v0.3.1 - Krytyczne poprawki UX ✅ UKOŃCZONE
 
@@ -27,19 +27,23 @@
 
 ### v0.3.2 - Przeprojektowanie logiki gry 🎯
 
-**Cel**: Poprawa logiki gry zgodnie z zasadami planszówki
+**Cel**: Poprawa UX i mechaniki gry zgodnie z zasadami planszówki
 
-- [ ] **Nowa logika przełączania botów**
-  - Usuń manual przełącznik botów (niepotrzebny)
-  - Dodaj automatyczną kolejność botów
-  - Wskaźnik "Bot X wykonuje akcję" zamiast przełącznika
-- [ ] **Nowe przyciski akcji**
-  - "Dobierz kartę" - dla aktualnego bota
-  - "Następny bot" - jeśli aktualny bot może wykonać akcję
-  - "Kolejna karta" - jeśli bot nie może wykonać akcji z karty
-- [ ] **Poprawiona mechanika gry**
-  - Zgodność z zasadami planszówki
-  - Jasny flow: dobieranie → sprawdzenie → akcja → następny bot/kolejna karta
+- [ ] **Ulepszone menu wyboru botów**
+  - Dodaj wizualne zaznaczenie wybranej liczby botów
+  - Osobny przycisk "Rozpocznij grę" po wyborze
+  - Przygotowanie na dodatkowe opcje (w przyszłości)
+- [ ] **Usuń niepotrzebny przełącznik botów**
+
+  - Usuń manual przełącznik botów (1, 2, 3, 4)
+  - Zastąp prostym wskaźnikiem "Aktualny bot: X/Y"
+  - Boty grają w kolejności automatycznie
+
+- [ ] **Nowa logika akcji zgodna z planszówką**
+  - "Dobierz kartę dla bota X" - aktualna karta dla tego bota
+  - "Następny bot" - jeśli bot może wykonać akcję z karty
+  - "Dobierz następną kartę" - jeśli bot nie może wykonać akcji
+  - Zgodność z zasadami: nie można wykonać → dobierz kolejną dla tego samego bota
 
 ### v0.4.0 - Osobne talie 🔜
 
