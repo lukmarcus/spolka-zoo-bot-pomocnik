@@ -4,27 +4,26 @@
 
 | Wersja | Status       | Opis                          | Szczegóły techniczne                       |
 | ------ | ------------ | ----------------------------- | ------------------------------------------ |
-| 0.3.0  | ✅ Aktualna  | Wsparcie dla wielu botów      | Multi-bot architecture z jedną talią       |
-| 0.3.1  | � Krytyczna  | Naprawienie UX v0.3.0         | Usunięcie bugów i niepotrzebnych elementów |
-| 0.3.2  | 🎯 Ważna     | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką     |
+| 0.3.1  | ✅ Aktualna  | Krytyczne poprawki UX v0.3.0  | Naprawienie re-renderów i nawigacji        |
+| 0.3.2  | 🎯 Następna  | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką     |
 | 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks                       |
 | 0.5.0  | 🔜 Planowana | Wizualizacja kart             | Card visualization system                  |
 
-### v0.3.1 - Krytyczne poprawki UX 🚨
+### v0.3.1 - Krytyczne poprawki UX ✅ UKOŃCZONE
 
 **Cel**: Naprawienie fundamentalnych problemów UX w v0.3.0
 
-- [ ] **Usunięcie niepotrzebnych elementów**
-  - Usuń "Ustawienia" z menu głównego (wybór botów jest w grze)
-  - Usuń licznik kart z ekranu wyboru botów (gra się jeszcze nie zaczęła)
-  - Usuń modal potwierdzenia przy powrocie z ekranu wyboru botów
-- [ ] **Naprawienie nawigacji**
-  - Powrót z ekranu wyboru botów → menu główne (bez modalu)
-  - Powrót z gry → menu główne (nie do wyboru botów)
-  - Prosty "Back" button bez dodatkowych pytań
-- [ ] **Bug fixes**
-  - Napraw aktywację przycisku po wyborze liczby botów
-  - Napraw wielokrotne klikanie w przyciski botów
+- [x] **Usunięcie niepotrzebnych elementów**
+  - ✅ Usuń "Ustawienia" z menu głównego (wybór botów jest w grze)
+  - ✅ Usuń licznik kart z ekranu wyboru botów (gra się jeszcze nie zaczęła)
+  - ✅ Usuń licznik kart z ekranu "Dobierz pierwszą kartę"
+- [x] **Naprawienie nawigacji**
+  - ✅ Powrót z ekranu wyboru botów → menu główne (bez modalu)
+  - ✅ Powrót z gry → menu główne (działa poprawnie)
+- [x] **Bug fixes**
+  - ✅ Napraw błąd "Maximum update depth exceeded" (nieskończone re-rendery)
+  - ✅ Zmemorizowano contextValue w GameContext używając useMemo
+  - ✅ Poprawiono flow gry i stabilność aplikacji
 
 ### v0.3.2 - Przeprojektowanie logiki gry 🎯
 
@@ -113,7 +112,7 @@ interface BotDeck {
   - Cloud backup integration
   - Game session replay
 
-## � Dokumentacja techniczna
+## 📖 Dokumentacja techniczna
 
 ### 🏗️ Architektura
 
@@ -139,7 +138,7 @@ src/
 └── assets/            # Obrazy, ikony, czcionki
 ```
 
-### 🔧 Aktualna architektura GameState (v0.3.0)
+### 🔧 Aktualna architektura GameState (v0.3.1)
 
 ```typescript
 interface GameState {

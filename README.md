@@ -17,13 +17,15 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - ⚡ **NOWE**: Inteligentna walidacja kodów gry w czasie rzeczywistym
 - 🤖 **NOWE v0.3.0**: Obsługa wielu botów (2-4) z jedną talią
 - 🔄 **NOWE v0.3.0**: Przełączanie między botami podczas gry
-- 📱 Responsywny design dla telefonów (320px+)
+- � **NAPRAWIONO v0.3.1**: Krytyczne błędy UX z v0.3.0 (re-rendery, nawigacja, licznik kart)
+- �📱 Responsywny design dla telefonów (320px+)
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.3.0 ✅  
-**Status**: Multi-bot support - obsługa 1-4 botów z jedną talią  
-**Następna wersja**: 0.3.1 - Krytyczne poprawki UX (naprawienie problemów v0.3.0)
+**Aktualna wersja**: 0.3.1 ✅  
+**Status**: Hotfix - naprawiono krytyczne problemy UX z v0.3.0  
+**Poprzednia wersja**: 0.3.0 - Multi-bot support (miała problemy z re-renderami)  
+**Następna wersja**: 0.3.2 - Przeprojektowanie logiki gry (poprawa mechaniki zgodnie z planszówką)
 
 ## 📖 Instrukcja obsługi
 
