@@ -25,7 +25,15 @@ const Game: React.FC = () => {
   // }, [game.state.cardSequence.length, game.newGame]);
 
   const handleBackToMenu = () => {
-    setShowExitModal(true);
+    // v0.3.2 Simplified exit - no modal during bot selection
+    if (!game.state.botsSelected) {
+      // During bot selection, exit immediately without modal
+      game.resetGame();
+      navigate("/");
+    } else {
+      // During game, show modal for confirmation
+      setShowExitModal(true);
+    }
   };
 
   const confirmExit = () => {
