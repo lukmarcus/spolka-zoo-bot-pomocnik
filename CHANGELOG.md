@@ -5,6 +5,53 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-09-03
+
+### 🎨 Kompleksowe ulepszenia UX
+
+- **🤖 Nowy interfejs wyboru botów**
+
+  - Przeprojektowany interfejs wyboru liczby botów z lepszą wizualizacją
+  - Dodano buttons w stylu kart z zoo-tematyczną paletą kolorów
+  - Wyeliminowano mylący ekran pośredni "Gotowy do rozpoczęcia gry"
+  - Gra automatycznie dobiera pierwszą kartę po wyborze botów
+
+- **🎮 Usprawnienia flow gry**
+
+  - Usunięto niepotrzebny ekran "Dobierz pierwszą kartę"
+  - Zintegrowany interfejs: wybór botów → automatyczne dobranie karty → gra
+  - Naprawiono błąd pustego ekranu po odświeżeniu strony
+  - Uproszczono logikę renderowania kondycjonalnego
+
+- **🎨 Redesign stylistyczny**
+
+  - Implementacja zoo-tematycznej palety kolorów (brązy, kremowe, pomarańczowe)
+  - Stylizacja przycisków wyboru botów w stylu kart
+  - Dodano gradienty i efekty hover dla lepszego feedbacku wizualnego
+  - Usunięto problematyczne tło kart z interfejsu wyboru (na życzenie użytkownika)
+
+- **🔧 Naprawienie błędów edge case**
+  - Naprawiono problem z pustym ekranem po odświeżeniu strony w trakcie wyboru botów
+  - Uproszczono warunki renderowania: zawsze pokazuj interfejs wyboru gdy `currentCardIndex === -1`
+  - Poprawiono konsystentność zachowania aplikacji
+
+### 🏗️ Zmiany techniczne
+
+- **⚡ Optymalizacja renderowania**
+
+  - Uproszczono logikę kondycjonalną w Game.tsx
+  - Wyeliminowano skomplikowane zagnieżdżone warunki
+  - Stabilne zachowanie po odświeżeniu strony
+
+- **🎨 Modularyzacja CSS**
+  - Dodano nowe klasy CSS dla interfejsu wyboru botów
+  - Implementacja zoo-tematycznych kolorów w CSS Modules
+  - Responsywny design dla przycisków wyboru
+
+### 📝 Status
+
+**v0.3.2** to znaczące ulepszenie UX eliminujące mylące ekrany pośrednie i wprowadzające spójną, zoo-tematyczną stylistykę z płynnym flow gry.
+
 ## [0.3.1] - 2025-09-02
 
 ### 🐛 Krytyczne poprawki UX v0.3.0
