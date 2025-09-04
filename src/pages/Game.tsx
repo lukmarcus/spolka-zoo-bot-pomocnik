@@ -15,14 +15,6 @@ const Game: React.FC = () => {
   const [copyMessage, setCopyMessage] = useState<string>("");
   const [selectedBotCount, setSelectedBotCount] = useState<number | null>(null);
 
-  // Auto-start game when component mounts (temporarily disabled to debug infinite re-renders)
-  // useEffect(() => {
-  //   // Ensure game is started - fallback for direct navigation
-  //   if (game.state.cardSequence.length === 0) {
-  //     game.newGame();
-  //   }
-  // }, [game.state.cardSequence.length, game.newGame]);
-
   // v0.3.2 Reset game state on page refresh to ensure clean bot selection
   React.useEffect(() => {
     // If we're in an inconsistent state (bots not selected but cards drawn), reset
@@ -86,6 +78,12 @@ const Game: React.FC = () => {
     }
   };
 
+  // v0.3.3 Handle shuffle for next bot
+  const handleShuffleForNextBot = () => {
+    game.nextBot();
+    setTimeout(() => game.shuffleDeck(), 50); // Small delay to ensure bot switch happens first
+  };
+
   const currentCardId = game.getCurrentCard();
   const currentCard =
     currentCardId !== null
@@ -119,10 +117,7 @@ const Game: React.FC = () => {
           game.state.botCount && game.state.botCount > 1
             ? {
                 text: "👥 Przetasuj i dobierz dla następnego bota",
-                action: () => {
-                  game.nextBot();
-                  setTimeout(() => game.shuffleDeck(), 50); // Small delay to ensure bot switch happens first
-                },
+                action: handleShuffleForNextBot,
                 disabled: false,
                 className: "btn-secondary",
               }

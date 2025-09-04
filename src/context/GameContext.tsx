@@ -227,15 +227,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [state]
   );
 
-  // Auto-save temporarily disabled to debug infinite re-render issue
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     autoSaveGameState(state);
-  //   }, 300); // Debounce by 300ms
-
-  //   return () => clearTimeout(timeoutId);
-  // }, [state]);
-
   return (
     <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
   );
