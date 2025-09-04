@@ -145,11 +145,14 @@
   transform: scale(1.02);
 }
 
-/* Game Controls */
+/* Game Controls - v0.3.3 updated for two buttons */
 .gameControls {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
   padding: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .gameControls button {
