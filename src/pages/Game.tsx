@@ -106,16 +106,27 @@ const Game: React.FC = () => {
       return { primary: null, secondary: null };
     }
 
-    // Deck exhausted - only shuffle option
+    // Deck exhausted - two buttons: shuffle for current bot, or shuffle for next bot
     if (game.isDeckExhausted()) {
       return {
         primary: {
-          text: "🔀 Przetasuj i dobierz kartę",
+          text: `🔀 Przetasuj i dobierz kartę dla bota ${game.state.currentBot}`,
           action: game.shuffleDeck,
           disabled: false,
           className: "btn-secondary",
         },
-        secondary: null,
+        secondary:
+          game.state.botCount && game.state.botCount > 1
+            ? {
+                text: "👥 Przetasuj i dobierz dla następnego bota",
+                action: () => {
+                  game.nextBot();
+                  setTimeout(() => game.shuffleDeck(), 50); // Small delay to ensure bot switch happens first
+                },
+                disabled: false,
+                className: "btn-secondary",
+              }
+            : null,
       };
     }
 
