@@ -2,44 +2,50 @@
 
 ## 🎯 Plan rozwoju - przyszłe wersje
 
-| Wersja | Status       | Opis                          | Szczegóły techniczne                       |
-| ------ | ------------ | ----------------------------- | ------------------------------------------ |
-| 0.3.1  | ✅ Aktualna  | Krytyczne poprawki UX v0.3.0  | Naprawienie re-renderów i nawigacji        |
-| 0.3.2  | 🎯 Następna  | Przeprojektowanie logiki gry  | Poprawa mechaniki zgodnie z planszówką     |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota | Individual bot decks                       |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart             | Card visualization system                  |
+| Wersja | Status       | Opis                              | Szczegóły techniczne                   |
+| ------ | ------------ | --------------------------------- | -------------------------------------- |
+| 0.3.2  | ✅ Aktualna  | Przeprojektowanie UX i stylistyki | Nowy interfejs wyboru botów, zoo-theme |
+| 0.3.3  | 🎯 Następna  | Dalsze usprawnienia flow gry      | Automatyczna kolejność botów           |
+| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota     | Individual bot decks                   |
+| 0.5.0  | 🔜 Planowana | Wizualizacja kart                 | Card visualization system              |
 
-### v0.3.1 - Krytyczne poprawki UX ✅ UKOŃCZONE
+### v0.3.2 - Przeprojektowanie UX i stylistyki ✅ UKOŃCZONE
 
-**Cel**: Naprawienie fundamentalnych problemów UX w v0.3.0
+**Cel**: Kompleksowe ulepszenie interfejsu użytkownika i wprowadzenie spójnej stylistyki
 
-- [x] **Usunięcie niepotrzebnych elementów**
-  - ✅ Usuń "Ustawienia" z menu głównego (wybór botów jest w grze)
-  - ✅ Usuń licznik kart z ekranu wyboru botów (gra się jeszcze nie zaczęła)
-  - ✅ Usuń licznik kart z ekranu "Dobierz pierwszą kartę"
-- [x] **Naprawienie nawigacji**
-  - ✅ Powrót z ekranu wyboru botów → menu główne (bez modalu)
-  - ✅ Powrót z gry → menu główne (działa poprawnie)
+- [x] **Nowy interfejs wyboru botów**
+  - ✅ Przeprojektowany interfejs z lepszą wizualizacją
+  - ✅ Buttons w stylu kart z zoo-tematyczną paletą kolorów
+  - ✅ Dodano wizualne zaznaczenie wybranej liczby botów
+  - ✅ Wyeliminowano mylący ekran pośredni "Gotowy do rozpoczęcia gry"
+- [x] **Usprawnienia flow gry**
+  - ✅ Gra automatycznie dobiera pierwszą kartę po wyborze botów
+  - ✅ Usunięto niepotrzebny ekran "Dobierz pierwszą kartę"
+  - ✅ Zintegrowany interfejs: wybór botów → automatyczne dobranie karty → gra
+- [x] **Zoo-tematyczna stylistyka**
+  - ✅ Implementacja kolorów: brązy, kremowe, pomarańczowe
+  - ✅ Stylizacja przycisków w stylu kart z gradientami
+  - ✅ Dodano efekty hover dla lepszego feedbacku wizualnego
 - [x] **Bug fixes**
-  - ✅ Napraw błąd "Maximum update depth exceeded" (nieskończone re-rendery)
-  - ✅ Zmemorizowano contextValue w GameContext używając useMemo
-  - ✅ Poprawiono flow gry i stabilność aplikacji
+  - ✅ Naprawiono błąd pustego ekranu po odświeżeniu strony
+  - ✅ Uproszczono logikę renderowania kondycjonalnego
+  - ✅ Stabilne zachowanie aplikacji we wszystkich scenariuszach
 
-### v0.3.2 - Przeprojektowanie logiki gry 🎯
+### v0.3.3 - Dalsze usprawnienia flow gry 🎯
 
-**Cel**: Poprawa logiki gry zgodnie z zasadami planszówki
+**Cel**: Dalsze usprawnienia mechaniki gry zgodnie z zasadami planszówki
 
-- [ ] **Nowa logika przełączania botów**
-  - Usuń manual przełącznik botów (niepotrzebny)
-  - Dodaj automatyczną kolejność botów
-  - Wskaźnik "Bot X wykonuje akcję" zamiast przełącznika
-- [ ] **Nowe przyciski akcji**
-  - "Dobierz kartę" - dla aktualnego bota
-  - "Następny bot" - jeśli aktualny bot może wykonać akcję
-  - "Kolejna karta" - jeśli bot nie może wykonać akcji z karty
-- [ ] **Poprawiona mechanika gry**
-  - Zgodność z zasadami planszówki
-  - Jasny flow: dobieranie → sprawdzenie → akcja → następny bot/kolejna karta
+- [ ] **Usuń niepotrzebny przełącznik botów**
+
+  - Usuń manual przełącznik botów (1, 2, 3, 4)
+  - Zastąp prostym wskaźnikiem "Aktualny bot: X/Y"
+  - Boty grają w kolejności automatycznie
+
+- [ ] **Nowa logika akcji zgodna z planszówką**
+  - "Dobierz kartę dla bota X" - aktualna karta dla tego bota
+  - "Następny bot" - jeśli bot może wykonać akcję z karty
+  - "Dobierz następną kartę" - jeśli bot nie może wykonać akcji
+  - Zgodność z zasadami: nie można wykonać → dobierz kolejną dla tego samego bota
 
 ### v0.4.0 - Osobne talie 🔜
 

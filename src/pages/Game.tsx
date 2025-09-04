@@ -7,13 +7,13 @@ import Layout from "../components/Layout";
 import BotCard from "../components/BotCard";
 import ConfirmModal from "../components/ConfirmModal";
 import styles from "./Game.module.css";
-import cardReverseImg from "../assets/images/interface/card-reverse.jpg";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string>("");
+  const [selectedBotCount, setSelectedBotCount] = useState<number | null>(null);
 
   // Auto-start game when component mounts (temporarily disabled to debug infinite re-renders)
   // useEffect(() => {
@@ -23,8 +23,24 @@ const Game: React.FC = () => {
   //   }
   // }, [game.state.cardSequence.length, game.newGame]);
 
+  // v0.3.2 Reset game state on page refresh to ensure clean bot selection
+  React.useEffect(() => {
+    // If we're in an inconsistent state (bots not selected but cards drawn), reset
+    if (!game.state.botsSelected && game.state.currentCardIndex >= 0) {
+      game.resetGame();
+    }
+  }, [game, game.state.botsSelected, game.state.currentCardIndex]);
+
   const handleBackToMenu = () => {
-    setShowExitModal(true);
+    // v0.3.2 Simplified exit - no modal during bot selection
+    if (!game.state.botsSelected) {
+      // During bot selection, exit immediately without modal
+      game.resetGame();
+      navigate("/");
+    } else {
+      // During game, show modal for confirmation
+      setShowExitModal(true);
+    }
   };
 
   const confirmExit = () => {
@@ -56,6 +72,20 @@ const Game: React.FC = () => {
     setTimeout(() => setCopyMessage(""), 3000);
   };
 
+  const handleBotSelection = (count: number) => {
+    setSelectedBotCount(count);
+  };
+
+  const handleStartGame = () => {
+    if (selectedBotCount) {
+      game.selectBots(selectedBotCount);
+      // v0.3.2 Auto-draw first card to skip intermediate screen
+      setTimeout(() => {
+        game.drawCard();
+      }, 100); // Small delay to ensure state is updated
+    }
+  };
+
   const currentCardId = game.getCurrentCard();
   const currentCard =
     currentCardId !== null
@@ -67,24 +97,15 @@ const Game: React.FC = () => {
     const currentIndex = game.state.currentCardIndex;
     const totalCards = BOT_CARDS.length;
 
-    // Stan początkowy - brak wylosowanej karty (0/13)
-    if (currentIndex === -1) {
-      // v0.3.0+ Check if bots are selected
-      if (!game.state.botsSelected) {
-        return {
-          text: "🤖 Wybierz liczbę botów",
-          action: () => {}, // Disabled - will show bot selection UI instead
-          disabled: true,
-          className: "btn-secondary",
-        };
-      }
+    // v0.3.2+ During bot selection, no button is shown
+    if (!game.state.botsSelected) {
+      return null; // No button shown during bot selection
+    }
 
-      return {
-        text: "🎯 Dobierz pierwszą kartę",
-        action: game.drawCard,
-        disabled: false,
-        className: "btn-primary",
-      };
+    // Stan początkowy - brak wylosowanej karty (0/13) - should not happen in v0.3.2+
+    // because we auto-draw first card after bot selection
+    if (currentIndex === -1) {
+      return null; // This case should not happen anymore
     }
 
     // Ostatnia karta (12/13 - indeks 11)
@@ -167,41 +188,50 @@ const Game: React.FC = () => {
             ) : (
               <div className={styles.noCard}>
                 {game.state.currentCardIndex === -1 ? (
-                  !game.state.botsSelected ? (
-                    // v0.3.0+ Bot selection UI
-                    <div className={styles.botSelection}>
+                  // v0.3.2 Always show bot selection when no cards are drawn
+                  <div className={styles.botSelection}>
+                    <div className={styles.botSelectionContent}>
                       <h3>Wybierz liczbę botów</h3>
                       <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
                       <div className={styles.botButtons}>
                         {[1, 2, 3, 4].map((count) => (
                           <button
                             key={count}
-                            className="btn-primary"
-                            onClick={() => game.selectBots(count)}
+                            className={`${styles.botOption} ${
+                              selectedBotCount === count ? styles.selected : ""
+                            }`}
+                            onClick={() => handleBotSelection(count)}
                           >
-                            {count} {count === 1 ? "bot" : "boty"}
+                            <span className={styles.botNumber}>{count}</span>
+                            <span className={styles.botLabel}>
+                              {count === 1 ? "bot" : "boty"}
+                            </span>
                           </button>
                         ))}
                       </div>
+                      <div className={styles.startGameSection}>
+                        {selectedBotCount ? (
+                          <p className={styles.selectedInfo}>
+                            Wybrano: {selectedBotCount}{" "}
+                            {selectedBotCount === 1 ? "bot" : "boty"}
+                          </p>
+                        ) : (
+                          <p className={styles.selectedInfo}>
+                            Wybierz liczbę botów aby rozpocząć
+                          </p>
+                        )}
+                        <button
+                          className={`btn-primary ${styles.startGameButton}`}
+                          onClick={handleStartGame}
+                          disabled={!selectedBotCount}
+                        >
+                          🎯 Rozpocznij grę
+                        </button>
+                      </div>
                     </div>
-                  ) : (
-                    // Ready to start game
-                    <div className={styles.cardReverse}>
-                      <img
-                        src={cardReverseImg}
-                        alt="Zakryty stos kart"
-                        className={styles.cardReverseImage}
-                      />
-                      <h3>Gotowy do gry</h3>
-                      <p>
-                        {game.state.botCount === 1
-                          ? "1 bot, jedna talia"
-                          : `${game.state.botCount} boty, wspólna talia`}
-                      </p>
-                      <p>Naciśnij przycisk, aby wylosować pierwszą kartę.</p>
-                    </div>
-                  )
+                  </div>
                 ) : (
+                  // Deck exhausted
                   <>
                     <h3>Koniec talii</h3>
                     <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
@@ -212,13 +242,15 @@ const Game: React.FC = () => {
           </div>
 
           <div className={styles.gameControls}>
-            <button
-              className={primaryAction.className}
-              onClick={primaryAction.action}
-              disabled={primaryAction.disabled}
-            >
-              {primaryAction.text}
-            </button>
+            {primaryAction && (
+              <button
+                className={primaryAction.className}
+                onClick={primaryAction.action}
+                disabled={primaryAction.disabled}
+              >
+                {primaryAction.text}
+              </button>
+            )}
           </div>
         </div>
 
