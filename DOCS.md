@@ -1,71 +1,57 @@
-# Spółka ZOO - Bot Pomocnik
+# Spółka ZOO - Bot Pomocnik - Plan Rozwoju
 
-## 🎯 Plan rozwoju - przyszłe wersje
+## 🎯 Roadmapa przyszłych wersji
 
-| Wersja | Status       | Opis                              | Szczegóły techniczne                   |
-| ------ | ------------ | --------------------------------- | -------------------------------------- |
-| 0.3.2  | ✅ Aktualna  | Przeprojektowanie UX i stylistyki | Nowy interfejs wyboru botów, zoo-theme |
-| 0.3.3  | 🎯 Następna  | Dalsze usprawnienia flow gry      | Automatyczna kolejność botów           |
-| 0.4.0  | 🔜 Planowana | Osobne talie dla każdego bota     | Individual bot decks                   |
-| 0.5.0  | 🔜 Planowana | Wizualizacja kart                 | Card visualization system              |
+| Wersja | Status        | Opis                           | Szczegóły techniczne                |
+| ------ | ------------- | ------------------------------ | ----------------------------------- |
+| 0.3.4  | 🎯 Następna   | Finalne usprawnienia mechaniki | Szczegółowe komunikaty gry          |
+| 0.4.0  | 🔜 Planowana  | Osobne talie dla każdego bota  | Individual bot decks                |
+| 0.5.0  | 🔜 Planowana  | Wizualizacja kart              | Card visualization system           |
+| 0.6.0+ | 🔮 Przyszłość | Zaawansowane funkcje           | Statistics, tournaments, cloud sync |
 
-### v0.3.2 - Przeprojektowanie UX i stylistyki ✅ UKOŃCZONE
+## 📋 Szczegółowe plany rozwoju
 
-**Cel**: Kompleksowe ulepszenie interfejsu użytkownika i wprowadzenie spójnej stylistyki
+### v0.3.4 - Finalne usprawnienia mechaniki 🎯
 
-- [x] **Nowy interfejs wyboru botów**
-  - ✅ Przeprojektowany interfejs z lepszą wizualizacją
-  - ✅ Buttons w stylu kart z zoo-tematyczną paletą kolorów
-  - ✅ Dodano wizualne zaznaczenie wybranej liczby botów
-  - ✅ Wyeliminowano mylący ekran pośredni "Gotowy do rozpoczęcia gry"
-- [x] **Usprawnienia flow gry**
-  - ✅ Gra automatycznie dobiera pierwszą kartę po wyborze botów
-  - ✅ Usunięto niepotrzebny ekran "Dobierz pierwszą kartę"
-  - ✅ Zintegrowany interfejs: wybór botów → automatyczne dobranie karty → gra
-- [x] **Zoo-tematyczna stylistyka**
-  - ✅ Implementacja kolorów: brązy, kremowe, pomarańczowe
-  - ✅ Stylizacja przycisków w stylu kart z gradientami
-  - ✅ Dodano efekty hover dla lepszego feedbacku wizualnego
-- [x] **Bug fixes**
-  - ✅ Naprawiono błąd pustego ekranu po odświeżeniu strony
-  - ✅ Uproszczono logikę renderowania kondycjonalnego
-  - ✅ Stabilne zachowanie aplikacji we wszystkich scenariuszach
+**Cel**: Drobne ulepszenia komunikatów i finalne polishing
 
-### v0.3.3 - Dalsze usprawnienia flow gry 🎯
+- [ ] **Ulepszenia komunikatów gry**
 
-**Cel**: Dalsze usprawnienia mechaniki gry zgodnie z zasadami planszówki
+  - Bardziej opisowe komunikaty dla akcji botów
+  - Poprawa feedbacku wizualnego podczas przełączania botów
+  - Opcjonalne animacje przejść między botami
 
-- [ ] **Usuń niepotrzebny przełącznik botów**
+- [ ] **Dodatkowe usprawnienia UX**
+  - Lepsze wskaźniki stanu gry
+  - Tooltip z informacjami o kartach
+  - Smooth transitions między stanami
 
-  - Usuń manual przełącznik botów (1, 2, 3, 4)
-  - Zastąp prostym wskaźnikiem "Aktualny bot: X/Y"
-  - Boty grają w kolejności automatycznie
-
-- [ ] **Nowa logika akcji zgodna z planszówką**
-  - "Dobierz kartę dla bota X" - aktualna karta dla tego bota
-  - "Następny bot" - jeśli bot może wykonać akcję z karty
-  - "Dobierz następną kartę" - jeśli bot nie może wykonać akcji
-  - Zgodność z zasadami: nie można wykonać → dobierz kolejną dla tego samego bota
-
-### v0.4.0 - Osobne talie 🔜
+### v0.4.0 - Osobne talie dla każdego bota 🔜
 
 **Cel**: Opcja osobnych talii dla każdego bota
 
 - [ ] **Wybór trybu gry**
-  - "Wspólna talia" (obecny system v0.3.0)
-  - "Osobne talie" (nowy system v0.4.0)
+
+  - "Wspólna talia" (obecny system)
+  - "Osobne talie" (nowy system)
+  - Radio buttons w interfejsie wyboru botów
+
 - [ ] **Zarządzanie wieloma taliami**
+
   - Każdy bot ma własną sekwencję kart
   - Niezależne `currentCardIndex` dla każdego bota
-  - Osobne `usedCards` tracking
+  - Osobne `usedCards` tracking per bot
+
 - [ ] **Rozszerzone kodowanie v2**
-  - 17-19 znaków: wspólna talia (v0.3.0)
-  - 29/44/57 znaków: osobne talie (v0.4.0)
+
+  - 17-19 znaków: wspólna talia (current)
+  - 29/44/57 znaków: osobne talie (new)
   - Format: [Bot1Sequence][Bot1Pos][Bot2Sequence][Bot2Pos]...[CurrentBot]
+
 - [ ] **UI mode selection**
-  - Radio buttons w bot selection
   - Visual indicators dla aktywnego trybu
-  - Tooltip z wyjaśnieniem różnic
+  - Tooltip z wyjaśnieniem różnic między trybami
+  - Podgląd różnic w mechanice gry
 
 **Architektura techniczna**:
 
@@ -89,13 +75,17 @@ interface BotDeck {
 **Cel**: Graficzne przedstawienie kart zamiast tekstu
 
 - [ ] **Design systemu kart**
+
   - SVG/CSS design kart botów
   - Ikony dla różnych efektów kart
   - Spójny design language z grą planszową
+
 - [ ] **Animacje kart**
+
   - Smooth animacje dobierania kart
   - Flip animation przy odsłanianiu karty
   - Tasowanie deck animation
+
 - [ ] **Responsive card display**
   - Adaptive sizing dla różnych ekranów
   - Touch-friendly interactions
@@ -106,13 +96,17 @@ interface BotDeck {
 **Cel**: Funkcje dla doświadczonych graczy
 
 - [ ] **Game statistics**
+
   - Historia ruchów i częstotliwość kart
   - Analytics dashboard
   - Export danych do CSV/JSON
+
 - [ ] **Advanced game modes**
+
   - Timer mode z countdown
   - Tournament mode z wieloma rundami
   - Practice mode z możliwością undo
+
 - [ ] **Enhanced save system**
   - Multiple save slots (slot 1, 2, 3...)
   - Cloud backup integration
@@ -120,10 +114,10 @@ interface BotDeck {
 
 ## 📖 Dokumentacja techniczna
 
-### 🏗️ Architektura
+### 🏗️ Aktualna architektura (v0.3.3)
 
 - **Frontend**: React 19.1.1 + TypeScript 5.8.3 + Vite 5.4.19
-- **Style**: CSS Modules
+- **Style**: CSS Modules z zoo-tematyczną paletą kolorów
 - **State Management**: React Context + useReducer
 - **Routing**: React Router DOM 7.8.1
 - **Build**: Vite
@@ -144,16 +138,16 @@ src/
 └── assets/            # Obrazy, ikony, czcionki
 ```
 
-### 🔧 Aktualna architektura GameState (v0.3.1)
+### 🔧 GameState Interface
 
 ```typescript
 interface GameState {
   currentCardIndex: number; // 0-12, pozycja w talii
   cardSequence: number[]; // 13 kart, permutacja 0-12
   usedCards: number[]; // karty użyte w bieżącej rundzie
-  botsSelected?: boolean; // Czy wybrano liczbę botów (v0.3.0+)
-  botCount?: number; // Liczba botów 1-4 (v0.3.0+)
-  currentBot?: number; // Aktualny bot 1-X (v0.3.0+)
+  botsSelected?: boolean; // Czy wybrano liczbę botów
+  botCount?: number; // Liczba botów 1-4
+  currentBot?: number; // Aktualny bot 1-X
 }
 ```
 
@@ -164,8 +158,9 @@ interface GameState {
 - `RESET_GAME` - reset do stanu początkowego
 - `NEW_GAME` - nowa gra
 - `LOAD_GAME` - wczytywanie stanu gry
-- `SELECT_BOTS` - wybór liczby botów (v0.3.0+)
-- `SWITCH_BOT` - przełączanie aktualnego bota (v0.3.0+)
+- `SELECT_BOTS` - wybór liczby botów
+- `NEXT_BOT` - przełączanie na następnego bota (v0.3.3+)
+- `NEXT_BOT_AND_DRAW` - przełączanie i dobieranie karty (v0.3.3+)
 
 ### 💾 System kodów gry
 

@@ -20,25 +20,33 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - 🔧 **NAPRAWIONO v0.3.1**: Krytyczne błędy UX z v0.3.0 (re-rendery, nawigacja, licznik kart)
 - 🎨 **NOWE v0.3.2**: Przeprojektowany interfejs wyboru botów z zoo-tematyczną stylistyką
 - ⚡ **NOWE v0.3.2**: Usprawiony flow gry - automatyczne dobranie pierwszej karty po wyborze botów
-- 📱 Responsywny design dla telefonów (320px+)
+- �️ **NAPRAWIONO v0.3.2**: Błąd pustego ekranu po odświeżeniu strony
+- 🎮 **NOWE v0.3.3**: Automatyczna kolejność botów - usunięto manual przełączniki
+- 🎯 **NOWE v0.3.3**: Dwa inteligentne przyciski akcji zgodnie z zasadami planszówki
+- �📱 Responsywny design dla telefonów (320px+)
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.3.2 ✅  
-**Status**: Major UX Update - przeprojektowany interfejs i usprawiony flow gry  
+**Aktualna wersja**: 0.3.3 ✅  
+**Status**: Enhanced Game Mechanics - automatyczna kolejność botów i intuicyjna mechanika gry  
 **Poprzednie wersje**:
 
+- 0.3.2 - Major UX Update - przeprojektowany interfejs i zoo-tematyczna stylistyka
 - 0.3.1 - Hotfix dla krytycznych błędów v0.3.0
 - 0.3.0 - Multi-bot support (miał problemy z re-renderami)
 
 ## 📖 Instrukcja obsługi
 
-### 🤖 Gra z wieloma botami (v0.3.0+)
+### 🤖 Gra z wieloma botami (v0.3.3+)
 
-1. **Rozpocznij grę** - kliknij "Start Game"
-2. **Wybierz liczbę botów** - wybierz od 1 do 4 botów
-3. **Przełączaj między botami** - kliknij numery botów w statusie gry
-4. **Wspólna talia** - wszyscy boci korzystają z tej samej sekwencji kart
+1. **Rozpocznij grę** - kliknij "Rozpocznij grę"
+2. **Wybierz liczbę botów** - wybierz od 1 do 4 botów używając stylizowanych przycisków
+3. **Automatyczna gra** - gra automatycznie dobiera pierwszą kartę po wyborze botów
+4. **Dwa inteligentne przyciski**:
+   - **"🎯 Dobierz następną kartę dla bota X"** - dobiera kartę dla aktualnego bota
+   - **"👥 Dobierz kartę dla następnego bota"** - przełącza na następnego bota i dobiera kartę
+5. **Automatyczna kolejność** - boty grają w kolejności 1 → 2 → 3 → 4 → 1
+6. **Wspólna talia** - wszyscy boci korzystają z tej samej sekwencji kart
 
 ### 💾 Zapisywanie gry
 
