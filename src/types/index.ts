@@ -41,6 +41,8 @@ export interface GameContextType {
   loadGame: (gameState: GameState) => void;
   selectBots: (count: number) => void; // v0.3.0+ bot selection
   switchBot: (botNumber: number) => void; // v0.3.0+ bot switching
+  nextBot: () => void; // v0.3.3+ go to next bot in sequence
+  nextBotAndDraw: () => void; // v0.3.3+ go to next bot and draw card
   getCurrentCard: () => number | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;

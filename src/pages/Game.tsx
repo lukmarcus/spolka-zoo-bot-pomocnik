@@ -15,14 +15,6 @@ const Game: React.FC = () => {
   const [copyMessage, setCopyMessage] = useState<string>("");
   const [selectedBotCount, setSelectedBotCount] = useState<number | null>(null);
 
-  // Auto-start game when component mounts (temporarily disabled to debug infinite re-renders)
-  // useEffect(() => {
-  //   // Ensure game is started - fallback for direct navigation
-  //   if (game.state.cardSequence.length === 0) {
-  //     game.newGame();
-  //   }
-  // }, [game.state.cardSequence.length, game.newGame]);
-
   // v0.3.2 Reset game state on page refresh to ensure clean bot selection
   React.useEffect(() => {
     // If we're in an inconsistent state (bots not selected but cards drawn), reset
@@ -86,58 +78,74 @@ const Game: React.FC = () => {
     }
   };
 
+  // v0.3.3 Handle shuffle for next bot
+  const handleShuffleForNextBot = () => {
+    game.nextBot();
+    setTimeout(() => game.shuffleDeck(), 50); // Small delay to ensure bot switch happens first
+  };
+
   const currentCardId = game.getCurrentCard();
   const currentCard =
     currentCardId !== null
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
 
-  // Determine primary action button state
-  const getPrimaryAction = () => {
+  // v0.3.3 New game action logic - two buttons
+  const getGameActions = () => {
     const currentIndex = game.state.currentCardIndex;
-    const totalCards = BOT_CARDS.length;
 
-    // v0.3.2+ During bot selection, no button is shown
+    // During bot selection, no buttons are shown
     if (!game.state.botsSelected) {
-      return null; // No button shown during bot selection
+      return { primary: null, secondary: null };
     }
 
-    // Stan początkowy - brak wylosowanej karty (0/13) - should not happen in v0.3.2+
-    // because we auto-draw first card after bot selection
+    // If no cards drawn yet (should not happen in v0.3.2+ due to auto-draw)
     if (currentIndex === -1) {
-      return null; // This case should not happen anymore
+      return { primary: null, secondary: null };
     }
 
-    // Ostatnia karta (12/13 - indeks 11)
-    if (currentIndex === totalCards - 2) {
+    // Deck exhausted - two buttons: shuffle for current bot, or shuffle for next bot
+    if (game.isDeckExhausted()) {
       return {
-        text: "🎯 Dobierz ostatnią kartę",
+        primary: {
+          text: `🔀 Przetasuj i dobierz kartę dla bota ${game.state.currentBot}`,
+          action: game.shuffleDeck,
+          disabled: false,
+          className: "btn-secondary",
+        },
+        secondary:
+          game.state.botCount && game.state.botCount > 1
+            ? {
+                text: "👥 Przetasuj i dobierz dla następnego bota",
+                action: handleShuffleForNextBot,
+                disabled: false,
+                className: "btn-secondary",
+              }
+            : null,
+      };
+    }
+
+    // Normal game state - two action buttons
+    return {
+      primary: {
+        text: `🎯 Dobierz następną kartę dla bota ${game.state.currentBot}`,
         action: game.drawCard,
         disabled: false,
         className: "btn-primary",
-      };
-    }
-
-    // Talia wyczerpana (13/13 - wszystkie karty dobrane)
-    if (game.isDeckExhausted()) {
-      return {
-        text: "🔀 Przetasuj i dobierz kartę",
-        action: game.shuffleDeck,
-        disabled: false,
-        className: "btn-secondary",
-      };
-    }
-
-    // Stan normalny (1-11/13)
-    return {
-      text: "🎯 Dobierz następną kartę",
-      action: game.drawCard,
-      disabled: false,
-      className: "btn-primary",
+      },
+      secondary:
+        game.state.botCount && game.state.botCount > 1
+          ? {
+              text: "👥 Dobierz kartę dla następnego bota",
+              action: game.nextBotAndDraw,
+              disabled: false,
+              className: "btn-secondary",
+            }
+          : null,
     };
   };
 
-  const primaryAction = getPrimaryAction();
+  const gameActions = getGameActions();
 
   return (
     <Layout title="Gra" backgroundType="game">
@@ -154,27 +162,11 @@ const Game: React.FC = () => {
                   game.state.botCount &&
                   game.state.botCount > 1 && (
                     <div className={styles.botInfo}>
-                      <span>
-                        Bot {game.state.currentBot}/{game.state.botCount}
-                      </span>
-                      <div className={styles.botSwitcher}>
-                        {Array.from(
-                          { length: game.state.botCount },
-                          (_, i) => i + 1
-                        ).map((botNumber) => (
-                          <button
-                            key={botNumber}
-                            className={`${styles.botButton} ${
-                              game.state.currentBot === botNumber
-                                ? styles.active
-                                : ""
-                            }`}
-                            onClick={() => game.switchBot(botNumber)}
-                            title={`Przełącz na Bot ${botNumber}`}
-                          >
-                            {botNumber}
-                          </button>
-                        ))}
+                      <div className={styles.currentBotIndicator}>
+                        <span className={styles.botIndicatorText}>
+                          Aktualny bot: {game.state.currentBot}/
+                          {game.state.botCount}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -242,13 +234,22 @@ const Game: React.FC = () => {
           </div>
 
           <div className={styles.gameControls}>
-            {primaryAction && (
+            {gameActions.primary && (
               <button
-                className={primaryAction.className}
-                onClick={primaryAction.action}
-                disabled={primaryAction.disabled}
+                className={gameActions.primary.className}
+                onClick={gameActions.primary.action}
+                disabled={gameActions.primary.disabled}
               >
-                {primaryAction.text}
+                {gameActions.primary.text}
+              </button>
+            )}
+            {gameActions.secondary && (
+              <button
+                className={gameActions.secondary.className}
+                onClick={gameActions.secondary.action}
+                disabled={gameActions.secondary.disabled}
+              >
+                {gameActions.secondary.text}
               </button>
             )}
           </div>

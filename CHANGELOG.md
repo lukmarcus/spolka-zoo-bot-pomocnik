@@ -5,6 +5,51 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2025-09-04
+
+### 🎮 Ulepszenia mechaniki gry zgodnie z planszówką
+
+- **🚫 Usunięto manual przełącznik botów**
+
+  - Usunięto przyciski przełączania botów (1, 2, 3, 4) z interfejsu gry
+  - Zastąpiono prostym wskaźnikiem "Aktualny bot: X/Y"
+  - Boty grają teraz w automatycznej kolejności
+
+- **🎯 Nowa logika akcji - dwa inteligentne przyciski**
+
+  - **"🎯 Dobierz następną kartę dla bota X"** - dobiera kartę dla bieżącego bota
+  - **"👥 Dobierz kartę dla następnego bota"** - przełącza na następnego bota i dobiera kartę
+  - Przyciski dostosowują się do liczby botów (1 bot = 1 przycisk, 2+ boty = 2 przyciski)
+
+- **🔀 Kompletna obsługa wyczerpania talii**
+
+  - Przy wyczerpaniu talii: dwa przyciski przetasowania
+  - **"🔀 Przetasuj i dobierz kartę dla bota X"** - przetasowuje dla aktualnego bota
+  - **"👥 Przetasuj i dobierz dla następnego bota"** - przełącza bota i przetasowuje
+
+### 🏗️ Zmiany techniczne
+
+- **⚡ Nowe akcje w GameContext**
+
+  - `NEXT_BOT` - przełącza na następnego bota w kolejności
+  - `NEXT_BOT_AND_DRAW` - przełącza na następnego bota i dobiera kartę
+  - Automatyczna kolejność: 1 → 2 → 3 → 4 → 1 (w zależności od liczby botów)
+
+- **🎨 Zaktualizowane style CSS**
+
+  - `.gameControls` wspiera responsywny layout dwóch przycisków
+  - Dodano `gap` i `flex-wrap` dla lepszej responsywności
+  - Usunięto nieużywane style `.botSwitcher` i `.botButton`
+
+- **🧹 Refaktory kodu**
+  - Oczyszczono komentowany kod z Game.tsx i GameContext.tsx
+  - Wyodrębniono funkcję `handleShuffleForNextBot`
+  - Zaktualizowano wersję aplikacji do 0.3.3
+
+### 📝 Status
+
+**v0.3.3** to kompletne usprawnienie mechaniki gry eliminujące mylące manual przełączniki i wprowadzające intuicyjne, automatyczne zarządzanie kolejnością botów zgodnie z zasadami planszówki.
+
 ## [0.3.2] - 2025-09-03
 
 ### 🎨 Kompleksowe ulepszenia UX

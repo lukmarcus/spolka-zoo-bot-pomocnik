@@ -24,7 +24,9 @@ type GameAction =
   | { type: "NEW_GAME" }
   | { type: "LOAD_GAME"; payload: GameState }
   | { type: "SELECT_BOTS"; payload: number } // v0.3.0+ bot count selection
-  | { type: "SWITCH_BOT"; payload: number }; // v0.3.0+ switch current bot
+  | { type: "SWITCH_BOT"; payload: number } // v0.3.0+ switch current bot
+  | { type: "NEXT_BOT" } // v0.3.3+ go to next bot in sequence
+  | { type: "NEXT_BOT_AND_DRAW" }; // v0.3.3+ go to next bot and draw card
 
 // Get initial state (with auto-save restore)
 function getInitialState(): GameState {
@@ -130,6 +132,46 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case "NEXT_BOT": {
+      // v0.3.3+ Go to next bot in sequence (1, 2, 3, 4 -> 1)
+      const nextBot =
+        state.currentBot && state.botCount
+          ? (state.currentBot % state.botCount) + 1
+          : 1;
+      return {
+        ...state,
+        currentBot: nextBot,
+      };
+    }
+
+    case "NEXT_BOT_AND_DRAW": {
+      // v0.3.3+ Go to next bot and draw card for that bot
+      if (state.cardSequence.length === 0) {
+        return state;
+      }
+
+      const nextIndex = state.currentCardIndex + 1;
+
+      // Check if trying to draw beyond deck
+      if (nextIndex >= TOTAL_CARDS) {
+        return state; // Don't auto-shuffle, let user manually shuffle
+      }
+
+      const nextBot =
+        state.currentBot && state.botCount
+          ? (state.currentBot % state.botCount) + 1
+          : 1;
+
+      const newUsedCards = [...state.usedCards, state.cardSequence[nextIndex]];
+
+      return {
+        ...state,
+        currentCardIndex: nextIndex,
+        usedCards: newUsedCards,
+        currentBot: nextBot,
+      };
+    }
+
     default:
       return state;
   }
@@ -165,6 +207,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "SELECT_BOTS", payload: count }),
       switchBot: (botNumber: number) =>
         dispatch({ type: "SWITCH_BOT", payload: botNumber }),
+      nextBot: () => dispatch({ type: "NEXT_BOT" }), // v0.3.3+ go to next bot
+      nextBotAndDraw: () => dispatch({ type: "NEXT_BOT_AND_DRAW" }), // v0.3.3+ go to next bot and draw
       getCurrentCard: () => {
         // Game is started if cardSequence is not empty and currentCardIndex is valid
         if (
@@ -182,15 +226,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }),
     [state]
   );
-
-  // Auto-save temporarily disabled to debug infinite re-render issue
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     autoSaveGameState(state);
-  //   }, 300); // Debounce by 300ms
-
-  //   return () => clearTimeout(timeoutId);
-  // }, [state]);
 
   return (
     <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
