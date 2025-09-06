@@ -8,28 +8,34 @@ interface BotCardProps {
 }
 
 const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
+  // Determine effect labels based on number of effects
+  const getEffectLabel = (index: number, totalEffects: number) => {
+    if (totalEffects === 1) {
+      return "Efekt";
+    } else {
+      if (index === 0) return "Pierwszy efekt";
+      if (index === 1) return "Drugi efekt";
+      return `Efekt ${index + 1}`; // fallback for more than 2 effects
+    }
+  };
+
   return (
     <div className={`${styles.card} ${className || ""}`}>
-      <div className={styles.cardHeader}>
-        <h3 className={styles.cardName}>{card.name}</h3>
-        <span className={styles.cardId}>#{card.id}</span>
-      </div>
-
       <div className={styles.cardBody}>
         <div className={styles.effects}>
-          <h4 className={styles.sectionTitle}>Efekty:</h4>
-          <ul className={styles.effectsList}>
-            {card.effects.map((effect, index) => (
-              <li key={index} className={styles.effect}>
-                {effect}
-              </li>
-            ))}
-          </ul>
+          {card.effects.map((effect, index) => (
+            <div key={index} className={styles.effectSection}>
+              <h4 className={styles.effectTitle}>
+                {getEffectLabel(index, card.effects.length)}
+              </h4>
+              <p className={styles.effect}>{effect}</p>
+            </div>
+          ))}
         </div>
 
         {card.ability && (
           <div className={styles.ability}>
-            <h4 className={styles.sectionTitle}>Specjalna umiejętność:</h4>
+            <h4 className={styles.sectionTitle}>Zdolność dodatkowa</h4>
             <p className={styles.abilityText}>{card.ability}</p>
           </div>
         )}
