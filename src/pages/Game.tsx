@@ -156,7 +156,7 @@ const Game: React.FC = () => {
             <div className={styles.gameStatus}>
               <div className={styles.statusInfo}>
                 <span className={styles.cardCounter}>
-                  {`${game.state.currentCardIndex + 1}/${BOT_CARDS.length}`}
+                  📊 Karta {game.state.currentCardIndex + 1}/{BOT_CARDS.length}
                 </span>
                 {game.state.botsSelected &&
                   game.state.botCount &&
@@ -164,8 +164,7 @@ const Game: React.FC = () => {
                     <div className={styles.botInfo}>
                       <div className={styles.currentBotIndicator}>
                         <span className={styles.botIndicatorText}>
-                          Aktualny bot: {game.state.currentBot}/
-                          {game.state.botCount}
+                          🤖 Bot {game.state.currentBot}/{game.state.botCount}
                         </span>
                       </div>
                     </div>
