@@ -184,7 +184,7 @@ const Game: React.FC = () => {
                   <div className={styles.botSelection}>
                     <div className={styles.botSelectionContent}>
                       <h3>Wybierz liczbę botów</h3>
-                      <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
+                      <p>Wybierz ile botów będzie brać udział w tej grze</p>
                       <div className={styles.botButtons}>
                         {[1, 2, 3, 4].map((count) => (
                           <button

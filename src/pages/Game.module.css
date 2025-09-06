@@ -62,10 +62,6 @@
   color: white;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .remainingCards {
