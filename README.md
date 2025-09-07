@@ -23,21 +23,23 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - �️ **NAPRAWIONO v0.3.2**: Błąd pustego ekranu po odświeżeniu strony
 - 🎮 **NOWE v0.3.3**: Automatyczna kolejność botów - usunięto manual przełączniki
 - 🎯 **NOWE v0.3.3**: Dwa inteligentne przyciski akcji zgodnie z zasadami planszówki
-- �📱 Responsywny design dla telefonów (320px+)
+- 🎨 **NOWE v0.3.4**: Ulepszenia komunikatów i UX - lepsze etykiety, unified styling, oczyszczenie kodu
+- 📱 Responsywny design dla telefonów (320px+)
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.3.3 ✅  
-**Status**: Enhanced Game Mechanics - automatyczna kolejność botów i intuicyjna mechanika gry  
+**Aktualna wersja**: 0.3.4 ✅  
+**Status**: Enhanced UX & Communication - lepsze komunikaty, unified styling i oczyszczenie kodu  
 **Poprzednie wersje**:
 
+- 0.3.3 - Enhanced Game Mechanics - automatyczna kolejność botów i intuicyjna mechanika gry
 - 0.3.2 - Major UX Update - przeprojektowany interfejs i zoo-tematyczna stylistyka
 - 0.3.1 - Hotfix dla krytycznych błędów v0.3.0
 - 0.3.0 - Multi-bot support (miał problemy z re-renderami)
 
 ## 📖 Instrukcja obsługi
 
-### 🤖 Gra z wieloma botami (v0.3.3+)
+### 🤖 Gra z wieloma botami (v0.3.4+)
 
 1. **Rozpocznij grę** - kliknij "Rozpocznij grę"
 2. **Wybierz liczbę botów** - wybierz od 1 do 4 botów używając stylizowanych przycisków

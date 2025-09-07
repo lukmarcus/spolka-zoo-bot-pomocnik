@@ -27,8 +27,8 @@ const Home: React.FC = () => {
     },
     {
       id: "load-game",
-      title: "Wczytaj grę",
-      description: "Użyj kodu gry",
+      title: "Wczytaj stan gry",
+      description: "Użyj zapisanego kodu stanu gry",
       action: () => setIsLoadModalOpen(true),
       disabled: false,
     },
@@ -39,8 +39,9 @@ const Home: React.FC = () => {
       <div className={styles.hero}>
         <h2 className={styles.heroTitle}>Bot Pomocnik</h2>
         <p className={styles.heroDescription}>
-          Cyfrowy zamiennik dla kart botów w grze planszowej Spółka ZOO.
-          Zarządzaj 1-4 botami, przełączaj między nimi i udostępniaj stan gry.
+          Cyfrowy zamiennik dla kart botów w grze planszowej{" "}
+          <strong>Spółka ZOO</strong>. Zarządzaj 1-4 botami, przełączaj między
+          nimi i zapisuj stan gry.
         </p>
       </div>
 

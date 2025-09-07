@@ -32,7 +32,7 @@
 }
 
 .cardCounter {
-  background: var(--color-primary);
+  background: var(--button-secondary);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -62,10 +62,6 @@
   color: white;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .remainingCards {
@@ -178,6 +174,7 @@
   border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: center;
+  gap: 1rem;
 }
 
 /* Mobile Responsive */
@@ -234,6 +231,15 @@
 
   .statusInfo {
     gap: 0.25rem;
+  }
+
+  .bottomControls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .bottomControls button {
+    width: 100%;
   }
 }
 

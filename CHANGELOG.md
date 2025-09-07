@@ -5,6 +5,44 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4] - 2025-09-07
+
+### 🎨 Finalne usprawnienia komunikatów i UX
+
+- **📝 Ulepszenia komunikatów gry**
+
+  - Bardziej opisowe komunikaty dla akcji botów:
+    - `"🎯 Dobierz kolejną kartę dla Bota X"` (była: "następną kartę dla bota X")
+    - `"👥 Dobierz kartę dla następnego Bota"` (była: "Dobierz kartę dla następnego bota")
+    - `"🔀 Przetasuj i dobierz kartę dla Bota X"` (było: "Przetasuj i dobierz kartę dla bota X")
+  - Ulepszony modal wyjścia: `"🚪 Czy na pewno chcesz wyjść do głównego menu?"`
+  - Lepsze etykiety przycisków: `"💾 Tak, skopiuj stan gry i wyjdź"`, `"💾 Kopiuj stan gry"`, `"← Wróć do menu"`
+
+- **🎯 Lepsze wskaźniki stanu gry**
+
+  - Ujednolicone wizualnie wskaźniki bota i karty (ten sam kolor tła)
+  - Spójne ikonki: `"📊 Karta 5/13"` i `"🤖 Bot 2/4"`
+  - Usunięta podwójna ramka z wskaźnika aktualnego bota
+  - Dodany gap między dolnymi przyciskami dla lepszej czytelności
+
+- **🃏 Usprawnienia kart botów**
+
+  - Usunięte nazwy i numery kart z interfejsu (czytelniejszy wygląd)
+  - Nowa logika opisów efektów:
+    - 1 efekt: "Efekt"
+    - 2+ efekty: "Pierwszy efekt", "Drugi efekt"
+    - Zdolność: "Zdolność dodatkowa"
+
+- **🧹 Oczyszczenie kodu**
+  - Usunięty niepotrzebny `src/App.css` (nie był używany)
+  - Zminimalizowany `src/index.css` (tylko podstawowy reset CSS)
+  - Oszczędność 1.27 kB w bundle CSS (-5.6%)
+
+### 📱 Responsive design
+
+- Dolne przyciski układane w kolumnę na bardzo małych ekranach (≤480px)
+- Lepsze odstępy między elementami UI na wszystkich urządzeniach
+
 ## [0.3.3] - 2025-09-04
 
 ### 🎮 Ulepszenia mechaniki gry zgodnie z planszówką

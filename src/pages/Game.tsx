@@ -35,12 +35,6 @@ const Game: React.FC = () => {
     }
   };
 
-  const confirmExit = () => {
-    setShowExitModal(false);
-    game.resetGame(); // Reset game state before returning to menu
-    navigate("/");
-  };
-
   const confirmExitWithCopy = async () => {
     // First copy the game code
     const message = await copyGameCodeToClipboard(game.state);
@@ -108,7 +102,7 @@ const Game: React.FC = () => {
     if (game.isDeckExhausted()) {
       return {
         primary: {
-          text: `🔀 Przetasuj i dobierz kartę dla bota ${game.state.currentBot}`,
+          text: `🔀 Przetasuj i dobierz kartę dla Bota ${game.state.currentBot}`,
           action: game.shuffleDeck,
           disabled: false,
           className: "btn-secondary",
@@ -128,7 +122,7 @@ const Game: React.FC = () => {
     // Normal game state - two action buttons
     return {
       primary: {
-        text: `🎯 Dobierz następną kartę dla bota ${game.state.currentBot}`,
+        text: `🎯 Dobierz kolejną kartę dla Bota ${game.state.currentBot}`,
         action: game.drawCard,
         disabled: false,
         className: "btn-primary",
@@ -136,7 +130,7 @@ const Game: React.FC = () => {
       secondary:
         game.state.botCount && game.state.botCount > 1
           ? {
-              text: "👥 Dobierz kartę dla następnego bota",
+              text: "👥 Dobierz kartę dla następnego Bota",
               action: game.nextBotAndDraw,
               disabled: false,
               className: "btn-secondary",
@@ -156,7 +150,7 @@ const Game: React.FC = () => {
             <div className={styles.gameStatus}>
               <div className={styles.statusInfo}>
                 <span className={styles.cardCounter}>
-                  {`${game.state.currentCardIndex + 1}/${BOT_CARDS.length}`}
+                  📊 Karta {game.state.currentCardIndex + 1}/{BOT_CARDS.length}
                 </span>
                 {game.state.botsSelected &&
                   game.state.botCount &&
@@ -164,8 +158,7 @@ const Game: React.FC = () => {
                     <div className={styles.botInfo}>
                       <div className={styles.currentBotIndicator}>
                         <span className={styles.botIndicatorText}>
-                          Aktualny bot: {game.state.currentBot}/
-                          {game.state.botCount}
+                          🤖 Bot {game.state.currentBot}/{game.state.botCount}
                         </span>
                       </div>
                     </div>
@@ -184,7 +177,7 @@ const Game: React.FC = () => {
                   <div className={styles.botSelection}>
                     <div className={styles.botSelectionContent}>
                       <h3>Wybierz liczbę botów</h3>
-                      <p>Wybierz ile botów będzie grać w tej rozgrywce</p>
+                      <p>Wybierz ile botów będzie brać udział w tej grze</p>
                       <div className={styles.botButtons}>
                         {[1, 2, 3, 4].map((count) => (
                           <button
@@ -261,7 +254,7 @@ const Game: React.FC = () => {
           </button>
           {game.state.currentCardIndex >= 0 && (
             <button className="btn-tertiary" onClick={handleCopyGameCode}>
-              📋 Kopiuj stan gry
+              💾 Kopiuj stan gry
             </button>
           )}
         </div>
@@ -271,16 +264,10 @@ const Game: React.FC = () => {
 
       <ConfirmModal
         isOpen={showExitModal}
-        message="Czy na pewno chcesz wyjść do głównego menu?"
-        confirmText={
-          game.state.currentCardIndex >= 0
-            ? "📋 Tak, skopiuj stan gry i wyjdź"
-            : "Tak, wyjdź"
-        }
+        message="🚪 Czy na pewno chcesz wyjść do głównego menu?"
+        confirmText="💾 Tak, skopiuj stan gry i wyjdź"
         cancelText="Anuluj"
-        onConfirm={
-          game.state.currentCardIndex >= 0 ? confirmExitWithCopy : confirmExit
-        }
+        onConfirm={confirmExitWithCopy}
         onCancel={cancelExit}
       />
     </Layout>
