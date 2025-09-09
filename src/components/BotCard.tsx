@@ -28,7 +28,10 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
               <h4 className={styles.effectTitle}>
                 {getEffectLabel(index, card.effects.length)}
               </h4>
-              <p className={styles.effect}>{effect}</p>
+              <p
+                className={styles.effect}
+                dangerouslySetInnerHTML={{ __html: effect }}
+              />
             </div>
           ))}
         </div>
@@ -36,7 +39,10 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
         {card.ability && (
           <div className={styles.ability}>
             <h4 className={styles.sectionTitle}>Zdolność dodatkowa</h4>
-            <p className={styles.abilityText}>{card.ability}</p>
+            <p
+              className={styles.abilityText}
+              dangerouslySetInnerHTML={{ __html: card.ability }}
+            />
           </div>
         )}
       </div>

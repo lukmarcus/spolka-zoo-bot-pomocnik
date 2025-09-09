@@ -88,3 +88,27 @@
     font-size: var(--font-size-sm);
   }
 }
+
+/* Card Text Icons - v0.3.5 */
+:global(.card-icon) {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin: 0 2px;
+  display: inline-block;
+}
+
+/* Responsive icon sizing */
+@media (max-width: 768px) {
+  :global(.card-icon) {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  :global(.card-icon) {
+    width: 12px;
+    height: 12px;
+  }
+}
