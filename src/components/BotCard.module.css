@@ -23,53 +23,31 @@
   gap: 1rem;
 }
 
-.effects {
+.sections {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.effectSection {
+.section {
   background: var(--color-background);
   padding: 0.75rem;
   border-radius: 8px;
   border-left: 3px solid var(--color-primary);
 }
 
-.effectTitle {
+.sectionTitle {
   color: var(--color-primary);
   font-size: var(--font-size-md);
   font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
 
-.effect {
+.sectionText {
   margin: 0;
   font-size: var(--font-size-base);
   color: var(--color-text);
   line-height: 1.4;
-}
-
-.ability {
-  background: var(--color-accent-light);
-  padding: 0.75rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-accent);
-}
-
-.sectionTitle {
-  color: var(--color-text);
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  margin: 0 0 0.5rem 0;
-}
-
-.abilityText {
-  margin: 0;
-  font-size: var(--font-size-base);
-  color: var(--color-text);
-  line-height: 1.4;
-  font-style: italic;
 }
 
 /* Mobile optimizations */
