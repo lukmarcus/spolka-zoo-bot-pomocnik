@@ -89,26 +89,23 @@ export const BOT_CARDS: BotCard[] = [
   {
     id: 10,
     effects: [
-      "Sprzedaj ze swojej puli <span style='color: #FFFFFF; font-weight: bold;'>OWOC</span> kosztujący 2<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' /> lub mniej.",
-      "Usuń wszystkie odkryte karty <span style='color: #77812B; font-weight: bold;'>TALII WPŁYWU</span>. Następnie uzupełnij <span style='color: #77812B; font-weight: bold;'>TALIĘ WPŁYWU</span>.",
+      "Jeśli nie jesteś pierwszym graczem, dobierz wierzchnią kartę z TALII WPŁYWU. Pokaż ją wszystkim graczom, a następnie wtasuj do TALII Spółki <img src='/src/assets/images/interface/apple.png' alt='jabłko' class='card-icon' />.",
     ],
     ability:
-      "Dobierz 4<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' />.",
+      "Jeśli to zrobiłeś, dobierz 5<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' />.",
   },
   {
     id: 11,
     effects: [
-      "Sprzedaj ze swojej puli <span style='color: #FFFFFF; font-weight: bold;'>OWOC</span> kosztujący 4<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' /> lub więcej.",
-      "Usuń wszystkie odkryte karty <span style='color: #77812B; font-weight: bold;'>TALII WPŁYWU</span>. Następnie uzupełnij <span style='color: #77812B; font-weight: bold;'>TALIĘ WPŁYWU</span>.",
+      "Jeśli nie jesteś pierwszym graczem, dobierz wierzchnią kartę z TALII WPŁYWU. Pokaż ją wszystkim graczom, a następnie wtasuj do TALII Spółki <img src='/src/assets/images/interface/lemon.png' alt='cytryna' class='card-icon' />.",
     ],
     ability:
-      "Dobierz 6<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' />.",
+      "Jeśli to zrobiłeś, dobierz 5<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' />.",
   },
   {
     id: 12,
     effects: [
-      "Jeśli nie jesteś pierwszym graczem, dobierz wierzchnią kartę z <span style='color: #77812B; font-weight: bold;'>TALII WPŁYWU</span>. Pokaż ją wszystkim graczom, a następnie wtasuj do <span style='color: #77812B; font-weight: bold;'>TALII Spółki</span> <img src='/src/assets/images/interface/lemon.png' alt='cytryna' class='card-icon' />.",
-      "Jeśli nie jesteś pierwszym graczem, dobierz wierzchnią kartę z <span style='color: #77812B; font-weight: bold;'>TALII WPŁYWU</span>. Pokaż ją wszystkim graczom, a następnie wtasuj do <span style='color: #77812B; font-weight: bold;'>TALII Spółki</span> <img src='/src/assets/images/interface/pineapple.png' alt='ananas' class='card-icon' />.",
+      "Jeśli nie jesteś pierwszym graczem, dobierz wierzchnią kartę z TALII WPŁYWU. Pokaż ją wszystkim graczom, a następnie wtasuj do TALII Spółki <img src='/src/assets/images/interface/pineapple.png' alt='ananas' class='card-icon' />.",
     ],
     ability:
       "Jeśli to zrobiłeś, dobierz 5<img src='/src/assets/images/interface/money.png' alt='moneta' class='card-icon' />.",
