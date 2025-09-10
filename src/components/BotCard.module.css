@@ -90,3 +90,25 @@
     height: 12px;
   }
 }
+
+:global(.text-green) {
+  color: #77812b;
+}
+:global(.text-red) {
+  color: #d14019;
+}
+:global(.text-orange) {
+  color: #e6a317;
+}
+:global(.text-blue) {
+  color: #1a4d8f;
+}
+:global(.text-purple) {
+  color: #7b3fa0;
+}
+:global(.text-gray) {
+  color: #888;
+}
+:global(.text-white) {
+  color: #fff;
+}
