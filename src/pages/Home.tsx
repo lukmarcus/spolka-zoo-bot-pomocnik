@@ -79,6 +79,8 @@ const Home: React.FC = () => {
             <li>✅ Uproszczone kopiowanie (v0.2.2)</li>
             <li>✅ Multi-bot support (v0.3.0)</li>
             <li>✅ Krytyczne poprawki UX (v0.3.1)</li>
+            <li>🎨 Globalne kolorowanie tekstu kart botów (v0.3.5)</li>
+            <li>📝 Pełne oryginalne opisy kart (v0.3.5)</li>
             <li>⏳ Osobne talie botów (v0.4.0+ roadmap)</li>
           </ul>
         </div>
