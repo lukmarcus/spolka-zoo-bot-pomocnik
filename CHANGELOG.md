@@ -5,6 +5,26 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.5] - 2025-09-11
+
+### 🎨 Globalne kolorowanie tekstu kart
+
+- Wszystkie frazy kluczowe w kartach botów są kolorowane zgodnie z oryginalnymi zasadami gry (OWOC, MAGAZYN, POMOCNIK, TALIA SPÓŁKI, TALIA WPŁYWU, UDZIAŁ, SPÓŁKA).
+- Usunięto pogrubienie z kolorów dla lepszej czytelności.
+
+### 🖼️ Uproszczone zarządzanie ikonami
+
+- Wszystkie ikony w kartach botów są wstawiane przez obiekt ICONS (np. `${ICONS.money}`), co upraszcza edycję i zarządzanie grafikami.
+- Usunięto atrybut alt z ikon w kartach.
+
+### 📝 Pełne oryginalne opisy kart
+
+- Opisy kart botów są zgodne z grą Spółka ZOO.
+
+### 🧹 Porządki w kodzie kart
+
+- Ujednolicenie stylów, uproszczenie kodu danych kart.
+
 ## [0.3.4] - 2025-09-07
 
 ### 🎨 Finalne usprawnienia komunikatów i UX
@@ -676,7 +696,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Naprawione
 
-- 🐛 **WCAG 320px compliance**: Naprawiono poziomy overflow na ekranach 320px (wymóg dostępności)
+- 🐛 **WCAG 320px compliance**: Naprawiono poziome overflow na ekranach 320px (wymóg dostępności)
 - 🐛 **Horizontal scrolling**: Wyeliminowano poziome przewijanie na małych ekranach (320px-360px)
 - 🐛 **CSS media query conflicts**: Naprawiono konflikty między różnymi zakresami responsywności
 - 🐛 **Card sizing issues**: Ujednolicono szerokość kart dla płynnych przejść między rozmiarami ekranu
@@ -701,7 +721,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Techniczne
 
 - 📦 **CSS bundle size**: Zoptymalizowano z 10.49kB → 10.03kB
-- 🧹 **Code cleanup**: Usunięto konfliktujące reguły CSS i uproszono strukturę responsywności
+- 🧹 **Code cleanup**: Usunięto konfliktujące reguły CSS i uproszczono strukturę responsywności
 
 ## [0.0.2] - 2025-08-17
 
