@@ -2,61 +2,27 @@
 
 ## 🎯 Roadmapa przyszłych wersji
 
-| Wersja | Status        | Opis                           | Szczegóły techniczne                |
-| ------ | ------------- | ------------------------------ | ----------------------------------- |
-| 0.3.4  | ✅ Aktualna   | Finalne usprawnienia mechaniki | Komunikaty gry, UX, kody kart       |
-| 0.3.5  | 🎯 Następna   | Prawdziwe teksty i ikony kart  | Real card content, proper icons     |
-| 0.4.0  | 🔜 Planowana  | Osobne talie dla każdego bota  | Individual bot decks                |
-| 0.5.0  | 🔜 Planowana  | Wizualizacja kart              | Card visualization system           |
-| 0.6.0+ | 🔮 Przyszłość | Zaawansowane funkcje           | Statistics, tournaments, cloud sync |
+| Wersja | Status        | Opis                          | Szczegóły techniczne                |
+| ------ | ------------- | ----------------------------- | ----------------------------------- |
+| 0.3.5  | ✅ Aktualna   | Prawdziwe teksty i ikony kart | Real card content, proper icons     |
+| 0.4.0  | 🎯 Następna   | Osobne talie dla każdego bota | Individual bot decks                |
+| 0.5.0  | 🔜 Planowana  | Wizualizacja kart             | Card visualization system           |
+| 0.6.0+ | 🔮 Przyszłość | Zaawansowane funkcje          | Statistics, tournaments, cloud sync |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.3.4 - Finalne usprawnienia mechaniki ✅ UKOŃCZONE
-
-**Cel**: Finalne usprawnienia komunikatów i UX
-
-- [x] **Ulepszenia komunikatów gry**
-
-  - ✅ Bardziej opisowe komunikaty dla akcji botów
-  - ✅ Lepsze etykiety przycisków i modali
-  - ✅ Spójne ikonki w komunikatach
-
-- [x] **Lepsze wskaźniki stanu gry**
-
-  - ✅ Ujednolicone style wskaźników bota i karty
-  - ✅ Usunięta podwójna ramka z wskaźnika bota
-  - ✅ Dodany gap między dolnymi przyciskami
-
-- [x] **Usprawienia kart botów**
-
-  - ✅ Usunięte nazwy i numery kart z interfejsu
-  - ✅ Nowa logika opisów efektów (Efekt/Pierwszy efekt/etc.)
-
-- [x] **Oczyszczenie kodu**
-  - ✅ Usunięte niepotrzebne pliki CSS
-  - ✅ Zoptymalizowany bundle size
-
-### v0.3.5 - Prawdziwe teksty i ikony kart 🎯
+### v0.3.5 - Prawdziwe teksty i ikony kart ✅
 
 **Cel**: Integracja prawdziwych treści kart ze Spółki ZOO
 
-- [ ] **Autentyczne ikony kart**
-
-  - Ikony reprezentujące prawdziwe efekty kart
-  - Spójny system wizualny dla różnych typów efektów
-  - Wysokiej jakości grafiki dopasowane do stylu gry
-
-- [ ] **Rzeczywiste opisy efektów**
-
-  - Oryginalne teksty efektów kart z gry planszowej
-  - Poprawne tłumaczenie mechanik na język cyfrowy
-  - Precyzyjne opisy działania każdego efektu
-
-- [ ] **Integracja z bazą danych kart**
-  - Strukturalna organizacja danych o kartach
-  - Łatwa rozszerzalność o nowe karty
-  - Optymalizacja ładowania treści
+- [x] Pełne oryginalne opisy kart zgodne z karty.md (ręczna synchronizacja i porównanie każdej karty)
+- [x] Dodanie grafik ikon do repozytorium (money, card, apple, lemon, pineapple)
+- [x] Globalne kolorowanie kluczowych fraz w efektach kart (OWOC, MAGAZYN, POMOCNIK, TALIA SPÓŁKI, TALIA WPŁYWU, UDZIAŁ, SPÓŁKA) – obsługa wszystkich przypadków
+- [x] Wsparcie dla kart z jednym efektem (poprawiona logika renderowania)
+- [x] Uproszczone zarządzanie ikonami przez obiekt ICONS, usunięcie alt z ikon
+- [x] Refaktor stylów CSS: globalne klasy kolorów, usunięcie pogrubienia
+- [x] Uproszczenie i porządki w kodzie danych kart
+- [x] Aktualizacja dokumentacji (README, CHANGELOG, DOCS)
 
 ### v0.4.0 - Osobne talie dla każdego bota 🔜
 

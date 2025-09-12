@@ -17,21 +17,23 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - ⚡ **NOWE**: Inteligentna walidacja kodów gry w czasie rzeczywistym
 - 🤖 **NOWE v0.3.0**: Obsługa wielu botów (2-4) z jedną talią
 - 🔄 **NOWE v0.3.0**: Przełączanie między botami podczas gry
-- 🔧 **NAPRAWIONO v0.3.1**: Krytyczne błędy UX z v0.3.0 (re-rendery, nawigacja, licznik kart)
+- 🛠️ **NAPRAWIONO v0.3.1**: Krytyczne błędy UX z v0.3.0 (re-rendery, nawigacja, licznik kart)
 - 🎨 **NOWE v0.3.2**: Przeprojektowany interfejs wyboru botów z zoo-tematyczną stylistyką
 - ⚡ **NOWE v0.3.2**: Usprawiony flow gry - automatyczne dobranie pierwszej karty po wyborze botów
-- �️ **NAPRAWIONO v0.3.2**: Błąd pustego ekranu po odświeżeniu strony
+- 🛠️ **NAPRAWIONO v0.3.2**: Błąd pustego ekranu po odświeżeniu strony
 - 🎮 **NOWE v0.3.3**: Automatyczna kolejność botów - usunięto manual przełączniki
-- 🎯 **NOWE v0.3.3**: Dwa inteligentne przyciski akcji zgodnie z zasadami planszówki
+- 🏆 **NOWE v0.3.3**: Dwa inteligentne przyciski akcji zgodnie z zasadami planszówki
 - 🎨 **NOWE v0.3.4**: Ulepszenia komunikatów i UX - lepsze etykiety, unified styling, oczyszczenie kodu
 - 📱 Responsywny design dla telefonów (320px+)
+- 🎨 **NOWE v0.3.5**: Globalne kolorowanie tekstu kart, uproszczone zarządzanie ikonami przez obiekt ICONS, usunięcie pogrubienia z kolorów, porządki w kodzie kart, **pełne oryginalne opisy kart**
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.3.4 ✅  
-**Status**: Enhanced UX & Communication - lepsze komunikaty, unified styling i oczyszczenie kodu  
+**Aktualna wersja**: 0.3.5 ✅  
+**Status**: Globalne kolorowanie tekstu kart, uproszczone ikony, czystszy kod  
 **Poprzednie wersje**:
 
+- 0.3.4 - Enhanced UX & Communication - lepsze komunikaty, unified styling i oczyszczenie kodu
 - 0.3.3 - Enhanced Game Mechanics - automatyczna kolejność botów i intuicyjna mechanika gry
 - 0.3.2 - Major UX Update - przeprojektowany interfejs i zoo-tematyczna stylistyka
 - 0.3.1 - Hotfix dla krytycznych błędów v0.3.0

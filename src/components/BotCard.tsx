@@ -22,23 +22,26 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
   return (
     <div className={`${styles.card} ${className || ""}`}>
       <div className={styles.cardBody}>
-        <div className={styles.effects}>
+        <div className={styles.sections}>
           {card.effects.map((effect, index) => (
-            <div key={index} className={styles.effectSection}>
-              <h4 className={styles.effectTitle}>
+            <div key={index} className={styles.section}>
+              <h4 className={styles.sectionTitle}>
                 {getEffectLabel(index, card.effects.length)}
               </h4>
-              <p className={styles.effect}>{effect}</p>
+              <p
+                className={styles.sectionText}
+                dangerouslySetInnerHTML={{ __html: effect }}
+              />
             </div>
           ))}
-        </div>
-
-        {card.ability && (
-          <div className={styles.ability}>
+          <div className={styles.section}>
             <h4 className={styles.sectionTitle}>Zdolność dodatkowa</h4>
-            <p className={styles.abilityText}>{card.ability}</p>
+            <p
+              className={styles.sectionText}
+              dangerouslySetInnerHTML={{ __html: card.ability as string }}
+            />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

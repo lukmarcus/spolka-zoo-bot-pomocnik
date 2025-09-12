@@ -2,9 +2,8 @@
 
 export interface BotCard {
   id: number; // 1-13
-  name: string;
   effects: string[]; // 1-2 effects as strings (simplified for v0.1.0)
-  ability?: string; // additional ability (optional)
+  ability: string; // additional ability (always present)
 }
 
 export interface GameState {
@@ -52,7 +51,6 @@ export interface GameContextType {
 // Additional types for future multi-bot functionality
 export interface Bot {
   id: string;
-  name: string;
   currentCard?: number; // ID of current card
 }
 
