@@ -6,17 +6,22 @@ export interface BotCard {
   ability: string; // additional ability (always present)
 }
 
+export interface BotDeck {
+  botId: number;
+  cardSequence: number[];
+  currentCardIndex: number;
+  usedCards: number[];
+}
+
 export interface GameState {
-  currentCardIndex: number; // current position in deck (0-12)
-  cardSequence: number[]; // shuffled card sequence (0-12)
-  usedCards: number[]; // used cards in this round
-  // v0.2.1+ multi-bot support (optional)
+  mode: "shared" | "individual"; // tryb gry: wspólna talia lub osobne talie
+  currentCardIndex?: number; // tylko dla trybu shared
+  cardSequence?: number[]; // tylko dla trybu shared
+  usedCards?: number[]; // tylko dla trybu shared
+  botDecks?: BotDeck[]; // tylko dla trybu individual
   botCount?: number; // 1-4 bots (default: 1)
   currentBot?: number; // 1-4 current bot (default: 1)
-  // v0.3.0+ bot selection
-  botsSelected?: boolean; // whether user selected number of bots
-  // shuffleCount removed - not needed in v0.2.1
-  // gameStarted removed - code existence = game started
+  botsSelected?: boolean; // czy wybrano boty
 }
 
 export interface GameCodePreview {
@@ -57,9 +62,8 @@ export interface Bot {
 export interface MultiGameState {
   bots: Bot[];
   currentBotIndex: number;
-  gameMode: "shared" | "separate"; // shared deck vs separate decks
-  sharedDeck?: GameState; // for shared mode
-  separateDecks?: { [botId: string]: GameState }; // for separate mode
+  mode: "shared" | "individual";
+  botDecks?: BotDeck[];
 }
 
 // Enums as const assertions (compatible with erasableSyntaxOnly)

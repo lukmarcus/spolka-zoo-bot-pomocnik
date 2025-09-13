@@ -1,3 +1,28 @@
+/* Mode Selection UI */
+.modeButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.modeOption {
+  background: var(--button-secondary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modeOption.selected {
+  background: var(--button-primary);
+  color: #fff;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
 /* Game Page Styles */
 
 .gameContainer {

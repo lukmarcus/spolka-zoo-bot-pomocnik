@@ -5,7 +5,7 @@
 
 import { createContext, useReducer, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
-import type { GameState, GameContextType } from "../types";
+import type { BotDeck, GameState, GameContextType } from "../types";
 import { TOTAL_CARDS } from "../data/botCards";
 import { loadAutoSavedGameState } from "../utils/gameStorage";
 
@@ -28,36 +28,69 @@ type GameAction =
   | { type: "NEXT_BOT" } // v0.3.3+ go to next bot in sequence
   | { type: "NEXT_BOT_AND_DRAW" }; // v0.3.3+ go to next bot and draw card
 
+// Utility function to generate shuffled sequence
+function generateShuffledSequence(): number[] {
+  const sequence = Array.from({ length: TOTAL_CARDS }, (_, i) => i);
+  // Fisher-Yates shuffle
+  for (let i = sequence.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
+  }
+  return sequence;
+}
+
+// Utility: generate botDecks for individual mode
+function generateBotDecks(botCount: number): BotDeck[] {
+  return Array.from({ length: botCount }, (_, idx) => ({
+    botId: idx + 1,
+    cardSequence: generateShuffledSequence(),
+    currentCardIndex: -1,
+    usedCards: [],
+  }));
+}
+
 // Get initial state (with auto-save restore)
 function getInitialState(): GameState {
   const autoSaved = loadAutoSavedGameState();
   if (autoSaved) {
-    // Ensure botsSelected is set for auto-saved games
     return {
       ...autoSaved,
       botsSelected: autoSaved.botCount ? true : false,
+      mode: autoSaved.mode || "shared",
     };
   }
-
   return {
+    mode: "shared",
     currentCardIndex: -1,
     cardSequence: [],
     usedCards: [],
     botCount: 1,
     currentBot: 1,
-    botsSelected: false, // v0.3.0+ require bot selection for new games
+    botsSelected: false,
   };
 }
 
-// Get clean state for new game
-function getCleanState(): GameState {
+function getCleanState(
+  mode: "shared" | "individual" = "shared",
+  botCount = 1
+): GameState {
+  if (mode === "individual") {
+    return {
+      mode,
+      botDecks: generateBotDecks(botCount),
+      botCount,
+      currentBot: 1,
+      botsSelected: false,
+    };
+  }
   return {
+    mode,
     currentCardIndex: -1,
     cardSequence: [],
     usedCards: [],
-    botCount: 1,
+    botCount,
     currentBot: 1,
-    botsSelected: false, // v0.3.0+ require bot selection
+    botsSelected: false,
   };
 }
 
@@ -68,29 +101,77 @@ const initialState: GameState = getInitialState();
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "NEW_GAME": {
-      // v0.3.0+ Don't generate sequence until bots are selected
-      const cleanState = getCleanState();
+      // Tryb shared/individual z zachowaniem botCount
+      return getCleanState(state.mode, state.botCount || 1);
+    }
+    case "SELECT_BOTS": {
+      // Tryb shared/individual z nową liczbą botów
+      if (state.mode === "individual") {
+        return {
+          ...state,
+          botCount: action.payload,
+          botDecks: generateBotDecks(action.payload),
+          currentBot: 1,
+          botsSelected: true,
+        };
+      }
+      // shared
+      const shuffledSequence = generateShuffledSequence();
       return {
-        ...cleanState,
-        currentCardIndex: -1, // Start before first card
+        ...state,
+        botCount: action.payload,
+        currentBot: 1,
+        botsSelected: true,
+        cardSequence: shuffledSequence,
+        currentCardIndex: -1,
+        usedCards: [],
       };
     }
 
     case "DRAW_CARD": {
-      // Game is started if cardSequence is not empty
-      if (state.cardSequence.length === 0) {
+      if (state.mode === "individual" && state.botDecks && state.currentBot) {
+        // Pobierz deck aktualnego bota
+        const botIdx = state.currentBot - 1;
+        const botDecks = [...state.botDecks];
+        const botDeck = botDecks[botIdx];
+        if (!botDeck || botDeck.cardSequence.length === 0) return state;
+        const nextIndex = botDeck.currentCardIndex + 1;
+        if (
+          nextIndex >= botDeck.cardSequence.length ||
+          nextIndex >= TOTAL_CARDS
+        )
+          return state;
+        const newUsedCards = [
+          ...botDeck.usedCards,
+          botDeck.cardSequence[nextIndex],
+        ];
+        botDecks[botIdx] = {
+          ...botDeck,
+          currentCardIndex: nextIndex,
+          usedCards: newUsedCards,
+        };
+        return {
+          ...state,
+          botDecks,
+        };
+      }
+      // shared mode
+      const cardSequence = Array.isArray(state.cardSequence)
+        ? state.cardSequence
+        : [];
+      const currentCardIndex =
+        typeof state.currentCardIndex === "number"
+          ? state.currentCardIndex
+          : -1;
+      const usedCards = Array.isArray(state.usedCards) ? state.usedCards : [];
+      if (cardSequence.length === 0) {
         return state;
       }
-
-      const nextIndex = state.currentCardIndex + 1;
-
-      // Check if trying to draw beyond deck
-      if (nextIndex >= TOTAL_CARDS) {
-        return state; // Don't auto-shuffle, let user manually shuffle
+      const nextIndex = currentCardIndex + 1;
+      if (nextIndex >= cardSequence.length || nextIndex >= TOTAL_CARDS) {
+        return state;
       }
-
-      const newUsedCards = [...state.usedCards, state.cardSequence[nextIndex]];
-
+      const newUsedCards = [...usedCards, cardSequence[nextIndex]];
       return {
         ...state,
         currentCardIndex: nextIndex,
@@ -113,18 +194,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case "LOAD_GAME":
       return action.payload;
 
-    case "SELECT_BOTS": {
-      const shuffledSequence = generateShuffledSequence();
-      return {
-        ...state,
-        botCount: action.payload,
-        currentBot: 1, // Start with first bot
-        botsSelected: true,
-        cardSequence: shuffledSequence,
-        currentCardIndex: -1, // Ready to draw first card
-      };
-    }
-
     case "SWITCH_BOT": {
       return {
         ...state,
@@ -145,25 +214,61 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "NEXT_BOT_AND_DRAW": {
-      // v0.3.3+ Go to next bot and draw card for that bot
-      if (state.cardSequence.length === 0) {
+      if (
+        state.mode === "individual" &&
+        state.botDecks &&
+        state.currentBot &&
+        state.botCount
+      ) {
+        const nextBot = (state.currentBot % state.botCount) + 1;
+        // Draw for next bot
+        const botIdx = nextBot - 1;
+        const botDecks = [...state.botDecks];
+        const botDeck = botDecks[botIdx];
+        if (!botDeck || botDeck.cardSequence.length === 0)
+          return { ...state, currentBot: nextBot };
+        const nextIndex = botDeck.currentCardIndex + 1;
+        if (
+          nextIndex >= botDeck.cardSequence.length ||
+          nextIndex >= TOTAL_CARDS
+        )
+          return { ...state, currentBot: nextBot };
+        const newUsedCards = [
+          ...botDeck.usedCards,
+          botDeck.cardSequence[nextIndex],
+        ];
+        botDecks[botIdx] = {
+          ...botDeck,
+          currentCardIndex: nextIndex,
+          usedCards: newUsedCards,
+        };
+        return {
+          ...state,
+          botDecks,
+          currentBot: nextBot,
+        };
+      }
+      // shared mode
+      const cardSequence = Array.isArray(state.cardSequence)
+        ? state.cardSequence
+        : [];
+      const currentCardIndex =
+        typeof state.currentCardIndex === "number"
+          ? state.currentCardIndex
+          : -1;
+      const usedCards = Array.isArray(state.usedCards) ? state.usedCards : [];
+      if (cardSequence.length === 0) {
         return state;
       }
-
-      const nextIndex = state.currentCardIndex + 1;
-
-      // Check if trying to draw beyond deck
-      if (nextIndex >= TOTAL_CARDS) {
-        return state; // Don't auto-shuffle, let user manually shuffle
+      const nextIndex = currentCardIndex + 1;
+      if (nextIndex >= cardSequence.length || nextIndex >= TOTAL_CARDS) {
+        return state;
       }
-
       const nextBot =
         state.currentBot && state.botCount
           ? (state.currentBot % state.botCount) + 1
           : 1;
-
-      const newUsedCards = [...state.usedCards, state.cardSequence[nextIndex]];
-
+      const newUsedCards = [...usedCards, cardSequence[nextIndex]];
       return {
         ...state,
         currentCardIndex: nextIndex,
@@ -175,19 +280,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     default:
       return state;
   }
-}
-
-// Utility function to generate shuffled sequence
-function generateShuffledSequence(): number[] {
-  const sequence = Array.from({ length: TOTAL_CARDS }, (_, i) => i);
-
-  // Fisher-Yates shuffle
-  for (let i = sequence.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
-  }
-
-  return sequence;
 }
 
 // Provider component
@@ -210,19 +302,44 @@ export function GameProvider({ children }: { children: ReactNode }) {
       nextBot: () => dispatch({ type: "NEXT_BOT" }), // v0.3.3+ go to next bot
       nextBotAndDraw: () => dispatch({ type: "NEXT_BOT_AND_DRAW" }), // v0.3.3+ go to next bot and draw
       getCurrentCard: () => {
-        // Game is started if cardSequence is not empty and currentCardIndex is valid
+        if (state.mode === "individual" && state.botDecks && state.currentBot) {
+          const botIdx = state.currentBot - 1;
+          const botDeck = state.botDecks[botIdx];
+          if (!botDeck || botDeck.cardSequence.length === 0) return null;
+          const idx = botDeck.currentCardIndex;
+          if (idx < 0 || idx >= botDeck.cardSequence.length) return null;
+          return botDeck.cardSequence[idx];
+        }
+        // shared mode
+        const cardSequence = state.cardSequence ?? [];
+        const currentCardIndex = state.currentCardIndex ?? -1;
         if (
-          state.cardSequence.length === 0 ||
-          state.currentCardIndex < 0 ||
-          state.currentCardIndex >= state.cardSequence.length
+          cardSequence.length === 0 ||
+          currentCardIndex < 0 ||
+          currentCardIndex >= cardSequence.length
         ) {
           return null;
         }
-        return state.cardSequence[state.currentCardIndex];
+        return cardSequence[currentCardIndex];
       },
-      isDeckExhausted: () => state.currentCardIndex >= TOTAL_CARDS - 1,
-      getCardsRemaining: () =>
-        Math.max(0, TOTAL_CARDS - (state.currentCardIndex + 1)),
+      isDeckExhausted: () => {
+        if (state.mode === "individual" && state.botDecks && state.currentBot) {
+          const botIdx = state.currentBot - 1;
+          const botDeck = state.botDecks[botIdx];
+          if (!botDeck) return true;
+          return botDeck.currentCardIndex >= TOTAL_CARDS - 1;
+        }
+        return (state.currentCardIndex ?? -1) >= TOTAL_CARDS - 1;
+      },
+      getCardsRemaining: () => {
+        if (state.mode === "individual" && state.botDecks && state.currentBot) {
+          const botIdx = state.currentBot - 1;
+          const botDeck = state.botDecks[botIdx];
+          if (!botDeck) return 0;
+          return Math.max(0, TOTAL_CARDS - (botDeck.currentCardIndex + 1));
+        }
+        return Math.max(0, TOTAL_CARDS - ((state.currentCardIndex ?? -1) + 1));
+      },
     }),
     [state]
   );

@@ -14,11 +14,18 @@ const Game: React.FC = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string>("");
   const [selectedBotCount, setSelectedBotCount] = useState<number | null>(null);
+  const [selectedMode, setSelectedMode] = useState<"shared" | "individual">(
+    "shared"
+  );
 
   // v0.3.2 Reset game state on page refresh to ensure clean bot selection
   React.useEffect(() => {
     // If we're in an inconsistent state (bots not selected but cards drawn), reset
-    if (!game.state.botsSelected && game.state.currentCardIndex >= 0) {
+    if (
+      !game.state.botsSelected &&
+      typeof game.state.currentCardIndex === "number" &&
+      game.state.currentCardIndex >= 0
+    ) {
       game.resetGame();
     }
   }, [game, game.state.botsSelected, game.state.currentCardIndex]);
@@ -62,13 +69,19 @@ const Game: React.FC = () => {
     setSelectedBotCount(count);
   };
 
+  const handleModeSelection = (mode: "shared" | "individual") => {
+    setSelectedMode(mode);
+    setSelectedBotCount(null);
+  };
+
   const handleStartGame = () => {
     if (selectedBotCount) {
+      // Ustaw tryb gry w stanie
+      game.state.mode = selectedMode;
       game.selectBots(selectedBotCount);
-      // v0.3.2 Auto-draw first card to skip intermediate screen
       setTimeout(() => {
         game.drawCard();
-      }, 100); // Small delay to ensure state is updated
+      }, 100);
     }
   };
 
@@ -80,7 +93,7 @@ const Game: React.FC = () => {
 
   const currentCardId = game.getCurrentCard();
   const currentCard =
-    currentCardId !== null
+    typeof currentCardId === "number"
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
 
@@ -146,23 +159,38 @@ const Game: React.FC = () => {
       <div className={styles.gameContainer}>
         <div className={styles.gameActive}>
           {/* Show game status only when cards are drawn (hide during bot selection and before first card) */}
-          {game.state.botsSelected && game.state.currentCardIndex >= 0 && (
+          {game.state.botsSelected && (
             <div className={styles.gameStatus}>
               <div className={styles.statusInfo}>
                 <span className={styles.cardCounter}>
-                  📊 Karta {game.state.currentCardIndex + 1}/{BOT_CARDS.length}
+                  📊 Karta{" "}
+                  {game.state.mode === "individual" &&
+                  game.state.botDecks &&
+                  game.state.currentBot
+                    ? (game.state.botDecks[game.state.currentBot - 1]
+                        ?.currentCardIndex ?? -1) + 1
+                    : typeof game.state.currentCardIndex === "number"
+                    ? game.state.currentCardIndex + 1
+                    : 0}
+                  /{BOT_CARDS.length}
                 </span>
-                {game.state.botsSelected &&
-                  game.state.botCount &&
-                  game.state.botCount > 1 && (
-                    <div className={styles.botInfo}>
-                      <div className={styles.currentBotIndicator}>
-                        <span className={styles.botIndicatorText}>
-                          🤖 Bot {game.state.currentBot}/{game.state.botCount}
-                        </span>
-                      </div>
+                <span className={styles.cardsLeft}>
+                  🃏 Pozostało: {game.getCardsRemaining()}
+                </span>
+                {game.state.botCount && game.state.botCount > 1 && (
+                  <div className={styles.botInfo}>
+                    <div className={styles.currentBotIndicator}>
+                      <span className={styles.botIndicatorText}>
+                        🤖 Bot {game.state.currentBot}/{game.state.botCount}
+                      </span>
                     </div>
-                  )}
+                  </div>
+                )}
+                {game.isDeckExhausted() && (
+                  <span className={styles.deckExhausted}>
+                    🔔 Talia wyczerpana!
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -176,6 +204,28 @@ const Game: React.FC = () => {
                   // v0.3.2 Always show bot selection when no cards are drawn
                   <div className={styles.botSelection}>
                     <div className={styles.botSelectionContent}>
+                      <h3>Wybierz tryb gry</h3>
+                      <p>
+                        Wybierz czy boty mają wspólną talię czy osobne talie
+                      </p>
+                      <div className={styles.modeButtons}>
+                        <button
+                          className={`${styles.modeOption} ${
+                            selectedMode === "shared" ? styles.selected : ""
+                          }`}
+                          onClick={() => handleModeSelection("shared")}
+                        >
+                          Wspólna talia
+                        </button>
+                        <button
+                          className={`${styles.modeOption} ${
+                            selectedMode === "individual" ? styles.selected : ""
+                          }`}
+                          onClick={() => handleModeSelection("individual")}
+                        >
+                          Osobne talie
+                        </button>
+                      </div>
                       <h3>Wybierz liczbę botów</h3>
                       <p>Wybierz ile botów będzie brać udział w tej grze</p>
                       <div className={styles.botButtons}>
@@ -197,8 +247,11 @@ const Game: React.FC = () => {
                       <div className={styles.startGameSection}>
                         {selectedBotCount ? (
                           <p className={styles.selectedInfo}>
-                            Wybrano: {selectedBotCount}{" "}
-                            {selectedBotCount === 1 ? "bot" : "boty"}
+                            Wybrano: {selectedBotCount} bot
+                            {selectedBotCount > 1 ? "y" : ""}, tryb:{" "}
+                            {selectedMode === "shared"
+                              ? "wspólna talia"
+                              : "osobne talie"}
                           </p>
                         ) : (
                           <p className={styles.selectedInfo}>
@@ -252,11 +305,12 @@ const Game: React.FC = () => {
           <button className="btn-secondary" onClick={handleBackToMenu}>
             ← Wróć do menu
           </button>
-          {game.state.currentCardIndex >= 0 && (
-            <button className="btn-tertiary" onClick={handleCopyGameCode}>
-              💾 Kopiuj stan gry
-            </button>
-          )}
+          {typeof game.state.currentCardIndex === "number" &&
+            game.state.currentCardIndex >= 0 && (
+              <button className="btn-tertiary" onClick={handleCopyGameCode}>
+                💾 Kopiuj stan gry
+              </button>
+            )}
         </div>
 
         {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
