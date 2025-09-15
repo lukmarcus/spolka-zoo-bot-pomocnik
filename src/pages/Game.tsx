@@ -71,7 +71,6 @@ const Game: React.FC = () => {
 
   const handleModeSelection = (mode: "shared" | "individual") => {
     setSelectedMode(mode);
-    setSelectedBotCount(null);
   };
 
   const handleStartGame = () => {
@@ -204,28 +203,6 @@ const Game: React.FC = () => {
                   // v0.3.2 Always show bot selection when no cards are drawn
                   <div className={styles.botSelection}>
                     <div className={styles.botSelectionContent}>
-                      <h3>Wybierz tryb gry</h3>
-                      <p>
-                        Wybierz czy boty mają wspólną talię czy osobne talie
-                      </p>
-                      <div className={styles.modeButtons}>
-                        <button
-                          className={`${styles.modeOption} ${
-                            selectedMode === "shared" ? styles.selected : ""
-                          }`}
-                          onClick={() => handleModeSelection("shared")}
-                        >
-                          Wspólna talia
-                        </button>
-                        <button
-                          className={`${styles.modeOption} ${
-                            selectedMode === "individual" ? styles.selected : ""
-                          }`}
-                          onClick={() => handleModeSelection("individual")}
-                        >
-                          Osobne talie
-                        </button>
-                      </div>
                       <h3>Wybierz liczbę botów</h3>
                       <p>Wybierz ile botów będzie brać udział w tej grze</p>
                       <div className={styles.botButtons}>
@@ -244,6 +221,36 @@ const Game: React.FC = () => {
                           </button>
                         ))}
                       </div>
+                      {/* Show mode selection only when 2-4 bots selected */}
+                      {selectedBotCount && selectedBotCount >= 2 ? (
+                        <>
+                          <h3>Wybierz tryb gry</h3>
+                          <p>
+                            Wybierz czy boty mają wspólną talię czy osobne talie
+                          </p>
+                          <div className={styles.modeButtons}>
+                            <button
+                              className={`${styles.modeOption} ${
+                                selectedMode === "shared" ? styles.selected : ""
+                              }`}
+                              onClick={() => handleModeSelection("shared")}
+                            >
+                              Wspólna talia
+                            </button>
+                            <button
+                              className={`${styles.modeOption} ${
+                                selectedMode === "individual"
+                                  ? styles.selected
+                                  : ""
+                              }`}
+                              onClick={() => handleModeSelection("individual")}
+                            >
+                              Osobne talie
+                            </button>
+                          </div>
+                        </>
+                      ) : null}
+
                       <div className={styles.startGameSection}>
                         {selectedBotCount ? (
                           <p className={styles.selectedInfo}>
