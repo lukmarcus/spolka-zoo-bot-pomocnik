@@ -98,14 +98,28 @@ const Game: React.FC = () => {
 
   // v0.3.3 New game action logic - two buttons
   const getGameActions = () => {
-    const currentIndex = game.state.currentCardIndex;
-
     // During bot selection, no buttons are shown
     if (!game.state.botsSelected) {
       return { primary: null, secondary: null };
     }
 
-    // If no cards drawn yet (should not happen in v0.3.2+ due to auto-draw)
+    // Determine current index depending on mode
+    let currentIndex = -1;
+    if (
+      game.state.mode === "individual" &&
+      game.state.botDecks &&
+      game.state.currentBot
+    ) {
+      const botDeck = game.state.botDecks[game.state.currentBot - 1];
+      currentIndex = botDeck ? botDeck.currentCardIndex : -1;
+    } else {
+      currentIndex =
+        typeof game.state.currentCardIndex === "number"
+          ? game.state.currentCardIndex
+          : -1;
+    }
+
+    // If no cards drawn yet for the current deck
     if (currentIndex === -1) {
       return { primary: null, secondary: null };
     }
@@ -312,12 +326,18 @@ const Game: React.FC = () => {
           <button className="btn-secondary" onClick={handleBackToMenu}>
             ← Wróć do menu
           </button>
-          {typeof game.state.currentCardIndex === "number" &&
-            game.state.currentCardIndex >= 0 && (
-              <button className="btn-tertiary" onClick={handleCopyGameCode}>
-                💾 Kopiuj stan gry
-              </button>
-            )}
+          {(game.state.mode === "individual"
+            ? game.state.botDecks && game.state.currentBot
+              ? game.state.botDecks[game.state.currentBot - 1]
+                  ?.currentCardIndex ?? -1
+              : -1
+            : typeof game.state.currentCardIndex === "number"
+            ? game.state.currentCardIndex
+            : -1) >= 0 && (
+            <button className="btn-tertiary" onClick={handleCopyGameCode}>
+              💾 Kopiuj stan gry
+            </button>
+          )}
         </div>
 
         {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
