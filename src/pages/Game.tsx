@@ -204,9 +204,7 @@ const Game: React.FC = () => {
                     : 0}
                   /{BOT_CARDS.length}
                 </span>
-                <span className={styles.cardsLeft}>
-                  🃏 Pozostało: {game.getCardsRemaining()}
-                </span>
+                {/* Remaining cards info removed by user request */}
                 {game.state.botCount && game.state.botCount > 1 && (
                   <div className={styles.botInfo}>
                     <div className={styles.currentBotIndicator}>
@@ -216,11 +214,7 @@ const Game: React.FC = () => {
                     </div>
                   </div>
                 )}
-                {game.isDeckExhausted() && (
-                  <span className={styles.deckExhausted}>
-                    🔔 Talia wyczerpana!
-                  </span>
-                )}
+                {/* Deck exhausted visual notification removed per user request */}
               </div>
             </div>
           )}
