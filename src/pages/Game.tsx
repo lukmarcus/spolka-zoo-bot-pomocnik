@@ -96,6 +96,23 @@ const Game: React.FC = () => {
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
 
+  // Determine whether to show the top game status: only when bots are selected AND
+  // the relevant deck (shared or current bot's deck) has at least one drawn card.
+  const showGameStatus = (() => {
+    if (!game.state.botsSelected) return false;
+    if (game.state.mode === "individual") {
+      if (!game.state.botDecks || !game.state.currentBot) return false;
+      const idx =
+        game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ?? -1;
+      return typeof idx === "number" && idx >= 0;
+    }
+    const sharedIdx =
+      typeof game.state.currentCardIndex === "number"
+        ? game.state.currentCardIndex
+        : -1;
+    return sharedIdx >= 0;
+  })();
+
   // v0.3.3 New game action logic - two buttons
   const getGameActions = () => {
     // During bot selection, no buttons are shown
@@ -172,7 +189,7 @@ const Game: React.FC = () => {
       <div className={styles.gameContainer}>
         <div className={styles.gameActive}>
           {/* Show game status only when cards are drawn (hide during bot selection and before first card) */}
-          {game.state.botsSelected && (
+          {showGameStatus && (
             <div className={styles.gameStatus}>
               <div className={styles.statusInfo}>
                 <span className={styles.cardCounter}>
