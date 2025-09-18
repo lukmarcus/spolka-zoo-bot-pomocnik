@@ -180,6 +180,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "SHUFFLE_DECK": {
+      // If individual mode, reshuffle only the current bot's deck
+      if (state.mode === "individual" && state.botDecks && state.currentBot) {
+        const botIdx = state.currentBot - 1;
+        const botDecks = [...state.botDecks];
+        const botDeck = botDecks[botIdx];
+        if (!botDeck) return state;
+        botDecks[botIdx] = {
+          ...botDeck,
+          cardSequence: generateShuffledSequence(),
+          currentCardIndex: 0,
+          usedCards: [],
+        };
+        return {
+          ...state,
+          botDecks,
+        };
+      }
+
+      // Shared mode - reshuffle the shared deck
       return {
         ...state,
         currentCardIndex: 0,
