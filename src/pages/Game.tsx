@@ -84,10 +84,49 @@ const Game: React.FC = () => {
     }
   };
 
-  // v0.3.3 Handle shuffle for next bot
-  const handleShuffleForNextBot = () => {
-    game.nextBot();
-    setTimeout(() => game.shuffleDeck(), 50); // Small delay to ensure bot switch happens first
+  // v0.4.0 Handlers per-user spec:
+  // Primary: act on CURRENT bot - draw if possible, otherwise shuffle this bot (which also draws)
+  const handlePrimaryForCurrentBot = () => {
+    if (game.state.mode === "individual") {
+      if (game.isDeckExhausted()) {
+        // current bot exhausted -> reshuffle this bot (shuffleDeck sets currentCardIndex = 0)
+        game.shuffleDeck();
+      } else {
+        // draw next card for current bot
+        game.drawCard();
+      }
+    } else {
+      // shared mode: normal draw
+      game.drawCard();
+    }
+  };
+
+  // Secondary: act on NEXT bot - always ensure the next bot ends up with a drawn card.
+  const handleSecondaryForNextBot = () => {
+    if (!game.state.botCount || game.state.botCount <= 1) return;
+
+    const nextBot = game.state.currentBot
+      ? (game.state.currentBot % game.state.botCount) + 1
+      : 1;
+
+    if (game.state.mode === "individual") {
+      const nextDeck = game.state.botDecks?.[nextBot - 1];
+      const nextIdx = nextDeck?.currentCardIndex ?? -1;
+      const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
+
+      if (nextExhausted) {
+        // Switch to next bot first, then reshuffle that bot's deck (reshuffle draws)
+        game.nextBot();
+        // small delay to allow reducer to update currentBot before shuffling
+        setTimeout(() => game.shuffleDeck(), 50);
+      } else {
+        // Draw for next bot (this action will switch bot and draw)
+        game.nextBotAndDraw();
+      }
+    } else {
+      // shared mode: switching to next and drawing is handled by nextBotAndDraw
+      game.nextBotAndDraw();
+    }
   };
 
   const currentCardId = game.getCurrentCard();
@@ -141,45 +180,39 @@ const Game: React.FC = () => {
       return { primary: null, secondary: null };
     }
 
-    // Deck exhausted - two buttons: shuffle for current bot, or shuffle for next bot
-    if (game.isDeckExhausted()) {
-      return {
-        primary: {
-          text: `🔀 Przetasuj i dobierz kartę dla Bota ${game.state.currentBot}`,
-          action: game.shuffleDeck,
-          disabled: false,
-          className: "btn-secondary",
-        },
-        secondary:
-          game.state.botCount && game.state.botCount > 1
-            ? {
-                text: "👥 Przetasuj i dobierz dla następnego bota",
-                action: handleShuffleForNextBot,
-                disabled: false,
-                className: "btn-secondary",
-              }
-            : null,
+    // Decide button semantics according to the user's specification.
+    // Primary: operate on CURRENT bot (draw or shuffle+draw when exhausted)
+    // Secondary: operate on NEXT bot (draw or switch+shuffle+draw when exhausted)
+    const primary = {
+      text: game.isDeckExhausted()
+        ? `🔀 Przetasuj talię tego Bota i dobierz kartę` // current bot exhausted
+        : `🎯 Dobierz kartę dla Bota ${game.state.currentBot}`,
+      action: handlePrimaryForCurrentBot,
+      disabled: false,
+      className: game.isDeckExhausted() ? "btn-secondary" : "btn-primary",
+    };
+
+    let secondary = null;
+    if (game.state.botCount && game.state.botCount > 1) {
+      // compute next bot exhaustion state for labeling
+      const nextBot = game.state.currentBot
+        ? (game.state.currentBot % game.state.botCount) + 1
+        : 1;
+      const nextDeck = game.state.botDecks?.[nextBot - 1];
+      const nextIdx = nextDeck?.currentCardIndex ?? -1;
+      const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
+
+      secondary = {
+        text: nextExhausted
+          ? `👥 Przetasuj talię następnego bota i dobierz dla niego kartę`
+          : `👥 Dobierz kartę dla następnego Bota`,
+        action: handleSecondaryForNextBot,
+        disabled: false,
+        className: "btn-secondary",
       };
     }
 
-    // Normal game state - two action buttons
-    return {
-      primary: {
-        text: `🎯 Dobierz kolejną kartę dla Bota ${game.state.currentBot}`,
-        action: game.drawCard,
-        disabled: false,
-        className: "btn-primary",
-      },
-      secondary:
-        game.state.botCount && game.state.botCount > 1
-          ? {
-              text: "👥 Dobierz kartę dla następnego Bota",
-              action: game.nextBotAndDraw,
-              disabled: false,
-              className: "btn-secondary",
-            }
-          : null,
-    };
+    return { primary, secondary };
   };
 
   const gameActions = getGameActions();
