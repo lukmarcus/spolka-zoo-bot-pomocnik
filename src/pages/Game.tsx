@@ -96,8 +96,12 @@ const Game: React.FC = () => {
         game.drawCard();
       }
     } else {
-      // shared mode: normal draw
-      game.drawCard();
+      // shared mode: if shared deck exhausted -> reshuffle shared deck, otherwise draw
+      if (game.isDeckExhausted()) {
+        game.shuffleDeck();
+      } else {
+        game.drawCard();
+      }
     }
   };
 
@@ -124,8 +128,14 @@ const Game: React.FC = () => {
         game.nextBotAndDraw();
       }
     } else {
-      // shared mode: switching to next and drawing is handled by nextBotAndDraw
-      game.nextBotAndDraw();
+      // shared mode: if shared deck exhausted, switch to next bot then reshuffle shared deck
+      if (game.isDeckExhausted()) {
+        game.nextBot();
+        setTimeout(() => game.shuffleDeck(), 50);
+      } else {
+        // normal shared behavior: go to next bot and draw
+        game.nextBotAndDraw();
+      }
     }
   };
 
@@ -184,9 +194,14 @@ const Game: React.FC = () => {
     // Primary: operate on CURRENT bot (draw or shuffle+draw when exhausted)
     // Secondary: operate on NEXT bot (draw or switch+shuffle+draw when exhausted)
     const primary = {
-      text: game.isDeckExhausted()
-        ? `🔀 Przetasuj talię tego Bota i dobierz kartę` // current bot exhausted
-        : `🎯 Dobierz kartę dla Bota ${game.state.currentBot}`,
+      text:
+        game.state.mode === "individual"
+          ? game.isDeckExhausted()
+            ? `🔀 Przetasuj talię tego Bota i dobierz kartę`
+            : `🎯 Dobierz kartę dla Bota ${game.state.currentBot}`
+          : game.isDeckExhausted()
+          ? `🔀 Przetasuj talię i dobierz kartę`
+          : `🎯 Dobierz kartę`,
       action: handlePrimaryForCurrentBot,
       disabled: false,
       className: game.isDeckExhausted() ? "btn-secondary" : "btn-primary",
@@ -203,9 +218,14 @@ const Game: React.FC = () => {
       const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
 
       secondary = {
-        text: nextExhausted
-          ? `👥 Przetasuj talię następnego bota i dobierz dla niego kartę`
-          : `👥 Dobierz kartę dla następnego Bota`,
+        text:
+          game.state.mode === "individual"
+            ? nextExhausted
+              ? `👥 Przetasuj talię następnego bota i dobierz dla niego kartę`
+              : `👥 Dobierz kartę dla następnego Bota`
+            : game.isDeckExhausted()
+            ? `👥 Przetasuj i dobierz dla następnego bota`
+            : `👥 Dobierz kartę dla następnego Bota`,
         action: handleSecondaryForNextBot,
         disabled: false,
         className: "btn-secondary",
