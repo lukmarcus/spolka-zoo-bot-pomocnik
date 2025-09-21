@@ -5,6 +5,31 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-09-13
+
+### 🚀 Nowości
+
+- Możliwość wyboru trybu gry: wspólna talia lub osobne talie dla każdego bota.
+- Każdy bot może mieć własną, niezależnie tasowaną talię kart.
+- UI wyboru trybu gry i liczby botów na ekranie startowym.
+- Pełna obsługa wyczerpania talii dla każdego bota osobno.
+- Zaktualizowane style dla nowego UI wyboru trybu.
+
+### 🏗️ Zmiany techniczne
+
+- Refaktoryzacja logiki GameContext.tsx pod obsługę trybu indywidualnych talii.
+- Rozbudowa reducerów, selektorów i akcji dla obsługi obu trybów.
+- Ujednolicenie API kontekstu gry.
+- Zaktualizowane style w Game.module.css.
+
+### 📋 Instrukcja
+
+1. Wybierz tryb gry (wspólna/indywidualna talia).
+2. Wybierz liczbę botów.
+3. Rozpocznij grę i korzystaj z nowych funkcji!
+
+---
+
 ## [0.3.5] - 2025-09-11
 
 ### 🎨 Globalne kolorowanie tekstu kart

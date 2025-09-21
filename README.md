@@ -8,40 +8,24 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ### Główne funkcje
 
-- 🤖 Losowanie kart botów z talii 13 kart
-- 🎲 Tasowanie i dobieranie kolejnych kart
-- 🔄 Reset i przetasowanie talii
-- 💾 Zapisywanie i wczytywanie stanu gry (localStorage)
-- 🔗 Udostępnianie gry przez kompaktowe kody (cross-device)
-- 🔍 **NOWE**: Live preview stanu gry przed wczytaniem
-- ⚡ **NOWE**: Inteligentna walidacja kodów gry w czasie rzeczywistym
-- 🤖 **NOWE v0.3.0**: Obsługa wielu botów (2-4) z jedną talią
-- 🔄 **NOWE v0.3.0**: Przełączanie między botami podczas gry
-- 🛠️ **NAPRAWIONO v0.3.1**: Krytyczne błędy UX z v0.3.0 (re-rendery, nawigacja, licznik kart)
-- 🎨 **NOWE v0.3.2**: Przeprojektowany interfejs wyboru botów z zoo-tematyczną stylistyką
-- ⚡ **NOWE v0.3.2**: Usprawiony flow gry - automatyczne dobranie pierwszej karty po wyborze botów
-- 🛠️ **NAPRAWIONO v0.3.2**: Błąd pustego ekranu po odświeżeniu strony
-- 🎮 **NOWE v0.3.3**: Automatyczna kolejność botów - usunięto manual przełączniki
-- 🏆 **NOWE v0.3.3**: Dwa inteligentne przyciski akcji zgodnie z zasadami planszówki
-- 🎨 **NOWE v0.3.4**: Ulepszenia komunikatów i UX - lepsze etykiety, unified styling, oczyszczenie kodu
-- 📱 Responsywny design dla telefonów (320px+)
-- 🎨 **NOWE v0.3.5**: Globalne kolorowanie tekstu kart, uproszczone zarządzanie ikonami przez obiekt ICONS, usunięcie pogrubienia z kolorów, porządki w kodzie kart, **pełne oryginalne opisy kart**
+- 🤖 Losowanie kart dla botów (talia 13 kart) — obsługa 1–4 botów
+- 🧩 Tryby gry: wspólna talia lub osobne talie dla każdego bota (v0.4.0)
+- 🎲 Tasowanie talii, reset i niezależne tasowanie (reshuffle) per-bot
+- 🎯 Dwa inteligentne przyciski akcji: dobierz dla aktualnego bota / dobierz dla następnego bota
+- 💾 Ręczne zapisywanie/wczytywanie stanu gry przez kopiowanie/kod (kompatybilne w obrębie tej wersji)
+- 🔗 Kompaktowe kody udostępniania (cross-device) + live preview przed wczytaniem
+- 🔍 Walidacja kodów gry w czasie rzeczywistym przed załadunkiem
+- 📱 Responsywny design (telefony 320px+)
+- ⚙️ Implementacja w TypeScript + React (czysta architektura, kontekst gry i reducer)
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.3.5 ✅  
-**Status**: Globalne kolorowanie tekstu kart, uproszczone ikony, czystszy kod  
-**Poprzednie wersje**:
-
-- 0.3.4 - Enhanced UX & Communication - lepsze komunikaty, unified styling i oczyszczenie kodu
-- 0.3.3 - Enhanced Game Mechanics - automatyczna kolejność botów i intuicyjna mechanika gry
-- 0.3.2 - Major UX Update - przeprojektowany interfejs i zoo-tematyczna stylistyka
-- 0.3.1 - Hotfix dla krytycznych błędów v0.3.0
-- 0.3.0 - Multi-bot support (miał problemy z re-renderami)
+**Aktualna wersja**: 0.4.0 ✅  
+**Status**: Osobne talie dla botów (tryb indywidualny), wybór trybu gry (wspólna/indywidualna), per-bot reshuffle i nowe, inteligentne akcje przycisków
 
 ## 📖 Instrukcja obsługi
 
-### 🤖 Gra z wieloma botami (v0.3.4+)
+### 🤖 Gra z wieloma botami z jedną talią (v0.3.4+) + osobne talie dla każdego bota (v0.4.0+)
 
 1. **Rozpocznij grę** - kliknij "Rozpocznij grę"
 2. **Wybierz liczbę botów** - wybierz od 1 do 4 botów używając stylizowanych przycisków
@@ -54,7 +38,7 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ### 💾 Zapisywanie gry
 
-Gra **automatycznie zapisuje** się w lokalnej pamięci przeglądarki podczas każdej akcji.
+Stan gry można skopiować jako krótki kod i przenieść na inne urządzenie (przycisk "Kopiuj stan gry").
 
 ### 🔗 Udostępnianie gry
 

@@ -14,11 +14,18 @@ const Game: React.FC = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string>("");
   const [selectedBotCount, setSelectedBotCount] = useState<number | null>(null);
+  const [selectedMode, setSelectedMode] = useState<"shared" | "individual">(
+    "shared"
+  );
 
   // v0.3.2 Reset game state on page refresh to ensure clean bot selection
   React.useEffect(() => {
     // If we're in an inconsistent state (bots not selected but cards drawn), reset
-    if (!game.state.botsSelected && game.state.currentCardIndex >= 0) {
+    if (
+      !game.state.botsSelected &&
+      typeof game.state.currentCardIndex === "number" &&
+      game.state.currentCardIndex >= 0
+    ) {
       game.resetGame();
     }
   }, [game, game.state.botsSelected, game.state.currentCardIndex]);
@@ -62,81 +69,170 @@ const Game: React.FC = () => {
     setSelectedBotCount(count);
   };
 
+  const handleModeSelection = (mode: "shared" | "individual") => {
+    setSelectedMode(mode);
+  };
+
   const handleStartGame = () => {
     if (selectedBotCount) {
+      // Ustaw tryb gry w stanie
+      game.state.mode = selectedMode;
       game.selectBots(selectedBotCount);
-      // v0.3.2 Auto-draw first card to skip intermediate screen
       setTimeout(() => {
         game.drawCard();
-      }, 100); // Small delay to ensure state is updated
+      }, 100);
     }
   };
 
-  // v0.3.3 Handle shuffle for next bot
-  const handleShuffleForNextBot = () => {
-    game.nextBot();
-    setTimeout(() => game.shuffleDeck(), 50); // Small delay to ensure bot switch happens first
+  // v0.4.0 Handlers per-user spec:
+  // Primary: act on CURRENT bot - draw if possible, otherwise shuffle this bot (which also draws)
+  const handlePrimaryForCurrentBot = () => {
+    if (game.state.mode === "individual") {
+      if (game.isDeckExhausted()) {
+        // current bot exhausted -> reshuffle this bot (shuffleDeck sets currentCardIndex = 0)
+        game.shuffleDeck();
+      } else {
+        // draw next card for current bot
+        game.drawCard();
+      }
+    } else {
+      // shared mode: if shared deck exhausted -> reshuffle shared deck, otherwise draw
+      if (game.isDeckExhausted()) {
+        game.shuffleDeck();
+      } else {
+        game.drawCard();
+      }
+    }
+  };
+
+  // Secondary: act on NEXT bot - always ensure the next bot ends up with a drawn card.
+  const handleSecondaryForNextBot = () => {
+    if (!game.state.botCount || game.state.botCount <= 1) return;
+
+    const nextBot = game.state.currentBot
+      ? (game.state.currentBot % game.state.botCount) + 1
+      : 1;
+
+    if (game.state.mode === "individual") {
+      const nextDeck = game.state.botDecks?.[nextBot - 1];
+      const nextIdx = nextDeck?.currentCardIndex ?? -1;
+      const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
+
+      if (nextExhausted) {
+        // Switch to next bot first, then reshuffle that bot's deck (reshuffle draws)
+        game.nextBot();
+        // small delay to allow reducer to update currentBot before shuffling
+        setTimeout(() => game.shuffleDeck(), 50);
+      } else {
+        // Draw for next bot (this action will switch bot and draw)
+        game.nextBotAndDraw();
+      }
+    } else {
+      // shared mode: if shared deck exhausted, switch to next bot then reshuffle shared deck
+      if (game.isDeckExhausted()) {
+        game.nextBot();
+        setTimeout(() => game.shuffleDeck(), 50);
+      } else {
+        // normal shared behavior: go to next bot and draw
+        game.nextBotAndDraw();
+      }
+    }
   };
 
   const currentCardId = game.getCurrentCard();
   const currentCard =
-    currentCardId !== null
+    typeof currentCardId === "number"
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
 
+  // Determine whether to show the top game status: only when bots are selected AND
+  // the relevant deck (shared or current bot's deck) has at least one drawn card.
+  const showGameStatus = (() => {
+    if (!game.state.botsSelected) return false;
+    if (game.state.mode === "individual") {
+      if (!game.state.botDecks || !game.state.currentBot) return false;
+      const idx =
+        game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ?? -1;
+      return typeof idx === "number" && idx >= 0;
+    }
+    const sharedIdx =
+      typeof game.state.currentCardIndex === "number"
+        ? game.state.currentCardIndex
+        : -1;
+    return sharedIdx >= 0;
+  })();
+
   // v0.3.3 New game action logic - two buttons
   const getGameActions = () => {
-    const currentIndex = game.state.currentCardIndex;
-
     // During bot selection, no buttons are shown
     if (!game.state.botsSelected) {
       return { primary: null, secondary: null };
     }
 
-    // If no cards drawn yet (should not happen in v0.3.2+ due to auto-draw)
+    // Determine current index depending on mode
+    let currentIndex = -1;
+    if (
+      game.state.mode === "individual" &&
+      game.state.botDecks &&
+      game.state.currentBot
+    ) {
+      const botDeck = game.state.botDecks[game.state.currentBot - 1];
+      currentIndex = botDeck ? botDeck.currentCardIndex : -1;
+    } else {
+      currentIndex =
+        typeof game.state.currentCardIndex === "number"
+          ? game.state.currentCardIndex
+          : -1;
+    }
+
+    // If no cards drawn yet for the current deck
     if (currentIndex === -1) {
       return { primary: null, secondary: null };
     }
 
-    // Deck exhausted - two buttons: shuffle for current bot, or shuffle for next bot
-    if (game.isDeckExhausted()) {
-      return {
-        primary: {
-          text: `🔀 Przetasuj i dobierz kartę dla Bota ${game.state.currentBot}`,
-          action: game.shuffleDeck,
-          disabled: false,
-          className: "btn-secondary",
-        },
-        secondary:
-          game.state.botCount && game.state.botCount > 1
-            ? {
-                text: "👥 Przetasuj i dobierz dla następnego bota",
-                action: handleShuffleForNextBot,
-                disabled: false,
-                className: "btn-secondary",
-              }
-            : null,
+    // Decide button semantics according to the user's specification.
+    // Primary: operate on CURRENT bot (draw or shuffle+draw when exhausted)
+    // Secondary: operate on NEXT bot (draw or switch+shuffle+draw when exhausted)
+    const primary = {
+      text:
+        game.state.mode === "individual"
+          ? game.isDeckExhausted()
+            ? `🔀 Przetasuj talię tego Bota i dobierz kartę`
+            : `🎯 Dobierz kartę dla Bota ${game.state.currentBot}`
+          : game.isDeckExhausted()
+          ? `🔀 Przetasuj talię i dobierz kartę`
+          : `🎯 Dobierz kartę`,
+      action: handlePrimaryForCurrentBot,
+      disabled: false,
+      className: game.isDeckExhausted() ? "btn-secondary" : "btn-primary",
+    };
+
+    let secondary = null;
+    if (game.state.botCount && game.state.botCount > 1) {
+      // compute next bot exhaustion state for labeling
+      const nextBot = game.state.currentBot
+        ? (game.state.currentBot % game.state.botCount) + 1
+        : 1;
+      const nextDeck = game.state.botDecks?.[nextBot - 1];
+      const nextIdx = nextDeck?.currentCardIndex ?? -1;
+      const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
+
+      secondary = {
+        text:
+          game.state.mode === "individual"
+            ? nextExhausted
+              ? `👥 Przetasuj talię następnego bota i dobierz dla niego kartę`
+              : `👥 Dobierz kartę dla następnego Bota`
+            : game.isDeckExhausted()
+            ? `👥 Przetasuj i dobierz dla następnego bota`
+            : `👥 Dobierz kartę dla następnego Bota`,
+        action: handleSecondaryForNextBot,
+        disabled: false,
+        className: "btn-secondary",
       };
     }
 
-    // Normal game state - two action buttons
-    return {
-      primary: {
-        text: `🎯 Dobierz kolejną kartę dla Bota ${game.state.currentBot}`,
-        action: game.drawCard,
-        disabled: false,
-        className: "btn-primary",
-      },
-      secondary:
-        game.state.botCount && game.state.botCount > 1
-          ? {
-              text: "👥 Dobierz kartę dla następnego Bota",
-              action: game.nextBotAndDraw,
-              disabled: false,
-              className: "btn-secondary",
-            }
-          : null,
-    };
+    return { primary, secondary };
   };
 
   const gameActions = getGameActions();
@@ -146,23 +242,32 @@ const Game: React.FC = () => {
       <div className={styles.gameContainer}>
         <div className={styles.gameActive}>
           {/* Show game status only when cards are drawn (hide during bot selection and before first card) */}
-          {game.state.botsSelected && game.state.currentCardIndex >= 0 && (
+          {showGameStatus && (
             <div className={styles.gameStatus}>
               <div className={styles.statusInfo}>
                 <span className={styles.cardCounter}>
-                  📊 Karta {game.state.currentCardIndex + 1}/{BOT_CARDS.length}
+                  📊 Karta{" "}
+                  {game.state.mode === "individual" &&
+                  game.state.botDecks &&
+                  game.state.currentBot
+                    ? (game.state.botDecks[game.state.currentBot - 1]
+                        ?.currentCardIndex ?? -1) + 1
+                    : typeof game.state.currentCardIndex === "number"
+                    ? game.state.currentCardIndex + 1
+                    : 0}
+                  /{BOT_CARDS.length}
                 </span>
-                {game.state.botsSelected &&
-                  game.state.botCount &&
-                  game.state.botCount > 1 && (
-                    <div className={styles.botInfo}>
-                      <div className={styles.currentBotIndicator}>
-                        <span className={styles.botIndicatorText}>
-                          🤖 Bot {game.state.currentBot}/{game.state.botCount}
-                        </span>
-                      </div>
+                {/* Remaining cards info removed by user request */}
+                {game.state.botCount && game.state.botCount > 1 && (
+                  <div className={styles.botInfo}>
+                    <div className={styles.currentBotIndicator}>
+                      <span className={styles.botIndicatorText}>
+                        🤖 Bot {game.state.currentBot}/{game.state.botCount}
+                      </span>
                     </div>
-                  )}
+                  </div>
+                )}
+                {/* Deck exhausted visual notification removed per user request */}
               </div>
             </div>
           )}
@@ -194,11 +299,44 @@ const Game: React.FC = () => {
                           </button>
                         ))}
                       </div>
+                      {/* Show mode selection only when 2-4 bots selected */}
+                      {selectedBotCount && selectedBotCount >= 2 ? (
+                        <>
+                          <h3>Wybierz tryb gry</h3>
+                          <p>
+                            Wybierz czy boty mają wspólną talię czy osobne talie
+                          </p>
+                          <div className={styles.modeButtons}>
+                            <button
+                              className={`${styles.modeOption} ${
+                                selectedMode === "shared" ? styles.selected : ""
+                              }`}
+                              onClick={() => handleModeSelection("shared")}
+                            >
+                              Wspólna talia
+                            </button>
+                            <button
+                              className={`${styles.modeOption} ${
+                                selectedMode === "individual"
+                                  ? styles.selected
+                                  : ""
+                              }`}
+                              onClick={() => handleModeSelection("individual")}
+                            >
+                              Osobne talie
+                            </button>
+                          </div>
+                        </>
+                      ) : null}
+
                       <div className={styles.startGameSection}>
                         {selectedBotCount ? (
                           <p className={styles.selectedInfo}>
-                            Wybrano: {selectedBotCount}{" "}
-                            {selectedBotCount === 1 ? "bot" : "boty"}
+                            Wybrano: {selectedBotCount} bot
+                            {selectedBotCount > 1 ? "y" : ""}, tryb:{" "}
+                            {selectedMode === "shared"
+                              ? "wspólna talia"
+                              : "osobne talie"}
                           </p>
                         ) : (
                           <p className={styles.selectedInfo}>
@@ -252,7 +390,14 @@ const Game: React.FC = () => {
           <button className="btn-secondary" onClick={handleBackToMenu}>
             ← Wróć do menu
           </button>
-          {game.state.currentCardIndex >= 0 && (
+          {(game.state.mode === "individual"
+            ? game.state.botDecks && game.state.currentBot
+              ? game.state.botDecks[game.state.currentBot - 1]
+                  ?.currentCardIndex ?? -1
+              : -1
+            : typeof game.state.currentCardIndex === "number"
+            ? game.state.currentCardIndex
+            : -1) >= 0 && (
             <button className="btn-tertiary" onClick={handleCopyGameCode}>
               💾 Kopiuj stan gry
             </button>
