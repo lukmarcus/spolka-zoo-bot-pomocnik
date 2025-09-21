@@ -2,71 +2,44 @@
 
 ## 🎯 Roadmapa przyszłych wersji
 
-| Wersja | Status        | Opis                          | Szczegóły techniczne                |
-| ------ | ------------- | ----------------------------- | ----------------------------------- |
-| 0.3.5  | ✅ Aktualna   | Prawdziwe teksty i ikony kart | Real card content, proper icons     |
-| 0.4.0  | 🎯 Następna   | Osobne talie dla każdego bota | Individual bot decks                |
-| 0.5.0  | 🔜 Planowana  | Wizualizacja kart             | Card visualization system           |
-| 0.6.0+ | 🔮 Przyszłość | Zaawansowane funkcje          | Statistics, tournaments, cloud sync |
+| Wersja | Status        | Opis                              | Szczegóły techniczne                                          |
+| ------ | ------------- | --------------------------------- | ------------------------------------------------------------- |
+| 0.4.0  | ✅ Aktualna   | Osobne talie dla każdego bota     | Individual bot decks                                          |
+| 0.4.1  | 🔜 Planowana  | System zapisu i odczytu stanu gry | Save/load system (export/import kompaktowych kodów, autosave) |
+| 0.5.0  | 🔜 Planowana  | Wizualizacja kart                 | Card visualization system                                     |
+| 0.6.0+ | 🔮 Przyszłość | Zaawansowane funkcje              | Statistics, tournaments, cloud sync                           |
 
 ## 📋 Szczegółowe plany rozwoju
-
-### v0.3.5 - Prawdziwe teksty i ikony kart ✅
-
-**Cel**: Integracja prawdziwych treści kart ze Spółki ZOO
-
-- [x] Pełne oryginalne opisy kart zgodne z karty.md (ręczna synchronizacja i porównanie każdej karty)
-- [x] Dodanie grafik ikon do repozytorium (money, card, apple, lemon, pineapple)
-- [x] Globalne kolorowanie kluczowych fraz w efektach kart (OWOC, MAGAZYN, POMOCNIK, TALIA SPÓŁKI, TALIA WPŁYWU, UDZIAŁ, SPÓŁKA) – obsługa wszystkich przypadków
-- [x] Wsparcie dla kart z jednym efektem (poprawiona logika renderowania)
-- [x] Uproszczone zarządzanie ikonami przez obiekt ICONS, usunięcie alt z ikon
-- [x] Refaktor stylów CSS: globalne klasy kolorów, usunięcie pogrubienia
-- [x] Uproszczenie i porządki w kodzie danych kart
-- [x] Aktualizacja dokumentacji (README, CHANGELOG, DOCS)
 
 ### v0.4.0 - Osobne talie dla każdego bota 🔜
 
 **Cel**: Opcja osobnych talii dla każdego bota
 
-- [ ] **Wybór trybu gry**
+- [x] **Wybór trybu gry**
 
-  - "Wspólna talia" (obecny system)
-  - "Osobne talie" (nowy system)
-  - Radio buttons w interfejsie wyboru botów
+  - [x] "Wspólna talia" (obecny system)
+  - [x] "Osobne talie" (nowy system) — implemented: per-bot decks, per-bot current index and usedCards
+  - [x] Radio buttons / mode chooser in the selection UI (shown for 2-4 bots)
 
-- [ ] **Zarządzanie wieloma taliami**
+- [x] **Zarządzanie wieloma taliami**
 
-  - Każdy bot ma własną sekwencję kart
-  - Niezależne `currentCardIndex` dla każdego bota
-  - Osobne `usedCards` tracking per bot
+  - [x] Każdy bot ma własną sekwencję kart (`botDecks` implemented)
+  - [x] Niezależne `currentCardIndex` dla każdego bota
+  - [x] Osobne `usedCards` tracking per bot
 
 - [ ] **Rozszerzone kodowanie v2**
 
-  - 17-19 znaków: wspólna talia (current)
-  - 29/44/57 znaków: osobne talie (new)
-  - Format: [Bot1Sequence][Bot1Pos][Bot2Sequence][Bot2Pos]...[CurrentBot]
+  - [ ] Rozszerzone kodowanie v2: planowane (kodowanie kompaktowe dla osobnych talii) — not yet implemented
 
 - [ ] **UI mode selection**
-  - Visual indicators dla aktywnego trybu
-  - Tooltip z wyjaśnieniem różnic między trybami
-  - Podgląd różnic w mechanice gry
 
-**Architektura techniczna**:
+  - [x] UI mode selection: visual mode chooser and indicators are implemented
+  - [x] Removed top-line remaining cards & deck-exhausted visuals as per UX decision
+  - [x] Per-mode action buttons and per-bot shuffle behavior implemented in GameContext and UI
 
-```typescript
-interface GameState {
-  mode: "shared" | "individual";
-  botDecks?: BotDeck[]; // Dla trybu individual
-  // ...existing fields dla shared mode
-}
+  ### v0.4.1
 
-interface BotDeck {
-  botId: number;
-  cardSequence: number[];
-  currentCardIndex: number;
-  usedCards: number[];
-}
-```
+  Prace związane z systemem zapisu i odczytu stanu gry (eksport/import kompaktowych kodów dla osobnych talii, autosave, walidacja) oraz drobne refaktory reducer'a.
 
 ### v0.5.0 - Wizualizacja kart 🔜
 
