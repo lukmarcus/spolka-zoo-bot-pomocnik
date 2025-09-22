@@ -119,21 +119,17 @@ const Game: React.FC = () => {
       const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
 
       if (nextExhausted) {
-        // Switch to next bot first, then reshuffle that bot's deck (reshuffle draws)
-        game.nextBot();
-        // small delay to allow reducer to update currentBot before shuffling
-        setTimeout(() => game.shuffleDeck(), 50);
+        // Use atomic action: switch to next bot, reshuffle its deck, and draw
+        game.nextBotAndShuffleAndDraw?.();
       } else {
         // Draw for next bot (this action will switch bot and draw)
         game.nextBotAndDraw();
       }
     } else {
-      // shared mode: if shared deck exhausted, switch to next bot then reshuffle shared deck
+      // shared mode: use atomic action when exhausted
       if (game.isDeckExhausted()) {
-        game.nextBot();
-        setTimeout(() => game.shuffleDeck(), 50);
+        game.nextBotAndShuffleAndDraw?.();
       } else {
-        // normal shared behavior: go to next bot and draw
         game.nextBotAndDraw();
       }
     }

@@ -26,7 +26,8 @@ type GameAction =
   | { type: "SELECT_BOTS"; payload: number } // v0.3.0+ bot count selection
   | { type: "SWITCH_BOT"; payload: number } // v0.3.0+ switch current bot
   | { type: "NEXT_BOT" } // v0.3.3+ go to next bot in sequence
-  | { type: "NEXT_BOT_AND_DRAW" }; // v0.3.3+ go to next bot and draw card
+  | { type: "NEXT_BOT_AND_DRAW" } // v0.3.3+ go to next bot and draw card
+  | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }; // v0.4.1+ atomic: switch to next bot, reshuffle if needed, and draw
 
 // Utility function to generate shuffled sequence
 function generateShuffledSequence(): number[] {
@@ -296,6 +297,98 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case "NEXT_BOT_AND_SHUFFLE_AND_DRAW": {
+      // Atomic: switch to next bot, if its deck is exhausted then reshuffle that deck and draw,
+      // otherwise draw normally. Works for both individual and shared modes.
+      if (
+        state.mode === "individual" &&
+        state.botDecks &&
+        state.currentBot &&
+        state.botCount
+      ) {
+        const nextBot = (state.currentBot % state.botCount) + 1;
+        const botIdx = nextBot - 1;
+        const botDecks = [...state.botDecks];
+        const botDeck = botDecks[botIdx];
+        if (!botDeck || botDeck.cardSequence.length === 0) {
+          return { ...state, currentBot: nextBot };
+        }
+        const nextIndex = botDeck.currentCardIndex + 1;
+        // If nextIndex is out of range, reshuffle and draw first card
+        if (
+          nextIndex >= botDeck.cardSequence.length ||
+          nextIndex >= TOTAL_CARDS
+        ) {
+          // reshuffle and draw index 0
+          botDecks[botIdx] = {
+            ...botDeck,
+            cardSequence: generateShuffledSequence(),
+            currentCardIndex: 0,
+            usedCards: [
+              /* first card will be set below */
+            ],
+          };
+          botDecks[botIdx].usedCards = [botDecks[botIdx].cardSequence[0]];
+          return {
+            ...state,
+            botDecks,
+            currentBot: nextBot,
+          };
+        }
+        // Normal draw for next bot
+        const newUsedCards = [
+          ...botDeck.usedCards,
+          botDeck.cardSequence[nextIndex],
+        ];
+        botDecks[botIdx] = {
+          ...botDeck,
+          currentCardIndex: nextIndex,
+          usedCards: newUsedCards,
+        };
+        return {
+          ...state,
+          botDecks,
+          currentBot: nextBot,
+        };
+      }
+
+      // Shared mode: switch to next bot and draw from shared deck, reshuffle if exhausted
+      const cardSequence = Array.isArray(state.cardSequence)
+        ? state.cardSequence
+        : [];
+      const currentCardIndex =
+        typeof state.currentCardIndex === "number"
+          ? state.currentCardIndex
+          : -1;
+      const usedCards = Array.isArray(state.usedCards) ? state.usedCards : [];
+      if (cardSequence.length === 0) {
+        return state;
+      }
+      const nextIndex = currentCardIndex + 1;
+      const nextBot =
+        state.currentBot && state.botCount
+          ? (state.currentBot % state.botCount) + 1
+          : 1;
+      if (nextIndex >= cardSequence.length || nextIndex >= TOTAL_CARDS) {
+        // reshuffle and draw first card
+        const newSequence = generateShuffledSequence();
+        return {
+          ...state,
+          cardSequence: newSequence,
+          currentCardIndex: 0,
+          usedCards: [newSequence[0]],
+          currentBot: nextBot,
+        };
+      }
+      const newUsedCards = [...usedCards, cardSequence[nextIndex]];
+      return {
+        ...state,
+        currentCardIndex: nextIndex,
+        usedCards: newUsedCards,
+        currentBot: nextBot,
+      };
+    }
+
     default:
       return state;
   }
@@ -320,6 +413,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "SWITCH_BOT", payload: botNumber }),
       nextBot: () => dispatch({ type: "NEXT_BOT" }), // v0.3.3+ go to next bot
       nextBotAndDraw: () => dispatch({ type: "NEXT_BOT_AND_DRAW" }), // v0.3.3+ go to next bot and draw
+      nextBotAndShuffleAndDraw: () =>
+        dispatch({ type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }), // v0.4.1 atomic
       getCurrentCard: () => {
         if (state.mode === "individual" && state.botDecks && state.currentBot) {
           const botIdx = state.currentBot - 1;
