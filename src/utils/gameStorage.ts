@@ -48,23 +48,37 @@ function decodeCard(char: string): number {
  */
 export function generateShareableCode(gameState: GameState): string {
   try {
+    // Validate required shared-mode fields for single-bot compact encoding
+    if (
+      !gameState.cardSequence ||
+      typeof gameState.currentCardIndex !== "number"
+    ) {
+      throw new Error(
+        "gameState must include cardSequence and currentCardIndex for encoding"
+      );
+    }
+
     // Encode card sequence (13 cards)
     const encodedSequence = gameState.cardSequence.map(encodeCard).join("");
 
     // Encode current position in deck
-    const encodedPosition = encodeCard(gameState.currentCardIndex);
+    const encodedPosition = encodeCard(gameState.currentCardIndex as number);
 
     // Check if multi-bot format is needed
     const botCount = gameState.botCount || 1;
     const currentBot = gameState.currentBot || 1;
 
     if (botCount === 1) {
-      // Single bot format: ZOO + sequence + position (17 chars)
-      return (
-        GAME_CODE_PREFIX +
-        encodedSequence +
-        encodedPosition
-      ).toUpperCase();
+      // Single bot: use compact 'remaining-only' format (ZS+<base64url>) per spec
+      // Build remaining-only representation: CUR = card at currentCardIndex; SEQ = cards after CUR
+      const curIndex = gameState.currentCardIndex as number;
+      const fullSeq = gameState.cardSequence as number[];
+      if (curIndex < 0 || curIndex >= fullSeq.length) {
+        throw new Error("Invalid currentCardIndex");
+      }
+      const curCard = fullSeq[curIndex];
+      const remaining = fullSeq.slice(curIndex + 1);
+      return encodeSingleBotCompact(curCard, remaining);
     } else {
       // Multi-bot format: ZOO + sequence + position + botCount + currentBot (19 chars)
       const encodedBotCount = botCount.toString();
@@ -94,62 +108,194 @@ export function loadFromShareableCode(gameCode: string): GameState | null {
 
   try {
     // Validate format
-    if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
-      return null;
-    }
+    // Support legacy 'ZOO...' format or new compact 'ZS+' etc.
+    if (normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
+      const dataSection = normalizedCode.slice(3); // Remove "ZOO" prefix
 
-    const dataSection = normalizedCode.slice(3); // Remove "ZOO" prefix
+      // Auto-detect format based on length
+      let cardSequence: number[];
+      let currentCardIndex: number;
+      let botCount = 1;
+      let currentBot = 1;
 
-    // Auto-detect format based on length
-    let cardSequence: number[];
-    let currentCardIndex: number;
-    let botCount = 1;
-    let currentBot = 1;
+      if (dataSection.length === 14) {
+        // Single bot legacy format (17 chars total: ZOO + 14 data)
+        const sequenceSection = dataSection.slice(0, 13);
+        cardSequence = sequenceSection.split("").map(decodeCard);
+        currentCardIndex = decodeCard(dataSection.slice(13));
+      } else if (dataSection.length === 16) {
+        // Multi-bot legacy format (19 chars total: ZOO + 16 data)
+        const sequenceSection = dataSection.slice(0, 13);
+        cardSequence = sequenceSection.split("").map(decodeCard);
+        currentCardIndex = decodeCard(dataSection.slice(13, 14));
 
-    if (dataSection.length === 14) {
-      // Single bot format (17 chars total: ZOO + 14 data)
-      const sequenceSection = dataSection.slice(0, 13);
-      cardSequence = sequenceSection.split("").map(decodeCard);
-      currentCardIndex = decodeCard(dataSection.slice(13));
-    } else if (dataSection.length === 16) {
-      // Multi-bot format (19 chars total: ZOO + 16 data)
-      const sequenceSection = dataSection.slice(0, 13);
-      cardSequence = sequenceSection.split("").map(decodeCard);
-      currentCardIndex = decodeCard(dataSection.slice(13, 14));
+        // Decode bot information
+        botCount = parseInt(dataSection.slice(14, 15));
+        currentBot = parseInt(dataSection.slice(15, 16));
 
-      // Decode bot information
-      botCount = parseInt(dataSection.slice(14, 15));
-      currentBot = parseInt(dataSection.slice(15, 16));
-
-      // Validate bot numbers
-      if (
-        botCount < 2 ||
-        botCount > 4 ||
-        currentBot < 1 ||
-        currentBot > botCount
-      ) {
+        // Validate bot numbers
+        if (
+          botCount < 2 ||
+          botCount > 4 ||
+          currentBot < 1 ||
+          currentBot > botCount
+        ) {
+          return null;
+        }
+      } else {
         return null;
       }
-    } else {
+
+      // Calculate used cards based on current position
+      const usedCards = cardSequence.slice(0, currentCardIndex);
+
+      // Construct game state
+      const gameState: GameState = {
+        mode: "shared",
+        currentCardIndex,
+        cardSequence,
+        usedCards,
+        botCount,
+        currentBot,
+      };
+
+      return gameState;
+    }
+
+    // Otherwise fallthrough to compact-prefixed formats
+
+    // continue below for compact handling
+
+    // Compact-prefixed forms: ZS+, ZP+, ZM+
+    // Expect format like 'zs+<base64url>'
+    const compactMatch = normalizedCode.match(/^z([psm])\+([0-9a-z\-_]+)$/);
+    if (!compactMatch) {
       return null;
     }
 
-    // Calculate used cards based on current position
-    const usedCards = cardSequence.slice(0, currentCardIndex);
+    const mode = compactMatch[1];
+    const payload = compactMatch[2];
 
-    // Construct game state
-    const gameState: GameState = {
-      currentCardIndex,
-      cardSequence,
-      usedCards,
-      botCount,
-      currentBot,
-    };
+    if (mode === "s") {
+      return decodeSingleBotCompact(payload);
+    }
 
-    return gameState;
+    // For now, we only implemented single-bot compact decoding
+    return null;
   } catch {
     return null;
   }
+}
+
+// ---- Compact (nibble) helpers and single-bot compact implementation ----
+
+function base64UrlEncode(bytes: Uint8Array): string {
+  let binary = "";
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  const b64 = btoa(binary);
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+function base64UrlDecode(str: string): Uint8Array | null {
+  // restore padding correctly
+  const cleaned = str.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = (4 - (cleaned.length % 4)) % 4;
+  const b64 = cleaned + "=".repeat(pad);
+  try {
+    const binary = atob(b64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes;
+  } catch {
+    return null;
+  }
+}
+
+function packNibbles(nibbles: number[]): Uint8Array {
+  const bytes = new Uint8Array(Math.ceil(nibbles.length / 2));
+  for (let i = 0; i < nibbles.length; i += 2) {
+    const high = nibbles[i] & 0x0f;
+    const low = i + 1 < nibbles.length ? nibbles[i + 1] & 0x0f : 0x0;
+    bytes[i >> 1] = (high << 4) | low;
+  }
+  return bytes;
+}
+
+function unpackNibbles(bytes: Uint8Array): number[] {
+  const nibbles: number[] = [];
+  for (let i = 0; i < bytes.length; i++) {
+    nibbles.push((bytes[i] >> 4) & 0x0f);
+    nibbles.push(bytes[i] & 0x0f);
+  }
+  return nibbles;
+}
+
+/**
+ * Encode single-bot remaining-only compact code.
+ * Returns string like 'ZS+<base64url>'
+ * Inputs:
+ *  - curCard: number (0..12)
+ *  - remaining: number[] (each 0..12)
+ */
+function encodeSingleBotCompact(curCard: number, remaining: number[]): string {
+  const VER = 1; // 4-bit version
+  const N = 1;
+  const C = 1;
+  const nibbles: number[] = [];
+  // Header: VER, N, C, CUR
+  nibbles.push(VER & 0x0f, N & 0x0f, C & 0x0f, curCard & 0x0f);
+  // Block for bot1: length + items
+  nibbles.push(remaining.length & 0x0f);
+  for (const v of remaining) nibbles.push(v & 0x0f);
+
+  const bytes = packNibbles(nibbles);
+  const payload = base64UrlEncode(bytes);
+  return `ZS+${payload}`;
+}
+
+/**
+ * Decode single-bot compact payload (base64url without prefix) and return GameState
+ */
+function decodeSingleBotCompact(payload: string): GameState | null {
+  const bytes = base64UrlDecode(payload);
+  if (!bytes) return null;
+  const nibbles = unpackNibbles(bytes);
+  if (nibbles.length < 4 + 1) return null; // header + at least length nibble
+
+  const VER = nibbles[0];
+  // For now support only VER = 1
+  if (VER !== 1) return null;
+  const N = nibbles[1];
+  const C = nibbles[2];
+  const CUR = nibbles[3];
+  if (N !== 1 || C !== 1) return null;
+
+  const L1 = nibbles[4];
+  const expected = 5 + L1;
+  if (nibbles.length < expected) return null;
+
+  const remaining: number[] = [];
+  for (let i = 0; i < L1; i++) {
+    remaining.push(nibbles[5 + i]);
+  }
+
+  // Build GameState as per 'remaining-only' semantics:
+  // cardSequence = [CUR, ...remaining], currentCardIndex = 0, usedCards = []
+  const cardSequence = [CUR, ...remaining];
+  const gameState: GameState = {
+    mode: "shared",
+    currentCardIndex: 0,
+    cardSequence,
+    usedCards: [],
+    botCount: 1,
+    currentBot: 1,
+  };
+
+  return gameState;
 }
 
 /**
