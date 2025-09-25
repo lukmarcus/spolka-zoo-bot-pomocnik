@@ -27,7 +27,7 @@ function decodeCard(char: string): number {
 }
 
 function encodeSingleBotReadable(curCard: number, remaining: number[]): string {
-  return `ZS+${[encodeCard(curCard), ...remaining.map(encodeCard)].join("")}`;
+  return `ZS${[encodeCard(curCard), ...remaining.map(encodeCard)].join("")}`;
 }
 
 function decodeSingleBotReadablePayload(
@@ -78,7 +78,7 @@ export function loadFromShareableCode(code: string): GameState | null {
   if (!code || typeof code !== "string") return null;
   const lower = code.trim().toLowerCase();
 
-  const singleMatch = lower.match(/^zs\+([0-9a-c]+)$/);
+  const singleMatch = lower.match(/^zs([0-9a-c]+)$/);
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     if (!parsed) return null;
@@ -134,7 +134,7 @@ export function previewGameCode(code: string): GameCodePreview {
 
   const lower = code.trim().toLowerCase();
 
-  const singleMatch = lower.match(/^zs\+([0-9a-c]+)$/);
+  const singleMatch = lower.match(/^zs([0-9a-c]+)$/);
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     if (!parsed)
@@ -238,7 +238,7 @@ export function previewGameCode(code: string): GameCodePreview {
 export function isValidGameCode(code: string): boolean {
   if (!code || typeof code !== "string") return false;
   const lower = code.trim().toLowerCase();
-  if (/^zs\+/.test(lower)) return true;
+  if (/^zs/.test(lower)) return true;
   if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
     const data = lower.slice(3);
     return data.length === 16 && /^[0-9a-c]+$/.test(data);
