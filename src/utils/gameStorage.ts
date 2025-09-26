@@ -238,7 +238,7 @@ export function previewGameCode(code: string): GameCodePreview {
 export function isValidGameCode(code: string): boolean {
   if (!code || typeof code !== "string") return false;
   const lower = code.trim().toLowerCase();
-  if (/^zs/.test(lower)) return true;
+  if (/^zs([0-9a-c]+)$/.test(lower)) return true;
   if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
     const data = lower.slice(3);
     return data.length === 16 && /^[0-9a-c]+$/.test(data);
