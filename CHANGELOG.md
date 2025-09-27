@@ -5,6 +5,47 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2025-09-27
+
+### 🎯 Stabilizacja Single-Bot Format (ZS)
+
+**🚀 Nowości:**
+
+- Format ZS Single-Bot z alfabetem A,B,C (duże litery) dla kart 10,11,12
+- Zaawansowana walidacja kodów gry (brak duplikatów, kontrola zakresu, eliminacja stanów ujemnych)
+- Usunięcie niepotrzebnego komunikatu "🏁 Talia wyczerpana"
+- Real-time validation w LoadGameModal z proper error messages
+- Preview stanu gry przed wczytaniem (pozycja X/13)
+
+**� UI/UX Improvements:**
+
+- Optymalizacja wielkości ikon (commit: `icon sizes changed`)
+- Poprawki w responsywności interfejsu
+
+**�🏗️ Zmiany techniczne:**
+
+- Przepisanie `gameStorage.ts` - single authoritative implementation
+- Optymalizacja walidacji (usunięcie redundantnego sprawdzania zakresu)
+- Refaktoryzacja logiki tasowania (commit: `small reshuffle refactor`)
+- Update LoadGameModal.tsx dla obsługi ZS + ZOO formatów
+- Pełna backward compatibility z ZOO legacy format
+
+**📚 Dokumentacja:**
+
+- DOCS.md → ROADMAP.md (lepsze nazewnictwo)
+- Kompletna aktualizacja roadmapy 0.4.x
+- GAME-CODES.md przepisane z aktualnym stanem i planami
+
+**📋 Roadmapa 0.4.x:**
+
+- v0.4.2 - ZM Multi-Shared format (planowane)
+- v0.4.3 - ZP Per-Bot format (planowane)
+- v0.4.4 - Comprehensive tests + finalizacja (planowane)
+
+**🎯 Status:** Stabilna implementacja ZS + dokumentacja. Przygotowanie pod ZM/ZP.
+
+---
+
 ## [0.4.0] - 2025-09-13
 
 ### 🚀 Nowości

@@ -48,34 +48,64 @@ export default function LoadGameModal({
       return;
     }
 
-    // Check if starts with ZOO
+    // Validate format (supports both ZS and ZOO formats)
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
-      setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
+      setError(
+        "Prawidłowy format: ZS + 0-9,A-C (single-bot) lub ZOO + 0-9,A-C (multi-bot)"
+      );
       return;
     }
 
-    if (filteredValue.length >= 2 && !filteredValue.startsWith("ZO")) {
-      setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
-      return;
-    }
-
-    if (filteredValue.length >= 3 && !filteredValue.startsWith("ZOO")) {
-      setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
-      return;
-    }
-
-    // Check for invalid characters in data part (after ZOO)
-    if (filteredValue.length > 3) {
-      const dataPart = filteredValue.substring(3);
-      const invalidChars = dataPart.replace(/[0-9A-C]/g, "");
-      if (invalidChars.length > 0) {
-        setError("Prawidłowy format kodu to ZOO + 0-9 i A-C");
+    if (filteredValue.length >= 2) {
+      const prefix = filteredValue.substring(0, 2);
+      if (prefix !== "ZS" && prefix !== "ZO") {
+        setError(
+          "Prawidłowy format: ZS + 0-9,A-C (single-bot) lub ZOO + 0-9,A-C (multi-bot)"
+        );
         return;
       }
     }
 
+    if (filteredValue.length >= 3) {
+      const prefix = filteredValue.substring(0, 3);
+      if (!prefix.startsWith("ZS") && prefix !== "ZOO") {
+        setError(
+          "Prawidłowy format: ZS + 0-9,A-C (single-bot) lub ZOO + 0-9,A-C (multi-bot)"
+        );
+        return;
+      }
+    }
+
+    // Check for invalid characters in data part
+    if (filteredValue.length > 2) {
+      let dataPart = "";
+
+      if (filteredValue.startsWith("ZOO")) {
+        dataPart = filteredValue.substring(3);
+      } else if (filteredValue.startsWith("ZS")) {
+        dataPart = filteredValue.substring(2);
+      }
+
+      if (dataPart.length > 0) {
+        const invalidChars = dataPart.replace(/[0-9A-C]/g, "");
+        if (invalidChars.length > 0) {
+          setError(
+            "Prawidłowy format: ZS + 0-9,A-C (single-bot) lub ZOO + 0-9,A-C (multi-bot)"
+          );
+          return;
+        }
+      }
+    }
+
     // Preview game state if code is potentially complete
-    if (filteredValue.length >= 14) {
+    let shouldPreview = false;
+    if (filteredValue.startsWith("ZS") && filteredValue.length >= 3) {
+      shouldPreview = true; // ZS format can be short
+    } else if (filteredValue.startsWith("ZOO") && filteredValue.length >= 19) {
+      shouldPreview = true; // ZOO format needs full 19 chars
+    }
+
+    if (shouldPreview) {
       const preview = previewGameCode(filteredValue);
       setGamePreview(preview);
       if (!preview.isValid) {
@@ -181,13 +211,6 @@ export default function LoadGameModal({
                     <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
                   </div>
                 </>
-              )}
-              {gamePreview.isDeckExhausted && (
-                <div
-                  className={`${styles.previewItem} ${styles.deckExhausted}`}
-                >
-                  🏁 Talia wyczerpana
-                </div>
               )}
             </div>
           </div>

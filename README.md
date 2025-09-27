@@ -20,8 +20,17 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.4.0 ✅  
-**Status**: Osobne talie dla botów (tryb indywidualny), wybór trybu gry (wspólna/indywidualna), per-bot reshuffle i nowe, inteligentne akcje przycisków
+**Aktualna wersja**: 0.4.1 🎯  
+**Status**: Stabilizacja Single-Bot format (ZS) + walidacja + roadmapa multi-bot
+
+### 📋 **Roadmapa 0.4.x:**
+
+- **v0.4.1** (current) - ZS Single-Bot + walidacja + docs
+- **v0.4.2** (planowane) - ZM Multi-Shared format
+- **v0.4.3** (planowane) - ZP Per-Bot format
+- **v0.4.4** (planowane) - Comprehensive tests + finalizacja
+
+**🎯 Cel:** Kompletna implementacja wszystkich formatów kodów gry w ramach wersji 0.4.x
 
 ## 📖 Instrukcja obsługi
 
@@ -40,13 +49,25 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 
 Stan gry można skopiować jako krótki kod i przenieść na inne urządzenie (przycisk "Kopiuj stan gry").
 
-### 🔗 Udostępnianie gry
+### 🔗 Udostępnianie gry (v0.4.1)
 
-Kody gry są zawsze generowane wielkimi literami (ZOO + 0-9, A-C) i można je przesyłać między urządzeniami.
+**Obsługiwane formaty:**
+
+- **ZS** - Single-Bot (główny format v0.4.1): `ZS5AC278B6413`
+- **ZOO** - Legacy (backward compatibility): `ZOOA0CB5938416274`
+
+**Funkcje v0.4.1:**
 
 1. **Podczas gry** kliknij przycisk **"Kopiuj stan gry"**
-2. **Kod jest automatycznie skopiowany** do schowka (np. `ZOOA0CB5938416274`)
-3. Kod działa na dowolnym urządzeniu i przeglądarce
+2. **Automatic format** - ZS dla 1 bota, ZOO dla multi-bot
+3. **Walidacja kodu** w czasie rzeczywistym przy wczytywaniu
+4. **Preview stanu** przed załadowaniem (pozycja X/13)
+5. **Cross-device compatibility** - kod działa na dowolnym urządzeniu
+
+**Planowane formaty:**
+
+- **ZM** (v0.4.2) - Multi-Shared dla wielu botów
+- **ZP** (v0.4.3) - Per-Bot dla niezależnych talii
 
 ### 📥 Wczytywanie gry
 
@@ -78,7 +99,7 @@ npm run preview # Podgląd builda
 
 ## � Dokumentacja
 
-- 📚 **[DOCS.md](DOCS.md)** - Plan rozwoju i przyszłe funkcjonalności
+- 📚 **[ROADMAP.md](ROADMAP.md)** - Roadmapa rozwoju i przyszłe funkcjonalności
 - � **[CHANGELOG.md](CHANGELOG.md)** - Historia zmian i wprowadzonych funkcji
 - 🎮 **[GAME-CODES.md](GAME-CODES.md)** - Instrukcja systemu kodów gry
 

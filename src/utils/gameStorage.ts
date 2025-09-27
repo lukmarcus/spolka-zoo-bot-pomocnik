@@ -1,213 +1,137 @@
-// Game Storage utilities for save/load functionality
-// v0.2.3 - Game code preview and detection functionality
-
 import type { GameState, GameCodePreview } from "../types";
 
-// Storage keys
+// Single authoritative implementation
+// - Single-bot readable: 'ZS' + card chars (0-9,A-C)
+// - Legacy multi-bot: 'ZOO' + 16-char data section (13 cards + pos + botCount + currentBot)
+// No compression/packing (per user request)
+
 const STORAGE_KEY = "zoo-bot-game-state";
 const AUTO_SAVE_KEY = "zoo-bot-auto-save";
-
-// Game code utilities
 const GAME_CODE_PREFIX = "ZOO";
-const GAME_CODE_PREFIX_LOWER = "zoo";
+const GAME_CODE_PREFIX_LOWER = GAME_CODE_PREFIX.toLowerCase();
 
-/**
- * Encode card number (0-12) to alphanumeric char (0-9, a-c)
- */
 function encodeCard(cardIndex: number): string {
-  if (cardIndex < 0 || cardIndex > 12) {
-    throw new Error(`Invalid card index: ${cardIndex}. Must be 0-12.`);
-  }
-
-  // 0-9 → '0'-'9', 10-12 → 'a'-'c'
+  if (cardIndex < 0 || cardIndex > 12) throw new Error("Invalid card index");
   return cardIndex <= 9
-    ? cardIndex.toString()
-    : String.fromCharCode(97 + cardIndex - 10);
+    ? String(cardIndex)
+    : String.fromCharCode(65 + cardIndex - 10);
 }
 
-/**
- * Decode alphanumeric char (0-9, a-c or A-C) to card number (0-12)
- */
 function decodeCard(char: string): number {
-  if (char >= "0" && char <= "9") {
-    return parseInt(char);
-  }
-  // Handle both lowercase and uppercase
-  const lowerChar = char.toLowerCase();
-  if (lowerChar >= "a" && lowerChar <= "c") {
-    return lowerChar.charCodeAt(0) - 97 + 10;
-  }
-  throw new Error(`Invalid card character: ${char}. Must be 0-9 or a-c.`);
+  if (!char || char.length === 0) throw new Error("Empty card char");
+  const c = char[0];
+  if (c >= "0" && c <= "9") return parseInt(c, 10);
+  const uc = c.toUpperCase();
+  if (uc >= "A" && uc <= "C") return uc.charCodeAt(0) - 65 + 10;
+  throw new Error("Invalid card char");
 }
 
-/**
- * Generate ultra-compact game code from game state
- * Format for 1 bot: ZOO + 13 chars (card sequence) + 1 char (current position) = 17 chars total
- * Format for 2-4 bots: ZOO + 13 chars + 1 char + 2 chars (bot info) = 19 chars total
- * Example: ZOO72b08391c64a55 (1 bot, 17 chars)
- */
+function encodeSingleBotReadable(curCard: number, remaining: number[]): string {
+  return `ZS${[encodeCard(curCard), ...remaining.map(encodeCard)].join("")}`;
+}
+
+function decodeSingleBotReadablePayload(
+  payload: string
+): { cur: number; remaining: number[] } | null {
+  if (!payload) return null;
+  const chars = payload.split("");
+  try {
+    const cur = decodeCard(chars[0]);
+    const remaining: number[] = [];
+    for (let i = 1; i < chars.length; i++) remaining.push(decodeCard(chars[i]));
+
+    // Validate card uniqueness - no duplicates allowed
+    const allCards = [cur, ...remaining];
+    const uniqueCards = new Set(allCards);
+    if (uniqueCards.size !== allCards.length) return null;
+
+    // Validate total card count - must be 1-13 (current + remaining)
+    // Note: Range 0-12 is guaranteed by decodeCard() + uniqueness check
+    if (allCards.length < 1 || allCards.length > 13) return null;
+
+    return { cur, remaining };
+  } catch {
+    return null;
+  }
+}
+
 export function generateShareableCode(gameState: GameState): string {
-  try {
-    // Encode card sequence (13 cards)
-    const encodedSequence = gameState.cardSequence.map(encodeCard).join("");
-
-    // Encode current position in deck
-    const encodedPosition = encodeCard(gameState.currentCardIndex);
-
-    // Check if multi-bot format is needed
-    const botCount = gameState.botCount || 1;
-    const currentBot = gameState.currentBot || 1;
-
-    if (botCount === 1) {
-      // Single bot format: ZOO + sequence + position (17 chars)
-      return (
-        GAME_CODE_PREFIX +
-        encodedSequence +
-        encodedPosition
-      ).toUpperCase();
-    } else {
-      // Multi-bot format: ZOO + sequence + position + botCount + currentBot (19 chars)
-      const encodedBotCount = botCount.toString();
-      const encodedCurrentBot = currentBot.toString();
-      return (
-        GAME_CODE_PREFIX +
-        encodedSequence +
-        encodedPosition +
-        encodedBotCount +
-        encodedCurrentBot
-      ).toUpperCase();
-    }
-  } catch {
-    throw new Error("Failed to generate game code");
+  if (!gameState) throw new Error("gameState required");
+  const botCount = gameState.botCount || 1;
+  if (botCount === 1) {
+    const seq = gameState.cardSequence || [];
+    const curIndex =
+      typeof gameState.currentCardIndex === "number"
+        ? gameState.currentCardIndex
+        : 0;
+    const cur = seq[curIndex] ?? 0;
+    const remaining = seq.slice(curIndex + 1);
+    return encodeSingleBotReadable(cur, remaining);
   }
+
+  const encodedSequence = (gameState.cardSequence || [])
+    .map(encodeCard)
+    .join("");
+  const encodedPosition = encodeCard(gameState.currentCardIndex ?? 0);
+  const encodedBotCount = (gameState.botCount || 1).toString();
+  const encodedCurrentBot = (gameState.currentBot || 1).toString();
+  return (
+    GAME_CODE_PREFIX +
+    encodedSequence +
+    encodedPosition +
+    encodedBotCount +
+    encodedCurrentBot
+  ).toUpperCase();
 }
 
-/**
- * Load game state from ultra-compact code
- * Supports v0.2.1+ format:
- * - 17 chars: ZOO + 14 data chars (1 bot)
- * - 19 chars: ZOO + 16 data chars (2-4 bots)
- */
-export function loadFromShareableCode(gameCode: string): GameState | null {
-  // Convert to lowercase to handle uppercase input from UI
-  const normalizedCode = gameCode.toLowerCase();
+export function loadFromShareableCode(code: string): GameState | null {
+  if (!code || typeof code !== "string") return null;
+  const trimmed = code.trim();
 
-  try {
-    // Validate format
-    if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
-      return null;
-    }
-
-    const dataSection = normalizedCode.slice(3); // Remove "ZOO" prefix
-
-    // Auto-detect format based on length
-    let cardSequence: number[];
-    let currentCardIndex: number;
-    let botCount = 1;
-    let currentBot = 1;
-
-    if (dataSection.length === 14) {
-      // Single bot format (17 chars total: ZOO + 14 data)
-      const sequenceSection = dataSection.slice(0, 13);
-      cardSequence = sequenceSection.split("").map(decodeCard);
-      currentCardIndex = decodeCard(dataSection.slice(13));
-    } else if (dataSection.length === 16) {
-      // Multi-bot format (19 chars total: ZOO + 16 data)
-      const sequenceSection = dataSection.slice(0, 13);
-      cardSequence = sequenceSection.split("").map(decodeCard);
-      currentCardIndex = decodeCard(dataSection.slice(13, 14));
-
-      // Decode bot information
-      botCount = parseInt(dataSection.slice(14, 15));
-      currentBot = parseInt(dataSection.slice(15, 16));
-
-      // Validate bot numbers
-      if (
-        botCount < 2 ||
-        botCount > 4 ||
-        currentBot < 1 ||
-        currentBot > botCount
-      ) {
-        return null;
-      }
-    } else {
-      return null;
-    }
-
-    // Calculate used cards based on current position
-    const usedCards = cardSequence.slice(0, currentCardIndex);
-
-    // Construct game state
-    const gameState: GameState = {
-      currentCardIndex,
+  const singleMatch = trimmed.match(/^ZS([0-9A-C]+)$/i);
+  if (singleMatch) {
+    const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
+    if (!parsed) return null;
+    const cardSequence = [parsed.cur, ...parsed.remaining];
+    return {
+      mode: "shared",
+      currentCardIndex: 0,
       cardSequence,
-      usedCards,
-      botCount,
-      currentBot,
+      usedCards: [],
+      botCount: 1,
+      currentBot: 1,
+      botsSelected: true,
     };
-
-    return gameState;
-  } catch {
-    return null;
   }
-}
 
-/**
- * Auto-save game state to localStorage
- */
-export function autoSaveGameState(gameState: GameState): void {
-  try {
-    const serialized = JSON.stringify(gameState);
-    localStorage.setItem(AUTO_SAVE_KEY, serialized);
-    localStorage.setItem(STORAGE_KEY, serialized); // Backup
-  } catch {
-    // Silently fail
-  }
-}
-
-/**
- * Load auto-saved game state from localStorage
- */
-export function loadAutoSavedGameState(): GameState | null {
-  try {
-    const serialized = localStorage.getItem(AUTO_SAVE_KEY);
-    if (serialized) {
-      return JSON.parse(serialized) as GameState;
+  if (trimmed.toLowerCase().startsWith(GAME_CODE_PREFIX_LOWER)) {
+    const data = trimmed.slice(3);
+    if (data.length !== 16) return null;
+    if (!/^[0-9A-C]+$/i.test(data)) return null;
+    try {
+      const seq = data.slice(0, 13).split("").map(decodeCard);
+      const pos = decodeCard(data.slice(13, 14));
+      const botCount = parseInt(data.slice(14, 15), 10);
+      const currentBot = parseInt(data.slice(15, 16), 10);
+      return {
+        mode: "shared",
+        currentCardIndex: pos,
+        cardSequence: seq,
+        usedCards: seq.slice(0, pos),
+        botCount,
+        currentBot,
+        botsSelected: true,
+      };
+    } catch {
+      return null;
     }
-
-    // Fallback to old key
-    const oldFormat = localStorage.getItem(STORAGE_KEY);
-    if (oldFormat) {
-      return JSON.parse(oldFormat) as GameState;
-    }
-
-    return null;
-  } catch {
-    return null;
   }
+
+  return null;
 }
 
-/**
- * Clear all saved game data
- */
-export function clearAllSavedData(): void {
-  localStorage.removeItem(AUTO_SAVE_KEY);
-  localStorage.removeItem(STORAGE_KEY);
-
-  // Clear v0.2.0 game codes (no longer supported)
-  const allKeys = Object.keys(localStorage).filter((key) =>
-    key.startsWith("game-code-")
-  );
-  allKeys.forEach((key) => localStorage.removeItem(key));
-}
-
-/**
- * Preview game code without full decoding - v0.2.3 feature
- * Returns basic information about the game state without loading it
- */
 export function previewGameCode(code: string): GameCodePreview {
-  // Initial validation
-  if (!code || typeof code !== "string") {
+  if (!code)
     return {
       isValid: false,
       errorMessage: "Kod gry jest pusty",
@@ -219,170 +143,176 @@ export function previewGameCode(code: string): GameCodePreview {
       isGameStarted: false,
       isDeckExhausted: false,
     };
-  }
 
-  // Normalize code (handle both cases)
-  const normalizedCode = code.toLowerCase().trim();
+  const trimmed = code.trim();
 
-  // Check prefix
-  if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
-    return {
-      isValid: false,
-      errorMessage: "Kod musi zaczynać się od 'ZOO'",
-      botCount: 1,
-      currentBot: undefined,
-      currentCardIndex: -1,
-      totalCards: 13,
-      gameProgress: "0/13",
-      isGameStarted: false,
-      isDeckExhausted: false,
-    };
-  }
+  const singleMatch = trimmed.match(/^ZS([0-9A-C]+)$/i);
+  if (singleMatch) {
+    const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
+    if (!parsed)
+      return {
+        isValid: false,
+        errorMessage: "Kod zawiera nieprawidłowe lub powtarzające się karty",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    const totalCards = 13;
+    const totalCardsInSequence = 1 + parsed.remaining.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // cards drawn before this sequence
+    const currentPosition = cardsAlreadyDrawn + 1; // current card position (1-based)
 
-  const dataSection = normalizedCode.slice(3);
-
-  // Validate length (14 chars for 1 bot, 16 chars for 2-4 bots)
-  if (dataSection.length !== 14 && dataSection.length !== 16) {
-    return {
-      isValid: false,
-      errorMessage: `Nieprawidłowa długość kodu (${
-        dataSection.length + 3
-      } znaków)`,
-      botCount: 1,
-      currentBot: undefined,
-      currentCardIndex: -1,
-      totalCards: 13,
-      gameProgress: "0/13",
-      isGameStarted: false,
-      isDeckExhausted: false,
-    };
-  }
-
-  // Validate characters
-  const validChars = /^[0-9a-c]+$/;
-  if (!validChars.test(dataSection)) {
-    return {
-      isValid: false,
-      errorMessage: "Kod zawiera nieprawidłowe znaki",
-      botCount: 1,
-      currentBot: undefined,
-      currentCardIndex: -1,
-      totalCards: 13,
-      gameProgress: "0/13",
-      isGameStarted: false,
-      isDeckExhausted: false,
-    };
-  }
-
-  try {
-    let currentCardIndex: number;
-    let botCount: number;
-    let currentBot: number | undefined;
-
-    if (dataSection.length === 14) {
-      // Single bot format: 13 chars (sequence) + 1 char (position)
-      currentCardIndex = decodeCard(dataSection.slice(13));
-      botCount = 1;
-      currentBot = undefined; // No current bot for single bot
-    } else {
-      // Multi-bot format: 13 chars + 1 char (position) + 1 char (botCount) + 1 char (currentBot)
-      currentCardIndex = decodeCard(dataSection.slice(13, 14));
-      // Decode bot count from position 14
-      botCount = parseInt(dataSection.slice(14, 15));
-      // Decode current bot from position 15
-      currentBot = parseInt(dataSection.slice(15, 16));
+    // Prevent invalid states
+    if (currentPosition <= 0 || currentPosition > totalCards) {
+      return {
+        isValid: false,
+        errorMessage: "Nieprawidłowy stan gry - pozycja poza zakresem",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
     }
 
-    const totalCards = 13;
-    const cardsDrawn = Math.max(0, currentCardIndex + 1);
-    const gameProgress = `${cardsDrawn}/${totalCards}`;
-    const isGameStarted = currentCardIndex >= 0;
-    const isDeckExhausted = currentCardIndex >= totalCards - 1;
-
+    const gameProgress = `${currentPosition}/${totalCards}`;
     return {
       isValid: true,
-      botCount,
-      currentBot,
-      currentCardIndex,
+      botCount: 1,
+      currentBot: 1,
+      currentCardIndex: cardsAlreadyDrawn, // 0-based index
       totalCards,
       gameProgress,
-      isGameStarted,
-      isDeckExhausted,
-    };
-  } catch {
-    return {
-      isValid: false,
-      errorMessage: "Błąd dekodowania kodu gry",
-      botCount: 1,
-      currentBot: undefined,
-      currentCardIndex: -1,
-      totalCards: 13,
-      gameProgress: "0/13",
-      isGameStarted: false,
-      isDeckExhausted: false,
+      isGameStarted: true,
+      isDeckExhausted: parsed.remaining.length === 0,
     };
   }
+
+  if (trimmed.toLowerCase().startsWith(GAME_CODE_PREFIX_LOWER)) {
+    const data = trimmed.slice(3);
+    if (data.length !== 16)
+      return {
+        isValid: false,
+        errorMessage: "Stary format ZOO jest nieprawidłowy (tylko multi-bot)",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    if (!/^[0-9A-C]+$/i.test(data))
+      return {
+        isValid: false,
+        errorMessage: "Kod zawiera nieprawidłowe znaki",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    try {
+      const pos = decodeCard(data.slice(13, 14));
+      const botCount = parseInt(data.slice(14, 15), 10);
+      const currentBot = parseInt(data.slice(15, 16), 10);
+      const totalCards = 13;
+      const cardsDrawn = Math.max(0, pos + 1);
+      const gameProgress = `${cardsDrawn}/${totalCards}`;
+      return {
+        isValid: true,
+        botCount,
+        currentBot,
+        currentCardIndex: pos,
+        totalCards,
+        gameProgress,
+        isGameStarted: pos >= 0,
+        isDeckExhausted: pos >= totalCards - 1,
+      };
+    } catch {
+      return {
+        isValid: false,
+        errorMessage: "Błąd dekodowania",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    }
+  }
+
+  return {
+    isValid: false,
+    errorMessage: "Nieznany format kodu",
+    botCount: 1,
+    currentBot: undefined,
+    currentCardIndex: -1,
+    totalCards: 13,
+    gameProgress: "0/13",
+    isGameStarted: false,
+    isDeckExhausted: false,
+  };
 }
 
-/**
- * Validate game code format for v0.2.1
- */
 export function isValidGameCode(code: string): boolean {
-  // Convert to lowercase to handle uppercase input from UI
-  const normalizedCode = code.toLowerCase();
+  if (!code || typeof code !== "string") return false;
+  const trimmed = code.trim();
 
-  if (!normalizedCode.startsWith(GAME_CODE_PREFIX_LOWER)) {
-    return false;
+  // Validate ZS format with proper card validation
+  const singleMatch = trimmed.match(/^ZS([0-9A-C]+)$/i);
+  if (singleMatch) {
+    const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
+    return parsed !== null; // This now includes duplicate/range validation
   }
 
-  const dataSection = normalizedCode.slice(3);
-
-  // Support both single bot (14 chars) and multi-bot (16 chars) formats
-  if (dataSection.length !== 14 && dataSection.length !== 16) {
-    return false;
+  // Validate legacy ZOO format
+  const lower = trimmed.toLowerCase();
+  if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
+    const data = lower.slice(3);
+    return data.length === 16 && /^[0-9a-c]+$/.test(data);
   }
 
-  // Validate all characters are valid (0-9, a-c)
-  const validChars = /^[0-9a-c]+$/;
-  return validChars.test(dataSection);
+  return false;
 }
 
-/**
- * Copy text to clipboard
- */
 export async function copyToClipboard(text: string): Promise<boolean> {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
-    } else {
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.position = "absolute";
-      textArea.style.left = "-999999px";
-      document.body.prepend(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      textArea.remove();
-      return true;
     }
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "absolute";
+    ta.style.left = "-9999px";
+    document.body.prepend(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    return true;
   } catch {
     return false;
   }
 }
 
-/**
- * Simple function to copy game code to clipboard with user feedback
- * Returns user-friendly message for display
- */
 export async function copyGameCodeToClipboard(
   gameState: GameState
 ): Promise<string> {
   try {
     const code = generateShareableCode(gameState);
-    const success = await copyToClipboard(code);
-    return success
+    const ok = await copyToClipboard(code);
+    return ok
       ? "✅ Stan gry skopiowany do schowka!"
       : "❌ Nie udało się skopiować. Spróbuj ponownie.";
   } catch {
@@ -390,9 +320,28 @@ export async function copyGameCodeToClipboard(
   }
 }
 
-// Legacy v0.2.0 functions removed:
-// - serializeGameState()
-// - deserializeGameData()
-// - generateGameCode()
-// - calculateChecksum()
-// These are no longer needed with the new ultra-compact system
+export function autoSaveGameState(gameState: GameState): void {
+  try {
+    const serialized = JSON.stringify(gameState);
+    localStorage.setItem(AUTO_SAVE_KEY, serialized);
+    localStorage.setItem(STORAGE_KEY, serialized);
+  } catch {
+    // ignore
+  }
+}
+
+export function loadAutoSavedGameState(): GameState | null {
+  try {
+    const s =
+      localStorage.getItem(AUTO_SAVE_KEY) || localStorage.getItem(STORAGE_KEY);
+    if (!s) return null;
+    return JSON.parse(s) as GameState;
+  } catch {
+    return null;
+  }
+}
+
+export function clearAllSavedData(): void {
+  localStorage.removeItem(AUTO_SAVE_KEY);
+  localStorage.removeItem(STORAGE_KEY);
+}
