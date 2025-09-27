@@ -1,11 +1,12 @@
 # System zapisu gry - Spółka ZOO Bot Pomocnik
 
-## 📖 Specyfikacja systemu kodów gry v0.2.1
+## 📖 Specyfikacja systemu kodów gry v0.4.1
 
-Kody gry są zawsze generowane i akceptowane wyłącznie wielkimi literami (ZOO + 0-9, A-C).
+Kody gry używają czytelnego formatu "remaining-only" - zapisują tylko obecną kartę i karty pozostałe do dobrania.
 
-- Kod gry jest zawsze generowany wielkimi literami, niezależnie od urządzenia czy przeglądarki.
-- Wklejanie kodu do pola wczytywania akceptuje tylko wielkie litery.
+- **Aktualny system**: Format `ZS` dla jednego bota (human-readable)
+- **Legacy**: Format `ZOO` dla kompatybilności wstecznej
+- **Przyszłość**: Formaty `ZM` i `ZP` dla wielu botów (planowane)
 
 ---
 
@@ -13,12 +14,12 @@ Kody gry są zawsze generowane i akceptowane wyłącznie wielkimi literami (ZOO 
 
 ### Podstawowe założenia
 
-- **Jedna talia**: 13 kart oznaczonych indeksami 0-12
-- **Alfanumeryczne kodowanie**: Użycie znaków 0-9 oraz A-C (łącznie 13 symboli)
-- **Zakres botów**: 1-4 boty zgodnie z ograniczeniami gry
-- **Optymalizacja**: 1 bot = 17 znaków, 2-4 boty = 19 znaków
-- **Brak historii**: System zapisuje tylko aktualny stan talii, nie przechowuje historii przetasowań
-- **Auto-detect**: Liczba botów i tryb gry rozpoznawane automatycznie na podstawie długości kodu
+- **Talia**: 13 kart oznaczonych indeksami 0-12
+- **Alfabet**: Znaki 0-9 (indeksy 0-9) oraz A-C (indeksy 10-12) - duże litery!
+- **Zakres botów**: Obecnie 1 bot, planowane 2-4 boty
+- **Logika "remaining-only"**: Kod zawiera obecną kartę + pozostałe do dobrania
+- **Brak kompresji**: Czytelny format dla człowieka (no compression, no binary packing)
+- **Auto-detect**: Rozpoznawanie formatu na podstawie prefiksu
 
 ### Mapowanie indeksów kart
 
@@ -27,112 +28,97 @@ Indeks karty → Symbol
 0 → 0     7 → 7
 1 → 1     8 → 8
 2 → 2     9 → 9
-3 → 3    10 → A
-4 → 4    11 → B
-5 → 5    12 → C
+3 → 3    10 → A  ← duże litery!
+4 → 4    11 → B  ← duże litery!
+5 → 5    12 → C  ← duże litery!
 6 → 6
 ```
 
 ---
 
-## 📝 Format kodów gry
+## 📝 Formaty kodów gry
 
-### Struktura kodu
+### 🎯 Aktualny system (implementowany)
 
-Każdy kod gry składa się z:
+#### Format ZS - Single Bot (jeden bot)
 
-1. **Prefix**: `ZOO` (3 znaki) - identyfikator aplikacji
-2. **Dane gry**: Zakodowany stan gry (długość zależna od trybu)
+**Struktura:** `ZS[obecna_karta][pozostałe_karty...]`
 
-### Tryby gry i długości kodów
+- **Prefix**: `ZS` (Single bot)
+- **Obecna karta**: 1 znak (0-9,A-C) - karta obecnie wyciągnięta
+- **Pozostałe karty**: 0-12 znaków - karty jeszcze do dobrania
+- **Długość**: 3-15 znaków (dynamiczna, zależna od postępu gry)
 
-| Tryb gry             | Długość kodu  | Format                                            | Opis                 |
-| -------------------- | ------------- | ------------------------------------------------- | -------------------- |
-| 1 bot                | **17 znaków** | `ZOO` + 13 znaków (sekwencja) + 1 znak (pozycja)  | `ZOO72b08391c64a55`  |
-| 2 boty (jedna talia) | **19 znaków** | `ZOO` + 13 znaków + 1 znak + 2 znaki (boty: n+nr) | `ZOO72b08391c64a521` |
-| 3 boty (jedna talia) | **19 znaków** | `ZOO` + 13 znaków + 1 znak + 2 znaki (boty: n+nr) | `ZOO72b08391c64a532` |
-| 4 boty (jedna talia) | **19 znaków** | `ZOO` + 13 znaków + 1 znak + 2 znaki (boty: n+nr) | `ZOO72b08391c64a543` |
+**Przykłady:**
+
+- `ZS5AC278B6413` - obecna: karta 5, pozostałe: A,C,2,7,8,B,6,4,1,3 (pozycja 3/13)
+- `ZSC` - obecna: karta C(12), brak pozostałych (pozycja 13/13)
+- `ZS0123456789ABC` - obecna: karta 0, wszystkie pozostałe (pozycja 1/13)
+
+### 🔮 Przyszłe systemy (planowane)
+
+#### Format ZM - Multi Shared (wielu botów, wspólna talia)
+
+**Struktura:** `ZM[n_botów][aktualny_bot][obecna_karta][pozostałe_karty...]`
+
+Przykład: `ZM325AC278B6413` - 3 boty, aktualny bot 2, obecna karta 5
+
+#### Format ZP - Per-Bot (każdy bot osobną talią)
+
+**Struktura:** `ZP[n_botów][aktualny_bot][obecna_karta]Z[bot1_karty]Z[bot2_karty]Z[bot3_karty]...`
+
+Przykład: `ZP321Z5Z23Z678` - 3 boty, aktualny bot 2, jego obecna karta 1
+
+### 🏛️ Legacy (kompatybilność wsteczna)
+
+#### Format ZOO - Stary system
+
+**Struktura:** `ZOO[13_kart][pozycja][n_botów][aktualny_bot]` (19 znaków)
+
+Przykład: `ZOO72B08391C64A5521` - wspierany dla wczytywania starych kodów
 
 ---
 
 ## 🔍 Szczegóły implementacji
 
-### Dla jednego bota (17 znaków)
+### Format ZS - Aktualny system (v0.4.1)
 
-**Format**: `ZOO[13-znakowa sekwencja kart][1-znakowa pozycja]`
+**Logika "remaining-only"**: Kod zawiera tylko obecną kartę + karty jeszcze do dobrania
 
-**Przykład**: `ZOO72b08391c64a55`
+**Struktura**: `ZS[obecna_karta][pozostałe_karty...]`
 
-- `ZOO` - prefix
-- `72b08391c64a5` - przetasowana sekwencja 13 kart
-- `5` - aktualna pozycja w talii (po 5. karcie, czyli indeks 5)
+**Przykład analizy kodu**: `ZS5ac278b6413`
 
-**Dekodowanie**:
-
-1. Usunięcie prefixu `ZOO`
-2. Podział na sekwencję (13 znaków) i pozycję (1 znak)
-3. Konwersja każdego znaku na indeks karty (0-12)
-4. Określenie użytych kart na podstawie aktualnej pozycji
-
-### Dla wielu botów z jedną talią
-
-**Format**: `ZOO[13-znakowa sekwencja kart][1-znakowa pozycja][liczba botów][numer aktualnego bota]`
-
-**Specyfikacja**:
-
-- **Znak 1**: Liczba botów (2-4) - tylko dla trybów wielobotowych
-- **Znak 2**: Numer aktualnego bota (1-4) - tylko dla trybów wielobotowych
-- **Uwaga**: 1 bot używa krótszego formatu (17 znaków) bez informacji o botach
-
-**Przykłady**:
-
-- `ZOO72b08391c64a521` - 2 boty, aktualny Bot 1
-- `ZOO72b08391c64a522` - 2 boty, aktualny Bot 2
-- `ZOO72b08391c64a532` - 3 boty, aktualny Bot 2
-- `ZOO72b08391c64a544` - 4 boty, aktualny Bot 4
+1. **Prefix**: `ZS` → Single bot format
+2. **Obecna karta**: `5` → Bot ma obecnie kartę o indeksie 5
+3. **Pozostałe karty**: `ac278b6413` → Do dobrania: [10,12,2,7,8,11,6,4,1,3]
+4. **Pozycja w grze**: 13 - (1+10) = 2 karty już wyciągnięte wcześniej → **pozycja 3/13**
 
 **Zalety**:
 
-- Stała długość 19 znaków dla wszystkich trybów wielobotowych
-- Intuicyjne numerowanie botów (1,2,3,4...)
-- Jasne rozróżnienie liczby botów i aktualnego bota
+- **Dynamiczna długość**: 3-15 znaków (krótszy kod = dalszy postęp gry)
+- **Czytelność**: Alfabet 0-9,a-c bez mylących znaków
+- **Oszczędność**: Tylko potrzebne informacje, bez historii
+
+### Format ZOO - Legacy (kompatybilność wsteczna)
+
+**Struktura**: `ZOO[13_kart][pozycja][n_botów][aktualny_bot]` (19 znaków stałe)
+
+**Przykład**: `ZOO72b08391c64a5523`
+
+- 2 boty, aktualny Bot 3, pozycja 5, pełna sekwencja 13 kart
+
+**Uwaga**: Format ZOO wspierany tylko do wczytywania starych kodów
 
 ---
 
-## 💾 Zmiany w GameState
+## 🎮 Zalety aktualnego systemu ZS
 
-### Usunięte pola (v0.2.0 → v0.2.1)
+### Oszczędność i czytelność
 
-```typescript
-// USUNIĘTE z GameState:
-shuffleCount: number; // Niepotrzebne - nie przechowujemy historii
-gameStarted: boolean; // Niepotrzebne - istnienie kodu = gra rozpoczęta
-```
-
-### Aktualna struktura
-
-```typescript
-interface GameState {
-  currentCardIndex: number; // Pozycja w talii (0-12)
-  cardSequence: number[]; // Przetasowana sekwencja kart [0-12]
-  usedCards: number[]; // Karty użyte w bieżącej rundzie
-}
-```
-
----
-
-## 🎮 Zalety systemu
-
-### Ultra-kompaktowość
-
-- **90% redukcja** względem poprzednich systemów
-- v0.2.0: ~175 znaków → v0.2.1: **17 znaków**
-
-### Czytelność dla człowieka
-
-- Brak mylących znaków (0/O, 1/l)
-- Alfanumeryczne znaki łatwe do przepisania
-- Krótkie kody możliwe do zapamiętania
+- **Dynamiczna długość**: 3-15 znaków (vs. stałe 19 w ZOO)
+- **Human-readable**: Alfabet 0-9,a-c bez mylących znaków (0/O, 1/l)
+- **Brak kompresji**: Czytelne dla człowieka (zgodnie z wymaganiami użytkownika)
 
 ### Cross-device compatibility
 
@@ -140,114 +126,106 @@ interface GameState {
 - Brak zależności od localStorage
 - Działa między różnymi urządzeniami i przeglądarkami
 
-### Skalowalność
+### Logiczna semantyka
 
-- Eleganckie rozszerzenie dla wielu botów
-- Auto-detect trybu gry
-- Przygotowanie na przyszłe funkcje
-
----
-
-## 🚫 Ograniczenia systemu
-
-### Brak personalizacji
-
-- Nie ma miejsca na niestandardowe imiona botów
-- Boty nazywane generycznie: "Bot 1", "Bot 2", etc.
-
-### Breaking change
-
-- Brak wstecznej kompatybilności z v0.2.0
-- Konieczność przepisania całego systemu save/load
-
-### Tylko podstawowe dane
-
-- Brak historii przetasowań
-- Brak metadanych (timestamp, wersja, checksumy)
+- **"Remaining-only"**: Kod zawiera tylko to co potrzebne
+- **Postęp gry = długość kodu**: Krótszy kod = dalszy postęp
+- **Intuicyjne**: Pierwsza karta = obecna, reszta = do dobrania
 
 ---
 
 ## 🔧 Implementacja techniczna
 
-### Funkcje kodowania
+### Funkcje kodowania (v0.4.1)
 
 ```typescript
-// Kodowanie indeksu karty (0-12) → symbol (1-9,a-d)
+// Kodowanie indeksu karty (0-12) → symbol (0-9,a-c)
 function encodeCard(cardIndex: number): string;
 
-// Dekodowanie symbolu (1-9,a-d) → indeks karty (0-12)
+// Dekodowanie symbolu (0-9,a-c) → indeks karty (0-12)
 function decodeCard(char: string): number;
 
-// Generowanie kodu gry
+// Generowanie kodu gry (ZS dla 1 bota, ZOO dla legacy)
 function generateShareableCode(gameState: GameState): string;
 
-// Wczytywanie stanu z kodu
+// Wczytywanie stanu z kodu (obsługuje ZS i ZOO)
 function loadFromShareableCode(gameCode: string): GameState | null;
+
+// Podgląd kodu przed wczytaniem
+function previewGameCode(code: string): GameCodePreview;
+
+// Sprawdzenie poprawności kodu
+function isValidGameCode(code: string): boolean;
 ```
 
 ### Walidacja
 
-- Sprawdzenie prefixu `ZOO`
-- Walidacja długości kodu (17 znaków dla 1 bota)
-- Walidacja znaków (tylko 1-9, A-C)
-- Sprawdzenie poprawności indeksów kart
+- **Format ZS**: prefix `ZS` + znaki 0-9,a-c, długość 3-15 znaków
+- **Format ZOO**: prefix `ZOO` + 16 znaków danych, łącznie 19 znaków
+- **Alfabety**: ZS używa 0-9,a-c; ZOO używa 0-9,A-C (duże litery)
+- **Auto-detect**: rozpoznawanie formatu po prefiksie
 
 ---
 
-## 📊 Porównanie systemów
+## 📊 Porównanie formatów
 
-| System               | Długość       | Cross-device | Czytelność | Kompresja |
-| -------------------- | ------------- | ------------ | ---------- | --------- |
-| v0.2.0 JSON+Base64   | ~172 znaki    | ❌           | ❌         | -         |
-| v0.2.0 LZ-String     | ~175 znaków   | ❌           | ❌         | Średnia   |
-| v0.2.1 Ultra-compact | **17 znaków** | ✅           | ✅         | **90%**   |
+| Format  | Status       | Długość       | Czytelność      | Użycie                     |
+| ------- | ------------ | ------------- | --------------- | -------------------------- |
+| **ZS**  | ✅ Aktualny  | 3-15 znaków   | ✅ Bardzo dobra | 1 bot (remaining-only)     |
+| **ZOO** | 🏛️ Legacy    | 19 znaków     | ⚠️ Średnia      | Multi-bot (kompatybilność) |
+| **ZM**  | 🔮 Planowany | ~6-18 znaków  | ✅ Dobra        | Multi-bot, wspólna talia   |
+| **ZP**  | 🔮 Planowany | ~15-40 znaków | ✅ Dobra        | Multi-bot, osobne talie    |
 
 ---
 
 ## 🚀 Roadmapa
 
-### v0.2.1 (current)
+### v0.4.1 (current)
 
-- ✅ Implementacja systemu dla 1 bota
+- ✅ Format ZS dla jednego bota (remaining-only)
+- ✅ Legacy ZOO support dla kompatybilności
+- ✅ Human-readable alphabet (0-9,a-c)
 - ✅ Cross-device functionality
-- ✅ Ultra-compact codes
 
-### v0.3.0 (planned)
+### v0.5.0 (planned)
 
-- [ ] Wsparcie dla wielu botów z jedną talią
-- [ ] Rozszerzenie systemu kodów
+- [ ] Format ZM - multi-bot wspólna talia
+- [ ] Rozszerzona walidacja i preview
 
-### v0.4.0 (planned)
+### v0.6.0 (planned)
 
-- [ ] Osobne talie dla każdego bota
-- [ ] Format kodów v2
+- [ ] Format ZP - per-bot osobne talie
+- [ ] Pełny multi-bot system
 
 ---
 
-_Dokumentacja systemu zapisu gry - Spółka ZOO Bot Pomocnik v0.2.1_
+## 🧩 Przyszłe formaty - planowane rozszerzenia
 
-## 🧩 Propozycja użytkownika: zapis 'remaining-only' z wyróżnieniem aktualnej karty
+Poniżej opis przyszłych formatów dla wielu botów, które będą implementowane w kolejnych wersjach.
 
-Uwaga: poniżej znajduje się zapis pomysłu przesłany przez współpracownika — zachowuję oryginalną logikę, robię analizę i proponuję małe ujednolicenia. Celem jest: zapisywać jedynie to, co pozostało do dobrania, ale jednocześnie móc natychmiast pokazać aktualną kartę (ostatnio dobraną) dla bieżącego bota.
+### Format ZM - Multi Shared (wspólna talia)
 
-Podstawa (idea):
+**Idea**: Wielu botów dzieli jedną talię, podobnie do obecnego systemu ZS.
 
-- Prefix zawsze zaczyna się od litery `Z`.
-- Zapisujemy jedynie "remaining" (karty, które jeszcze będą dobierane) — oszczędza miejsce.
-- Dla jednego bota zapis może być np. `ZS5` oznaczające: tryb Single (`S`), aktualna karta = `5`, i nie ma już kolejnej karty do dobrania (następna akcja to reshuffle).
-- Dla wielu botów z jedną talią np. `ZM325` oznacza: `Z` `M` (multi-shared), `3` (liczba botów), `2` (aktualny bot), `5` (aktualna karta). Następnie w zależności od akcji kod może rozwinąć się do postaci zawierającej sekwencję pozostałych kart (np. po reshuffle): `ZM320123456789ABC` lub `ZM330123456789ABC`.
+**Struktura**: `ZM[n_botów][aktualny_bot][obecna_karta][pozostałe_karty...]`
 
-### Propozycja formatu per-bot (użytkownik): przykładowy zapis
+**Przykłady**:
 
-- Przykład zaproponowany przez użytkownika: `ZP321Z5Z23Z678`
-  - Rozbicie (interpretacja autora pomysłu):
-    - `ZP` — prefix + per-bot mode
-    - `3` — liczba botów (3)
-    - `2` — aktualny bot (bot #2)
-    - `1` — aktualna karta (dla bota #2 = karta 1)
-    - `Z5` — dla bota #1: tylko karta `5` pozostała do dobrania
-    - `Z23` — dla bota #2: pozostałe do dobrania karty `2` i `3`
-    - `Z678` — dla bota #3: pozostałe do dobrania karty `6,7,8`
+- `ZM325ac278b6413` - 3 boty, aktualny bot 2, obecna karta 5, pozostałe karty
+- `ZM21c` - 2 boty, aktualny bot 1, obecna karta c(12), końcówka gry
+
+### Format ZP - Per-Bot (osobne talie)
+
+**Idea**: Każdy bot ma własną talię w różnym stanie zaawansowania.
+
+**Struktura**: `ZP[n_botów][aktualny_bot][obecna_karta]Z[bot1_karty]Z[bot2_karty]Z[bot3_karty]...`
+
+**Przykład**: `ZP321Z5Z23Z678`
+
+- **Nagłówek**: `ZP321` → 3 boty, aktualny bot 2, jego obecna karta 1
+- **Bot 1**: `Z5` → pozostała do dobrania karta 5
+- **Bot 2**: `Z23` → pozostałe karty 2,3 (po obecnej karcie 1)
+- **Bot 3**: `Z678` → pozostałe karty 6,7,8
 
 -### Analiza oryginalnego pomysłu — uwagi i reguła
 

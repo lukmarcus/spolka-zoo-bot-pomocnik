@@ -1,7 +1,7 @@
 import type { GameState, GameCodePreview } from "../types";
 
 // Single authoritative implementation
-// - Single-bot readable: 'ZS+' + card chars (0-9,a-c)
+// - Single-bot readable: 'ZS' + card chars (0-9,A-C)
 // - Legacy multi-bot: 'ZOO' + 16-char data section (13 cards + pos + botCount + currentBot)
 // No compression/packing (per user request)
 
@@ -14,15 +14,15 @@ function encodeCard(cardIndex: number): string {
   if (cardIndex < 0 || cardIndex > 12) throw new Error("Invalid card index");
   return cardIndex <= 9
     ? String(cardIndex)
-    : String.fromCharCode(97 + cardIndex - 10);
+    : String.fromCharCode(65 + cardIndex - 10);
 }
 
 function decodeCard(char: string): number {
   if (!char || char.length === 0) throw new Error("Empty card char");
   const c = char[0];
   if (c >= "0" && c <= "9") return parseInt(c, 10);
-  const lc = c.toLowerCase();
-  if (lc >= "a" && lc <= "c") return lc.charCodeAt(0) - 97 + 10;
+  const uc = c.toUpperCase();
+  if (uc >= "A" && uc <= "C") return uc.charCodeAt(0) - 65 + 10;
   throw new Error("Invalid card char");
 }
 
@@ -76,9 +76,9 @@ export function generateShareableCode(gameState: GameState): string {
 
 export function loadFromShareableCode(code: string): GameState | null {
   if (!code || typeof code !== "string") return null;
-  const lower = code.trim().toLowerCase();
+  const trimmed = code.trim();
 
-  const singleMatch = lower.match(/^zs([0-9a-c]+)$/);
+  const singleMatch = trimmed.match(/^ZS([0-9A-C]+)$/i);
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     if (!parsed) return null;
@@ -90,13 +90,14 @@ export function loadFromShareableCode(code: string): GameState | null {
       usedCards: [],
       botCount: 1,
       currentBot: 1,
+      botsSelected: true,
     };
   }
 
-  if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
-    const data = lower.slice(3);
+  if (trimmed.toLowerCase().startsWith(GAME_CODE_PREFIX_LOWER)) {
+    const data = trimmed.slice(3);
     if (data.length !== 16) return null;
-    if (!/^[0-9a-c]+$/.test(data)) return null;
+    if (!/^[0-9A-C]+$/i.test(data)) return null;
     try {
       const seq = data.slice(0, 13).split("").map(decodeCard);
       const pos = decodeCard(data.slice(13, 14));
@@ -109,6 +110,7 @@ export function loadFromShareableCode(code: string): GameState | null {
         usedCards: seq.slice(0, pos),
         botCount,
         currentBot,
+        botsSelected: true,
       };
     } catch {
       return null;
@@ -132,9 +134,9 @@ export function previewGameCode(code: string): GameCodePreview {
       isDeckExhausted: false,
     };
 
-  const lower = code.trim().toLowerCase();
+  const trimmed = code.trim();
 
-  const singleMatch = lower.match(/^zs([0-9a-c]+)$/);
+  const singleMatch = trimmed.match(/^ZS([0-9A-C]+)$/i);
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     if (!parsed)
@@ -150,13 +152,15 @@ export function previewGameCode(code: string): GameCodePreview {
         isDeckExhausted: false,
       };
     const totalCards = 13;
-    const cardsDrawn = 1;
-    const gameProgress = `${cardsDrawn}/${totalCards}`;
+    const totalCardsInSequence = 1 + parsed.remaining.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // cards drawn before this sequence
+    const currentPosition = cardsAlreadyDrawn + 1; // current card position (1-based)
+    const gameProgress = `${currentPosition}/${totalCards}`;
     return {
       isValid: true,
       botCount: 1,
       currentBot: 1,
-      currentCardIndex: 0,
+      currentCardIndex: cardsAlreadyDrawn, // 0-based index
       totalCards,
       gameProgress,
       isGameStarted: true,
@@ -164,8 +168,8 @@ export function previewGameCode(code: string): GameCodePreview {
     };
   }
 
-  if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
-    const data = lower.slice(3);
+  if (trimmed.toLowerCase().startsWith(GAME_CODE_PREFIX_LOWER)) {
+    const data = trimmed.slice(3);
     if (data.length !== 16)
       return {
         isValid: false,
@@ -178,7 +182,7 @@ export function previewGameCode(code: string): GameCodePreview {
         isGameStarted: false,
         isDeckExhausted: false,
       };
-    if (!/^[0-9a-c]+$/.test(data))
+    if (!/^[0-9A-C]+$/i.test(data))
       return {
         isValid: false,
         errorMessage: "Kod zawiera nieprawidłowe znaki",
@@ -237,8 +241,9 @@ export function previewGameCode(code: string): GameCodePreview {
 
 export function isValidGameCode(code: string): boolean {
   if (!code || typeof code !== "string") return false;
-  const lower = code.trim().toLowerCase();
-  if (/^zs([0-9a-c]+)$/.test(lower)) return true;
+  const trimmed = code.trim();
+  if (/^ZS([0-9A-C]+)$/i.test(trimmed)) return true;
+  const lower = trimmed.toLowerCase();
   if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
     const data = lower.slice(3);
     return data.length === 16 && /^[0-9a-c]+$/.test(data);
