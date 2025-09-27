@@ -39,6 +39,16 @@ function decodeSingleBotReadablePayload(
     const cur = decodeCard(chars[0]);
     const remaining: number[] = [];
     for (let i = 1; i < chars.length; i++) remaining.push(decodeCard(chars[i]));
+
+    // Validate card uniqueness - no duplicates allowed
+    const allCards = [cur, ...remaining];
+    const uniqueCards = new Set(allCards);
+    if (uniqueCards.size !== allCards.length) return null;
+
+    // Validate total card count - must be 1-13 (current + remaining)
+    // Note: Range 0-12 is guaranteed by decodeCard() + uniqueness check
+    if (allCards.length < 1 || allCards.length > 13) return null;
+
     return { cur, remaining };
   } catch {
     return null;
@@ -142,7 +152,7 @@ export function previewGameCode(code: string): GameCodePreview {
     if (!parsed)
       return {
         isValid: false,
-        errorMessage: "Nieprawidłowy kod",
+        errorMessage: "Kod zawiera nieprawidłowe lub powtarzające się karty",
         botCount: 1,
         currentBot: undefined,
         currentCardIndex: -1,
@@ -155,6 +165,22 @@ export function previewGameCode(code: string): GameCodePreview {
     const totalCardsInSequence = 1 + parsed.remaining.length; // current + remaining
     const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // cards drawn before this sequence
     const currentPosition = cardsAlreadyDrawn + 1; // current card position (1-based)
+
+    // Prevent invalid states
+    if (currentPosition <= 0 || currentPosition > totalCards) {
+      return {
+        isValid: false,
+        errorMessage: "Nieprawidłowy stan gry - pozycja poza zakresem",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    }
+
     const gameProgress = `${currentPosition}/${totalCards}`;
     return {
       isValid: true,
@@ -242,12 +268,21 @@ export function previewGameCode(code: string): GameCodePreview {
 export function isValidGameCode(code: string): boolean {
   if (!code || typeof code !== "string") return false;
   const trimmed = code.trim();
-  if (/^ZS([0-9A-C]+)$/i.test(trimmed)) return true;
+
+  // Validate ZS format with proper card validation
+  const singleMatch = trimmed.match(/^ZS([0-9A-C]+)$/i);
+  if (singleMatch) {
+    const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
+    return parsed !== null; // This now includes duplicate/range validation
+  }
+
+  // Validate legacy ZOO format
   const lower = trimmed.toLowerCase();
   if (lower.startsWith(GAME_CODE_PREFIX_LOWER)) {
     const data = lower.slice(3);
     return data.length === 16 && /^[0-9a-c]+$/.test(data);
   }
+
   return false;
 }
 

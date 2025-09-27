@@ -212,13 +212,6 @@ export default function LoadGameModal({
                   </div>
                 </>
               )}
-              {gamePreview.isDeckExhausted && (
-                <div
-                  className={`${styles.previewItem} ${styles.deckExhausted}`}
-                >
-                  🏁 Talia wyczerpana
-                </div>
-              )}
             </div>
           </div>
         )}
