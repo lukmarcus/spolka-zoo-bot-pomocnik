@@ -4,9 +4,19 @@
 
 Kody gry używają czytelnego formatu "remaining-only" - zapisują tylko obecną kartę i karty pozostałe do dobrania.
 
-- **Aktualny system**: Format `ZS` dla jednego bota (human-readable)
-- **Legacy**: Format `ZOO` dla kompatybilności wstecznej
-- **Przyszłość**: Formaty `ZM` i `ZP` dla wielu botów (planowane)
+### 🎯 **Status implementacji (v0.4.1):**
+
+- **✅ ZS Single-Bot**: Aktywny system dla jednego bota (human-readable)
+- **✅ ZOO Legacy**: Pełne wsparcie dla kompatybilności wstecznej
+- **🚧 ZM Multi-Shared**: W przygotowaniu (v0.4.2)
+- **🚧 ZP Per-Bot**: W przygotowaniu (v0.4.3)
+
+### 🗓️ **Roadmapa 0.4.x:**
+
+- **v0.4.1** - Finalizacja ZS + dokumentacja
+- **v0.4.2** - Implementacja ZM (Multi-Shared)
+- **v0.4.3** - Implementacja ZP (Per-Bot)
+- **v0.4.4** - Comprehensive tests + finalizacja
 
 ---
 
@@ -36,11 +46,41 @@ Indeks karty → Symbol
 
 ---
 
+## ✅ **Aktualny stan v0.4.1**
+
+### 🎯 **Zaimplementowane funkcje:**
+
+**Walidacja kodów:**
+
+- ✅ Sprawdzenie unikalności kart (brak duplikatów)
+- ✅ Walidacja zakresu kart (0-12, automatic via decoding)
+- ✅ Kontrola liczby kart (1-13 w sekwencji)
+- ✅ Brak stanów ujemnych lub 0/13
+- ✅ Auto-detection formatu (ZS vs ZOO)
+
+**User Interface:**
+
+- ✅ Real-time validation w LoadGameModal
+- ✅ Preview stanu gry (pozycja X/13)
+- ✅ Proper error messages dla każdego formatu
+- ✅ Usunięto niepotrzebny komunikat o wyczerpaniu talii
+
+**Format Support:**
+
+- ✅ ZS Single-Bot (pełna implementacja)
+- ✅ ZOO Legacy (backward compatibility)
+- 🚧 ZM Multi-Shared (planowane v0.4.2)
+- 🚧 ZP Per-Bot (planowane v0.4.3)
+
+---
+
 ## 📝 Formaty kodów gry
 
-### 🎯 Aktualny system (implementowany)
+### 🎯 **Aktualny system (v0.4.1 - pełna implementacja)**
 
 #### Format ZS - Single Bot (jeden bot)
+
+_Status: ✅ Gotowy do użycia_
 
 **Struktura:** `ZS[obecna_karta][pozostałe_karty...]`
 
@@ -49,33 +89,70 @@ Indeks karty → Symbol
 - **Pozostałe karty**: 0-12 znaków - karty jeszcze do dobrania
 - **Długość**: 3-15 znaków (dynamiczna, zależna od postępu gry)
 
+**Walidacja v0.4.1:**
+
+- ✅ Brak duplikatów kart (np. `ZS66666` odrzucane)
+- ✅ Zakres kart 0-12 (automatic via alphabet)
+- ✅ Kontrola liczby kart 1-13 total
+- ✅ Brak stanów ujemnych lub pustych
+
 **Przykłady:**
 
 - `ZS5AC278B6413` - obecna: karta 5, pozostałe: A,C,2,7,8,B,6,4,1,3 (pozycja 3/13)
 - `ZSC` - obecna: karta C(12), brak pozostałych (pozycja 13/13)
 - `ZS0123456789ABC` - obecna: karta 0, wszystkie pozostałe (pozycja 1/13)
 
-### 🔮 Przyszłe systemy (planowane)
+### � **Systemy w przygotowaniu (v0.4.2-0.4.3)**
 
-#### Format ZM - Multi Shared (wielu botów, wspólna talia)
+#### Format ZM - Multi Shared (v0.4.2)
+
+_Wielu botów, wspólna talia - planowane na v0.4.2_
 
 **Struktura:** `ZM[n_botów][aktualny_bot][obecna_karta][pozostałe_karty...]`
 
-Przykład: `ZM325AC278B6413` - 3 boty, aktualny bot 2, obecna karta 5
+**Przykład:** `ZM325AC278B6413`
 
-#### Format ZP - Per-Bot (każdy bot osobną talią)
+- **ZM** - prefix Multi-Shared
+- **3** - liczba botów (2-4)
+- **2** - aktualny bot (1-based)
+- **5** - obecna karta bota 2
+- **AC278B6413** - pozostałe karty we wspólnej talii
+
+#### Format ZP - Per-Bot (v0.4.3)
+
+_Każdy bot osobną talią - planowane na v0.4.3_
 
 **Struktura:** `ZP[n_botów][aktualny_bot][obecna_karta]Z[bot1_karty]Z[bot2_karty]Z[bot3_karty]...`
 
-Przykład: `ZP321Z5Z23Z678` - 3 boty, aktualny bot 2, jego obecna karta 1
+**Przykład:** `ZP321Z5Z23Z678`
 
-### 🏛️ Legacy (kompatybilność wsteczna)
+- **ZP** - prefix Per-Bot
+- **3** - liczba botów (2-4)
+- **2** - aktualny bot (1-based)
+- **1** - obecna karta bota 2
+- **Z5** - bot 1: pozostałe karty [5]
+- **Z23** - bot 2: pozostałe karty [2,3] (po obecnej 1)
+- **Z678** - bot 3: pozostałe karty [6,7,8]
+
+### 🏛️ **Legacy Format (v0.4.1 - pełne wsparcie)**
 
 #### Format ZOO - Stary system
 
+_Pełna kompatybilność wsteczna - czytanie starych kodów_
+
 **Struktura:** `ZOO[13_kart][pozycja][n_botów][aktualny_bot]` (19 znaków)
 
-Przykład: `ZOO72B08391C64A5521` - wspierany dla wczytywania starych kodów
+**Status v0.4.1:** ✅ Pełne wsparcie dla wczytywania
+
+- **Dekodowanie**: Pełna implementacja
+- **Walidacja**: Sprawdzenie formatu i długości
+- **Preview**: Pokazuje stan gry z kodem ZOO
+- **Loading**: Konwersja do aktualnego GameState
+
+**Przykład:** `ZOO72B08391C64A5521`
+
+- Wspierany dla wczytywania starych kodów
+- Automatyczna konwersja do nowego formatu przy zapisie
 
 ---
 
@@ -315,6 +392,92 @@ Przykład (per-bot): `ZP321Z5Z23Z678`
 - Interpretacja: `ZP` | `3` (botCount) | `2` (currentBot) | `1` (CUR) | `Z5` (bot1 remaining) | `Z23` (bot2 remaining after CUR=1) | `Z678` (bot3 remaining)
 
 ---
+
+## 🗓️ **Roadmapa rozwoju 0.4.x**
+
+### **v0.4.1 (Current) - Stabilizacja ZS**
+
+**Status:** 🎯 Aktywny development
+
+**✅ Ukończone:**
+
+- ZS Single-Bot format z A,B,C alphabet
+- Walidacja: duplikaty, zakresy, stany ujemne
+- UI: LoadGameModal z proper validation
+- ZOO Legacy: pełne wsparcie backward compatibility
+- Usunięcie komunikatu o wyczerpaniu talii
+- Dokumentacja: aktualizacja GAME-CODES.md
+
+**🚧 W toku:**
+
+- Finalizacja dokumentacji
+- Package.json update do v0.4.1
+
+---
+
+### **v0.4.2 - ZM Multi-Shared Implementation**
+
+**Timeline:** ~3-4 dni po v0.4.1
+
+**Planowane funkcje:**
+
+- **ZM Format:** `ZM[bots][current][card][remaining]`
+- **Parsing:** Rozszerzenie gameStorage.ts o ZM support
+- **Validation:** Multi-bot validation logic
+- **UI:** LoadGameModal update dla ZM preview
+- **Tests:** Basic round-trip tests dla ZM
+
+**Przykład:** `ZM325AC278B6413` (3 boty, aktualny=2, obecna=5)
+
+---
+
+### **v0.4.3 - ZP Per-Bot Implementation**
+
+**Timeline:** ~3-4 dni po v0.4.2
+
+**Planowane funkcje:**
+
+- **ZP Format:** `ZP[bots][current][card]Z[bot1]Z[bot2]Z...`
+- **Complex Parsing:** Z-separator logic
+- **Per-Bot Logic:** Independent deck management
+- **Advanced Validation:** Cross-bot validation
+- **UI:** Complete ZP support w LoadGameModal
+
+**Przykład:** `ZP321Z5Z23Z678` (3 boty, per-bot sequences)
+
+---
+
+### **v0.4.4 - Comprehensive Tests & Finalization**
+
+**Timeline:** ~2-3 dni po v0.4.3
+
+**Planowane funkcje:**
+
+- **Unit Tests:** Wszystkie formaty (ZS, ZOO, ZM, ZP)
+- **Edge Cases:** Boundary conditions, error handling
+- **Performance:** Optimization dla większej liczby botów
+- **Cross-Format:** Compatibility tests
+- **Final Polish:** UI/UX improvements, final docs
+
+---
+
+### **🎯 Harmonogram całkowity:**
+
+```
+v0.4.1 (1-2 dni)   ── Finalizacja ZS + docs
+v0.4.2 (3-4 dni)   ── ZM Multi-Shared
+v0.4.3 (3-4 dni)   ── ZP Per-Bot
+v0.4.4 (2-3 dni)   ── Tests + finalizacja
+═══════════════════════════════════════════
+v0.4.4 Complete     (2 tygodnie total)
+```
+
+**🚀 Rezultat v0.4.4:**
+
+- Kompletna implementacja wszystkich formatów
+- Pełna backward compatibility
+- Comprehensive test coverage
+- Production-ready quality
 
 ## 🧩 Kompaktowanie długich kodów — binary → base64url (opcjonalne)
 
