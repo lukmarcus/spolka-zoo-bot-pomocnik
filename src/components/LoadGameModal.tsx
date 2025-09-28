@@ -93,9 +93,19 @@ export default function LoadGameModal({
       }
 
       if (dataPart.length > 0) {
-        const invalidChars = dataPart.replace(/[0-9A-C]/g, "");
+        let invalidChars = "";
+        if (filteredValue.startsWith("ZM")) {
+          // ZM format allows Z separator: [0-9A-C]+Z[0-9A-C]*
+          invalidChars = dataPart.replace(/[0-9A-CZ]/g, "");
+        } else {
+          // ZS and ZOO formats only allow 0-9,A-C
+          invalidChars = dataPart.replace(/[0-9A-C]/g, "");
+        }
+
         if (invalidChars.length > 0) {
-          setError("Prawidłowy format: ZS/ZM + 0-9,A-C lub ZOO + 0-9,A-C");
+          setError(
+            "Prawidłowy format: ZS/ZM + 0-9,A-C (ZM z Z) lub ZOO + 0-9,A-C"
+          );
           return;
         }
       }
