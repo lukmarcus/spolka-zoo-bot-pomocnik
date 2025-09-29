@@ -70,9 +70,7 @@ function encodeMultiSharedReadable(
   return `ZM${botCount}${currentBot}${encodeCard(curCard)}Z${remainingCards}`;
 }
 
-function decodeMultiSharedReadablePayload(
-  payload: string
-): {
+function decodeMultiSharedReadablePayload(payload: string): {
   botCount: number;
   currentBot: number;
   cur: number;
@@ -172,12 +170,23 @@ export function loadFromShareableCode(code: string): GameState | null {
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     if (!parsed) return null;
-    const cardSequence = [parsed.cur, ...parsed.remaining];
+    const tail = [parsed.cur, ...parsed.remaining];
+    // compute how many cards were already drawn before this sequence
+    const totalCards = 13;
+    const totalCardsInSequence = tail.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // number of used cards
+
+    // Reconstruct a full 13-card sequence: missing cards (used) followed by tail
+    const allCards = Array.from({ length: totalCards }, (_, i) => i);
+    const tailSet = new Set(tail);
+    const usedCards = allCards.filter((c) => !tailSet.has(c));
+    const cardSequence = [...usedCards, ...tail];
+
     return {
       mode: "shared",
-      currentCardIndex: 0,
+      currentCardIndex: cardsAlreadyDrawn,
       cardSequence,
-      usedCards: [],
+      usedCards: usedCards,
       botCount: 1,
       currentBot: 1,
       botsSelected: true,
@@ -188,12 +197,23 @@ export function loadFromShareableCode(code: string): GameState | null {
   if (multiMatch) {
     const parsed = decodeMultiSharedReadablePayload(multiMatch[1]);
     if (!parsed) return null;
-    const cardSequence = [parsed.cur, ...parsed.remaining];
+    const tail = [parsed.cur, ...parsed.remaining];
+    // compute how many cards were already drawn before this sequence
+    const totalCards = 13;
+    const totalCardsInSequence = tail.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // number of used cards
+
+    // Reconstruct full sequence
+    const allCards = Array.from({ length: totalCards }, (_, i) => i);
+    const tailSet = new Set(tail);
+    const usedCards = allCards.filter((c) => !tailSet.has(c));
+    const cardSequence = [...usedCards, ...tail];
+
     return {
       mode: "shared",
-      currentCardIndex: 0,
+      currentCardIndex: cardsAlreadyDrawn,
       cardSequence,
-      usedCards: [],
+      usedCards: usedCards,
       botCount: parsed.botCount,
       currentBot: parsed.currentBot,
       botsSelected: true,
