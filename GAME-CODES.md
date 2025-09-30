@@ -1,22 +1,17 @@
 # System zapisu gry - Spółka ZOO Bot Pomocnik
 
-## 📖 Specyfikacja systemu kodów gry v0.4.1
+-- Ten przykład służy tylko jako dokumentacja historyczna i nie będzie dłużej obsługiwany po nadchodzącym wydaniu 0.4.x.
 
-Kody gry używają czytelnego formatu "remaining-only" - zapisują tylko obecną kartę i karty pozostałe do dobrania.
-
-### 🎯 **Status implementacji (v0.4.1):**
+### 🎯 **Status implementacji (current)**
 
 - **✅ ZS Single-Bot**: Aktywny system dla jednego bota (human-readable)
-- **✅ ZOO Legacy**: Pełne wsparcie dla kompatybilności wstecznej
-- **🚧 ZM Multi-Shared**: W przygotowaniu (v0.4.2)
+  **⚠️ ZOO Legacy**: Kompatybilność wsteczna będzie usunięta w nadchodzącym wydaniu 0.4.x — zobacz sekcję "Migracja" poniżej
+- **✅ ZM Multi-Shared**: Implementacja ukończona (v0.4.2)
 - **🚧 ZP Per-Bot**: W przygotowaniu (v0.4.3)
 
 ### 🗓️ **Roadmapa 0.4.x:**
 
-- **v0.4.1** - Finalizacja ZS + dokumentacja
-- **v0.4.2** - Implementacja ZM (Multi-Shared)
-- **v0.4.3** - Implementacja ZP (Per-Bot)
-- **v0.4.4** - Comprehensive tests + finalizacja
+-- **v0.4.x** - Comprehensive tests + finalizacja (planned)
 
 ---
 
@@ -134,25 +129,22 @@ _Każdy bot osobną talią - planowane na v0.4.3_
 - **Z23** - bot 2: pozostałe karty [2,3] (po obecnej 1)
 - **Z678** - bot 3: pozostałe karty [6,7,8]
 
-### 🏛️ **Legacy Format (v0.4.1 - pełne wsparcie)**
+### 🏛️ Legacy Format (ZOO)
 
 #### Format ZOO - Stary system
 
-_Pełna kompatybilność wsteczna - czytanie starych kodów_
+_Uwaga: wsparcie dla tego formatu będzie usunięte w nadchodzącym wydaniu 0.4.x._
 
-**Struktura:** `ZOO[13_kart][pozycja][n_botów][aktualny_bot]` (19 znaków)
+**Struktura (historyczna):** `ZOO[13_kart][pozycja][n_botów][aktualny_bot]` (19 znaków)
 
-**Status v0.4.1:** ✅ Pełne wsparcie dla wczytywania
+**Obecny status:**
 
-- **Dekodowanie**: Pełna implementacja
-- **Walidacja**: Sprawdzenie formatu i długości
-- **Preview**: Pokazuje stan gry z kodem ZOO
-- **Loading**: Konwersja do aktualnego GameState
+- Dekodowanie (tylko do czasu usunięcia): w starszych wydaniach było dostępne; w nadchodzącym wydaniu 0.4.x planujemy usunąć czytanie `ZOO` z kodu źródłowego.
+- Migracja: Użytkownicy powinni przekonwertować stare kody `ZOO` do nowych formatów (`ZS` / `ZM` / `ZP`) przed aktualizacją do nowszej wersji.
 
-**Przykład:** `ZOO72B08391C64A5521`
+**Przykład historyczny:** `ZOO72B08391C64A5521`
 
-- Wspierany dla wczytywania starych kodów
-- Automatyczna konwersja do nowego formatu przy zapisie
+-- Ten przykład służy tylko jako dokumentacja historyczna i nie będzie dłużej obsługiwany po nadchodzącym wydaniu 0.4.x.
 
 ---
 
@@ -447,7 +439,7 @@ Przykład (per-bot): `ZP321Z5Z23Z678`
 
 ---
 
-### **v0.4.4 - Comprehensive Tests & Finalization**
+### **v0.4.x - Comprehensive Tests & Finalization (planned)**
 
 **Timeline:** ~2-3 dni po v0.4.3
 
@@ -467,12 +459,12 @@ Przykład (per-bot): `ZP321Z5Z23Z678`
 v0.4.1 (1-2 dni)   ── Finalizacja ZS + docs
 v0.4.2 (3-4 dni)   ── ZM Multi-Shared
 v0.4.3 (3-4 dni)   ── ZP Per-Bot
-v0.4.4 (2-3 dni)   ── Tests + finalizacja
+v0.4.x (2-3 dni)   ── Tests + finalizacja
 ═══════════════════════════════════════════
-v0.4.4 Complete     (2 tygodnie total)
+v0.4.x Complete     (2 tygodnie total)
 ```
 
-**🚀 Rezultat v0.4.4:**
+**🚀 Rezultat planowany dla v0.4.x:**
 
 - Kompletna implementacja wszystkich formatów
 - Pełna backward compatibility

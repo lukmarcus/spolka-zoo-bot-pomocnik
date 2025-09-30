@@ -1,264 +1,171 @@
 # Spółka ZOO - Bot Pomocnik - Roadmapa
 
-## 🎯 Plan rozwoju 0.4.x - Kompletna implementacja kodów gry
+## 🎯 Plan rozwoju 0.4.x - Plany i nadchodzące wydania
 
-| Wersja | Status       | Opis                           | Timeline   | Szczegóły techniczne                 |
-| ------ | ------------ | ------------------------------ | ---------- | ------------------------------------ |
-| 0.4.0  | ✅ Gotowe    | Osobne talie dla każdego bota  | 2025-09-13 | Individual bot decks, mode selection |
-| 0.4.1  | 🎯 Aktywne   | ZS Single-Bot + stabilizacja   | 2025-09-27 | ZS format, walidacja, fixes          |
-| 0.4.2  | � Planowane  | ZM Multi-Shared implementation | ~3-4 dni   | Multi-bot shared deck format         |
-| 0.4.3  | 🚧 Planowane | ZP Per-Bot implementation      | ~3-4 dni   | Per-bot independent decks format     |
-| 0.4.4  | � Planowane  | Tests + finalizacja            | ~2-3 dni   | Comprehensive tests, polish          |
-
-## 🔮 Przyszłe wersje (post 0.4.x)
-
-| Wersja | Status        | Opis                 | Szczegóły techniczne           |
-| ------ | ------------- | -------------------- | ------------------------------ |
-| 0.5.0  | 🔮 Przyszłość | Wizualizacja kart    | Card visualization system      |
-| 0.6.0+ | 🔮 Przyszłość | Zaawansowane funkcje | Statistics, tournaments, cloud |
+| Wersja | Status       | Opis krótki                                                  | Przybliżony termin | Szczegóły techniczne                                                                            |
+| ------ | ------------ | ------------------------------------------------------------ | -----------------: | ----------------------------------------------------------------------------------------------- |
+| 0.4.2  | ✅ Gotowe    | Implementacja ZM (Multi-Shared)                              |         2025-09-28 | Format wspólnej talii dla wielu botów; zapisywanie/wczytywanie, podgląd i walidacja             |
+| 0.4.3  | 🚧 Planowane | Implementacja ZP (Per-Bot)                                   |  ~3-4 dni po 0.4.2 | Format z osobnymi taliami per-bot; parsowanie separatorów `Z`                                   |
+| 0.4.x  | ⚠️ Planowane | Kompletny zestaw testów i finalizacja — usunięcie legacy ZOO |  ~2-3 dni po 0.4.3 | Pełny zestaw testów; usunięcie ścieżki odczytu starego formatu ZOO z opisanymi krokami migracji |
+| 0.5.0  | 🔮 Planowane | Wizualizacja kart i dopracowanie UI                          |       Do ustalenia | System wizualizacji kart; animacje                                                              |
+| 0.6.0+ | 🔮 Planowane | Zaawansowane funkcje                                         |       Do ustalenia | Statystyki, tryby turniejowe, zapisy w chmurze                                                  |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.0 - Osobne talie dla każdego bota 🔜
+### v0.4.2 — Implementacja ZM (Multi-Shared) 🚧
 
-**Cel**: Opcja osobnych talii dla każdego bota
+🎯 Cel: wprowadzenie formatu ZM dla kilku botów korzystających ze wspólnej talii
 
-- [x] **Wybór trybu gry**
+⏱️ Przybliżony termin: ~3-4 dni po v0.4.1
 
-  - [x] "Wspólna talia" (obecny system)
-  - [x] "Osobne talie" (nowy system) — implemented: per-bot decks, per-bot current index and usedCards
-  - [x] Radio buttons / mode chooser in the selection UI (shown for 2-4 bots)
+Planowane zadania:
 
-- [x] **Zarządzanie wieloma taliami**
+- Implementacja formatu ZM
 
-  - [x] Każdy bot ma własną sekwencję kart (`botDecks` implemented)
-  - [x] Niezależne `currentCardIndex` dla każdego bota
-  - [x] Osobne `usedCards` tracking per bot
-
-- [ ] **Rozszerzone kodowanie v2**
-
-  - [ ] Rozszerzone kodowanie v2: planowane (kodowanie kompaktowe dla osobnych talii) — not yet implemented
-
-- [ ] **UI mode selection**
-
-  - [x] UI mode selection: visual mode chooser and indicators are implemented
-  - [x] Removed top-line remaining cards & deck-exhausted visuals as per UX decision
-  - [x] Per-mode action buttons and per-bot shuffle behavior implemented in GameContext and UI
-
-## 📋 Szczegółowy rozwój 0.4.x
-
-### v0.4.1 - ZS Single-Bot + Stabilizacja ✅
-
-**🎯 Główny cel**: Implementacja ZS Single-Bot format + fixes
-
-**✅ Zrealizowane funkcje:**
-
-- **ZS Single-Bot Format**
-
-  - Prefix `ZS` + card sequence (0-9,A-C alphabet)
-  - Human-readable format dla jednego bota
-  - Dynamic length (3-15 chars) zależnie od postępu gry
-
-- **Zaawansowana walidacja**
-
-  - ✅ Brak duplikatów kart (np. `ZS66666` odrzucane)
-  - ✅ Automatyczny zakres 0-12 (via decoding + uniqueness)
-  - ✅ Kontrola liczby kart 1-13 w sekwencji
-  - ✅ Eliminacja stanów ujemnych i pustych (0/13)
-
-- **UI Improvements**
-
-  - ✅ Real-time validation w LoadGameModal
-  - ✅ Preview stanu gry (pozycja X/13) przed wczytaniem
-  - ✅ Proper error messages dla różnych formatów
-  - ✅ Usunięto komunikat "🏁 Talia wyczerpana"
-
-- **Technical Fixes** (commits w v0.4.1):
-
-  - ✅ Icon sizes optimization (`icon sizes changed`)
-  - ✅ Reshuffle logic refactor (`small reshuffle refactor`)
-  - ✅ GameStorage.ts rewrite (single authoritative implementation)
-  - ✅ Backward compatibility z ZOO legacy format
-
-- **Documentation**
-  - ✅ GAME-CODES.md przepisane (ZS main, ZM/ZP planned, ZOO legacy)
-  - ✅ README.md + CHANGELOG.md update
-  - ✅ Roadmapa 0.4.x (ten plik: DOCS.md → ROADMAP.md)### v0.4.2 - ZM Multi-Shared Implementation 🚧
-
-**🎯 Cel**: Format ZM dla wielu botów z wspólną talią  
-**⏱️ Timeline**: ~3-4 dni po v0.4.1
-
-**🚀 Planowane funkcje:**
-
-- **ZM Format Implementation**
-
-  - Struktura: `ZM[bots][current][card][remaining]`
+  - Struktura: `ZM[n_botów][aktualny_bot][obecna_karta][pozostałe_karty...]`
   - Przykład: `ZM325AC278B6413` (3 boty, aktualny=2, obecna=5)
-  - Encoding/decoding w gameStorage.ts
+  - Kodowanie/dekodowanie w `src/utils/gameStorage.ts`
 
-- **Multi-Bot Logic**
+- Logika wielobotowa
 
-  - Parsing liczby botów (2-4)
-  - Walidacja aktualnego bota (1-based index)
-  - Shared deck management logic
+  - Parsowanie liczby botów (2–4)
+  - Walidacja numeru aktualnego bota (1-based)
+  - Zarządzanie wspólną talią i synchronizacja stanu
 
-- **UI Support**
+- Wsparcie UI
 
-  - LoadGameModal update dla ZM validation
-  - Preview logic dla multi-bot scenarios
-  - Error messages specyficzne dla ZM
+  - Aktualizacja `LoadGameModal` dla walidacji ZM
+  - Logika podglądu dla scenariuszy multi-bot
+  - Przyjazne komunikaty błędów specyficzne dla ZM
 
-- **Testing**
-  - Basic round-trip tests ZM ↔ GameState
-  - Edge cases: invalid bot count, out-of-range current bot
-
----
-
-### v0.4.3 - ZP Per-Bot Implementation 🚧
-
-**🎯 Cel**: Format ZP dla niezależnych talii każdego bota  
-**⏱️ Timeline**: ~3-4 dni po v0.4.2
-
-**🚀 Planowane funkcje:**
-
-- **ZP Format Implementation**
-
-  - Struktura: `ZP[bots][current][card]Z[bot1]Z[bot2]Z[bot3]...`
-  - Przykład: `ZP321Z5Z23Z678` (per-bot sequences)
-  - Complex parsing z separatorami Z
-
-- **Per-Bot Logic**
-
-  - Independent deck management per bot
-  - Z-separator parsing algorithm
-  - Cross-bot validation (no duplicate cards across bots)
-
-- **Advanced UI**
-
-  - Complete ZP support w LoadGameModal
-  - Multi-bot preview z per-bot progress
-  - Sophisticated error messages dla complex format
-
-- **Comprehensive Testing**
-  - Per-bot sequence validation
-  - Cross-bot uniqueness checks
-  - Complex edge cases (empty bot sequences, invalid separators)
+- Testy
+  - Podstawowe testy round-trip (kod ↔ GameState)
+  - Edge-case: nieprawidłowa liczba botów, out-of-range current bot
 
 ---
 
-### v0.4.4 - Comprehensive Tests & Finalization 🚧
+### v0.4.3 — Implementacja ZP (Per-Bot) 🚧
 
-**🎯 Cel**: Production-ready quality dla wszystkich formatów  
-**⏱️ Timeline**: ~2-3 dni po v0.4.3
+🎯 Cel: wprowadzenie formatu ZP, w którym każdy bot ma własną talię
 
-**🚀 Planowane funkcje:**
+Planowane zadania:
 
-- **Full Test Suite**
+- Implementacja formatu ZP
 
-  - Unit tests dla wszystkich formatów: ZS, ZOO, ZM, ZP
-  - Round-trip encoding/decoding tests
-  - Edge cases i boundary conditions
-  - Cross-format compatibility tests
+  - Struktura: `ZP[n_botów][aktualny_bot][obecna_karta]Z[bot1_karty]Z[bot2_karty]...`
+  - Przykład: `ZP321Z5Z23Z678`
+  - Parsowanie bloków rozdzielonych separatorem `Z`
 
-- **Performance & Polish**
+- Logika per-bot
 
-  - Optimization dla większej liczby botów
-  - Memory usage optimization
-  - UI/UX final improvements
-  - Error handling refinement
+  - Niezależne sekwencje kart dla każdego bota
+  - Algorytm parsowania separatorów `Z`
+  - Walidacja międzybotowa (brak duplikatów między taliami, gdzie wymagane)
 
-- **Final Documentation**
-  - Complete GAME-CODES.md update
-  - API documentation dla wszystkich functions
-  - Usage examples i best practices
-  - Migration guide ZOO → ZS/ZM/ZP
+- UI
+
+  - Pełne wsparcie ZP w `LoadGameModal`
+  - Podgląd postępów per-bot
+  - Szczegółowe komunikaty walidacyjne dla złożonych przypadków
+
+- Testy
+  - Walidacja sekwencji per-bot
+  - Sprawdzenie unikalności kart między taliami
+  - Scenariusze brzegowe (puste sekwencje, nieprawidłowe separatory)
 
 ---
 
-## 🔮 Post-0.4.x Development
+### v0.4.x — Testy kompletne i finalizacja 🚧
 
-### v0.5.0 - Wizualizacja kart �
+🎯 Cel: doprowadzenie projektu do jakości produkcyjnej
 
-**Cel**: Graficzne przedstawienie kart zamiast tekstu
+⏱️ Przybliżony termin: ~2–3 dni po v0.4.3
 
-- [ ] **Design systemu kart**
+Planowane zadania:
 
-  - SVG/CSS design kart botów
-  - Ikony dla różnych efektów kart
-  - Spójny design language z grą planszową
+- Pełny zestaw testów
 
-- [ ] **Animacje kart**
+  - Testy jednostkowe dla wszystkich formatów (ZS, ZOO, ZM, ZP)
+  - Testy round-trip kodów
+  - Testy warunków brzegowych i zgodności między formatami
 
-  - Smooth animacje dobierania kart
-  - Flip animation przy odsłanianiu karty
-  - Tasowanie deck animation
+- Optymalizacja i dopracowanie
 
-- [ ] **Responsive card display**
-  - Adaptive sizing dla różnych ekranów
-  - Touch-friendly interactions
-  - Card preview modal dla małych ekranów
+  - Optymalizacje wydajności dla większej liczby botów
+  - Udoskonalenia UI/UX i obsługi błędów
 
-### v0.6.0+ - Zaawansowane funkcje 🔮
+- Dokumentacja końcowa
 
-**Cel**: Funkcje dla doświadczonych graczy
+  - Aktualizacja `GAME-CODES.md`
+  - Dokumentacja API dla wszystkich funkcji
+  - Przykłady użycia i dobre praktyki
+  - Przewodnik migracji: ZOO → ZS/ZM/ZP
 
-- [ ] **Game statistics**
+- Kontrolowane usunięcie legacy ZOO
+  - Usunięcie ścieżki odczytu starego formatu ZOO w kontrolowany sposób
+  - Dostarczenie przewodnika migracji i okna kompatybilności (jedno wydanie) dla użytkowników, aby przekonwertowali stare kody
 
-  - Historia ruchów i częstotliwość kart
-  - Analytics dashboard
-  - Export danych do CSV/JSON
+---
 
-- [ ] **Advanced game modes**
+## 🔮 Rozwój po 0.4.x
 
-  - Timer mode z countdown
-  - Tournament mode z wieloma rundami
-  - Practice mode z możliwością undo
+### v0.5.0 — Wizualizacja kart
 
-- [ ] **Enhanced save system**
-  - Multiple save slots (slot 1, 2, 3...)
-  - Cloud backup integration
-  - Game session replay
+🎯 Cel: zastąpienie tekstowej reprezentacji kart graficzną wizualizacją
 
-## 📖 Dokumentacja techniczna
+- System projektowania kart (SVG/CSS)
+- Ikony i spójny język wizualny
+- Animacje: płynne animacje dobierania, animacja odwracania karty, animacja tasowania
+- Responsive: adaptacyjne rozmiary, obsługa dotykowa, modal podglądu karty dla małych ekranów
 
-### 🏗️ Aktualna architektura (v0.3.3)
+### v0.6.0+ — Funkcje zaawansowane
 
-- **Frontend**: React 19.1.1 + TypeScript 5.8.3 + Vite 5.4.19
-- **Style**: CSS Modules z zoo-tematyczną paletą kolorów
-- **State Management**: React Context + useReducer
-- **Routing**: React Router DOM 7.8.1
-- **Build**: Vite
-- **Linting**: ESLint
+🎯 Cel: rozszerzenie funkcjonalności dla zaawansowanych użytkowników
 
-### 📁 Struktura projektu
+- Statystyki gry: historia ruchów, częstotliwość kart, panel analityczny
+- Tryby turniejowe i zaawansowane tryby gry (timer, turnieje, tryb treningowy z undo)
+- Rozszerzony system zapisu: wiele slotów zapisu, integracja z chmurą, odtwarzanie sesji
+
+## 📖 Dokumentacja techniczna (skrót)
+
+### Aktualna architektura
+
+- Frontend: React 19.1.1 + TypeScript 5.8.3 + Vite 5.4.19
+- Style: CSS Modules
+- Zarządzanie stanem: React Context + useReducer
+- Routing: React Router DOM
+- Build: Vite
+- Linting: ESLint
+
+### Struktura projektu (skrót)
 
 ```
 src/
-├── components/         # Komponenty React (Layout, modals)
-├── pages/             # Strony aplikacji (Home, Game)
-├── hooks/             # Custom React hooks
-├── context/           # React Context providers
-├── utils/             # Funkcje pomocnicze
-├── types/             # TypeScript definitions
-├── data/              # Dane gry (karty, etc.)
-├── styles/            # Globalne style CSS
-└── assets/            # Obrazy, ikony, czcionki
+├── components/  # Komponenty React (layout, modalne)
+├── pages/       # Strony aplikacji (Home, Game)
+├── hooks/       # Własne hooki React
+├── context/     # Providery kontekstu gry
+├── utils/       # Funkcje pomocnicze
+├── types/       # Definicje TypeScript
+├── data/        # Dane gry (karty, itp.)
+├── styles/      # Style globalne
+└── assets/      # Obrazy, ikony, czcionki
 ```
 
-### 🔧 GameState Interface
+### Interfejs GameState (skrót)
 
 ```typescript
 interface GameState {
   currentCardIndex: number; // 0-12, pozycja w talii
   cardSequence: number[]; // 13 kart, permutacja 0-12
   usedCards: number[]; // karty użyte w bieżącej rundzie
-  botsSelected?: boolean; // Czy wybrano liczbę botów
-  botCount?: number; // Liczba botów 1-4
-  currentBot?: number; // Aktualny bot 1-X
+  botsSelected?: boolean; // czy wybrano liczbę botów
+  botCount?: number; // liczba botów 1-4
+  currentBot?: number; // aktualny bot 1-X
 }
 ```
 
-### 🎮 GameContext Actions
+### Główne akcje w GameContext
 
 - `DRAW_CARD` - dobieranie karty
 - `SHUFFLE_DECK` - tasowanie talii
@@ -266,12 +173,15 @@ interface GameState {
 - `NEW_GAME` - nowa gra
 - `LOAD_GAME` - wczytywanie stanu gry
 - `SELECT_BOTS` - wybór liczby botów
-- `NEXT_BOT` - przełączanie na następnego bota (v0.3.3+)
-- `NEXT_BOT_AND_DRAW` - przełączanie i dobieranie karty (v0.3.3+)
+- `NEXT_BOT` - przełączenie na następnego bota
+- `NEXT_BOT_AND_DRAW` - przełączenie i dobieranie karty
 
-### 💾 System kodów gry
+### System kodów gry (skrót)
 
-- **Format**: `ZOO` + sekwencja kart + pozycja + multi-bot data
-- **Długość**: 17 znaków (1 bot) | 19 znaków (2-4 boty)
-- **Przykład**: `ZOOA0CB5938416274`
-- **Cross-device**: Pełna kompatybilność między urządzeniami
+- Format przykładowy: `ZS`, `ZM`, `ZP` (remaining-only) oraz historyczne `ZOO`
+- Długość: czytelne kody są krótsze i zależą od postępu gry; ZOO ma stałą długość historycznie
+- Przykład: `ZS5AC278B6413` (ZS – single-bot)
+
+---
+
+Jeśli chcesz, mogę przygotować: przewodnik migracji (`MIGRATION.md`) z przykładami konwersji starych kodów `ZOO` do nowych formatów, albo utworzyć branch roboczy `feature/zp-parser` ze szkicem parsera i testów.

@@ -13,24 +13,22 @@ Ta aplikacja zastępuje fizyczne karty botów (13 kart) w grze planszowej Spół
 - 🎲 Tasowanie talii, reset i niezależne tasowanie (reshuffle) per-bot
 - 🎯 Dwa inteligentne przyciski akcji: dobierz dla aktualnego bota / dobierz dla następnego bota
 - 💾 Ręczne zapisywanie/wczytywanie stanu gry przez kopiowanie/kod (kompatybilne w obrębie tej wersji)
-- 🔗 Kompaktowe kody udostępniania (cross-device) + live preview przed wczytaniem
+- 🔗 Kompaktowe kody udostępniania — kompatybilność między urządzeniami oraz podgląd na żywo przed wczytaniem
 - 🔍 Walidacja kodów gry w czasie rzeczywistym przed załadunkiem
 - 📱 Responsywny design (telefony 320px+)
 - ⚙️ Implementacja w TypeScript + React (czysta architektura, kontekst gry i reducer)
 
 ## 🚀 Status rozwoju
 
-**Aktualna wersja**: 0.4.1 🎯  
-**Status**: Stabilizacja Single-Bot format (ZS) + walidacja + roadmapa multi-bot
+**Aktualna wersja**: 0.4.2
+**Status**: Implementacja ZM
 
 ### 📋 **Roadmapa 0.4.x:**
 
-- **v0.4.1** (current) - ZS Single-Bot + walidacja + docs
-- **v0.4.2** (planowane) - ZM Multi-Shared format
-- **v0.4.3** (planowane) - ZP Per-Bot format
-- **v0.4.4** (planowane) - Comprehensive tests + finalizacja
-
-**🎯 Cel:** Kompletna implementacja wszystkich formatów kodów gry w ramach wersji 0.4.x
+- **v0.4.1** (obecne) - ZS Single-Bot + walidacja + dokumentacja
+- **v0.4.2** (wdrożone) - ZM (Multi-Shared) — wspólna talia
+- **v0.4.3** (planowane) - ZP (Per-Bot) — osobne talie per-bot
+- **v0.4.x** (planowane) - Kompletny zestaw testów i finalizacja
 
 ## 📖 Instrukcja obsługi
 
@@ -51,18 +49,19 @@ Stan gry można skopiować jako krótki kod i przenieść na inne urządzenie (p
 
 ### 🔗 Udostępnianie gry (v0.4.1)
 
-**Obsługiwane formaty:**
+**Obsługiwane formaty (uwaga):**
 
-- **ZS** - Single-Bot (główny format v0.4.1): `ZS5AC278B6413`
-- **ZOO** - Legacy (backward compatibility): `ZOOA0CB5938416274`
+- **ZS** - Single-Bot (czytelny): `ZS5AC278B6413`
+- **ZM** - Multi-Shared (wspólna talia dla wielu botów) — zaimplementowany w v0.4.2
+- **ZOO** - format legacy: wsparcie dla tego formatu zostanie usunięte w przyszłej aktualizacji 0.4.x — przed aktualizacją przekonwertuj stare kody.
 
 **Funkcje v0.4.1:**
 
 1. **Podczas gry** kliknij przycisk **"Kopiuj stan gry"**
-2. **Automatic format** - ZS dla 1 bota, ZOO dla multi-bot
+2. **Automatyczny format** - ZS dla 1 bota, ZOO dla multi-bot
 3. **Walidacja kodu** w czasie rzeczywistym przy wczytywaniu
-4. **Preview stanu** przed załadowaniem (pozycja X/13)
-5. **Cross-device compatibility** - kod działa na dowolnym urządzeniu
+4. **Podgląd stanu** przed załadowaniem (pozycja X/13)
+5. **Kompatybilność między urządzeniami** - kod działa na dowolnym urządzeniu
 
 **Planowane formaty:**
 
@@ -73,7 +72,7 @@ Stan gry można skopiować jako krótki kod i przenieść na inne urządzenie (p
 
 1. **W menu głównym** kliknij **"📥 Wczytaj grę"**
 2. **Wprowadź kod** wygenerowany wcześniej
-3. **Preview pokazuje** liczbę botów, aktualnego bota i postęp gry
+3. **Podgląd pokazuje** liczbę botów, aktualnego bota i postęp gry
 4. Przycisk aktywny tylko przy prawidłowym kodzie
 5. Gra zostanie wczytana w zapisanym stanie
 
@@ -97,10 +96,10 @@ npm run lint    # Sprawdzenie linting
 npm run preview # Podgląd builda
 ```
 
-## � Dokumentacja
+## 📚 Dokumentacja
 
-- 📚 **[ROADMAP.md](ROADMAP.md)** - Roadmapa rozwoju i przyszłe funkcjonalności
-- � **[CHANGELOG.md](CHANGELOG.md)** - Historia zmian i wprowadzonych funkcji
+- 📚 **[ROADMAP.md](ROADMAP.md)** - Roadmapa rozwoju i planowane funkcjonalności
+- 📜 **[CHANGELOG.md](CHANGELOG.md)** - Historia zmian i wprowadzonych funkcji
 - 🎮 **[GAME-CODES.md](GAME-CODES.md)** - Instrukcja systemu kodów gry
 
 ## 🛠️ Technologie
