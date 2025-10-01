@@ -183,27 +183,25 @@ function decodePerBotPayload(payload: string): {
     for (let i = 0; i < botCount; i++) {
       const block = blocks[i];
       const remaining: number[] = [];
+      const isCurrentBotBlock = (i + 1) === currentBot;
 
       if (block.length > 0) {
         const chars = block.split("");
         for (const char of chars) {
           const card = decodeCard(char);
           
-          // Validate: current card must NOT appear in any remaining block
-          if (card === cur) return null;
+          // Validate: current card must NOT appear in CURRENT bot's remaining block
+          if (isCurrentBotBlock && card === cur) return null;
           
           // Validate: no duplicates within this block
           if (remaining.includes(card)) return null;
           
-          // Validate: card not used in other blocks
-          if (allCardsUsed.has(card)) return null;
-          
           remaining.push(card);
-          allCardsUsed.add(card);
         }
       }
 
       botDecks.push({ remaining });
+      allCardsUsed.add(cur); // Track that current card is used
     }
 
     // Validate total card count - must be 1-13 (current + all remaining)
