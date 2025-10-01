@@ -5,6 +5,27 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2025-10-01
+
+### 🛠️ Wdrożenie ZM (Multi-Shared)
+
+**🚀 Nowości:**
+
+- Implementacja formatu ZM (Multi-Shared): kodowanie/dekodowanie, walidacja, podgląd oraz poprawne wczytywanie stanu gry dla wielu botów korzystających ze wspólnej talii.
+- Poprawki w `LoadGameModal` — akceptacja separatora `Z` w formatach wielobotowych, lepsze komunikaty błędów i spójny podgląd przed wczytaniem.
+- Naprawione rozbieżności między preview a załadowanym stanem: `loadFromShareableCode` odbudowuje pełną sekwencję 13 kart (`cardSequence`), ustawia `usedCards` i poprawny `currentCardIndex`, tak aby UI wyświetlało ten sam stan, który widziano w podglądzie.
+- Aktualizacja `src/utils/gameStorage.ts` — scentralizowane enkodery/dekodery dla ZS/ZM oraz rozszerzona logika podglądu i walidacji.
+
+**🏗️ Zmiany techniczne:**
+
+- UI i Parser: `LoadGameModal.tsx` rozszerzone o walidację ZM i czytelny podgląd; parser ZM dopuszcza separator `Z` w sekwencji remaining.
+- Kompatybilność wsteczna: dostępne krótkotrwałe wsparcie odczytu formatu ZOO (planowane usunięcie w przyszłym 0.4.x z przewodnikiem migracji).
+- Testy: przygotowano podstawowe testy round-trip dla ZM; ZP (per-bot) zaplanowane jako kolejny task.
+
+**🎯 Status:** stabilna implementacja ZM; dalsze testy i implementacja ZP w planie.
+
+---
+
 ## [0.4.1] - 2025-09-27
 
 ### 🎯 Stabilizacja Single-Bot Format (ZS)

@@ -1,8 +1,9 @@
 import type { GameState, GameCodePreview } from "../types";
 
 // Single authoritative implementation
-// - Single-bot readable: 'ZS' + card chars (0-9,A-C)
-// - Legacy multi-bot: 'ZOO' + 16-char data section (13 cards + pos + botCount + currentBot)
+// - ZS Single-bot: 'ZS' + card chars (0-9,A-C)
+// - ZM Multi-shared: 'ZM' + [bots][current][card]Z[remaining] (0-9,A-C)
+// - ZOO Legacy: 'ZOO' + 16-char data section (13 cards + pos + botCount + currentBot)
 // No compression/packing (per user request)
 
 const STORAGE_KEY = "zoo-bot-game-state";
@@ -55,10 +56,73 @@ function decodeSingleBotReadablePayload(
   }
 }
 
+function encodeMultiSharedReadable(
+  botCount: number,
+  currentBot: number,
+  curCard: number,
+  remaining: number[]
+): string {
+  if (botCount < 2 || botCount > 4) throw new Error("Invalid bot count for ZM");
+  if (currentBot < 1 || currentBot > botCount)
+    throw new Error("Invalid current bot for ZM");
+
+  const remainingCards = remaining.map(encodeCard).join("");
+  return `ZM${botCount}${currentBot}${encodeCard(curCard)}Z${remainingCards}`;
+}
+
+function decodeMultiSharedReadablePayload(payload: string): {
+  botCount: number;
+  currentBot: number;
+  cur: number;
+  remaining: number[];
+} | null {
+  if (!payload || payload.length < 4) return null; // Minimum: [bot][current][card]Z
+
+  try {
+    const botCount = parseInt(payload[0], 10);
+    const currentBot = parseInt(payload[1], 10);
+
+    // Validate bot parameters
+    if (botCount < 2 || botCount > 4) return null;
+    if (currentBot < 1 || currentBot > botCount) return null;
+
+    // Parse current card at position 2
+    const cur = decodeCard(payload[2]);
+
+    // Find Z separator (should be at position 3)
+    if (payload[3] !== "Z") return null;
+
+    // Parse remaining cards after Z separator
+    const remainingSection = payload.slice(4); // Everything after Z
+    const remaining: number[] = [];
+
+    if (remainingSection.length > 0) {
+      const chars = remainingSection.split("");
+      for (const char of chars) {
+        remaining.push(decodeCard(char));
+      }
+    }
+
+    // Validate card uniqueness - no duplicates allowed
+    const allCards = [cur, ...remaining];
+    const uniqueCards = new Set(allCards);
+    if (uniqueCards.size !== allCards.length) return null;
+
+    // Validate total card count - must be 1-13 (current + remaining)
+    if (allCards.length < 1 || allCards.length > 13) return null;
+
+    return { botCount, currentBot, cur, remaining };
+  } catch {
+    return null;
+  }
+}
+
 export function generateShareableCode(gameState: GameState): string {
   if (!gameState) throw new Error("gameState required");
   const botCount = gameState.botCount || 1;
+
   if (botCount === 1) {
+    // Use ZS format for single bot
     const seq = gameState.cardSequence || [];
     const curIndex =
       typeof gameState.currentCardIndex === "number"
@@ -69,6 +133,20 @@ export function generateShareableCode(gameState: GameState): string {
     return encodeSingleBotReadable(cur, remaining);
   }
 
+  // For multi-bot (2-4 bots), use ZM format for shared mode
+  if (gameState.mode === "shared") {
+    const seq = gameState.cardSequence || [];
+    const curIndex =
+      typeof gameState.currentCardIndex === "number"
+        ? gameState.currentCardIndex
+        : 0;
+    const cur = seq[curIndex] ?? 0;
+    const remaining = seq.slice(curIndex + 1);
+    const currentBot = gameState.currentBot || 1;
+    return encodeMultiSharedReadable(botCount, currentBot, cur, remaining);
+  }
+
+  // Fallback to legacy ZOO format for non-shared modes
   const encodedSequence = (gameState.cardSequence || [])
     .map(encodeCard)
     .join("");
@@ -92,14 +170,52 @@ export function loadFromShareableCode(code: string): GameState | null {
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     if (!parsed) return null;
-    const cardSequence = [parsed.cur, ...parsed.remaining];
+    const tail = [parsed.cur, ...parsed.remaining];
+    // compute how many cards were already drawn before this sequence
+    const totalCards = 13;
+    const totalCardsInSequence = tail.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // number of used cards
+
+    // Reconstruct a full 13-card sequence: missing cards (used) followed by tail
+    const allCards = Array.from({ length: totalCards }, (_, i) => i);
+    const tailSet = new Set(tail);
+    const usedCards = allCards.filter((c) => !tailSet.has(c));
+    const cardSequence = [...usedCards, ...tail];
+
     return {
       mode: "shared",
-      currentCardIndex: 0,
+      currentCardIndex: cardsAlreadyDrawn,
       cardSequence,
-      usedCards: [],
+      usedCards: usedCards,
       botCount: 1,
       currentBot: 1,
+      botsSelected: true,
+    };
+  }
+
+  const multiMatch = trimmed.match(/^ZM([0-9A-C]+Z[0-9A-C]*)$/i);
+  if (multiMatch) {
+    const parsed = decodeMultiSharedReadablePayload(multiMatch[1]);
+    if (!parsed) return null;
+    const tail = [parsed.cur, ...parsed.remaining];
+    // compute how many cards were already drawn before this sequence
+    const totalCards = 13;
+    const totalCardsInSequence = tail.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // number of used cards
+
+    // Reconstruct full sequence
+    const allCards = Array.from({ length: totalCards }, (_, i) => i);
+    const tailSet = new Set(tail);
+    const usedCards = allCards.filter((c) => !tailSet.has(c));
+    const cardSequence = [...usedCards, ...tail];
+
+    return {
+      mode: "shared",
+      currentCardIndex: cardsAlreadyDrawn,
+      cardSequence,
+      usedCards: usedCards,
+      botCount: parsed.botCount,
+      currentBot: parsed.currentBot,
       botsSelected: true,
     };
   }
@@ -194,6 +310,56 @@ export function previewGameCode(code: string): GameCodePreview {
     };
   }
 
+  const multiMatch = trimmed.match(/^ZM([0-9A-C]+Z[0-9A-C]*)$/i);
+  if (multiMatch) {
+    const parsed = decodeMultiSharedReadablePayload(multiMatch[1]);
+    if (!parsed)
+      return {
+        isValid: false,
+        errorMessage:
+          "Kod ZM zawiera nieprawidłowe dane lub błędną liczbę botów",
+        botCount: 1,
+        currentBot: undefined,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+
+    const totalCards = 13;
+    const totalCardsInSequence = 1 + parsed.remaining.length; // current + remaining
+    const cardsAlreadyDrawn = totalCards - totalCardsInSequence; // cards drawn before this sequence
+    const currentPosition = cardsAlreadyDrawn + 1; // current card position (1-based)
+
+    // Prevent invalid states
+    if (currentPosition <= 0 || currentPosition > totalCards) {
+      return {
+        isValid: false,
+        errorMessage: "Kod ZM zawiera nieprawidłowy stan gry",
+        botCount: parsed.botCount,
+        currentBot: parsed.currentBot,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    }
+
+    const gameProgress = `${currentPosition}/${totalCards}`;
+    return {
+      isValid: true,
+      botCount: parsed.botCount,
+      currentBot: parsed.currentBot,
+      currentCardIndex: cardsAlreadyDrawn, // 0-based index
+      totalCards,
+      gameProgress,
+      isGameStarted: true,
+      isDeckExhausted: parsed.remaining.length === 0,
+    };
+  }
+
   if (trimmed.toLowerCase().startsWith(GAME_CODE_PREFIX_LOWER)) {
     const data = trimmed.slice(3);
     if (data.length !== 16)
@@ -274,6 +440,13 @@ export function isValidGameCode(code: string): boolean {
   if (singleMatch) {
     const parsed = decodeSingleBotReadablePayload(singleMatch[1]);
     return parsed !== null; // This now includes duplicate/range validation
+  }
+
+  // Validate ZM format with proper multi-bot validation
+  const multiMatch = trimmed.match(/^ZM([0-9A-C]+Z[0-9A-C]*)$/i);
+  if (multiMatch) {
+    const parsed = decodeMultiSharedReadablePayload(multiMatch[1]);
+    return parsed !== null; // This includes bot count + card validation
   }
 
   // Validate legacy ZOO format
