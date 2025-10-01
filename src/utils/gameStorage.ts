@@ -117,6 +117,104 @@ function decodeMultiSharedReadablePayload(payload: string): {
   }
 }
 
+function encodePerBotReadable(gameState: GameState): string {
+  if (!gameState.botDecks || gameState.botDecks.length < 2 || gameState.botDecks.length > 4) {
+    throw new Error("Invalid botDecks for ZP format");
+  }
+
+  const botCount = gameState.botDecks.length;
+  const currentBot = gameState.currentBot || 1;
+  
+  if (currentBot < 1 || currentBot > botCount) {
+    throw new Error("Invalid current bot for ZP");
+  }
+
+  // Get current card from current bot's deck
+  const currentBotDeck = gameState.botDecks[currentBot - 1];
+  const curCard = currentBotDeck.cardSequence[currentBotDeck.currentCardIndex] ?? 0;
+
+  // Build header: ZP[botCount][currentBot][currentCard]
+  let code = `ZP${botCount}${currentBot}${encodeCard(curCard)}`;
+
+  // Build remaining blocks for each bot
+  for (const botDeck of gameState.botDecks) {
+    const remaining = botDeck.cardSequence.slice(botDeck.currentCardIndex + 1);
+    const remainingCards = remaining.map(encodeCard).join("");
+    code += `Z${remainingCards}`;
+  }
+
+  return code;
+}
+
+function decodePerBotPayload(payload: string): {
+  botCount: number;
+  currentBot: number;
+  cur: number;
+  botDecks: Array<{ remaining: number[] }>;
+} | null {
+  if (!payload || payload.length < 4) return null; // Minimum: [bot][current][card]Z
+
+  try {
+    const botCount = parseInt(payload[0], 10);
+    const currentBot = parseInt(payload[1], 10);
+
+    // Validate bot parameters
+    if (botCount < 2 || botCount > 4) return null;
+    if (currentBot < 1 || currentBot > botCount) return null;
+
+    // Parse current card at position 2
+    const cur = decodeCard(payload[2]);
+
+    // Find Z separator (should be at position 3)
+    if (payload[3] !== "Z") return null;
+
+    // Split remaining payload by Z to get bot blocks
+    const remainingPayload = payload.slice(4); // Everything after first Z
+    const blocks = remainingPayload.split("Z");
+
+    // Validate block count - must match botCount
+    if (blocks.length !== botCount) return null;
+
+    // Parse each bot's remaining cards
+    const botDecks: Array<{ remaining: number[] }> = [];
+    const allCardsUsed = new Set<number>();
+    allCardsUsed.add(cur); // Current card is used
+
+    for (let i = 0; i < botCount; i++) {
+      const block = blocks[i];
+      const remaining: number[] = [];
+
+      if (block.length > 0) {
+        const chars = block.split("");
+        for (const char of chars) {
+          const card = decodeCard(char);
+          
+          // Validate: current card must NOT appear in any remaining block
+          if (card === cur) return null;
+          
+          // Validate: no duplicates within this block
+          if (remaining.includes(card)) return null;
+          
+          // Validate: card not used in other blocks
+          if (allCardsUsed.has(card)) return null;
+          
+          remaining.push(card);
+          allCardsUsed.add(card);
+        }
+      }
+
+      botDecks.push({ remaining });
+    }
+
+    // Validate total card count - must be 1-13 (current + all remaining)
+    if (allCardsUsed.size < 1 || allCardsUsed.size > 13) return null;
+
+    return { botCount, currentBot, cur, botDecks };
+  } catch {
+    return null;
+  }
+}
+
 export function generateShareableCode(gameState: GameState): string {
   if (!gameState) throw new Error("gameState required");
   const botCount = gameState.botCount || 1;
@@ -133,8 +231,14 @@ export function generateShareableCode(gameState: GameState): string {
     return encodeSingleBotReadable(cur, remaining);
   }
 
-  // For multi-bot (2-4 bots), use ZM format for shared mode
+  // For multi-bot (2-4 bots), check mode
+  if (gameState.mode === "individual" && gameState.botDecks) {
+    // Use ZP format for individual mode (per-bot decks)
+    return encodePerBotReadable(gameState);
+  }
+
   if (gameState.mode === "shared") {
+    // Use ZM format for shared mode
     const seq = gameState.cardSequence || [];
     const curIndex =
       typeof gameState.currentCardIndex === "number"
@@ -217,6 +321,58 @@ export function loadFromShareableCode(code: string): GameState | null {
       botCount: parsed.botCount,
       currentBot: parsed.currentBot,
       botsSelected: true,
+    };
+  }
+
+  const perBotMatch = trimmed.match(/^ZP([1-4])([1-4])([0-9A-C])(Z.*)$/i);
+  if (perBotMatch) {
+    const parsed = decodePerBotPayload(perBotMatch[1] + perBotMatch[2] + perBotMatch[3] + perBotMatch[4]);
+    if (!parsed) return null;
+
+    // Reconstruct full card sequences for each bot
+    const totalCards = 13;
+    const allCardsInGame = new Set<number>();
+    allCardsInGame.add(parsed.cur);
+    
+    parsed.botDecks.forEach(deck => {
+      deck.remaining.forEach(card => allCardsInGame.add(card));
+    });
+
+    const cardsAlreadyDrawn = totalCards - allCardsInGame.size;
+
+    // Get all cards that were used (not in any remaining + not current)
+    const allCards = Array.from({ length: totalCards }, (_, i) => i);
+    const usedCards = allCards.filter((c) => !allCardsInGame.has(c));
+
+    // Build botDecks array for GameState
+    const botDecks = parsed.botDecks.map((deck, index) => {
+      const botId = index + 1;
+      const isCurrentBot = botId === parsed.currentBot;
+      
+      // Reconstruct full sequence: used cards + current (if this bot) + remaining
+      const cardSequence = [...usedCards];
+      if (isCurrentBot) {
+        cardSequence.push(parsed.cur);
+      }
+      cardSequence.push(...deck.remaining);
+      
+      return {
+        botId,
+        cardSequence,
+        currentCardIndex: cardsAlreadyDrawn + (isCurrentBot ? 0 : -1),
+        usedCards,
+      };
+    });
+
+    return {
+      mode: "individual",
+      currentCardIndex: cardsAlreadyDrawn,
+      cardSequence: [], // Not used in individual mode
+      usedCards: usedCards,
+      botCount: parsed.botCount,
+      currentBot: parsed.currentBot,
+      botsSelected: true,
+      botDecks,
     };
   }
 
@@ -360,6 +516,84 @@ export function previewGameCode(code: string): GameCodePreview {
     };
   }
 
+  const perBotMatch = trimmed.match(/^ZP([1-4])([1-4])([0-9A-C])(Z.*)$/i);
+  if (perBotMatch) {
+    const parsed = decodePerBotPayload(perBotMatch[1] + perBotMatch[2] + perBotMatch[3] + perBotMatch[4]);
+    if (!parsed) {
+      // Try to provide more specific error messages
+      const botCountChar = perBotMatch[1];
+      const currentBotChar = perBotMatch[2];
+      const botCount = parseInt(botCountChar, 10);
+      const currentBot = parseInt(currentBotChar, 10);
+      
+      if (currentBot > botCount) {
+        return {
+          isValid: false,
+          errorMessage: `Aktualny bot (${currentBot}) poza zakresem (1-${botCount})`,
+          botCount: botCount,
+          currentBot: currentBot,
+          currentCardIndex: -1,
+          totalCards: 13,
+          gameProgress: "0/13",
+          isGameStarted: false,
+          isDeckExhausted: false,
+        };
+      }
+
+      return {
+        isValid: false,
+        errorMessage:
+          "Kod ZP zawiera nieprawidłowe dane (sprawdź duplikaty lub obecną kartę w blokach)",
+        botCount: botCount,
+        currentBot: currentBot,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    }
+
+    const totalCards = 13;
+    const allCardsInGame = new Set<number>();
+    allCardsInGame.add(parsed.cur);
+    
+    let totalRemaining = 0;
+    parsed.botDecks.forEach(deck => {
+      totalRemaining += deck.remaining.length;
+      deck.remaining.forEach(card => allCardsInGame.add(card));
+    });
+
+    const cardsAlreadyDrawn = totalCards - allCardsInGame.size;
+    const currentPosition = cardsAlreadyDrawn + 1;
+
+    if (currentPosition <= 0 || currentPosition > totalCards) {
+      return {
+        isValid: false,
+        errorMessage: "Kod ZP zawiera nieprawidłowy stan gry",
+        botCount: parsed.botCount,
+        currentBot: parsed.currentBot,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    }
+
+    const gameProgress = `${currentPosition}/${totalCards}`;
+    return {
+      isValid: true,
+      botCount: parsed.botCount,
+      currentBot: parsed.currentBot,
+      currentCardIndex: cardsAlreadyDrawn,
+      totalCards,
+      gameProgress,
+      isGameStarted: true,
+      isDeckExhausted: totalRemaining === 0,
+    };
+  }
+
   if (trimmed.toLowerCase().startsWith(GAME_CODE_PREFIX_LOWER)) {
     const data = trimmed.slice(3);
     if (data.length !== 16)
@@ -447,6 +681,13 @@ export function isValidGameCode(code: string): boolean {
   if (multiMatch) {
     const parsed = decodeMultiSharedReadablePayload(multiMatch[1]);
     return parsed !== null; // This includes bot count + card validation
+  }
+
+  // Validate ZP format with proper per-bot validation
+  const perBotMatch = trimmed.match(/^ZP([1-4])([1-4])([0-9A-C])(Z.*)$/i);
+  if (perBotMatch) {
+    const parsed = decodePerBotPayload(perBotMatch[1] + perBotMatch[2] + perBotMatch[3] + perBotMatch[4]);
+    return parsed !== null; // This includes all ZP validation rules
   }
 
   // Validate legacy ZOO format

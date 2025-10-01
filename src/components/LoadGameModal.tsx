@@ -48,19 +48,19 @@ export default function LoadGameModal({
       return;
     }
 
-    // Validate format (supports ZS, ZM, and ZOO formats)
+    // Validate format (supports ZS, ZM, ZP, and ZOO formats)
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
       setError(
-        "Prawidłowy format: ZS (single-bot), ZM (multi-shared) lub ZOO (legacy)"
+        "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
       );
       return;
     }
 
     if (filteredValue.length >= 2) {
       const prefix = filteredValue.substring(0, 2);
-      if (prefix !== "ZS" && prefix !== "ZM" && prefix !== "ZO") {
+      if (prefix !== "ZS" && prefix !== "ZM" && prefix !== "ZP" && prefix !== "ZO") {
         setError(
-          "Prawidłowy format: ZS (single-bot), ZM (multi-shared) lub ZOO (legacy)"
+          "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
         );
         return;
       }
@@ -71,10 +71,11 @@ export default function LoadGameModal({
       if (
         !prefix.startsWith("ZS") &&
         !prefix.startsWith("ZM") &&
+        !prefix.startsWith("ZP") &&
         prefix !== "ZOO"
       ) {
         setError(
-          "Prawidłowy format: ZS (single-bot), ZM (multi-shared) lub ZOO (legacy)"
+          "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
         );
         return;
       }
@@ -94,8 +95,8 @@ export default function LoadGameModal({
 
       if (dataPart.length > 0) {
         let invalidChars = "";
-        if (filteredValue.startsWith("ZM")) {
-          // ZM format allows Z separator: [0-9A-C]+Z[0-9A-C]*
+        if (filteredValue.startsWith("ZM") || filteredValue.startsWith("ZP")) {
+          // ZM and ZP formats allow Z separator: [0-9A-C]+Z[0-9A-C]*
           invalidChars = dataPart.replace(/[0-9A-CZ]/g, "");
         } else {
           // ZS and ZOO formats only allow 0-9,A-C
@@ -104,7 +105,7 @@ export default function LoadGameModal({
 
         if (invalidChars.length > 0) {
           setError(
-            "Prawidłowy format: ZS/ZM + 0-9,A-C (ZM z Z) lub ZOO + 0-9,A-C"
+            "Prawidłowy format: ZS/ZM/ZP + 0-9,A-C (ZM/ZP z Z) lub ZOO + 0-9,A-C"
           );
           return;
         }
@@ -117,6 +118,8 @@ export default function LoadGameModal({
       shouldPreview = true; // ZS format can be short
     } else if (filteredValue.startsWith("ZM") && filteredValue.length >= 5) {
       shouldPreview = true; // ZM format needs at least ZM + bot count + current bot + card
+    } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 6) {
+      shouldPreview = true; // ZP format needs at least ZP + bot count + current bot + card + Z
     } else if (filteredValue.startsWith("ZOO") && filteredValue.length >= 19) {
       shouldPreview = true; // ZOO format needs full 19 chars
     }
