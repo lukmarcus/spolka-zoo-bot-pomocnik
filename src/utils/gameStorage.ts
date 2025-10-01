@@ -461,6 +461,7 @@ export function previewGameCode(code: string): GameCodePreview {
       gameProgress,
       isGameStarted: true,
       isDeckExhausted: parsed.remaining.length === 0,
+      mode: "shared" as const,
     };
   }
 
@@ -511,6 +512,7 @@ export function previewGameCode(code: string): GameCodePreview {
       gameProgress,
       isGameStarted: true,
       isDeckExhausted: parsed.remaining.length === 0,
+      mode: "shared" as const,
     };
   }
 
@@ -579,6 +581,24 @@ export function previewGameCode(code: string): GameCodePreview {
       };
     }
 
+    // For ZP format, calculate per-bot positions
+    // Each bot shares the same used cards pile, but has own remaining deck
+    const botPositions = parsed.botDecks.map((_, index) => {
+      const botId = index + 1;
+      const isCurrentBot = botId === parsed.currentBot;
+      
+      // Position for this bot (1-based):
+      // - Current bot: currentCardIndex = cardsAlreadyDrawn, position = cardsAlreadyDrawn + 1 (showing current card)
+      // - Other bots: currentCardIndex = cardsAlreadyDrawn - 1, position = cardsAlreadyDrawn (last card they saw)
+      const botCardPosition = cardsAlreadyDrawn + (isCurrentBot ? 1 : 0);
+      const positionStr = `${botCardPosition}/${totalCards}`;
+      
+      return {
+        botId,
+        position: positionStr,
+      };
+    });
+
     const gameProgress = `${currentPosition}/${totalCards}`;
     return {
       isValid: true,
@@ -589,6 +609,8 @@ export function previewGameCode(code: string): GameCodePreview {
       gameProgress,
       isGameStarted: true,
       isDeckExhausted: totalRemaining === 0,
+      mode: "individual" as const,
+      botPositions,
     };
   }
 

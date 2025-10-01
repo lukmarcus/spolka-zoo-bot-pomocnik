@@ -219,16 +219,30 @@ export default function LoadGameModal({
                     <strong>Liczba botów:</strong> {gamePreview.botCount}
                   </div>
                   <div className={styles.previewItem}>
-                    <strong>Talia:</strong> wspólna
+                    <strong>Talia:</strong> {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
                   </div>
                   {gamePreview.currentBot && (
                     <div className={styles.previewItem}>
                       <strong>Aktualny bot:</strong> {gamePreview.currentBot}
                     </div>
                   )}
-                  <div className={styles.previewItem}>
-                    <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
-                  </div>
+                  {gamePreview.botPositions ? (
+                    <div className={styles.previewItem}>
+                      <strong>Pozycje botów:</strong>
+                      <div style={{ marginLeft: "1rem", marginTop: "0.25rem" }}>
+                        {gamePreview.botPositions.map((bot) => (
+                          <div key={bot.botId}>
+                            Bot {bot.botId}: {bot.position}
+                            {bot.botId === gamePreview.currentBot ? " ⬅️" : ""}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.previewItem}>
+                      <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
+                    </div>
+                  )}
                 </>
               )}
             </div>

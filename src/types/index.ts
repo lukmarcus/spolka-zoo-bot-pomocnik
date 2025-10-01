@@ -34,6 +34,8 @@ export interface GameCodePreview {
   gameProgress: string; // "0/13", "5/13", etc.
   isGameStarted: boolean;
   isDeckExhausted: boolean;
+  mode?: "shared" | "individual"; // v0.4.3+ deck mode
+  botPositions?: Array<{ botId: number; position: string }>; // v0.4.3+ per-bot positions for ZP
 }
 
 export interface GameContextType {
