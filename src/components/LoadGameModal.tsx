@@ -32,7 +32,6 @@ export default function LoadGameModal({
     const filteredValue = rawValue.replace(/[^0-9A-Z]/g, "");
 
     setGameCode(filteredValue);
-    setGamePreview(null);
     setError(null);
 
     // Restore cursor position after filtering
@@ -45,11 +44,13 @@ export default function LoadGameModal({
     // Validate from the first character
     if (filteredValue.length === 0) {
       // No error for empty input
+      setGamePreview(null);
       return;
     }
 
     // Validate format (supports ZS, ZM, ZP, and ZOO formats)
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
+      setGamePreview(null);
       setError(
         "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
       );
@@ -59,6 +60,7 @@ export default function LoadGameModal({
     if (filteredValue.length >= 2) {
       const prefix = filteredValue.substring(0, 2);
       if (prefix !== "ZS" && prefix !== "ZM" && prefix !== "ZP" && prefix !== "ZO") {
+        setGamePreview(null);
         setError(
           "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
         );
@@ -74,6 +76,7 @@ export default function LoadGameModal({
         !prefix.startsWith("ZP") &&
         prefix !== "ZOO"
       ) {
+        setGamePreview(null);
         setError(
           "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
         );
@@ -104,6 +107,7 @@ export default function LoadGameModal({
         }
 
         if (invalidChars.length > 0) {
+          setGamePreview(null);
           setError(
             "Prawidłowy format: ZS/ZM/ZP + 0-9,A-C (ZM/ZP z Z) lub ZOO + 0-9,A-C"
           );
@@ -118,8 +122,8 @@ export default function LoadGameModal({
       shouldPreview = true; // ZS format can be short
     } else if (filteredValue.startsWith("ZM") && filteredValue.length >= 5) {
       shouldPreview = true; // ZM format needs at least ZM + bot count + current bot + card
-    } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 6) {
-      shouldPreview = true; // ZP format needs at least ZP + bot count + current bot + card + Z
+    } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 5) {
+      shouldPreview = true; // ZP format needs at least ZP + bot count + current bot + card
     } else if (filteredValue.startsWith("ZOO") && filteredValue.length >= 19) {
       shouldPreview = true; // ZOO format needs full 19 chars
     }
