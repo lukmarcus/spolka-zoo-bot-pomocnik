@@ -59,7 +59,12 @@ export default function LoadGameModal({
 
     if (filteredValue.length >= 2) {
       const prefix = filteredValue.substring(0, 2);
-      if (prefix !== "ZS" && prefix !== "ZM" && prefix !== "ZP" && prefix !== "ZO") {
+      if (
+        prefix !== "ZS" &&
+        prefix !== "ZM" &&
+        prefix !== "ZP" &&
+        prefix !== "ZO"
+      ) {
         setGamePreview(null);
         setError(
           "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
@@ -180,7 +185,9 @@ export default function LoadGameModal({
   };
 
   // Check if the current code is valid for button activation
-  const isCodeValid = gamePreview?.isValid || false;
+  // Button should be disabled if code is empty, too short, or preview shows invalid
+  const isCodeValid =
+    gameCode.length > 0 && (gamePreview === null ? false : gamePreview.isValid);
 
   return (
     <BaseModal
@@ -223,7 +230,8 @@ export default function LoadGameModal({
                     <strong>Liczba botów:</strong> {gamePreview.botCount}
                   </div>
                   <div className={styles.previewItem}>
-                    <strong>Talia:</strong> {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
+                    <strong>Talia:</strong>{" "}
+                    {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
                   </div>
                   {gamePreview.currentBot && (
                     <div className={styles.previewItem}>
@@ -244,7 +252,8 @@ export default function LoadGameModal({
                     </div>
                   ) : (
                     <div className={styles.previewItem}>
-                      <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
+                      <strong>Aktualna karta:</strong>{" "}
+                      {gamePreview.gameProgress}
                     </div>
                   )}
                 </>
