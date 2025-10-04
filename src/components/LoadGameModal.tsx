@@ -32,7 +32,6 @@ export default function LoadGameModal({
     const filteredValue = rawValue.replace(/[^0-9A-Z]/g, "");
 
     setGameCode(filteredValue);
-    setGamePreview(null);
     setError(null);
 
     // Restore cursor position after filtering
@@ -45,22 +44,30 @@ export default function LoadGameModal({
     // Validate from the first character
     if (filteredValue.length === 0) {
       // No error for empty input
+      setGamePreview(null);
       return;
     }
 
-    // Validate format (supports ZS, ZM, and ZOO formats)
+    // Validate format (supports ZS, ZM, ZP, and ZOO formats)
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
+      setGamePreview(null);
       setError(
-        "Prawidłowy format: ZS (single-bot), ZM (multi-shared) lub ZOO (legacy)"
+        "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
       );
       return;
     }
 
     if (filteredValue.length >= 2) {
       const prefix = filteredValue.substring(0, 2);
-      if (prefix !== "ZS" && prefix !== "ZM" && prefix !== "ZO") {
+      if (
+        prefix !== "ZS" &&
+        prefix !== "ZM" &&
+        prefix !== "ZP" &&
+        prefix !== "ZO"
+      ) {
+        setGamePreview(null);
         setError(
-          "Prawidłowy format: ZS (single-bot), ZM (multi-shared) lub ZOO (legacy)"
+          "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
         );
         return;
       }
@@ -71,10 +78,12 @@ export default function LoadGameModal({
       if (
         !prefix.startsWith("ZS") &&
         !prefix.startsWith("ZM") &&
+        !prefix.startsWith("ZP") &&
         prefix !== "ZOO"
       ) {
+        setGamePreview(null);
         setError(
-          "Prawidłowy format: ZS (single-bot), ZM (multi-shared) lub ZOO (legacy)"
+          "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot) lub ZOO (legacy)"
         );
         return;
       }
@@ -94,8 +103,8 @@ export default function LoadGameModal({
 
       if (dataPart.length > 0) {
         let invalidChars = "";
-        if (filteredValue.startsWith("ZM")) {
-          // ZM format allows Z separator: [0-9A-C]+Z[0-9A-C]*
+        if (filteredValue.startsWith("ZM") || filteredValue.startsWith("ZP")) {
+          // ZM and ZP formats allow Z separator: [0-9A-C]+Z[0-9A-C]*
           invalidChars = dataPart.replace(/[0-9A-CZ]/g, "");
         } else {
           // ZS and ZOO formats only allow 0-9,A-C
@@ -103,8 +112,9 @@ export default function LoadGameModal({
         }
 
         if (invalidChars.length > 0) {
+          setGamePreview(null);
           setError(
-            "Prawidłowy format: ZS/ZM + 0-9,A-C (ZM z Z) lub ZOO + 0-9,A-C"
+            "Prawidłowy format: ZS/ZM/ZP + 0-9,A-C (ZM/ZP z Z) lub ZOO + 0-9,A-C"
           );
           return;
         }
@@ -117,6 +127,8 @@ export default function LoadGameModal({
       shouldPreview = true; // ZS format can be short
     } else if (filteredValue.startsWith("ZM") && filteredValue.length >= 5) {
       shouldPreview = true; // ZM format needs at least ZM + bot count + current bot + card
+    } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 5) {
+      shouldPreview = true; // ZP format needs at least ZP + bot count + current bot + card
     } else if (filteredValue.startsWith("ZOO") && filteredValue.length >= 19) {
       shouldPreview = true; // ZOO format needs full 19 chars
     }
@@ -173,7 +185,9 @@ export default function LoadGameModal({
   };
 
   // Check if the current code is valid for button activation
-  const isCodeValid = gamePreview?.isValid || false;
+  // Button should be disabled if code is empty, too short, or preview shows invalid
+  const isCodeValid =
+    gameCode.length > 0 && (gamePreview === null ? false : gamePreview.isValid);
 
   return (
     <BaseModal
@@ -216,16 +230,32 @@ export default function LoadGameModal({
                     <strong>Liczba botów:</strong> {gamePreview.botCount}
                   </div>
                   <div className={styles.previewItem}>
-                    <strong>Talia:</strong> wspólna
+                    <strong>Talia:</strong>{" "}
+                    {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
                   </div>
                   {gamePreview.currentBot && (
                     <div className={styles.previewItem}>
                       <strong>Aktualny bot:</strong> {gamePreview.currentBot}
                     </div>
                   )}
-                  <div className={styles.previewItem}>
-                    <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
-                  </div>
+                  {gamePreview.botPositions ? (
+                    <div className={styles.previewItem}>
+                      <strong>Pozycje botów:</strong>
+                      <div style={{ marginLeft: "1rem", marginTop: "0.25rem" }}>
+                        {gamePreview.botPositions.map((bot) => (
+                          <div key={bot.botId}>
+                            Bot {bot.botId}: {bot.position}
+                            {bot.botId === gamePreview.currentBot ? " ⬅️" : ""}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.previewItem}>
+                      <strong>Aktualna karta:</strong>{" "}
+                      {gamePreview.gameProgress}
+                    </div>
+                  )}
                 </>
               )}
             </div>

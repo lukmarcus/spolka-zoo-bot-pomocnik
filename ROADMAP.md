@@ -2,108 +2,50 @@
 
 ## 🎯 Plan rozwoju 0.4.x - Plany i nadchodzące wydania
 
-| Wersja | Status       | Opis krótki                                                  | Przybliżony termin | Szczegóły techniczne                                                                            |
-| ------ | ------------ | ------------------------------------------------------------ | -----------------: | ----------------------------------------------------------------------------------------------- |
-| 0.4.2  | ✅ Gotowe    | Implementacja ZM (Multi-Shared)                              |         2025-09-28 | Format wspólnej talii dla wielu botów; zapisywanie/wczytywanie, podgląd i walidacja             |
-| 0.4.3  | 🚧 Planowane | Implementacja ZP (Per-Bot)                                   |  ~3-4 dni po 0.4.2 | Format z osobnymi taliami per-bot; parsowanie separatorów `Z`                                   |
-| 0.4.x  | ⚠️ Planowane | Kompletny zestaw testów i finalizacja — usunięcie legacy ZOO |  ~2-3 dni po 0.4.3 | Pełny zestaw testów; usunięcie ścieżki odczytu starego formatu ZOO z opisanymi krokami migracji |
-| 0.5.0  | 🔮 Planowane | Wizualizacja kart i dopracowanie UI                          |       Do ustalenia | System wizualizacji kart; animacje                                                              |
-| 0.6.0+ | 🔮 Planowane | Zaawansowane funkcje                                         |       Do ustalenia | Statystyki, tryby turniejowe, zapisy w chmurze                                                  |
+| Wersja | Status       | Opis krótki                                       | Przybliżony termin | Szczegóły techniczne                                                                     |
+| ------ | ------------ | ------------------------------------------------- | -----------------: | ---------------------------------------------------------------------------------------- |
+| 0.4.3  | ✅ Gotowe    | Implementacja ZP (Per-Bot)                        |         2025-10-04 | Format z osobnymi taliami per-bot; parsowanie separatorów `Z`, pełna walidacja i preview |
+| 0.4.4  | ⚠️ Planowane | Wycofanie legacy formatu ZOO i finalizacja testów |      ~1-2 tygodnie | Usunięcie obsługi ZOO, przewodnik migracji, comprehensive testing suite                  |
+| 0.5.0  | 🔮 Planowane | Wizualizacja kart i dopracowanie UI               |       Do ustalenia | System wizualizacji kart; animacje                                                       |
+| 0.6.0+ | 🔮 Planowane | Zaawansowane funkcje                              |       Do ustalenia | Statystyki, tryby turniejowe, zapisy w chmurze                                           |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.2 — Implementacja ZM (Multi-Shared) 🚧
+### v0.4.4 — Wycofanie legacy ZOO i finalizacja testów 🚧
 
-🎯 Cel: wprowadzenie formatu ZM dla kilku botów korzystających ze wspólnej talii
+🎯 Cel: usunięcie przestarzałego formatu ZOO i doprowadzenie projektu do jakości produkcyjnej
 
-⏱️ Przybliżony termin: ~3-4 dni po v0.4.1
-
-Planowane zadania:
-
-- Implementacja formatu ZM
-
-  - Struktura: `ZM[n_botów][aktualny_bot][obecna_karta][pozostałe_karty...]`
-  - Przykład: `ZM325AC278B6413` (3 boty, aktualny=2, obecna=5)
-  - Kodowanie/dekodowanie w `src/utils/gameStorage.ts`
-
-- Logika wielobotowa
-
-  - Parsowanie liczby botów (2–4)
-  - Walidacja numeru aktualnego bota (1-based)
-  - Zarządzanie wspólną talią i synchronizacja stanu
-
-- Wsparcie UI
-
-  - Aktualizacja `LoadGameModal` dla walidacji ZM
-  - Logika podglądu dla scenariuszy multi-bot
-  - Przyjazne komunikaty błędów specyficzne dla ZM
-
-- Testy
-  - Podstawowe testy round-trip (kod ↔ GameState)
-  - Edge-case: nieprawidłowa liczba botów, out-of-range current bot
-
----
-
-### v0.4.3 — Implementacja ZP (Per-Bot) 🚧
-
-🎯 Cel: wprowadzenie formatu ZP, w którym każdy bot ma własną talię
+⏱️ Przybliżony termin: ~1-2 tygodnie po v0.4.3
 
 Planowane zadania:
 
-- Implementacja formatu ZP
+- **Wycofanie legacy formatu ZOO**
 
-  - Struktura: `ZP[n_botów][aktualny_bot][obecna_karta]Z[bot1_karty]Z[bot2_karty]...`
-  - Przykład: `ZP321Z5Z23Z678`
-  - Parsowanie bloków rozdzielonych separatorem `Z`
+  - Usunięcie obsługi odczytu starych kodów ZOO z `loadFromShareableCode()`
+  - Usunięcie funkcji `decodeLegacyZooPayload()` i powiązanych funkcji
+  - Aktualizacja `isValidGameCode()` - brak wsparcia dla ZOO
+  - Czytelne komunikaty błędów dla starych kodów ZOO z instrukcją migracji
 
-- Logika per-bot
+- **Przewodnik migracji ZOO → ZS/ZM/ZP**
 
-  - Niezależne sekwencje kart dla każdego bota
-  - Algorytm parsowania separatorów `Z`
-  - Walidacja międzybotowa (brak duplikatów między taliami, gdzie wymagane)
+  - Dokumentacja procesu migracji starych kodów
+  - Narzędzie konwersji (opcjonalnie) - ZOO → odpowiedni nowoczesny format
+  - Instrukcje dla użytkowników z starymi zapisanymi kodami
+  - Komunikaty w UI kierujące do przewodnika migracji
 
-- UI
+- **Comprehensive testing suite**
 
-  - Pełne wsparcie ZP w `LoadGameModal`
-  - Podgląd postępów per-bot
-  - Szczegółowe komunikaty walidacyjne dla złożonych przypadków
+  - Testy jednostkowe dla wszystkich formatów (ZS, ZM, ZP)
+  - Testy round-trip: encode → decode → verify
+  - Testy warunków brzegowych i edge cases
+  - Performance tests dla większej liczby botów
 
-- Testy
-  - Walidacja sekwencji per-bot
-  - Sprawdzenie unikalności kart między taliami
-  - Scenariusze brzegowe (puste sekwencje, nieprawidłowe separatory)
+- **Finalizacja dokumentacji**
 
----
-
-### v0.4.x — Testy kompletne i finalizacja 🚧
-
-🎯 Cel: doprowadzenie projektu do jakości produkcyjnej
-
-⏱️ Przybliżony termin: ~2–3 dni po v0.4.3
-
-Planowane zadania:
-
-- Pełny zestaw testów
-
-  - Testy jednostkowe dla wszystkich formatów (ZS, ZOO, ZM, ZP)
-  - Testy round-trip kodów
-  - Testy warunków brzegowych i zgodności między formatami
-
-- Optymalizacja i dopracowanie
-
-  - Optymalizacje wydajności dla większej liczby botów
-  - Udoskonalenia UI/UX i obsługi błędów
-
-- Dokumentacja końcowa
-
-  - Aktualizacja `GAME-CODES.md`
-  - Dokumentacja API dla wszystkich funkcji
-  - Przykłady użycia i dobre praktyki
-  - Przewodnik migracji: ZOO → ZS/ZM/ZP
-
-- Kontrolowane usunięcie legacy ZOO
-  - Usunięcie ścieżki odczytu starego formatu ZOO w kontrolowany sposób
-  - Dostarczenie przewodnika migracji i okna kompatybilności (jedno wydanie) dla użytkowników, aby przekonwertowali stare kody
+  - Aktualizacja `GAME-CODES.md` - usunięcie sekcji ZOO
+  - Dokumentacja API dla wszystkich funkcji eksportowanych
+  - Przykłady użycia i best practices
+  - Cleanup kodu - usunięcie martwych ścieżek i legacy komentarzy
 
 ---
 
