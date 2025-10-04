@@ -354,19 +354,47 @@ export function loadFromShareableCode(code: string): GameState | null {
       const botId = index + 1;
       const isCurrentBot = botId === parsed.currentBot;
 
-      // Reconstruct full sequence: used cards + current (if this bot) + remaining
-      const cardSequence = [...usedCards];
-      if (isCurrentBot) {
-        cardSequence.push(parsed.cur);
-      }
-      cardSequence.push(...deck.remaining);
+      // For current bot: they are showing current card (already drawn)
+      // For other bots: they haven't drawn current card yet
+      const cardsDrawnByThisBot = totalCards - deck.remaining.length;
+      let currentCardIdx;
+      let thisBotsUsedCards;
 
-      return {
-        botId,
-        cardSequence,
-        currentCardIndex: cardsAlreadyDrawn + (isCurrentBot ? 0 : -1),
-        usedCards,
-      };
+      if (isCurrentBot) {
+        // Current bot has already drawn the current card
+        currentCardIdx = cardsDrawnByThisBot - 1; // Index of current card
+        thisBotsUsedCards = Array.from(
+          { length: cardsDrawnByThisBot - 1 },
+          (_, i) => i
+        );
+        // Full sequence: used cards + current card + remaining
+        const cardSequence = [
+          ...thisBotsUsedCards,
+          parsed.cur,
+          ...deck.remaining,
+        ];
+        return {
+          botId,
+          cardSequence,
+          currentCardIndex: currentCardIdx,
+          usedCards: thisBotsUsedCards,
+        };
+      } else {
+        // Other bots haven't drawn current card yet
+        currentCardIdx = cardsDrawnByThisBot - 1; // Index of their next card to draw
+        thisBotsUsedCards = Array.from(
+          { length: cardsDrawnByThisBot },
+          (_, i) => i
+        );
+        // Full sequence: used cards + remaining
+        const cardSequence = [...thisBotsUsedCards, ...deck.remaining];
+        return {
+          botId,
+          cardSequence,
+          currentCardIndex: currentCardIdx,
+          usedCards: thisBotsUsedCards,
+        };
+      }
     });
 
     return {
