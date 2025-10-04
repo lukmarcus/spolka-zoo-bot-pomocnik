@@ -82,6 +82,7 @@ const Home: React.FC = () => {
             <li>🎨 Globalne kolorowanie tekstu kart botów (v0.3.5)</li>
             <li>📝 Pełne oryginalne opisy kart (v0.3.5)</li>
             <li>✅ Osobne talie botów (v0.4.0)</li>
+            <li>✅ Format ZP - niezależne talie per-bot (v0.4.3)</li>
           </ul>
         </div>
       </div>

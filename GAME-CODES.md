@@ -71,7 +71,7 @@
 
 ## 🎯 Format ZP - Per-Bot (v0.4.3)
 
-**Status:** 🚧 W trakcie implementacji
+**Status:** ✅ Zaimplementowane
 
 **Struktura:** `ZP[n_botów][aktualny_bot][obecna_karta]Z[bot1_pozostałe]Z[bot2_pozostałe]Z...`
 
@@ -136,59 +136,41 @@
    - Separator `Z` ułatwia parsowanie i czytelność
    - Brak separatora lub za mało separatorów → BŁĄD
 
-### Plan implementacji ZP (v0.4.3)
+### Implementacja ZP - Kompletna (v0.4.3)
 
-#### Krok 1: Funkcje encode/decode w gameStorage.ts
+#### ✅ Zrealizowane funkcjonalności:
 
-**Do zrobienia:**
+**Funkcje core:**
 
-- Dodać `encodePerBotReadable(gameState: GameState): string`
-- Dodać `decodePerBotPayload(payload: string): GameState | null`
-- Dodać walidację: reguła redundancji (CUR nie w bloku currentBot)
-- Dodać walidację: liczba separatorów, zakres botCount/currentBot
-- Dodać walidację: duplikaty w blokach, nieprawidłowe znaki
+- `encodePerBotReadable(gameState)` - kodowanie do formatu ZP
+- `decodePerBotPayload(payload)` - dekodowanie i walidacja ZP
+- Pełna walidacja: reguła redundancji, separatory Z, duplikaty w blokach
+- Integracja z `generateShareableCode()` i `loadFromShareableCode()`
 
-#### Krok 2: Integracja z generateShareableCode()
+**UI i UX:**
 
-**Do zrobienia:**
+- LoadGameModal: wsparcie ZP preview z pozycjami per-bot
+- Real-time validation podczas wpisywania kodu
+- Komunikaty błędów specyficzne dla ZP (nieprawidłowe separatory, duplikaty)
+- Filtrowanie znaków: `0-9A-CZ` (separator Z dozwolony)
 
-- Dodać sprawdzenie: `if (mode === 'individual' && botDecks)`
-- Wywołać `encodePerBotReadable(gameState)` zamiast fallback do ZOO
-- Zachować kompatybilność z ZS (1 bot) i ZM (shared mode)
+**Kompatybilność:**
 
-#### Krok 3: Integracja z loadFromShareableCode()
+- Backward compatibility: ZS/ZM/ZOO nadal w pełni obsługiwane
+- Automatyczny wybór formatu: ZP dla `mode: "individual"`
+- Poprawiona logika pozycji botów w preview i po załadowaniu
 
-**Do zrobienia:**
+**Walidacja i edge cases:**
 
-- Dodać pattern match dla kodu ZP: `/^ZP[2-4][1-4][0-9A-C]Z/`
-- Wywołać `decodePerBotPayload(code)` dla kodów ZP
-- Zwrócić `null` + błąd dla nieprawidłowych kodów ZP
-- Zachować obsługę ZS, ZM, ZOO (backward compatibility)
+- ✅ Roundtrip: encode → decode → verify GameState
+- ✅ Puste bloki (boty z wyczerpanymi taliami)
+- ✅ Wszystkie 13 kart w jednym bloku
+- ✅ Reguła redundancji: CUR nie w bloku currentBot
+- ✅ Duplikaty w blokach (rejection)
+- ✅ Nieprawidłowa liczba bloków/separatorów
+- ✅ currentBot poza zakresem (1-N)
 
-#### Krok 4: Wsparcie LoadGameModal
-
-**Do zrobienia:**
-
-- Dodać filtr znaków dla ZP: `0-9A-CZ` (separator Z)
-- Dodać preview dla kodów ZP (pokazać stan per-bot)
-- Dodać komunikaty błędów dla ZP:
-  - "Obecna karta nie może być w bloku pozostałych"
-  - "Nieprawidłowa liczba bloków (oczekiwano N, znaleziono M)"
-  - "Duplikaty w bloku bota X"
-  - "Aktualny bot poza zakresem (1-N)"
-
-#### Krok 5: Testy
-
-**Do zrobienia:**
-
-- Test roundtrip: encode → decode → porównaj GameState
-- Test edge case: puste bloki (boty wyczerpane)
-- Test edge case: wszystkie 13 kart w bloku
-- Test walidacji: CUR w bloku currentBot (should reject)
-- Test walidacji: duplikaty w bloku (should reject)
-- Test walidacji: za mało/za dużo bloków (should reject)
-- Test walidacji: currentBot poza zakresem (should reject)
-- Test backward compatibility: stare kody ZS/ZM nadal działają
+**Status:** Format ZP w pełni działający i gotowy do produkcji.
 
 ---
 

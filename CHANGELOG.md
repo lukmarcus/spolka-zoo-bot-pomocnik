@@ -5,6 +5,42 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.3] - 2025-10-04
+
+### 🎯 Implementacja ZP (Per-Bot Independent Decks)
+
+**🚀 Nowości:**
+
+- **Format ZP (Per-Bot):** Pełna implementacja nowego formatu `ZP[bots][current][card]Z[bot1]Z[bot2]Z...` umożliwiającego niezależne talie dla każdego bota
+- **Niezależne talie botów:** Każdy bot ma własną sekwencję kart, pozycję i stan gry - boty mogą być w różnych fazach rozgrywki
+- **Zaawansowana walidacja ZP:** Kompletne reguły walidacji zgodnie z dokumentacją (separatory Z, duplikaty w blokach, reguła redundancji)
+- **Preview per-bot:** LoadGameModal wyświetla pozycje każdego bota osobno (np. "Bot 1: 5/13, Bot 2: 8/13")
+- **Real-time updates:** Podgląd ZP aktualizuje się w czasie rzeczywistym podczas wpisywania kodu
+
+**🏗️ Zmiany techniczne:**
+
+- **Enkoder/Dekoder ZP:** Funkcje `encodePerBotReadable()` i `decodePerBotPayload()` w `gameStorage.ts`
+- **Inteligentny format selection:** `generateShareableCode()` automatycznie wybiera ZP dla `mode: "individual"`
+- **Poprawiona logika pozycji:** Naprawione obliczenia pozycji botów w preview i po załadowaniu stanu gry
+- **Enhanced LoadGameModal:** Wsparcie dla walidacji ZP z komunikatami błędów specyficznymi dla formatu
+- **Button state management:** Poprawiona logika aktywności przycisku "Wczytaj grę" - nieaktywny dla niepełnych kodów
+
+**🔄 Kompatybilność:**
+
+- **Backward compatibility:** Wszystkie poprzednie formaty (ZS, ZM, ZOO) nadal w pełni obsługiwane
+- **Automatic format detection:** System automatycznie rozpoznaje i obsługuje wszystkie formaty kodów
+- **Migracja bezproblemowa:** Stare kody działają bez zmian, nowe kody używają optymalnego formatu
+
+**🐛 Bug Fixes:**
+
+- Naprawione nieprawidłowe pozycje botów po załadowaniu kodu ZP
+- Poprawiona walidacja przycisków w LoadGameModal dla krótkich kodów (np. "ZS", "ZM")
+- Usunięte błędne sprawdzanie duplikatów między taliami botów (individual mode pozwala na duplikaty)
+
+**🎯 Status:** Format ZP w pełni zaimplementowany i gotowy do użycia. Kompleksowe wsparcie dla wszystkich trybów gry.
+
+---
+
 ## [0.4.2] - 2025-10-01
 
 ### 🛠️ Wdrożenie ZM (Multi-Shared)
