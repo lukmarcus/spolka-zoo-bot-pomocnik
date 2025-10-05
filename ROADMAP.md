@@ -1,72 +1,142 @@
 # Spółka ZOO - Bot Pomocnik - Roadmapa
 
-## 🎯 Plan rozwoju 0.4.x - Plany i nadchodzące wydania
+## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                                       | Przybliżony termin | Szczegóły techniczne                                                                     |
-| ------ | ------------ | ------------------------------------------------- | -----------------: | ---------------------------------------------------------------------------------------- |
-| 0.4.3  | ✅ Gotowe    | Implementacja ZP (Per-Bot)                        |         2025-10-04 | Format z osobnymi taliami per-bot; parsowanie separatorów `Z`, pełna walidacja i preview |
-| 0.4.4  | ⚠️ Planowane | Wycofanie legacy formatu ZOO i finalizacja testów |      ~1-2 tygodnie | Usunięcie obsługi ZOO, przewodnik migracji, comprehensive testing suite                  |
-| 0.5.0  | 🔮 Planowane | Wizualizacja kart i dopracowanie UI               |       Do ustalenia | System wizualizacji kart; animacje                                                       |
-| 0.6.0+ | 🔮 Planowane | Zaawansowane funkcje                              |       Do ustalenia | Statystyki, tryby turniejowe, zapisy w chmurze                                           |
+| Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                                |
+| ------ | ------------ | ----------------------------------------------- | ------------------------------------------------------------------- |
+| 0.4.4  | ✅ Gotowe    | Wycofanie legacy formatu ZOO                    | Usunięcie obsługi ZOO, oczyszczenie kodu, optymalizacja             |
+| 0.4.5  | 🚧 W planach | UX Fixes - poprawki interfejsu użytkownika      | Modal ZP, przyciski, opcja wyjścia z gry, czyszczenie menu głównego |
+| 0.5.0  | 🔮 Planowane | Typography & Styling - własne czcionki i design | Implementacja własnych czcionek, ujednolicenie wielkości tekstów    |
+| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa        |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.4 — Wycofanie legacy ZOO i finalizacja testów 🚧
+### v0.4.4 — ✅ Wycofanie legacy ZOO (ukończone)
 
-🎯 Cel: usunięcie przestarzałego formatu ZOO i doprowadzenie projektu do jakości produkcyjnej
+🎯 Cel: usunięcie przestarzałego formatu ZOO i oczyszczenie kodu
 
-⏱️ Przybliżony termin: ~1-2 tygodnie po v0.4.3
+✅ Ukończone zadania:
 
-Planowane zadania:
-
-- **Wycofanie legacy formatu ZOO**
-
-  - Usunięcie obsługi odczytu starych kodów ZOO z `loadFromShareableCode()`
-  - Usunięcie funkcji `decodeLegacyZooPayload()` i powiązanych funkcji
-  - Aktualizacja `isValidGameCode()` - brak wsparcia dla ZOO
-  - Czytelne komunikaty błędów dla starych kodów ZOO z instrukcją migracji
-
-- **Przewodnik migracji ZOO → ZS/ZM/ZP**
-
-  - Dokumentacja procesu migracji starych kodów
-  - Narzędzie konwersji (opcjonalnie) - ZOO → odpowiedni nowoczesny format
-  - Instrukcje dla użytkowników z starymi zapisanymi kodami
-  - Komunikaty w UI kierujące do przewodnika migracji
-
-- **Comprehensive testing suite**
-
-  - Testy jednostkowe dla wszystkich formatów (ZS, ZM, ZP)
-  - Testy round-trip: encode → decode → verify
-  - Testy warunków brzegowych i edge cases
-  - Performance tests dla większej liczby botów
-
-- **Finalizacja dokumentacji**
-
-  - Aktualizacja `GAME-CODES.md` - usunięcie sekcji ZOO
-  - Dokumentacja API dla wszystkich funkcji eksportowanych
-  - Przykłady użycia i best practices
-  - Cleanup kodu - usunięcie martwych ścieżek i legacy komentarzy
+- **Wycofanie legacy formatu ZOO** - kompletne usunięcie obsługi ZOO z kodu
+- **Oczyszczenie kodu** - usunięte funkcje `decodeLegacyZooPayload()`, `GAME_CODE_PREFIX` i cała logika ZOO
+- **Optymalizacja** - redukcja rozmiaru aplikacji przez eliminację nieużywanego kodu
 
 ---
 
-## 🔮 Rozwój po 0.4.x
+### v0.4.5 — UX Fixes - poprawki interfejsu użytkownika 🚧
 
-### v0.5.0 — Wizualizacja kart
+🎯 Cel: poprawienie komfortu użytkowania i rozwiązanie problemów z interfejsem
 
-🎯 Cel: zastąpienie tekstowej reprezentacji kart graficzną wizualizacją
+⏱️ Przybliżony termin: ~1-2 tygodnie
 
-- System projektowania kart (SVG/CSS)
-- Ikony i spójny język wizualny
-- Animacje: płynne animacje dobierania, animacja odwracania karty, animacja tasowania
-- Responsive: adaptacyjne rozmiary, obsługa dotykowa, modal podglądu karty dla małych ekranów
+Planowane zadania:
 
-### v0.6.0+ — Funkcje zaawansowane
+- **Modal wczytywania kodu**
 
-🎯 Cel: rozszerzenie funkcjonalności dla zaawansowanych użytkowników
+  - Poprawa podglądu dla formatu ZP (zbyt duży na małych ekranach)
+  - Zapewnienie widoczności przycisków na wszystkich rozdzielczościach
+  - Lepsze przewijanie i responsive design
 
-- Statystyki gry: historia ruchów, częstotliwość kart, panel analityczny
-- Tryby turniejowe i zaawansowane tryby gry (timer, turnieje, tryb treningowy z undo)
-- Rozszerzony system zapisu: wiele slotów zapisu, integracja z chmurą, odtwarzanie sesji
+- **Poprawki przycisków i tekstów**
+
+  - Skrócenie zbyt długich tekstów przycisków
+  - Ujednolicenie wielkości tekstów na kartach
+  - Zapewnienie stałego położenia przycisków (konsystentny layout)
+
+- **Opcja wyjścia z gry**
+
+  - Dodanie przycisku "Wróć do menu" bez konieczności kopiowania kodu
+  - Zachowanie opcji zapisu stanu gry (jeśli użytkownik chce)
+
+- **Czyszczenie menu głównego**
+  - Usunięcie spisu usprawnień z różnych wersji z interfejsu
+  - Uproszczenie głównego ekranu dla lepszej czytelności
+
+---
+
+### v0.5.0 — Typography & Styling - własne czcionki i design 🔮
+
+🎯 Cel: implementacja własnych czcionek i dopracowanie wizualne
+
+⏱️ Przybliżony termin: Do ustalenia
+
+Planowane zadania:
+
+- **System czcionek**
+
+  - Implementacja własnych plików czcionek (nie Google Fonts)
+  - Optymalizacja ładowania czcionek
+  - Fallback fonts dla compatibility
+
+- **Ujednolicenie stylingu**
+
+  - Konsistentne wielkości tekstów w całej aplikacji
+  - Spójny vertical rhythm i spacing
+  - Harmonijny system typograficzny
+
+- **Design system**
+  - Dokumentacja używanych czcionek i rozmiarów
+  - Style guide dla przyszłych zmian
+
+---
+
+### v0.5.1 — Informacje i linki - połączenia z zewnętrznymi 🔮
+
+🎯 Cel: dodanie informacji o grze i przydatnych linków
+
+⏱️ Przybliżony termin: Do ustalenia
+
+Planowane zadania:
+
+- **Linki zewnętrzne**
+
+  - Odnośnik do repozytorium GitHub
+  - Formularz/link do zgłaszania błędów
+  - Kontakt z deweloperem
+
+- **Informacje o grze**
+
+  - Sekcja "O grze" z podstawowymi informacjami
+  - Linki do wydawnictwa/oficjalnej strony gry
+  - Informacje o zasadach (jeśli potrzebne)
+
+- **Kredyty i acknowledgments**
+  - Informacje o twórcach aplikacji
+  - Ewentualne podziękowania
+
+---
+
+## � Pomysły na przyszłość - luźny spis ewentualnych usprawnień
+
+Lista potencjalnych funkcjonalności do rozważenia w przyszłych wersjach:
+
+### 🎨 Wizualizacja i UX
+
+- **Graficzna reprezentacja kart** - zastąpienie tekstów obrazkami/ikonami kart
+- **Animacje** - płynne animacje dobierania, odwracania, tasowania
+- **System projektowania** - spójny język wizualny, ikony, kolory
+- **Responsive design** - lepsze dostosowanie do małych ekranów
+- **Ciemny motyw** - opcja dark mode dla aplikacji
+
+### 📊 Funkcje zaawansowane
+
+- **Statystyki gry** - historia ruchów, częstotliwość kart, analizy
+- **Panel analityczny** - szczegółowe statystyki dla zaawansowanych użytkowników
+- **Tryb treningowy** - możliwość cofania ruchów (undo)
+- **Timer** - opcjonalny pomiar czasu gry
+
+### 💾 System zapisów
+
+- **Wiele slotów zapisu** - zapisywanie różnych stanów gry
+- **Zapisy w chmurze** - synchronizacja między urządzeniami
+- **Historia sesji** - możliwość odtwarzania poprzednich gier
+- **Eksport/import** - wymiana zapisów między użytkownikami
+
+### 🏆 Tryby rozgrywki
+
+- **Tryby turniejowe** - specjalne zasady dla turniejów
+- **Tryb wieloosobowy** - gra przez sieć (daleka przyszłość)
+- **Wyzwania** - specjalne scenariusze do rozegrania
 
 ## 📖 Dokumentacja techniczna (skrót)
 
