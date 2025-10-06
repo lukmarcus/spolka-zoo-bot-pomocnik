@@ -5,6 +5,29 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.4] - 2025-10-05
+
+### 🧹 Code cleanup - usunięcie przestarzałego formatu ZOO
+
+**🚀 Zmiany:**
+
+- **Usunięcie obsługi ZOO:** Kompletne wycofanie przestarzałego formatu ZOO z kodu aplikacji
+- **Oczyszczenie kodu:** Usunięte wszystkie funkcje, stałe i logika związana z formatem ZOO
+- **Optymalizacja:** Redukcja rozmiaru aplikacji przez eliminację nieużywanego kodu
+
+**🏗️ Zmiany techniczne:**
+
+- **gameStorage.ts:** Usunięte `GAME_CODE_PREFIX`, `decodeLegacyZooPayload()` i cały kod ZOO
+- **Walidacja:** Uproszczona logika walidacji i parsowania kodów
+- **LoadGameModal:** Oczyszczone referencje do formatu ZOO
+
+**🔄 Kompatybilność:**
+
+- **Formaty ZS/ZM/ZP:** W pełni zachowane i obsługiwane
+- **Automatyczny wybór:** System nadal inteligentnie wybiera odpowiedni format (ZS/ZM/ZP)
+
+---
+
 ## [0.4.3] - 2025-10-04
 
 ### 🎯 Implementacja ZP (Per-Bot Independent Decks)
