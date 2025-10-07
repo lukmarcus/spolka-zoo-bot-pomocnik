@@ -5,7 +5,6 @@ import LoadGameModal from "../components/LoadGameModal";
 import { useGame } from "../context/GameContext";
 import type { GameState } from "../types";
 import styles from "./Home.module.css";
-import packageJson from "../../package.json";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -63,28 +62,6 @@ const Home: React.FC = () => {
             </div>
           </button>
         ))}
-      </div>
-
-      <div className={styles.info}>
-        <div className={styles.infoCard}>
-          <h4>Wersja {packageJson.version}</h4>
-          <ul className={styles.featureList}>
-            <li>✅ Podstawowa nawigacja</li>
-            <li>✅ Layout z kolorami z instrukcji</li>
-            <li>✅ Poprawki responsywności</li>
-            <li>✅ WCAG 320px compliance</li>
-            <li>✅ Mechanika kart (v0.1.0)</li>
-            <li>✅ Zapis/wczytywanie (v0.2.0)</li>
-            <li>✅ Cross-device kody gry (v0.2.1)</li>
-            <li>✅ Uproszczone kopiowanie (v0.2.2)</li>
-            <li>✅ Multi-bot support (v0.3.0)</li>
-            <li>✅ Krytyczne poprawki UX (v0.3.1)</li>
-            <li>🎨 Globalne kolorowanie tekstu kart botów (v0.3.5)</li>
-            <li>📝 Pełne oryginalne opisy kart (v0.3.5)</li>
-            <li>✅ Osobne talie botów (v0.4.0)</li>
-            <li>✅ Format ZP - niezależne talie per-bot (v0.4.3)</li>
-          </ul>
-        </div>
       </div>
 
       <LoadGameModal

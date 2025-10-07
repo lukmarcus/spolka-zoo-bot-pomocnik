@@ -52,7 +52,7 @@ const Layout: React.FC<LayoutProps> = ({
 
       <footer className={styles.footer}>
         <p className={styles.footerText}>
-          v{packageJson.version} • Pomocnik do gry planszowej
+          v{packageJson.version} • Spółka ZOO • Bot Pomocnik
         </p>
       </footer>
     </div>
