@@ -234,7 +234,11 @@ const Game: React.FC = () => {
   const gameActions = getGameActions();
 
   return (
-    <Layout title="Gra" backgroundType="game">
+    <Layout
+      title={pageTitle}
+      subtitle={getPageSubtitle()}
+      backgroundType="game"
+    >
       <div className={styles.gameContainer}>
         <div className={styles.gameActive}>
           {/* Show game status only when cards are drawn (hide during bot selection and before first card) */}
