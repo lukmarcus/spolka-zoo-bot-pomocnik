@@ -7,731 +7,300 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.4.5] - 2025-10-09
 
-### 🎨 UX Fixes - poprawki interfejsu użytkownika
+### Dodane
 
-**🚀 Zmiany:**
+- Własny favicon (zoo.png) zastępujący domyślny Vite
+- Dynamiczne tytuły header ("Rozpocznij grę" / "Gra w toku")
+- Informacyjne subtitle z szczegółami o botach i trybie gry
 
-- **Czyszczenie menu głównego:** Usunięcie spisu funkcjonalności z różnych wersji z ekranu głównego
-- **Dynamiczne tytuły:** Header zmienia się między "Rozpocznij grę" a "Gra w toku" w zależności od stanu
-- **Informacyjne subtitle:** Wyświetlanie "Wybierz liczbę botów" lub szczegółów o botach i trybie gry
-- **Własny favicon:** Zastąpienie domyślnego Vite favicon własnym zoo.png
-- **Profesjonalny title:** Zmiana z "Vite + React + TS" na "Spółka ZOO - Bot Pomocnik"
+### Zmienione
 
-**🎨 Poprawki stylistyczne:**
+- Usunięcie spisu funkcjonalności z ekranu głównego
+- Profesjonalny tytuł strony: "Spółka ZOO - Bot Pomocnik"
+- Ujednolicona kolorystyka przycisków wyboru trybu gry
+- Stabilny layout - przyciski nie zmieniają rozmiaru
 
-- **Ujednolicona kolorystyka:** Przyciski wyboru trybu gry mają teraz ten sam styl co przyciski botów
-- **Stabilny layout:** Przyciski nie zmieniają rozmiaru przy przełączaniu między opcjami
-- **Konsystentne animacje:** Jednolite hover effects i transitions w całym interfejsie
+### Naprawione
 
-**🔧 Poprawki techniczne:**
-
-- **Logika resetowania:** Poprawione zachowanie przy odświeżaniu strony
-- **Walidacja stanu:** Lepsze rozpoznawanie czy aplikacja jest w fazie konfiguracji czy aktywnej gry
-- **Exit flow:** Inteligentne rozpoznawanie kiedy pokazać modal zapisu vs natychmiastowe wyjście
+- Logika resetowania przy odświeżaniu strony
+- Walidacja stanu aplikacji (konfiguracja vs aktywna gra)
+- Inteligentne rozpoznawanie flow wyjścia z gry
 
 ## [0.4.4] - 2025-10-05
 
-### 🧹 Code cleanup - usunięcie przestarzałego formatu ZOO
+### Usunięte
 
-**🚀 Zmiany:**
+- Kompletne wycofanie przestarzałego formatu ZOO z aplikacji
+- Funkcje `GAME_CODE_PREFIX` i `decodeLegacyZooPayload()` z gameStorage.ts
+- Referencje do formatu ZOO w LoadGameModal
 
-- **Usunięcie obsługi ZOO:** Kompletne wycofanie przestarzałego formatu ZOO z kodu aplikacji
-- **Oczyszczenie kodu:** Usunięte wszystkie funkcje, stałe i logika związana z formatem ZOO
-- **Optymalizacja:** Redukcja rozmiaru aplikacji przez eliminację nieużywanego kodu
+### Zmienione
 
-**🏗️ Zmiany techniczne:**
-
-- **gameStorage.ts:** Usunięte `GAME_CODE_PREFIX`, `decodeLegacyZooPayload()` i cały kod ZOO
-- **Walidacja:** Uproszczona logika walidacji i parsowania kodów
-- **LoadGameModal:** Oczyszczone referencje do formatu ZOO
-
-**🔄 Kompatybilność:**
-
-- **Formaty ZS/ZM/ZP:** W pełni zachowane i obsługiwane
-- **Automatyczny wybór:** System nadal inteligentnie wybiera odpowiedni format (ZS/ZM/ZP)
+- Uproszczona logika walidacji i parsowania kodów
+- Redukcja rozmiaru aplikacji przez eliminację nieużywanego kodu
 
 ---
 
 ## [0.4.3] - 2025-10-04
 
-### 🎯 Implementacja ZP (Per-Bot Independent Decks)
+### Dodane
 
-**🚀 Nowości:**
+- Format ZP (Per-Bot) dla niezależnych talii każdego bota
+- Zaawansowana walidacja ZP z kontrolą separatorów i duplikatów
+- Podgląd pozycji każdego bota osobno w LoadGameModal
 
-- **Format ZP (Per-Bot):** Pełna implementacja nowego formatu `ZP[bots][current][card]Z[bot1]Z[bot2]Z...` umożliwiającego niezależne talie dla każdego bota
-- **Niezależne talie botów:** Każdy bot ma własną sekwencję kart, pozycję i stan gry - boty mogą być w różnych fazach rozgrywki
-- **Zaawansowana walidacja ZP:** Kompletne reguły walidacji zgodnie z dokumentacją (separatory Z, duplikaty w blokach, reguła redundancji)
-- **Preview per-bot:** LoadGameModal wyświetla pozycje każdego bota osobno (np. "Bot 1: 5/13, Bot 2: 8/13")
-- **Real-time updates:** Podgląd ZP aktualizuje się w czasie rzeczywistym podczas wpisywania kodu
+### Zmienione
 
-**🏗️ Zmiany techniczne:**
+- Enkoder/dekoder ZP w gameStorage.ts
+- Automatyczny wybór optymalnego formatu przy generowaniu kodów
+- Ulepszona logika aktywności przycisków w LoadGameModal
 
-- **Enkoder/Dekoder ZP:** Funkcje `encodePerBotReadable()` i `decodePerBotPayload()` w `gameStorage.ts`
-- **Inteligentny format selection:** `generateShareableCode()` automatycznie wybiera ZP dla `mode: "individual"`
-- **Poprawiona logika pozycji:** Naprawione obliczenia pozycji botów w preview i po załadowaniu stanu gry
-- **Enhanced LoadGameModal:** Wsparcie dla walidacji ZP z komunikatami błędów specyficznymi dla formatu
-- **Button state management:** Poprawiona logika aktywności przycisku "Wczytaj grę" - nieaktywny dla niepełnych kodów
+### Naprawione
 
-**🔄 Kompatybilność:**
-
-- **Backward compatibility:** Wszystkie poprzednie formaty (ZS, ZM, ZOO) nadal w pełni obsługiwane
-- **Automatic format detection:** System automatycznie rozpoznaje i obsługuje wszystkie formaty kodów
-- **Migracja bezproblemowa:** Stare kody działają bez zmian, nowe kody używają optymalnego formatu
-
-**🐛 Bug Fixes:**
-
-- Naprawione nieprawidłowe pozycje botów po załadowaniu kodu ZP
-- Poprawiona walidacja przycisków w LoadGameModal dla krótkich kodów (np. "ZS", "ZM")
-- Usunięte błędne sprawdzanie duplikatów między taliami botów (individual mode pozwala na duplikaty)
-
-**🎯 Status:** Format ZP w pełni zaimplementowany i gotowy do użycia. Kompleksowe wsparcie dla wszystkich trybów gry.
+- Nieprawidłowe pozycje botów po załadowaniu kodu ZP
+- Walidacja przycisków dla krótkich kodów (ZS, ZM)
+- Błędne sprawdzanie duplikatów między taliami botów
 
 ---
 
 ## [0.4.2] - 2025-10-01
 
-### 🛠️ Wdrożenie ZM (Multi-Shared)
+### Dodane
 
-**🚀 Nowości:**
+- Implementacja formatu ZM (Multi-Shared) dla wielu botów ze wspólną talią
+- Kodowanie/dekodowanie, walidacja i podgląd formatu ZM
+- Akceptacja separatora `Z` w formatach wielobotowych
 
-- Implementacja formatu ZM (Multi-Shared): kodowanie/dekodowanie, walidacja, podgląd oraz poprawne wczytywanie stanu gry dla wielu botów korzystających ze wspólnej talii.
-- Poprawki w `LoadGameModal` — akceptacja separatora `Z` w formatach wielobotowych, lepsze komunikaty błędów i spójny podgląd przed wczytaniem.
-- Naprawione rozbieżności między preview a załadowanym stanem: `loadFromShareableCode` odbudowuje pełną sekwencję 13 kart (`cardSequence`), ustawia `usedCards` i poprawny `currentCardIndex`, tak aby UI wyświetlało ten sam stan, który widziano w podglądzie.
-- Aktualizacja `src/utils/gameStorage.ts` — scentralizowane enkodery/dekodery dla ZS/ZM oraz rozszerzona logika podglądu i walidacji.
+### Zmienione
 
-**🏗️ Zmiany techniczne:**
+- Rozszerzone LoadGameModal.tsx o walidację ZM i lepsze komunikaty błędów
+- Scentralizowane enkodery/dekodery w gameStorage.ts
+- Ulepszony podgląd przed wczytaniem
 
-- UI i Parser: `LoadGameModal.tsx` rozszerzone o walidację ZM i czytelny podgląd; parser ZM dopuszcza separator `Z` w sekwencji remaining.
-- Kompatybilność wsteczna: dostępne krótkotrwałe wsparcie odczytu formatu ZOO (planowane usunięcie w przyszłym 0.4.x z przewodnikiem migracji).
-- Testy: przygotowano podstawowe testy round-trip dla ZM; ZP (per-bot) zaplanowane jako kolejny task.
+### Naprawione
 
-**🎯 Status:** stabilna implementacja ZM; dalsze testy i implementacja ZP w planie.
+- Rozbieżności między podglądem a załadowanym stanem gry
+- Poprawna rekonstrukcja sekwencji 13 kart i currentCardIndex
 
 ---
 
 ## [0.4.1] - 2025-09-27
 
-### 🎯 Stabilizacja Single-Bot Format (ZS)
+### Dodane
 
-**🚀 Nowości:**
+- Format ZS Single-Bot z alfabetem A,B,C dla kart 10,11,12
+- Zaawansowana walidacja kodów gry z kontrolą duplikatów i zakresu
+- Podgląd stanu gry przed wczytaniem (pozycja X/13)
 
-- Format ZS Single-Bot z alfabetem A,B,C (duże litery) dla kart 10,11,12
-- Zaawansowana walidacja kodów gry (brak duplikatów, kontrola zakresu, eliminacja stanów ujemnych)
-- Usunięcie niepotrzebnego komunikatu "🏁 Talia wyczerpana"
-- Real-time validation w LoadGameModal z proper error messages
-- Preview stanu gry przed wczytaniem (pozycja X/13)
+### Zmienione
 
-**� UI/UX Improvements:**
+- Przepisanie gameStorage.ts jako główna implementacja
+- Optymalizacja wielkości ikon i responsywności interfejsu
+- Refaktoryzacja logiki tasowania i walidacji
 
-- Optymalizacja wielkości ikon (commit: `icon sizes changed`)
-- Poprawki w responsywności interfejsu
+### Usunięte
 
-**�🏗️ Zmiany techniczne:**
+- Niepotrzebny komunikat "Talia wyczerpana"
 
-- Przepisanie `gameStorage.ts` - single authoritative implementation
-- Optymalizacja walidacji (usunięcie redundantnego sprawdzania zakresu)
-- Refaktoryzacja logiki tasowania (commit: `small reshuffle refactor`)
-- Update LoadGameModal.tsx dla obsługi ZS + ZOO formatów
-- Pełna backward compatibility z ZOO legacy format
+### Naprawione
 
-**📚 Dokumentacja:**
-
-- DOCS.md → ROADMAP.md (lepsze nazewnictwo)
-- Kompletna aktualizacja roadmapy 0.4.x
-- GAME-CODES.md przepisane z aktualnym stanem i planami
-
-**📋 Roadmapa 0.4.x:**
-
-- v0.4.2 - ZM Multi-Shared format (planowane)
-- v0.4.3 - ZP Per-Bot format (planowane)
-- v0.4.4 - Comprehensive tests + finalizacja (planowane)
-
-**🎯 Status:** Stabilna implementacja ZS + dokumentacja. Przygotowanie pod ZM/ZP.
+- Kompatybilność wsteczna z formatem ZOO
 
 ---
 
 ## [0.4.0] - 2025-09-13
 
-### 🚀 Nowości
+### Dodane
 
-- Możliwość wyboru trybu gry: wspólna talia lub osobne talie dla każdego bota.
-- Każdy bot może mieć własną, niezależnie tasowaną talię kart.
-- UI wyboru trybu gry i liczby botów na ekranie startowym.
-- Pełna obsługa wyczerpania talii dla każdego bota osobno.
-- Zaktualizowane style dla nowego UI wyboru trybu.
+- Wybór trybu gry: wspólna talia lub osobne talie dla każdego bota
+- Możliwość niezależnie tasowanych talii dla każdego bota
+- Interfejs wyboru trybu gry i liczby botów na ekranie startowym
+- Pełna obsługa wyczerpania talii dla każdego bota osobno
 
-### 🏗️ Zmiany techniczne
+### Zmienione
 
-- Refaktoryzacja logiki GameContext.tsx pod obsługę trybu indywidualnych talii.
-- Rozbudowa reducerów, selektorów i akcji dla obsługi obu trybów.
-- Ujednolicenie API kontekstu gry.
-- Zaktualizowane style w Game.module.css.
-
-### 📋 Instrukcja
-
-1. Wybierz tryb gry (wspólna/indywidualna talia).
-2. Wybierz liczbę botów.
-3. Rozpocznij grę i korzystaj z nowych funkcji!
+- Refaktoryzacja GameContext.tsx pod obsługę trybu indywidualnych talii
+- Rozbudowa reducerów, selektorów i akcji dla obsługi obu trybów
 
 ---
 
 ## [0.3.5] - 2025-09-11
 
-### 🎨 Globalne kolorowanie tekstu kart
+### Dodane
 
-- Wszystkie frazy kluczowe w kartach botów są kolorowane zgodnie z oryginalnymi zasadami gry (OWOC, MAGAZYN, POMOCNIK, TALIA SPÓŁKI, TALIA WPŁYWU, UDZIAŁ, SPÓŁKA).
-- Usunięto pogrubienie z kolorów dla lepszej czytelności.
+- Globalne kolorowanie fraz kluczowych w kartach botów zgodnie z oryginalnymi zasadami
+- Uproszczone zarządzanie ikonami przez obiekt ICONS
+- Pełne oryginalne opisy kart zgodne z grą Spółka ZOO
 
-### 🖼️ Uproszczone zarządzanie ikonami
+### Zmienione
 
-- Wszystkie ikony w kartach botów są wstawiane przez obiekt ICONS (np. `${ICONS.money}`), co upraszcza edycję i zarządzanie grafikami.
-- Usunięto atrybut alt z ikon w kartach.
-
-### 📝 Pełne oryginalne opisy kart
-
-- Opisy kart botów są zgodne z grą Spółka ZOO.
-
-### 🧹 Porządki w kodzie kart
-
-- Ujednolicenie stylów, uproszczenie kodu danych kart.
+- Usunięto pogrubienie z kolorów dla lepszej czytelności
+- Ujednolicenie stylów i uproszczenie kodu danych kart
 
 ## [0.3.4] - 2025-09-07
 
-### 🎨 Finalne usprawnienia komunikatów i UX
+### Zmienione
 
-- **📝 Ulepszenia komunikatów gry**
+- Ulepszone komunikaty gry: bardziej opisowe akcje botów z ikonkami
+- Ujednolicone wskaźniki stanu gry (bot i karta) z tym samym kolorem tła
+- Usunięte nazwy i numery kart z interfejsu dla czytelności
+- Nowa logika opisów efektów: "Efekt", "Pierwszy/Drugi efekt", "Zdolność dodatkowa"
 
-  - Bardziej opisowe komunikaty dla akcji botów:
-    - `"🎯 Dobierz kolejną kartę dla Bota X"` (była: "następną kartę dla bota X")
-    - `"👥 Dobierz kartę dla następnego Bota"` (była: "Dobierz kartę dla następnego bota")
-    - `"🔀 Przetasuj i dobierz kartę dla Bota X"` (było: "Przetasuj i dobierz kartę dla bota X")
-  - Ulepszony modal wyjścia: `"🚪 Czy na pewno chcesz wyjść do głównego menu?"`
-  - Lepsze etykiety przycisków: `"💾 Tak, skopiuj stan gry i wyjdź"`, `"💾 Kopiuj stan gry"`, `"← Wróć do menu"`
+### Usunięte
 
-- **🎯 Lepsze wskaźniki stanu gry**
-
-  - Ujednolicone wizualnie wskaźniki bota i karty (ten sam kolor tła)
-  - Spójne ikonki: `"📊 Karta 5/13"` i `"🤖 Bot 2/4"`
-  - Usunięta podwójna ramka z wskaźnika aktualnego bota
-  - Dodany gap między dolnymi przyciskami dla lepszej czytelności
-
-- **🃏 Usprawnienia kart botów**
-
-  - Usunięte nazwy i numery kart z interfejsu (czytelniejszy wygląd)
-  - Nowa logika opisów efektów:
-    - 1 efekt: "Efekt"
-    - 2+ efekty: "Pierwszy efekt", "Drugi efekt"
-    - Zdolność: "Zdolność dodatkowa"
-
-- **🧹 Oczyszczenie kodu**
-  - Usunięty niepotrzebny `src/App.css` (nie był używany)
-  - Zminimalizowany `src/index.css` (tylko podstawowy reset CSS)
-  - Oszczędność 1.27 kB w bundle CSS (-5.6%)
-
-### 📱 Responsive design
-
-- Dolne przyciski układane w kolumnę na bardzo małych ekranach (≤480px)
-- Lepsze odstępy między elementami UI na wszystkich urządzeniach
+- Niepotrzebny `src/App.css` i zminimalizowany `src/index.css`
 
 ## [0.3.3] - 2025-09-04
 
-### 🎮 Ulepszenia mechaniki gry zgodnie z planszówką
+### Usunięte
 
-- **🚫 Usunięto manual przełącznik botów**
+- Ręczne przełączniki botów (1, 2, 3, 4) z interfejsu gry
+- Zastąpiono wskaźnikiem "Aktualny bot: X/Y"
 
-  - Usunięto przyciski przełączania botów (1, 2, 3, 4) z interfejsu gry
-  - Zastąpiono prostym wskaźnikiem "Aktualny bot: X/Y"
-  - Boty grają teraz w automatycznej kolejności
+### Dodane
 
-- **🎯 Nowa logika akcji - dwa inteligentne przyciski**
+- Dwa inteligentne przyciski: "Dobierz kartę dla bota X" i "Dobierz dla następnego bota"
+- Automatyczna kolejność botów (1 → 2 → 3 → 4 → 1)
+- Kompletna obsługa wyczerpania talii z przyciskami przetasowania
 
-  - **"🎯 Dobierz następną kartę dla bota X"** - dobiera kartę dla bieżącego bota
-  - **"👥 Dobierz kartę dla następnego bota"** - przełącza na następnego bota i dobiera kartę
-  - Przyciski dostosowują się do liczby botów (1 bot = 1 przycisk, 2+ boty = 2 przyciski)
+### Zmienione
 
-- **🔀 Kompletna obsługa wyczerpania talii**
-
-  - Przy wyczerpaniu talii: dwa przyciski przetasowania
-  - **"🔀 Przetasuj i dobierz kartę dla bota X"** - przetasowuje dla aktualnego bota
-  - **"👥 Przetasuj i dobierz dla następnego bota"** - przełącza bota i przetasowuje
-
-### 🏗️ Zmiany techniczne
-
-- **⚡ Nowe akcje w GameContext**
-
-  - `NEXT_BOT` - przełącza na następnego bota w kolejności
-  - `NEXT_BOT_AND_DRAW` - przełącza na następnego bota i dobiera kartę
-  - Automatyczna kolejność: 1 → 2 → 3 → 4 → 1 (w zależności od liczby botów)
-
-- **🎨 Zaktualizowane style CSS**
-
-  - `.gameControls` wspiera responsywny layout dwóch przycisków
-  - Dodano `gap` i `flex-wrap` dla lepszej responsywności
-  - Usunięto nieużywane style `.botSwitcher` i `.botButton`
-
-- **🧹 Refaktory kodu**
-  - Oczyszczono komentowany kod z Game.tsx i GameContext.tsx
-  - Wyodrębniono funkcję `handleShuffleForNextBot`
-  - Zaktualizowano wersję aplikacji do 0.3.3
-
-### 📝 Status
-
-**v0.3.3** to kompletne usprawnienie mechaniki gry eliminujące mylące manual przełączniki i wprowadzające intuicyjne, automatyczne zarządzanie kolejnością botów zgodnie z zasadami planszówki.
+- Mechanika gry zgodna z zasadami planszówki
+- Responsywny układ dwóch przycisków w `.gameControls`
 
 ## [0.3.2] - 2025-09-03
 
-### 🎨 Kompleksowe ulepszenia UX
+### Dodane
 
-- **🤖 Nowy interfejs wyboru botów**
+- Przeprojektowany interfejs wyboru botów w stylu kart z zoo-tematyczną paletą
+- Automatyczne dobieranie pierwszej karty po wyborze botów
+- Gradienty i efekty hover dla lepszego użytkowego
 
-  - Przeprojektowany interfejs wyboru liczby botów z lepszą wizualizacją
-  - Dodano buttons w stylu kart z zoo-tematyczną paletą kolorów
-  - Wyeliminowano mylący ekran pośredni "Gotowy do rozpoczęcia gry"
-  - Gra automatycznie dobiera pierwszą kartę po wyborze botów
+### Usunięte
 
-- **🎮 Usprawnienia flow gry**
+- Mylący ekran pośredni "Gotowy do rozpoczęcia gry"
+- Niepotrzebny ekran "Dobierz pierwszą kartę"
 
-  - Usunięto niepotrzebny ekran "Dobierz pierwszą kartę"
-  - Zintegrowany interfejs: wybór botów → automatyczne dobranie karty → gra
-  - Naprawiono błąd pustego ekranu po odświeżeniu strony
-  - Uproszczono logikę renderowania kondycjonalnego
+### Naprawione
 
-- **🎨 Redesign stylistyczny**
-
-  - Implementacja zoo-tematycznej palety kolorów (brązy, kremowe, pomarańczowe)
-  - Stylizacja przycisków wyboru botów w stylu kart
-  - Dodano gradienty i efekty hover dla lepszego feedbacku wizualnego
-  - Usunięto problematyczne tło kart z interfejsu wyboru (na życzenie użytkownika)
-
-- **🔧 Naprawienie błędów edge case**
-  - Naprawiono problem z pustym ekranem po odświeżeniu strony w trakcie wyboru botów
-  - Uproszczono warunki renderowania: zawsze pokazuj interfejs wyboru gdy `currentCardIndex === -1`
-  - Poprawiono konsystentność zachowania aplikacji
-
-### 🏗️ Zmiany techniczne
-
-- **⚡ Optymalizacja renderowania**
-
-  - Uproszczono logikę kondycjonalną w Game.tsx
-  - Wyeliminowano skomplikowane zagnieżdżone warunki
-  - Stabilne zachowanie po odświeżeniu strony
-
-- **🎨 Modularyzacja CSS**
-  - Dodano nowe klasy CSS dla interfejsu wyboru botów
-  - Implementacja zoo-tematycznych kolorów w CSS Modules
-  - Responsywny design dla przycisków wyboru
-
-### 📝 Status
-
-**v0.3.2** to znaczące ulepszenie UX eliminujące mylące ekrany pośrednie i wprowadzające spójną, zoo-tematyczną stylistykę z płynnym flow gry.
+- Pusty ekran po odświeżeniu strony w trakcie wyboru botów
+- Uproszczono logikę renderowania warunkowego
 
 ## [0.3.1] - 2025-09-02
 
-### 🐛 Krytyczne poprawki UX v0.3.0
+### Naprawione
 
-- **🔄 Naprawiono nieskończone re-rendery**
+- KRYTYCZNY błąd nieskończonych re-renderów "Maximum update depth exceeded"
+- Zmemorizowano `contextValue` w GameContext używając `useMemo`
+- Przepływ gry - przyciski powrotu do menu głównego działają poprawnie
+- Wyświetlanie licznika kart - ukryty w menu wyboru botów i przed pierwszą kartą
 
-  - Rozwiązano błąd "Maximum update depth exceeded"
-  - Zmemorizowano `contextValue` w GameContext używając `useMemo`
-  - Usunięto problematyczne `useEffect` dependencies w Game.tsx
-  - Tymczasowo wyłączono auto-save aby zapobiec cyklom re-renderowania
+### Usunięte
 
-- **🎮 Naprawiono flow gry**
-
-  - Przyciski powrotu do menu głównego działają poprawnie
-  - Przejście z menu wyboru botów do menu głównego
-  - Przejście z trwającej gry do menu głównego
-
-- **📊 Poprawiono wyświetlanie licznika kart**
-
-  - Licznik jest ukryty w menu wyboru botów
-  - Licznik jest ukryty na ekranie "Dobierz pierwszą kartę"
-  - Licznik pojawia się dopiero po dobraniu pierwszej karty (1/13, 2/13, itd.)
-
-- **🎛️ Usunięto przycisk "Ustawienia"**
-  - Przycisk "Ustawienia" usunięty z menu głównego (zgodnie z planem UX)
-  - Menu główne ma teraz tylko 2 opcje: "Rozpocznij grę" i "Wczytaj grę"
-
-### 🏗️ Zmiany techniczne
-
-- **⚡ Optymalizacja GameContext**
-
-  - Dodano `useMemo` dla stabilnych referencji funkcji
-  - Poprawiono `getInitialState()` - prawidłowe ustawienie `botsSelected: false`
-  - Tymczasowo wyłączono auto-save dla stabilności
-
-- **🔧 Cleanup niepotrzebnych importów**
-  - Usunięto nieużywane `useEffect` z Game.tsx
-  - Oczyszczono imports w GameContext.tsx
-
-### 📝 Status
-
-**v0.3.1** to **hotfix** dla v0.3.0 naprawiający krytyczne problemy UX które uniemożliwiały korzystanie z aplikacji.
+- Przycisk "Ustawienia" z menu głównego
+- Tymczasowo wyłączono auto-save dla stabilności
 
 ## [0.3.0] - 2025-09-01
 
-### 🤖 Wsparcie dla wielu botów
+### Dodane
 
-- **✨ Nowy system multi-bot**
+- System wielu botów (1-4) z wyborem bezpośrednio w grze
+- Przełączanie między botami podczas rozgrywki ze wspólną talią
+- Interfejs wyboru botów z układem siatki 2x2
+- Interaktywny przełącznik botów w statusie gry z podświetleniem aktywnego
 
-  - Wybór liczby botów (1-4) bezpośrednio w grze
-  - Przełączanie między botami podczas rozgrywki
-  - Wspólna talia dla wszystkich botów
-  - Brak nazw botów (zgodnie z wymaganiem - kody gry nie obsługują nazw)
+### Zmienione
 
-- **🎯 UI wyboru botów**
-
-  - Grid layout 2x2 dla przycisków wyboru
-  - Wybór w grze zamiast w menu ustawień
-  - Intuicyjny flow: Start Game → Wybór botów → Gra
-
-- **🔄 Przełączanie botów**
-  - Interactive bot switcher w statusie gry
-  - Aktywny bot highlighting z białym tłem
-  - Hover effects i smooth transitions
-  - Możliwość przełączania w dowolnym momencie gry
-
-### 🏗️ Zmiany architektoniczne
-
-- **🧩 Rozszerzone GameState**
-
-  - `botsSelected?: boolean` - gate dla UI flow
-  - `botCount?: number` - liczba botów (1-4)
-  - `currentBot?: number` - aktualny bot (1-X)
-
-- **⚡ Nowe GameContext actions**
-
-  - `SELECT_BOTS` - wybór liczby botów + generowanie talii
-  - `SWITCH_BOT` - przełączanie aktualnego bota
-
-- **🔗 Rozszerzone kodowanie gry**
-  - Format 17-19 znaków dla multi-bot vs 14 dla single bot
-  - Automatyczne rozpoznawanie trybu na podstawie długości kodu
-  - Backward compatibility z kodami v0.2.x
-
-### 🎨 Zmiany interfejsu
-
-- **📊 Status gry**
-
-  - Wskaźnik "Bot X/Y" tylko dla gier wielobotowych
-  - Kompaktowy layout z przełącznikiem botów
-  - Responsywny design na małych ekranach
-
-- **🎮 Nowe style CSS**
-  - `.botSelection` - interfejs wyboru botów
-  - `.botSwitcher` - przełącznik botów w statusie
-  - `.botButton` - przyciski numerów botów z active state
-
-### 🔧 Zmiany techniczne
-
-- **📐 TypeScript interface updates**
-
-  - `GameContextType` rozszerzone o `selectBots` i `switchBot`
-  - Proper typing dla multi-bot state
-
-- **🎯 UI Flow optimization**
-  - Conditional rendering na podstawie `botsSelected` state
-  - Seamless transition od wyboru botów do gry
+- Rozszerzone GameState o `botsSelected`, `botCount`, `currentBot`
+- Format kodów gry: 17-19 znaków dla wielu botów vs 14 dla jednego
+- Automatyczne rozpoznawanie trybu na podstawie długości kodu
 
 ## [0.2.4] - 2025-08-29
 
-### 🎨 Poprawki UI/UX
+### Zmienione
 
-- **✨ Ulepszone animacje toasta kopiowania**
+- Ulepszone animacje toasta kopiowania - automatyczne znikanie po 2.5s
+- Uproszczony modal wyjścia do menu - zmniejszono przyciski z 3 do 2
+- Kombinacja "Tak" + "Kopiuj stan gry" w jeden przycisk
+- Lepsze komunikaty: "Czy chcesz wyjść do głównego menu?"
 
-  - Automatyczne znikanie po 2.5s z animacją fade out
-  - Lepszy wygląd z box-shadow i proper CSS variables
-  - Poprawiona responsywność na małych ekranach
-  - Smooth animacje slide up i fade out
+### Naprawione
 
-- **🔧 Uproszczony modal wyjścia do menu**
-
-  - Zmniejszono liczbę przycisków z 3 do 2
-  - Kombinacja "Tak" + "Kopiuj stan gry" w jeden przycisk
-  - Wycentrowane przyciski zamiast wyrównania do prawej
-  - Naturalny komunikat: "Czy chcesz wyjść do głównego menu?"
-
-- **🎯 Poprawki przycisków kopiowania**
-  - Dodano dedykowany styl `.btn-tertiary` w globals.css
-  - Konsystentne hover effects i animacje
-  - Lepsze pozycjonowanie i kolory
-
-### 🐛 Poprawki błędów
-
-- **🔍 Bug fix w LoadGameModal**
-  - Naprawiono problem z niersetowaniem podglądu gry przy zamykaniu modalu
-  - Teraz `gamePreview` jest poprawnie czyszczony przy `handleClose()`
-
-### 📐 Usprawnienia UX
-
-- **💬 Lepsze komunikaty**
-  - "Czy chcesz wyjść do głównego menu?" zamiast "Czy na pewno wrócić..."
-  - "Tak, skopiuj stan gry i wyjdź" - jasna akcja kombinowana
+- Problem z resetowaniem podglądu gry przy zamykaniu LoadGameModal
 
 ## [0.2.3] - 2025-08-27
 
-### ✨ Nowe funkcje
+### Dodane
 
-- **🔍 Podgląd stanu gry w LoadGameModal**
+- Podgląd stanu gry w LoadGameModal podczas wpisywania kodu
+- Walidacja kodu od pierwszego znaku (prefix "ZOO")
+- Inteligentny przycisk wczytywania - aktywny tylko przy prawidłowym kodzie
 
-  - Live preview kodu gry podczas wpisywania
-  - Preview pokazuje: liczbę botów, typ talii, aktualnego bota, progress kart
+### Zmienione
 
-- **⚡ Ulepszona walidacja kodu gry**
-
-  - Walidacja od pierwszego znaku (prefix "ZOO")
-  - Uproszczone komunikaty błędów: "Prawidłowy format kodu to ZOO + 0-9 i A-C"
-
-- **🎯 Inteligentny przycisk wczytywania**
-  - Aktywny tylko przy prawidłowym kodzie gry
-  - Brak możliwości wczytania nieprawidłowych kodów
-
-### 🎨 Zmiany interfejsu
-
-- **📱 Dedykowane style CSS**
-
-  - LoadGameModal.module.css - własny plik stylów
-  - Lepsza organizacja stylów (każdy komponent ma własne style)
-
-- **🔧 Optymalizacja layoutu**
-  - Usunięto redundantny tekst wprowadzający
-  - Kompaktowy preview z czytelnym formatowaniem
-
-### 🏗️ Zmiany techniczne
-
-- **🔧 Rozszerzony GameCodePreview interface**
-
-  - Dodane pole currentBot dla obsługi wielu botów
-  - Przygotowanie pod przyszłe funkcjonalności
-
-- **🧩 Funkcja previewGameCode**
-  - Dekodowanie aktualnego bota z kodu gry
-  - Comprehensive error handling z jasnymi komunikatami
-
-### 📐 Poprawki UX
-
-- **⌨️ Lepsze zachowanie input-a**
-
-  - Zachowanie pozycji kursora podczas filtrowania znaków
-  - Natychmiastowa walidacja bez opóźnień
-
-- **📊 Informacyjny preview**
-  - Dla 1 bota: liczba botów + aktualna karta
-  - Ostrzeżenie o wyczerpaniu talii (🏁 Talia wyczerpana)
+- Dedykowane style CSS dla LoadGameModal
+- Uproszczone komunikaty błędów walidacji
+- Lepsze zachowanie pola tekstowego (zachowanie pozycji kursora)
 
 ## [0.2.2] - 2025-08-25
 
-### ✨ Nowe funkcje
+### Dodane
 
-- **📋 Uproszczone kopiowanie kodu gry**
-  - Przycisk "Kopiuj stan gry" bezpośrednio w grze
-  - Przycisk "Kopiuj kod" w modalu wyjścia do menu
-  - Automatyczny toast z potwierdzeniem kopiowania
-  - Kopiowanie dostępne tylko po dobraniu pierwszej karty
+- Uproszczone kopiowanie kodu gry - przyciski "Kopiuj stan gry" bezpośrednio w grze
+- Automatyczny toast z potwierdzeniem kopiowania
+- Funkcja `copyGameCodeToClipboard()` z komunikatami
 
-### 🏗️ Zmiany architektoniczne
+### Usunięte
 
-- **🗑️ Usunięto ShareGameModal**
-  - Zastąpiono prostymi przyciskami kopiowania
-  - Zmniejszono złożożność kodu o ~180 linii
-  - Uproszczono UX z 3 kroków do 1 kroku
+- ShareGameModal - zastąpiono prostymi przyciskami (zmniejszono kod o ~180 linii)
 
-### 🎮 Interfejs użytkownika
+### Naprawione
 
-- **🔧 Optymalizacja przycisków**
-  - Zmniejszono poziomy padding: 1.5rem → 1rem (przyciski ogólne)
-  - Zmniejszono poziomy padding: 2rem → 1.25rem (przyciski w grze)
-  - Lepsze proporcje wizualne
-
-### 🐛 Poprawki błędów
-
-- **⚠️ KRYTYCZNY: Naprawiono stan nowej gry**
-  - Nowa gra zawsze zaczyna od czystego stanu (currentCardIndex: -1)
-  - Usunięto przeciekanie danych między grami
-  - Home.tsx wywołuje newGame() przed nawigacją do gry
-
-### 🔧 Zmiany techniczne
-
-- **🧩 GameContext**
-
-  - Dodano funkcję getCleanState() dla czystego stanu
-  - NEW_GAME i RESET_GAME używają getCleanState() zamiast initialState
-  - Poprawiono logikę inicjalizacji gry
-
-- **🔧 Nowe funkcje utility**
-  - copyGameCodeToClipboard() - prosty interface kopiowania z komunikatami
-  - Automatyczne generowanie i kopiowanie kodu w jednym kroku
+- KRYTYCZNY błąd: nowa gra zawsze zaczyna od czystego stanu (currentCardIndex: -1)
+- Przeciekanie danych między grami
 
 ## [0.2.1] - 2025-08-25
 
-### ✨ Nowe funkcje
+### Dodane
 
-- **💾 Ultra-kompaktowy system kodów gry**
+- Ultra-kompaktowe kody gry: 17/19 znaków (ZOO + 0-9,A-C)
+- Współdzielenie między urządzeniami - kody działają wszędzie
+- Automatyczne rozpoznawanie trybu gry na podstawie długości kodu
 
-  - Kody gry mają zawsze wielkie litery (ZOO + 0-9, A-C)
-  - Format: 17 znaków (1 bot) lub 19 znaków (2-4 boty)
-  - Kody są w pełni cross-device (można je przesyłać między urządzeniami)
-  - System automatycznie rozpoznaje tryb gry na podstawie długości kodu
-  - Przykład kodu: `ZOOA0CB5938416274`
-  - 90% redukcja długości względem systemów Base64/LZ-String
+### Zmienione
 
-- **🔗 Cross-device compatibility**
-  - Kody zawierają pełne dane gry (nie wymagają localStorage)
-  - Działają między różnymi urządzeniami i przeglądarkami
-  - Walidacja format wielkich liter w UI wczytywania
-
-### 🏗️ Zmiany architektoniczne
-
-- **🧩 GameState interface**
-
-  - Usunięto `shuffleCount` i `gameStarted` (niepotrzebne w nowym systemie)
-  - Dodano opcjonalne `botCount` i `currentBot` dla przyszłych wersji
-  - Uproszczenie struktury danych
-
-- **🛠️ Utilities gameStorage**
-  - `encodeCard()` / `decodeCard()` - mapowanie 0-12 na 0-9,A-C
-  - `generateShareableCode()` - tworzenie kodów zawsze wielkimi literami
-  - `loadFromShareableCode()` - wczytywanie z obsługą case-insensitive
-  - `isValidGameCode()` - walidacja formatu i długości
-  - Usunięto dependency na localStorage w kodach
-
-### 🎮 Interfejs użytkownika
-
-- **📝 ShareGameModal** - Generowanie kodów zawsze wielkimi literami
-- **📥 LoadGameModal** - Akceptowanie wielkich liter, walidacja ZOO prefixu
-- **🏠 Home.tsx** - Aktualizacja sekcji wersji na v0.2.1
-
-### 🔧 Zmiany techniczne
-
-- **📦 Wersja 0.2.1** - Aktualizacja package.json
-- **🧹 Czyszczenie kodu** - Usunięto wszystkie console.log z produkcji
-- **📋 Dokumentacja** - Aktualizacja README.md, DOCS.md, GAME-CODES.md
+- 90% redukcja długości kodów względem Base64/LZ-String
+- Uproszczenie GameState interface - usunięto `shuffleCount` i `gameStarted`
+- Walidacja formatu wielkich liter w LoadGameModal
 
 ## [0.2.0] - 2025-08-23
 
-### ✨ Nowe funkcje
+### Dodane
 
-- **💾 System zapisywania i wczytywania gry**
+- System zapisywania/wczytywania gry z kodami Base64 w localStorage
+- ShareGameModal i LoadGameModal z walidacją kodów
+- Automatyczne zapisywanie stanu gry
+- Kopiowanie kodów do schowka z potwierdzeniem
+- BaseModal component dla spójności wyglądu
 
-  - Automatyczne zapisywanie stanu gry w localStorage
-  - Możliwość generowania kodów gry (localStorage-only)
-  - Base64 encoding z checksumami dla bezpiecznego kodowania
-  - ⚠️ **Ograniczenia**: Kody działają tylko w tej samej przeglądarce
+### Ograniczenia
 
-- **🔗 Modale udostępniania i wczytywania**
-  - ShareGameModal - generowanie kodów do zapisywania stanu
-  - LoadGameModal - wczytywanie gry z lokalnych kodów
-  - Walidacja kodów gry z odpowiednimi komunikatami błędów
-  - Kopiowanie do schowka z wizualnym potwierdzeniem
-
-### ⚠️ Znane ograniczenia v0.2.0
-
-- **localStorage-only system**: Kody działają tylko w tej samej przeglądarce
-- **Brak cross-device**: Nie można udostępniać kodów między urządzeniami
-- **Długie kody**: Base64 format generuje nieczytelne kody (~175 znaków)
-
-### 🏗️ Zmiany architektoniczne
-
-- **🧩 BaseModal component**
-
-  - Uniwersalny modal bazujący na istniejącym ConfirmModal
-  - Reużywalne style dla spójności designu
-  - Usunięcie duplikacji CSS między modalami
-
-- **⚛️ GameContext rozszerzenia**
-
-  - Dodano `loadGame` action do wczytywania stanu
-  - Integracja z gameStorage utilities
-  - Auto-save functionality z useEffect
-
-- **🛠️ Utilities gameStorage**
-  - `serializeGameState()` - konwersja stanu do Base64
-  - `deserializeGameState()` - dekodowanie z walidacją
-  - `generateShareableCode()` - tworzenie kodów gry
-  - `loadFromShareableCode()` - wczytywanie z kodów
-  - `autoSaveGameState()` - automatyczne zapisywanie
-  - `copyToClipboard()` - helper do kopiowania
-
-### 🎮 Interfejs użytkownika
-
-- **🏠 Home.tsx** - Aktywacja przycisku "Wczytaj grę"
-- **🎯 Game.tsx** - Dodanie przycisku "Udostępnij grę"
-- **📱 Responsywny design** - Modale dostosowane do urządzeń mobilnych
-
-### 🔧 Zmiany techniczne
-
-- **📦 Wersja 0.2.0** - Aktualizacja package.json
-- **🌿 Nowa gałąź v0.2.0** - Organizacja rozwoju wersji
-- **🧪 TypeScript** - Pełna typizacja nowych komponentów
-- **♻️ Refaktor modali** - Eliminacja duplikacji styli CSS
+- Kody działają tylko w tej samej przeglądarce (localStorage-only)
+- Długie kody Base64 (~175 znaków), brak współdzielenia między urządzeniami
 
 ## [0.1.4] - 2025-08-22
 
-### 🐛 Naprawione błędy
+### Naprawione
 
-- **🖥️ Poprawione centrowanie na desktopie**
-  - Naprawiono problem z centrowaniem aplikacji na szerszych ekranach (>480px)
-  - Unified szerokość aplikacji - wszystkie ekrany używają teraz spójnego systemu 480px max-width
-  - Dodano lepsze media queries dla ekranów desktop z `margin: 0 auto`
-  - Poprawiono CSS variables dla `--max-width` z lepszym calc() dla narrow screens
-  - Home description nie używa już własnej max-width 400px (teraz 100% z Layout)
+- Centrowanie aplikacji na szerszych ekranach desktop (>480px)
+- Tła pełnoekranowe - przeniesienie z komponentu układu na element body
+- Spójność szerokości elementów między różnymi ekranami
+- Reset stanu gry przy powrocie do menu - dodano `game.resetGame()` w `confirmExit()`
 
-### 🔧 Zmiany techniczne
+### Zmienione
 
-- **📦 Wersja 0.1.4** - Aktualizacja package.json
-- **🎯 Layout.module.css**: Dodano explicite `max-width: 480px` i `margin: 0 auto` dla desktop, positioning i z-index
-- **🌐 globals.css**: Ulepszone media queries dla spójnego centrowania, refaktor background utilities
-- **🏠 Home.module.css**: Usunięto konflictujące max-width z heroDescription
-- **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
-- **🎨 BotCard.module.css**: Zmieniono max-width z 400px na 100% dla Layout consistency
-- **🎮 Game.module.css**: Usunięto ograniczenie max-width 300px z przycisków, zwiększono card-reverse
-- **⚛️ Game.tsx**: Dodano `game.resetGame()` call w `confirmExit()` dla proper state management
-
-### 📁 Bug fix dla Issue #13
-
-- "Ekran nie jest wyśrodkowany w wersji desktopowej" - ROZWIĄZANY ✅
-
-### 📁 Bug fix dla Issue #14
-
-- "Tło nie zajmuje całego ekranu i nie jest wyśrodkowane" - ROZWIĄZANY ✅
-
-### 📁 Bug fix dla Issue #15
-
-- "Niespójne szerokości elementów na różnych ekranach" - ROZWIĄZANY ✅
-
-### 📁 Bug fix dla Issue #16
-
-- "Stan gry nie jest resetowany przy powrocie do menu" - ROZWIĄZANY ✅
-
-### 🐛 Naprawione błędy
-
-- **🎨 Poprawione tła pełnoekranowe**
-
-  - Naprawiono problem z tłami nie pokrywającymi całego ekranu (Issue #14)
-  - Przeniesiono aplikację tła z Layout component na body element dla full-screen coverage
-  - Dodano `background-attachment: fixed` dla stabilnych teł podczas scroll
-  - Wprowadzono subtelny overlay (0.05 opacity) dla lepszej czytelności tekstu
-  - Ulepszona hierarchia z-index (Layout z-index: 1, overlay z-index: 0)
-
-- **� Spójność układu na różnych ekranach**
-
-  - Naprawiono niespójne szerokości elementów między ekranami (Issue #15)
-  - BotCard: zmieniono max-width z 400px na 100% dla pełnego wykorzystania Layout
-  - Game buttons: usunięto ograniczenie max-width 300px dla spójności z Layout
-  - Game card-reverse: zwiększono max-width z 200px na 250px dla lepszej proporcji
-  - Wszystkie komponenty używają teraz unified Layout max-width system (480px)
-
-- **🎮 Poprawiony reset stanu gry**
-  - Naprawiono problem z nieresetowaniem stanu gry przy powrocie do menu (Issue #16)
-  - Dodano wywołanie `game.resetGame()` w funkcji `confirmExit()` w Game.tsx
-  - Modal ostrzeżenia pozostaje aktywny dla informacji użytkownika
-  - Stan gry jest teraz prawidłowo resetowany przed nawigacją do menu
-
-### 🔧 Zmiany techniczne
-
-- **🎯 Layout.tsx**: Dodano useEffect dla dynamicznego zarządzania klasami tła na body
-- **🌐 globals.css**: Refaktor background utilities - aplikacja na body, nie Layout
-- **📱 Layout.module.css**: Dodano positioning i z-index dla proper layering
+- Unified system szerokości 480px dla wszystkich ekranów
+- Dynamiczne zarządzanie klasami tła na body przez useEffect
 
 ## [0.1.3] - 2025-08-21
 
@@ -830,119 +399,64 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.0] - 2025-08-19
 
-### ✨ Dodane
+### Dodane
 
-- **🎮 Kompletna mechanika kart**
-  - 13 kart botów Lorem Ipsum z efektami i zdolnościami
-  - Losowanie, tasowanie i reset kart
-  - Zarządzanie stanem gry z React Context + useReducer
-  - Komponent BotCard z responsywnym designem
-  - Kontrolki gry: "Dobierz kartę", "Przetasuj talię", "Reset gry"
-  - Auto-start gry po wejściu na stronę
-  - Statystyki gry: aktualna karta, pozostałe karty, liczba tasowań
+- Kompletna mechanika gry z 13 kartami botów
+- Zarządzanie stanem z React Context + useReducer
+- Komponent BotCard z responsywnym układem
+- Kontrolki gry: "Dobierz kartę", "Przetasuj talię", "Reset gry"
+- Automatyczny start gry i statystyki (algorytm tasowania Fisher-Yates)
+- Płynne animacje kart i projekt dostosowany do urządzeń mobilnych
 
-### 🎯 Doświadczenie użytkownika
+### Zmienione
 
-- Płynne animacje kart z CSS keyframes
-- Disabled states dla przycisków gdy to właściwe
-- Mobile-first responsive design (320px+ WCAG compliant)
-- Intuicyjny flow: Home → "Rozpocznij grę" → natychmiastowe wyświetlenie karty
-
-### 🏗️ Techniczne
-
-- TypeScript full type safety z custom interfaces
-- System CSS custom properties dla spójnego stylingu
-- Profesjonalna struktura projektu z rozdzielonymi odpowiedzialnościami
-- Implementacja algorytmu Fisher-Yates shuffle
-- Czyste procesy build i lint
-
-### 🔧 Zmienione
-
-- Game.tsx: usunięto zbędny ekran startowy, auto-start gry
-- Struktura: skonsolidowano typy w /types/index.ts
-- CSS: optymalizacja i usunięcie nieużywanych reguł
+- Usunięto zbędny ekran startowy
+- Skonsolidowano typy w /types/index.ts
+- Zoptymalizowano CSS
 
 ## [0.0.3] - 2025-08-18
 
 ### Naprawione
 
-- 🐛 **WCAG 320px compliance**: Naprawiono poziome overflow na ekranach 320px (wymóg dostępności)
-- 🐛 **Horizontal scrolling**: Wyeliminowano poziome przewijanie na małych ekranach (320px-360px)
-- 🐛 **CSS media query conflicts**: Naprawiono konflikty między różnymi zakresami responsywności
-- 🐛 **Card sizing issues**: Ujednolicono szerokość kart dla płynnych przejść między rozmiarami ekranu
-
-### 📁 Bug fixes dla Issues
-
-- Issue #7: "Horizontal overflow na bardzo małych ekranach (≤320px)" - ROZWIĄZANY ✅
+- Poziome przewijanie na ekranach 320px (zgodność z wymogami dostępności)
+- Konflikty między zakresami responsywności
+- Problemy z rozmiarami kart na różnych ekranach
 
 ### Dodane
 
-- ✅ **CSS custom properties**: Wprowadzono zmienne dla responsywnych font-size i spacing
-- ✅ **Unified small screen support**: Jeden spójny styl dla wszystkich ekranów ≤360px
-- ✅ **Responsive font system**: System zarządzania czcionkami przez CSS custom properties
+- Zmienne CSS dla responsywnych rozmiarów czcionek i odstępów
+- Jednolite wsparcie dla małych ekranów (≤360px)
 
 ### Zmienione
 
-- 🔧 **Media queries**: Uproszczono z wielu zakresów do jednolitego `@media (max-width: 360px)`
-- 🔧 **CSS architecture**: Refaktor - eliminacja `clamp()` na rzecz CSS custom properties
-- 🔧 **Small screen layout**: Zoptymalizowano layout dla ekranów 320px-360px z równymi odstępami
-- 🔧 **Code maintainability**: Zmniejszono duplikację CSS poprzez centralne zarządzanie responsive styles
-
-### Techniczne
-
-- 📦 **CSS bundle size**: Zoptymalizowano z 10.49kB → 10.03kB
-- 🧹 **Code cleanup**: Usunięto konfliktujące reguły CSS i uproszczono strukturę responsywności
+- Uproszczono media queries do `@media (max-width: 360px)`
+- Refaktor architektury CSS - zastąpiono `clamp()` zmiennymi CSS
 
 ## [0.0.2] - 2025-08-17
 
 ### Naprawione
 
-- 🐛 **Layout viewport issues**: Naprawiono urwane tło na dole ekranu (`background-attachment: fixed`, `100dvh`)
-- 🐛 **Content overflow**: Poprawiono wyświetlanie na małych ekranach - zawartość nie była w pełni widoczna
-- 🐛 **Responsywność czcionek**: Zastąpiono stałe rozmiary czcionek responsywnymi (`clamp()`)
-- 🐛 **Padding na małych ekranach**: Dodano responsywny padding dla urządzeń <380px
-
-### 📁 Bug fixes dla Issues
-
-- Issue #2: "Responsywność: Czcionki zbyt duże na małych ekranach" - ROZWIĄZANY ✅
-- Issue #3: "Overflow: Zawartość nie mieści się na ekranie na małych urządzeniach" - ROZWIĄZANY ✅
-- Issue #4: "Gradient tła nie pokrywa całego ekranu (urwane tło na dole)" - ROZWIĄZANY ✅
+- Problemy z widocznym obszarem - urwane tło na dole ekranu (`100dvh`)
+- Przepełnienie zawartości na małych ekranach
+- Responsywność czcionek - zastąpiono stałe rozmiary funkcją `clamp()`
+- Czcionki zbyt duże na małych ekranach
+- Gradient tła nie pokrywający całego ekranu
 
 ### Dodane
 
-- ✅ **Automatyczne wersje**: Import `package.json` dla dynamicznego wyświetlania wersji
-- ✅ **Media queries**: Lepsze wsparcie dla bardzo małych ekranów
-- ✅ **TypeScript JSON support**: Dodano `resolveJsonModule` w konfiguracji
-
-### Zmienione
-
-- 🔧 **CSS**: Użyto `100dvh` zamiast `100vh` dla lepszej obsługi mobile browsers
-- 🔧 **Responsywność**: Dodano `clamp()` dla wszystkich rozmiarów czcionek
-- 🔧 **Base font-size**: Zrobiono responsywnym (14-16px zależnie od ekranu)
+- Automatyczne wersje z `package.json`
+- Lepsze zapytania mediów dla małych ekranów
+- Obsługa JSON w TypeScript (`resolveJsonModule`)
 
 ## [0.0.1] - 2025-08-16
 
 ### Dodane
 
-- ✅ Setup React + TypeScript + Vite (dostosowany do Node 18)
-- ✅ Routing z React Router (`/` i `/game`)
-- ✅ Responsywny design mobile-first
-- ✅ Layout z kolorami z instrukcji gry (żółto-zielone tło, brązowe nagłówki)
-- ✅ Struktura folderów projektu (components, pages, hooks, etc.)
-- ✅ TypeScript interfaces dla całej aplikacji
-- ✅ Globalne style CSS z paletą kolorów z instrukcji
-- ✅ Strona główna z menu opcji
-- ✅ Placeholder ekranu gry (gotowy na v0.1.0)
-- ✅ ESLint konfiguracja
-- ✅ Build i lint bez błędów
-
-### Techniczne
-
-- React 19.1.1
-- TypeScript 5.8.3
-- Vite 5.4.19 (downgraded dla Node 18)
-- React Router DOM 7.8.1
-- CSS Modules dla stylów
+- Konfiguracja React + TypeScript + Vite (Node 18)
+- Routing z React Router (`/` i `/game`)
+- Responsywny projekt dla urządzeń mobilnych z kolorami ZOO
+- Struktura folderów projektu i interfejsy TypeScript
+- Strona główna z menu i przygotowany ekran gry
 
 ## [0.0.0] - 2025-08-16
 

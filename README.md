@@ -13,7 +13,8 @@
 💾 **Zapisywanie stanu** - Kompaktowe kody gry z podglądem  
 🔗 **Cross-device** - Kompatybilność między urządzeniami  
 📱 **Responsywne UI** - Optymalizacja dla wszystkich ekranów (320px+)  
-⚡ **Real-time validation** - Walidacja kodów w czasie rzeczywistym
+⚡ **Real-time validation** - Walidacja kodów w czasie rzeczywistym  
+🎨 **Profesjonalny design** - Własny favicon i dynamiczne tytuły
 
 ## 🚀 Szybki start
 
@@ -37,7 +38,7 @@ npm run dev
 
 ### 🎮 Podstawy gry
 
-1. **Rozpocznij grę** → Wybierz liczbę botów (1-4)
+1. **Rozpocznij grę** → Wybierz tryb i liczbę botów (1-4)
 2. **Dobieranie kart** → Dwa inteligentne przyciski:
    - 🎯 Dobierz kartę dla aktualnego bota
    - 👥 Przełącz na następnego bota i dobierz kartę
