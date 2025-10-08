@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.4.4-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.4.5-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -74,7 +74,7 @@ npm run dev
 
 ## 🤝 Rozwój projektu
 
-**Aktualna wersja:** 0.4.4 (Wycofanie legacy ZOO)  
+**Aktualna wersja:** 0.4.5 (UX Fixes)  
 **Status:** Stabilny - gotowy do użycia
 
 ---

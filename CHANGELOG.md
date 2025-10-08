@@ -5,6 +5,30 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.5] - 2025-10-09
+
+### 🎨 UX Fixes - poprawki interfejsu użytkownika
+
+**🚀 Zmiany:**
+
+- **Czyszczenie menu głównego:** Usunięcie spisu funkcjonalności z różnych wersji z ekranu głównego
+- **Dynamiczne tytuły:** Header zmienia się między "Rozpocznij grę" a "Gra w toku" w zależności od stanu
+- **Informacyjne subtitle:** Wyświetlanie "Wybierz liczbę botów" lub szczegółów o botach i trybie gry
+- **Własny favicon:** Zastąpienie domyślnego Vite favicon własnym zoo.png
+- **Profesjonalny title:** Zmiana z "Vite + React + TS" na "Spółka ZOO - Bot Pomocnik"
+
+**🎨 Poprawki stylistyczne:**
+
+- **Ujednolicona kolorystyka:** Przyciski wyboru trybu gry mają teraz ten sam styl co przyciski botów
+- **Stabilny layout:** Przyciski nie zmieniają rozmiaru przy przełączaniu między opcjami
+- **Konsystentne animacje:** Jednolite hover effects i transitions w całym interfejsie
+
+**🔧 Poprawki techniczne:**
+
+- **Logika resetowania:** Poprawione zachowanie przy odświeżaniu strony
+- **Walidacja stanu:** Lepsze rozpoznawanie czy aplikacja jest w fazie konfiguracji czy aktywnej gry
+- **Exit flow:** Inteligentne rozpoznawanie kiedy pokazać modal zapisu vs natychmiastowe wyjście
+
 ## [0.4.4] - 2025-10-05
 
 ### 🧹 Code cleanup - usunięcie przestarzałego formatu ZOO

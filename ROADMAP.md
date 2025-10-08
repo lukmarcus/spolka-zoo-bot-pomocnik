@@ -2,32 +2,60 @@
 
 ## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                                |
-| ------ | ------------ | ----------------------------------------------- | ------------------------------------------------------------------- |
-| 0.4.4  | ✅ Gotowe    | Wycofanie legacy formatu ZOO                    | Usunięcie obsługi ZOO, oczyszczenie kodu, optymalizacja             |
-| 0.4.5  | 🚧 W planach | UX Fixes - poprawki interfejsu użytkownika      | Modal ZP, przyciski, opcja wyjścia z gry, czyszczenie menu głównego |
-| 0.5.0  | 🔮 Planowane | Typography & Styling - własne czcionki i design | Implementacja własnych czcionek, ujednolicenie wielkości tekstów    |
-| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa        |
+| Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                             |
+| ------ | ------------ | ----------------------------------------------- | ---------------------------------------------------------------- |
+| 0.4.5  | ✅ Gotowe    | UX Fixes - poprawki interfejsu użytkownika      | Czyszczenie menu, dynamiczne tytuły, favicon, kolorystyka        |
+| 0.4.6  | 🔮 Planowane | Architecture Refactoring - podział komponentów  | Rozdzielenie Game.tsx na GameSetup i GamePlay                    |
+| 0.4.7  | 🔮 Planowane | UX Fixes vol.2 - dopracowanie interfejsu        | Modal ZP, długie teksty przycisków, responsive fixes             |
+| 0.5.0  | 🔮 Planowane | Typography & Styling - własne czcionki i design | Implementacja własnych czcionek, ujednolicenie wielkości tekstów |
+| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa     |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.4 — ✅ Wycofanie legacy ZOO (ukończone)
+### v0.4.5 — ✅ UX Fixes - poprawki interfejsu użytkownika (ukończone)
 
-🎯 Cel: usunięcie przestarzałego formatu ZOO i oczyszczenie kodu
+🎯 Cel: poprawienie komfortu użytkowania i podstawowe usprawnienia interfejsu
 
-✅ Ukończone zadania:
+✅ **Ukończone zadania:**
 
-- **Wycofanie legacy formatu ZOO** - kompletne usunięcie obsługi ZOO z kodu
-- **Oczyszczenie kodu** - usunięte funkcje `decodeLegacyZooPayload()`, `GAME_CODE_PREFIX` i cała logika ZOO
-- **Optymalizacja** - redukcja rozmiaru aplikacji przez eliminację nieużywanego kodu
+- **Czyszczenie menu głównego** - usunięcie spisu funkcjonalności z różnych wersji
+- **Dynamiczne tytuły** - "Rozpocznij grę" vs "Gra w toku" w zależności od stanu
+- **Dynamiczne subtitle** - informacje o wybranych botach i trybie gry
+- **Favicon i title strony** - własny favicon zoo.png i proper title
+- **Kolorystyka przycisków** - ujednolicenie stylu przycisków wyboru trybu i botów
+- **Stabilny layout** - przyciski nie zmieniają rozmiaru przy przełączaniu opcji
+- **Logika resetowania** - poprawione zachowanie przy odświeżaniu strony
 
 ---
 
-### v0.4.5 — UX Fixes - poprawki interfejsu użytkownika 🚧
+### v0.4.6 — Architecture Refactoring - podział komponentów 🔮
 
-🎯 Cel: poprawienie komfortu użytkowania i rozwiązanie problemów z interfejsem
+🎯 Cel: poprawa architektury kodu przez rozdzielenie odpowiedzialności
 
-⏱️ Przybliżony termin: ~1-2 tygodnie
+Planowane zadania:
+
+- **Rozdzielenie Game.tsx (436 linii)**
+
+  - **GameSetup.tsx** - wybór botów i trybu gry (150-200 linii)
+  - **GamePlay.tsx** - aktywna rozgrywka i karty (150-200 linii)
+  - **Game.tsx** - router między Setup/Play (50-100 linii)
+
+- **Separation of Concerns**
+
+  - Osobne state management dla każdego ekranu
+  - Wydzielenie logiki nawigacji między ekranami
+  - Lepsze typowanie props i interfejsów
+
+- **Maintainability improvements**
+  - Łatwiejsze debugowanie i testowanie
+  - Przygotowanie do przyszłych rozszerzeń
+  - Clean code architecture
+
+---
+
+### v0.4.7 — UX Fixes vol.2 - dopracowanie interfejsu 🔮
+
+🎯 Cel: dokończenie poprawek interfejsu użytkownika z v0.4.5
 
 Planowane zadania:
 
@@ -97,6 +125,48 @@ Planowane zadania:
 - **Informacje o grze**
 
   - Sekcja "O grze" z podstawowymi informacjami
+  - Linki do wydawnictwa/oficjalnej strony gry
+  - Informacje o zasadach (jeśli potrzebne)
+
+- **Kredyty i acknowledgments**
+  - Informacje o twórcach aplikacji
+  - Ewentualne podziękowania
+
+---
+
+## � Pomysły na przyszłość - luźny spis ewentualnych usprawnień
+
+Lista potencjalnych funkcjonalności do rozważenia w przyszłych wersjach:
+
+### 🎨 Wizualizacja i UX
+
+- **Graficzna reprezentacja kart** - zastąpienie tekstów obrazkami/ikonami kart
+- **Animacje** - płynne animacje dobierania, odwracania, tasowania
+- **System projektowania** - spójny język wizualny, ikony, kolory
+- **Responsive design** - lepsze dostosowanie do małych ekranów
+- **Ciemny motyw** - opcja dark mode dla aplikacji
+
+### 📊 Funkcje zaawansowane
+
+- **Statystyki gry** - historia ruchów, częstotliwość kart, analizy
+- **Panel analityczny** - szczegółowe statystyki dla zaawansowanych użytkowników
+- **Tryb treningowy** - możliwość cofania ruchów (undo)
+- **Timer** - opcjonalny pomiar czasu gry
+
+### 💾 System zapisów
+
+- **Wiele slotów zapisu** - zapisywanie różnych stanów gry
+- **Zapisy w chmurze** - synchronizacja między urządzeniami
+- **Historia sesji** - możliwość odtwarzania poprzednich gier
+- **Eksport/import** - wymiana zapisów między użytkownikami
+
+### 🏆 Tryby rozgrywki
+
+- **Tryby turniejowe** - specjalne zasady dla turniejów
+- **Tryb wieloosobowy** - gra przez sieć (daleka przyszłość)
+- **Wyzwania** - specjalne scenariusze do rozegrania
+  nformacjami
+
   - Linki do wydawnictwa/oficjalnej strony gry
   - Informacje o zasadach (jeśli potrzebne)
 
