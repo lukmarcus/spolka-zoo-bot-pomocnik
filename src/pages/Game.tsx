@@ -233,6 +233,27 @@ const Game: React.FC = () => {
 
   const gameActions = getGameActions();
 
+  // Dynamic title based on game state
+  const pageTitle = game.state.botsSelected ? "Gra w toku" : "Rozpocznij grę";
+
+  // Dynamic subtitle based on game state
+  const getPageSubtitle = () => {
+    if (!game.state.botsSelected) {
+      return "Wybierz liczbę botów i tryb gry";
+    }
+
+    const botCount = game.state.botCount || 0;
+    const botText = botCount === 1 ? "bot" : "boty";
+
+    if (botCount === 1) {
+      return `${botCount} ${botText}`;
+    } else {
+      const modeText =
+        game.state.mode === "shared" ? "wspólna talia" : "osobne talie";
+      return `${botCount} ${botText} • ${modeText}`;
+    }
+  };
+
   return (
     <Layout
       title={pageTitle}
@@ -281,8 +302,7 @@ const Game: React.FC = () => {
                   // v0.3.2 Always show bot selection when no cards are drawn
                   <div className={styles.botSelection}>
                     <div className={styles.botSelectionContent}>
-                      <h3>Wybierz liczbę botów</h3>
-                      <p>Wybierz ile botów będzie brać udział w tej grze</p>
+                      <h2>Liczba botów</h2>
                       <div className={styles.botButtons}>
                         {[1, 2, 3, 4].map((count) => (
                           <button
@@ -299,48 +319,56 @@ const Game: React.FC = () => {
                           </button>
                         ))}
                       </div>
-                      {/* Show mode selection only when 2-4 bots selected */}
-                      {selectedBotCount && selectedBotCount >= 2 ? (
-                        <>
-                          <h3>Wybierz tryb gry</h3>
-                          <p>
-                            Wybierz czy boty mają wspólną talię czy osobne talie
-                          </p>
-                          <div className={styles.modeButtons}>
-                            <button
-                              className={`${styles.modeOption} ${
-                                selectedMode === "shared" ? styles.selected : ""
-                              }`}
-                              onClick={() => handleModeSelection("shared")}
-                            >
-                              Wspólna talia
-                            </button>
-                            <button
-                              className={`${styles.modeOption} ${
-                                selectedMode === "individual"
-                                  ? styles.selected
-                                  : ""
-                              }`}
-                              onClick={() => handleModeSelection("individual")}
-                            >
-                              Osobne talie
-                            </button>
-                          </div>
-                        </>
-                      ) : null}
+                      {/* Show mode selection - hidden for single bot to maintain layout */}
+                      <div
+                        className={`${styles.modeSection} ${
+                          selectedBotCount && selectedBotCount >= 2
+                            ? styles.visible
+                            : styles.hidden
+                        }`}
+                      >
+                        <h2>Tryb gry</h2>
+                        <div className={styles.modeButtons}>
+                          <button
+                            className={`${styles.modeOption} ${
+                              selectedMode === "shared" ? styles.selected : ""
+                            }`}
+                            onClick={() => handleModeSelection("shared")}
+                            disabled={selectedBotCount === 1}
+                          >
+                            Wspólna talia
+                          </button>
+                          <button
+                            className={`${styles.modeOption} ${
+                              selectedMode === "individual"
+                                ? styles.selected
+                                : ""
+                            }`}
+                            onClick={() => handleModeSelection("individual")}
+                            disabled={selectedBotCount === 1}
+                          >
+                            Osobne talie
+                          </button>
+                        </div>
+                      </div>
 
                       <div className={styles.startGameSection}>
                         {selectedBotCount ? (
                           <p className={styles.selectedInfo}>
                             Wybrano: {selectedBotCount} bot
-                            {selectedBotCount > 1 ? "y" : ""}, tryb:{" "}
-                            {selectedMode === "shared"
-                              ? "wspólna talia"
-                              : "osobne talie"}
+                            {selectedBotCount > 1 ? "y" : ""}
+                            {selectedBotCount > 1 ? (
+                              <>
+                                ,{" "}
+                                {selectedMode === "shared"
+                                  ? "wspólna talia"
+                                  : "osobne talie"}
+                              </>
+                            ) : null}
                           </p>
                         ) : (
                           <p className={styles.selectedInfo}>
-                            Wybierz liczbę botów aby rozpocząć
+                            Najpierw wybierz liczbę botów
                           </p>
                         )}
                         <button
