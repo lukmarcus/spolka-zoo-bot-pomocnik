@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../context/GameContext";
 import { BOT_CARDS } from "../data/botCards";
@@ -17,27 +17,40 @@ const Game: React.FC = () => {
   const [selectedMode, setSelectedMode] = useState<"shared" | "individual">(
     "shared"
   );
+  const hasReset = useRef(false);
 
   // v0.3.2 Reset game state on page refresh to ensure clean bot selection
   React.useEffect(() => {
-    // If we're in an inconsistent state (bots not selected but cards drawn), reset
-    if (
-      !game.state.botsSelected &&
-      typeof game.state.currentCardIndex === "number" &&
-      game.state.currentCardIndex >= 0
-    ) {
+    // Only reset once on component mount
+    if (!hasReset.current && !game.state.botsSelected) {
+      hasReset.current = true;
       game.resetGame();
+      setSelectedBotCount(null);
+      setSelectedMode("shared");
     }
-  }, [game, game.state.botsSelected, game.state.currentCardIndex]);
+  }, [game, game.state.botsSelected]); // Include both dependencies
 
   const handleBackToMenu = () => {
-    // v0.3.2 Simplified exit - no modal during bot selection
-    if (!game.state.botsSelected) {
-      // During bot selection, exit immediately without modal
+    // Check if we're actually in a game (cards have been drawn)
+    const inActiveGame =
+      game.state.botsSelected &&
+      ((game.state.mode === "individual" &&
+        game.state.botDecks &&
+        game.state.currentBot &&
+        (game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ??
+          -1) >= 0) ||
+        (game.state.mode !== "individual" &&
+          typeof game.state.currentCardIndex === "number" &&
+          game.state.currentCardIndex >= 0));
+
+    if (!inActiveGame) {
+      // During bot selection or before any cards drawn, exit immediately without modal
       game.resetGame();
+      setSelectedBotCount(null);
+      setSelectedMode("shared");
       navigate("/");
     } else {
-      // During game, show modal for confirmation
+      // During active game, show modal for confirmation
       setShowExitModal(true);
     }
   };
@@ -233,13 +246,25 @@ const Game: React.FC = () => {
 
   const gameActions = getGameActions();
 
-  // Dynamic title based on game state
-  const pageTitle = game.state.botsSelected ? "Gra w toku" : "Rozpocznij grę";
+  // Check if we're actually in a game (cards have been drawn)
+  const inActiveGame =
+    game.state.botsSelected &&
+    ((game.state.mode === "individual" &&
+      game.state.botDecks &&
+      game.state.currentBot &&
+      (game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ??
+        -1) >= 0) ||
+      (game.state.mode !== "individual" &&
+        typeof game.state.currentCardIndex === "number" &&
+        game.state.currentCardIndex >= 0));
+
+  // Dynamic title based on actual game state
+  const pageTitle = inActiveGame ? "Gra w toku" : "Rozpocznij grę";
 
   // Dynamic subtitle based on game state
   const getPageSubtitle = () => {
-    if (!game.state.botsSelected) {
-      return "Wybierz liczbę botów i tryb gry";
+    if (!inActiveGame) {
+      return "Wybierz liczbę botów";
     }
 
     const botCount = game.state.botCount || 0;
