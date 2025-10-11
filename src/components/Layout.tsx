@@ -5,12 +5,14 @@ import packageJson from "../../package.json";
 interface LayoutProps {
   children: React.ReactNode;
   title?: string;
+  subtitle?: string;
   backgroundType?: "home" | "game" | "default";
 }
 
 const Layout: React.FC<LayoutProps> = ({
   children,
   title = "Spółka ZOO",
+  subtitle,
   backgroundType = "default",
 }) => {
   useEffect(() => {
@@ -43,16 +45,14 @@ const Layout: React.FC<LayoutProps> = ({
     <div className={styles.layout}>
       <header className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
-        {title !== "Spółka ZOO" && (
-          <p className={styles.subtitle}>Bot Pomocnik</p>
-        )}
+        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       </header>
 
       <main className={styles.main}>{children}</main>
 
       <footer className={styles.footer}>
         <p className={styles.footerText}>
-          v{packageJson.version} • Pomocnik do gry planszowej
+          v{packageJson.version} • Spółka ZOO • Bot Pomocnik
         </p>
       </footer>
     </div>

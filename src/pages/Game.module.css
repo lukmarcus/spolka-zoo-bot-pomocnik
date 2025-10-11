@@ -1,4 +1,19 @@
 /* Mode Selection UI */
+.modeSection {
+  transition: opacity 0.3s ease;
+}
+
+.modeSection.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modeSection.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .modeButtons {
   display: flex;
   gap: 1rem;
@@ -7,21 +22,56 @@
 }
 
 .modeOption {
-  background: var(--button-secondary);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #fff8dc, #f5f5dc);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
   font-size: var(--font-size-base);
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.modeOption::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.03),
+    rgba(255, 140, 0, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modeOption:hover {
+  border-color: var(--button-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.modeOption:hover::before {
+  opacity: 1;
 }
 
 .modeOption.selected {
-  background: var(--button-primary);
-  color: #fff;
-  box-shadow: 0 0 0 2px var(--color-primary);
+  border-color: var(--button-primary);
+  background: linear-gradient(135deg, var(--button-primary), #a0522d);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+}
+
+.modeOption.selected::before {
+  display: none;
 }
 /* Game Page Styles */
 

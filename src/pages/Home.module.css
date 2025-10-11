@@ -86,37 +86,6 @@
   opacity: 0.8;
 }
 
-.info {
-  margin-top: auto;
-}
-
-.infoCard {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--border-radius);
-  padding: 1.5rem; /* Simplified - will be overridden by media queries */
-  box-shadow: var(--shadow-light);
-  box-sizing: border-box;
-}
-
-.infoCard h4 {
-  color: var(--text-header);
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-}
-
-.featureList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.featureList li {
-  color: var(--text-primary);
-  padding: 0.25rem 0;
-  font-size: 0.95rem;
-}
-
 /* Responsiveness */
 @media (min-width: 481px) {
   .heroTitle {
@@ -151,13 +120,6 @@
   .menuButton {
     padding: 0.5rem var(--card-padding); /* Use CSS custom property */
     margin: 0 auto; /* Center the button */
-    width: calc(100% - 0.5rem); /* Leave only 0.25rem margin on each side */
-    max-width: none; /* Override any max-width constraints */
-  }
-
-  .infoCard {
-    padding: 0.5rem var(--card-padding); /* Use CSS custom property */
-    margin: 0 auto; /* Center the card */
     width: calc(100% - 0.5rem); /* Leave only 0.25rem margin on each side */
     max-width: none; /* Override any max-width constraints */
   }
