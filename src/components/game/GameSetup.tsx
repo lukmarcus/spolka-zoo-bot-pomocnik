@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGame } from "../../lib/GameContext";
+import { useGame } from "@lib/GameContext";
 import styles from "./GameSetup.module.css";
 
 interface GameSetupProps {

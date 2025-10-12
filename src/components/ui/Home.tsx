@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import LoadGameModal from "./LoadGameModal";
-import { useGame } from "../../lib/GameContext";
-import type { GameState } from "../../lib/types";
+import { useGame } from "@lib/GameContext";
+import type { GameState } from "@lib/types";
 import styles from "./Home.module.css";
 
 const Home: React.FC = () => {

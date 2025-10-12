@@ -16,6 +16,14 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Path mapping */
+    "baseUrl": ".",
+    "paths": {
+      "@lib/*": ["./src/lib/*"],
+      "@game/*": ["./src/components/game/*"],
+      "@ui/*": ["./src/components/ui/*"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

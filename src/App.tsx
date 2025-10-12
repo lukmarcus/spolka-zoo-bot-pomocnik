@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { GameProvider } from "./lib/GameContext";
-import Home from "./components/ui/Home";
-import Game from "./components/game/Game";
+import { GameProvider } from "@lib/GameContext";
+import Home from "@ui/Home";
+import Game from "@game/Game";
 import "./globals.css";
 
 function App() {
