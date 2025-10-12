@@ -1,8 +1,8 @@
 // BaseModal - Universal modal component
-// Based on existing ConfirmModal design with custom content support
+// Base component for all modals in the application
 
 import React from "react";
-import styles from "./ConfirmModal.module.css"; // Reuse existing modal styles
+import styles from "./BaseModal.module.css";
 
 interface BaseModalProps {
   isOpen: boolean;

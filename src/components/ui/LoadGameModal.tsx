@@ -3,9 +3,10 @@
 
 import { useState } from "react";
 import BaseModal from "./BaseModal";
+import baseStyles from "./BaseModal.module.css";
 import styles from "./LoadGameModal.module.css";
-import { loadFromShareableCode, previewGameCode } from "../utils/gameStorage";
-import type { GameState, GameCodePreview } from "../types";
+import { loadFromShareableCode, previewGameCode } from "@lib/gameStorage";
+import type { GameState, GameCodePreview } from "@lib/types";
 
 interface LoadGameModalProps {
   isOpen: boolean;
@@ -188,7 +189,7 @@ export default function LoadGameModal({
       onClose={handleClose}
       maxWidth="500px"
     >
-      <div className={styles.content}>
+      <div className={baseStyles.content}>
         <label className={styles.label}>Stan gry:</label>
         <input
           type="text"
@@ -266,16 +267,16 @@ export default function LoadGameModal({
         </div>
       </div>
 
-      <div className={styles.actions}>
+      <div className={`${baseStyles.actions} ${styles.actions}`}>
         <button
-          className={`${styles.button} ${styles.cancelButton}`}
+          className={`${baseStyles.button} ${baseStyles.cancelButton}`}
           onClick={handleClose}
           disabled={isLoading}
         >
           Anuluj
         </button>
         <button
-          className={`${styles.button} ${styles.confirmButton}`}
+          className={`${baseStyles.button} ${baseStyles.confirmButton}`}
           onClick={handleLoadGame}
           disabled={isLoading || !isCodeValid}
         >

@@ -1,0 +1,9 @@
+/* ConfirmModal Specific Styles - Extends BaseModal */
+/* Only unique styles for ConfirmModal, common styles are inherited from BaseModal */
+
+.message {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.5;
+}

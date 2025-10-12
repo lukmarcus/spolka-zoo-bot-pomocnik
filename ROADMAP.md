@@ -4,52 +4,48 @@
 
 | Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                             |
 | ------ | ------------ | ----------------------------------------------- | ---------------------------------------------------------------- |
-| 0.4.5  | ✅ Gotowe    | UX Fixes - poprawki interfejsu użytkownika      | Czyszczenie menu, dynamiczne tytuły, favicon, kolorystyka        |
-| 0.4.6  | 🔮 Planowane | Architecture Refactoring - podział komponentów  | Rozdzielenie Game.tsx na GameSetup i GamePlay                    |
+| 0.4.6  | ✅ Gotowe    | Architecture Refactoring - podział komponentów  | Rozdzielenie Game.tsx, path mapping, BaseModal, organizacja CSS  |
 | 0.4.7  | 🔮 Planowane | UX Fixes vol.2 - dopracowanie interfejsu        | Modal ZP, długie teksty przycisków, responsive fixes             |
 | 0.5.0  | 🔮 Planowane | Typography & Styling - własne czcionki i design | Implementacja własnych czcionek, ujednolicenie wielkości tekstów |
 | 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa     |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.5 — ✅ UX Fixes - poprawki interfejsu użytkownika (ukończone)
-
-🎯 Cel: poprawienie komfortu użytkowania i podstawowe usprawnienia interfejsu
-
-✅ **Ukończone zadania:**
-
-- **Czyszczenie menu głównego** - usunięcie spisu funkcjonalności z różnych wersji
-- **Dynamiczne tytuły** - "Rozpocznij grę" vs "Gra w toku" w zależności od stanu
-- **Dynamiczne subtitle** - informacje o wybranych botach i trybie gry
-- **Favicon i title strony** - własny favicon zoo.png i proper title
-- **Kolorystyka przycisków** - ujednolicenie stylu przycisków wyboru trybu i botów
-- **Stabilny layout** - przyciski nie zmieniają rozmiaru przy przełączaniu opcji
-- **Logika resetowania** - poprawione zachowanie przy odświeżaniu strony
-
----
-
-### v0.4.6 — Architecture Refactoring - podział komponentów 🔮
+### v0.4.6 — ✅ Architecture Refactoring - podział komponentów (ukończone)
 
 🎯 Cel: poprawa architektury kodu przez rozdzielenie odpowiedzialności
 
-Planowane zadania:
+✅ **Ukończone zadania:**
 
-- **Rozdzielenie Game.tsx (436 linii)**
+- **Rozdzielenie Game.tsx na 3 komponenty**
 
-  - **GameSetup.tsx** - wybór botów i trybu gry (150-200 linii)
-  - **GamePlay.tsx** - aktywna rozgrywka i karty (150-200 linii)
-  - **Game.tsx** - router między Setup/Play (50-100 linii)
+  - **GameSetup.tsx** - konfiguracja botów i trybu gry (119 linii)
+  - **GamePlay.tsx** - aktywna rozgrywka i karty (313 linii)
+  - **Game.tsx** - router między fazami gry (78 linii)
 
-- **Separation of Concerns**
+- **TypeScript Path Mapping**
 
-  - Osobne state management dla każdego ekranu
-  - Wydzielenie logiki nawigacji między ekranami
-  - Lepsze typowanie props i interfejsów
+  - Aliasy `@lib`, `@game`, `@ui` dla czytelnych importów
+  - Konfiguracja w tsconfig.json i vite.config.ts
+  - Aktualizacja wszystkich importów w projekcie
 
-- **Maintainability improvements**
-  - Łatwiejsze debugowanie i testowanie
-  - Przygotowanie do przyszłych rozszerzeń
-  - Clean code architecture
+- **Reorganizacja struktury folderów**
+
+  - `src/components/game/` - komponenty rozgrywki
+  - `src/components/ui/` - komponenty interfejsu
+  - `src/lib/` - logika, context, typy i dane
+
+- **Optymalizacja CSS i modalów**
+
+  - BaseModal jako uniwersalny komponent bazowy
+  - Eliminacja duplikatów stylów między modalami
+  - ConfirmModal i LoadGameModal dziedziczą z BaseModal
+
+- **Naprawy techniczne**
+  - Korupcja plików z polskimi znakami
+  - Problemy z kodowaniem UTF-8 w CSS
+  - Błędne ścieżki obrazków tła
+  - Ostrzeżenia Vite podczas build
 
 ---
 

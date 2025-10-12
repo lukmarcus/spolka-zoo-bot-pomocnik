@@ -1,7 +1,7 @@
 // Bot Cards Data - Spółka ZOO Bot Helper
 // Real card content from Spółka ZOO board game
 
-import type { BotCard } from "../types";
+import type { BotCard } from "./types";
 
 export const ICONS = {
   money: "/src/assets/images/interface/money.png",

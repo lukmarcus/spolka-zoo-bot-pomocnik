@@ -1,0 +1,238 @@
+/* GamePlay Component Styles */
+
+/* Game Status */
+.gameStatus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-background);
+  padding: 0.125rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.statusInfo {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.cardCounter {
+  background: var(--button-secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.botInfo {
+  background: var(--button-secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.currentBotIndicator {
+  display: flex;
+  align-items: center;
+}
+
+.botIndicatorText {
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+/* Card Display Area */
+.cardArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  min-height: 150px;
+}
+
+.currentCard {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.noCard {
+  text-align: center;
+  color: var(--color-text);
+  background: var(--color-background);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 2px dashed var(--color-border);
+}
+
+.noCard h3 {
+  color: var(--color-secondary);
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-lg);
+}
+
+.noCard p {
+  margin: 0;
+  font-size: var(--font-size-base);
+}
+
+/* Card Reverse for 0/13 state */
+.cardReverse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cardReverseImage {
+  max-width: 250px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.cardReverseImage:hover {
+  transform: scale(1.02);
+}
+
+/* Game Controls */
+.gameControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.gameControls button {
+  min-width: 200px;
+  font-size: var(--font-size-base);
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+}
+
+.gameControls button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gameControls button:disabled:hover {
+  transform: none;
+}
+
+/* Bottom Controls */
+.bottomControls {
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Copy Message */
+.copyMessage {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--button-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-medium);
+  z-index: 1000;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  animation: fadeInOut 2.5s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  10%,
+  90% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .gameStatus {
+    padding: 0.125rem 1rem;
+  }
+
+  .statusInfo {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .cardArea {
+    padding: 0.5rem;
+    min-height: 250px;
+  }
+
+  .gameControls {
+    padding: 1rem;
+  }
+
+  .gameControls button {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .bottomControls {
+    padding: 1rem;
+  }
+
+  .bottomControls button {
+    width: 100%;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .cardArea {
+    min-height: 200px;
+  }
+
+  .cardReverseImage {
+    max-width: 200px;
+  }
+
+  .gameControls button {
+    font-size: var(--font-size-sm);
+    padding: 0.875rem 1rem;
+  }
+
+  .bottomControls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

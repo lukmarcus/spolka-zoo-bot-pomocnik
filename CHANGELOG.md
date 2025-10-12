@@ -5,6 +5,38 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.6] - 2025-10-12
+
+### Dodane
+
+- TypeScript Path Mapping - aliasy `@lib`, `@game`, `@ui` dla czytelnych importów
+- BaseModal - uniwersalny komponent bazowy dla wszystkich modalów
+
+### Zmienione
+
+- Podział Game.tsx na 3 specjalizowane komponenty:
+  - Game.tsx - router między fazami gry
+  - GameSetup.tsx - konfiguracja botów i trybu gry
+  - GamePlay.tsx - aktywna rozgrywka
+- Reorganizacja folderów na `src/components/game/`, `src/components/ui/`, `src/lib/`
+- ConfirmModal i LoadGameModal używają BaseModal dla spójności interfejsu
+- Wszystkie importy zaktualizowane do path aliases
+
+### Naprawione
+
+- Korupcja plików z polskimi znakami - przywrócono oryginalne teksty
+- Problemy z kodowaniem UTF-8 w plikach CSS
+- Błędne ścieżki obrazków tła w globals.css
+- Duplikaty stylów CSS między modalami
+- Ostrzeżenia Vite o nierozwiązanych obrazkach podczas build
+
+### Usunięte
+
+- Niepotrzebny Game.module.css - pusty plik bez definicji stylów
+- Zduplikowane style przycisków i akcji w modalach
+
+---
+
 ## [0.4.5] - 2025-10-09
 
 ### Dodane

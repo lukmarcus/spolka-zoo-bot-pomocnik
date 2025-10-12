@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.4.5-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.4.6-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -73,9 +73,36 @@ npm run dev
 | [📜 CHANGELOG.md](CHANGELOG.md)   | Historia zmian i release notes           |
 | [🎮 GAME-CODES.md](GAME-CODES.md) | Formaty kodów gry i instrukcje           |
 
+## 🏗️ Architektura (v0.4.6)
+
+```
+src/
+├── components/
+│   ├── game/          # Komponenty rozgrywki
+│   │   ├── Game.tsx   # Router: GameSetup ↔ GamePlay  
+│   │   ├── GameSetup.tsx + .module.css # Konfiguracja botów
+│   │   └── GamePlay.tsx + .module.css  # Aktywna rozgrywka
+│   └── ui/            # Komponenty interfejsu
+│       ├── BaseModal.tsx + .module.css # Bazowy modal
+│       ├── ConfirmModal.tsx + .module.css # Potwierdzenia
+│       ├── LoadGameModal.tsx + .module.css # Wczytywanie gry
+│       └── Layout.tsx + .module.css # Layout aplikacji
+├── lib/               # Logika biznesowa
+│   ├── GameContext.tsx # Zarządzanie stanem gry
+│   ├── botCards.ts    # Dane kart botów  
+│   ├── gameStorage.ts # Zapis/odczyt stanu gry
+│   └── types.ts       # Definicje TypeScript
+└── assets/            # Zasoby statyczne
+```
+
+**TypeScript Path Mapping:**
+- `@lib/*` → `src/lib/*` (logika, context, typy)
+- `@ui/*` → `src/components/ui/*` (interfejs)  
+- `@game/*` → `src/components/game/*` (rozgrywka)
+
 ## 🤝 Rozwój projektu
 
-**Aktualna wersja:** 0.4.5 (UX Fixes)  
+**Aktualna wersja:** 0.4.6 (Architecture Refactoring)  
 **Status:** Stabilny - gotowy do użycia
 
 ---

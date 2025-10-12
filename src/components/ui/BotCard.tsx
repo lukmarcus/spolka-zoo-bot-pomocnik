@@ -1,5 +1,5 @@
 import React from "react";
-import type { BotCard as BotCardType } from "../types";
+import type { BotCard as BotCardType } from "@lib/types";
 import styles from "./BotCard.module.css";
 
 interface BotCardProps {
