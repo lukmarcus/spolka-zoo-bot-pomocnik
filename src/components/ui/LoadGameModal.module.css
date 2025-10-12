@@ -1,9 +1,5 @@
-/* LoadGameModal Styles */
+/* LoadGameModal Styles - Unique styles extending BaseModal */
 /* v0.2.3 - Dedicated styles for load game modal */
-
-.content {
-  padding: 1.5rem;
-}
 
 .label {
   display: block;
@@ -94,73 +90,13 @@
   color: var(--text-primary);
 }
 
+/* LoadGameModal specific actions positioning */
 .actions {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background: #f9f9f9;
-  border-top: 1px solid var(--card-border);
   justify-content: flex-end;
 }
 
-.button {
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius);
-  border: 1px solid;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 80px;
-}
-
-.cancelButton {
-  background: transparent;
-  border-color: var(--card-border);
-  color: var(--text-primary);
-}
-
-.cancelButton:hover {
-  background: #f0f0f0;
-  border-color: var(--button-secondary);
-}
-
-.confirmButton {
-  background: var(--button-primary);
-  border-color: var(--button-primary);
-  color: white;
-}
-
-.confirmButton:hover:not(:disabled) {
-  background: #6d3410;
-  border-color: #6d3410;
-  transform: translateY(-1px);
-}
-
-.confirmButton:disabled {
-  background: #ccc;
-  border-color: #ccc;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Mobile Responsive */
+/* Mobile Responsive - LoadGameModal specific */
 @media (max-width: 480px) {
-  .actions {
-    flex-direction: column-reverse;
-    gap: 0.75rem;
-  }
-
-  .button {
-    width: 100%;
-    padding: 1rem;
-    font-size: var(--font-size-base);
-  }
-
-  .content {
-    padding: 1rem;
-  }
-
   .instructions {
     margin-top: 1rem;
   }

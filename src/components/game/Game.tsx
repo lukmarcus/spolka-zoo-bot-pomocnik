@@ -4,7 +4,6 @@ import { useGame } from "@lib/GameContext";
 import Layout from "@ui/Layout";
 import GameSetup from "./GameSetup";
 import GamePlay from "./GamePlay";
-import styles from "./Game.module.css";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();
@@ -63,13 +62,11 @@ const Game: React.FC = () => {
       subtitle={getPageSubtitle()}
       backgroundType="game"
     >
-      <div className={styles.gameContainer}>
-        {!inActiveGame ? (
-          <GameSetup onGameStart={handleGameStart} />
-        ) : (
-          <GamePlay onBackToMenu={handleBackToMenu} />
-        )}
-      </div>
+      {!inActiveGame ? (
+        <GameSetup onGameStart={handleGameStart} />
+      ) : (
+        <GamePlay onBackToMenu={handleBackToMenu} />
+      )}
     </Layout>
   );
 };
