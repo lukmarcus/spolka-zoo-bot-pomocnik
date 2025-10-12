@@ -5,9 +5,9 @@
 
 import { createContext, useReducer, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
-import type { BotDeck, GameState, GameContextType } from "../types";
-import { TOTAL_CARDS } from "../data/botCards";
-import { loadAutoSavedGameState } from "../utils/gameStorage";
+import type { BotDeck, GameState, GameContextType } from "./types";
+import { TOTAL_CARDS } from "./botCards";
+import { loadAutoSavedGameState } from "./gameStorage";
 
 // === CONTEXT ===
 

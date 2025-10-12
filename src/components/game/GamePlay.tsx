@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useGame } from "../../context/GameContext";
-import { BOT_CARDS } from "../../data/botCards";
-import { copyGameCodeToClipboard } from "../../utils/gameStorage";
-import BotCard from "../BotCard";
-import ConfirmModal from "../ConfirmModal";
+import { useGame } from "../../lib/GameContext";
+import { BOT_CARDS } from "../../lib/botCards";
+import { copyGameCodeToClipboard } from "../../lib/gameStorage";
+import BotCard from "../ui/BotCard";
+import ConfirmModal from "../ui/ConfirmModal";
 import styles from "./GamePlay.module.css";
 
 interface GamePlayProps {

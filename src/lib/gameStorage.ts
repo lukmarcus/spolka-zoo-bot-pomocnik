@@ -1,4 +1,4 @@
-import type { GameState, GameCodePreview } from "../types";
+import type { GameState, GameCodePreview } from "./types";
 
 // Modern game code formats (v0.4.4)
 // - ZS Single-bot: 'ZS' + card chars (0-9,A-C)

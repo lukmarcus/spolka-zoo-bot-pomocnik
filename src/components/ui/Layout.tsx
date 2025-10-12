@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./Layout.module.css";
-import packageJson from "../../package.json";
+import packageJson from "../../../package.json";
 
 interface LayoutProps {
   children: React.ReactNode;

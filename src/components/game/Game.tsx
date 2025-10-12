@@ -1,9 +1,9 @@
 ﻿import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGame } from "../context/GameContext";
-import Layout from "../components/Layout";
-import GameSetup from "../components/game/GameSetup";
-import GamePlay from "../components/game/GamePlay";
+import { useGame } from "../../lib/GameContext";
+import Layout from "../ui/Layout";
+import GameSetup from "./GameSetup";
+import GamePlay from "./GamePlay";
 import styles from "./Game.module.css";
 
 const Game: React.FC = () => {

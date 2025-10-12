@@ -4,8 +4,8 @@
 import { useState } from "react";
 import BaseModal from "./BaseModal";
 import styles from "./LoadGameModal.module.css";
-import { loadFromShareableCode, previewGameCode } from "../utils/gameStorage";
-import type { GameState, GameCodePreview } from "../types";
+import { loadFromShareableCode, previewGameCode } from "../../lib/gameStorage";
+import type { GameState, GameCodePreview } from "../../lib/types";
 
 interface LoadGameModalProps {
   isOpen: boolean;
