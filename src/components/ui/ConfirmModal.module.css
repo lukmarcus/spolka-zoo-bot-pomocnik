@@ -7,3 +7,25 @@
   font-size: 1rem;
   line-height: 1.5;
 }
+
+/* Three-button layout styles */
+.threeButtonActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f9f9f9;
+  border-top: 1px solid var(--card-border);
+}
+
+.bottomButtonRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.wideButton {
+  width: auto;
+  max-width: 80%;
+  align-self: flex-end;
+}

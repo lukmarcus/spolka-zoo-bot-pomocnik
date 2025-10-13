@@ -51,12 +51,38 @@
   color: white;
   padding: 1.2rem 1.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .title {
   margin: 0;
   font-size: var(--font-size-lg);
   font-weight: 600;
+  color: white;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.closeButton:hover {
+  opacity: 0.7;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Common content and actions styles for all modals */
@@ -70,7 +96,7 @@
   padding: 1rem 1.5rem;
   background: #f9f9f9;
   border-top: 1px solid var(--card-border);
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .button {
@@ -96,14 +122,14 @@
 }
 
 .confirmButton {
-  background: var(--button-primary);
-  border-color: var(--button-primary);
+  background: var(--button-secondary);
+  border-color: var(--button-secondary);
   color: white;
 }
 
 .confirmButton:hover:not(:disabled) {
-  background: #6d3410;
-  border-color: #6d3410;
+  background: #b8732a;
+  border-color: #b8732a;
   transform: translateY(-1px);
 }
 
@@ -115,14 +141,14 @@
 }
 
 .copyButton {
-  background: var(--button-secondary);
-  border-color: var(--button-secondary);
+  background: var(--button-primary);
+  border-color: var(--button-primary);
   color: white;
 }
 
 .copyButton:hover {
-  background: #b8732a;
-  border-color: #b8732a;
+  background: #6d3410;
+  border-color: #6d3410;
   transform: translateY(-1px);
 }
 

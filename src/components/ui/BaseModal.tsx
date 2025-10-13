@@ -44,6 +44,13 @@ const BaseModal: React.FC<BaseModalProps> = ({
         {title && (
           <div className={styles.header}>
             <h3 className={styles.title}>{title}</h3>
+            <button
+              className={styles.closeButton}
+              onClick={onClose}
+              aria-label="Zamknij"
+            >
+              ×
+            </button>
           </div>
         )}
         {children}

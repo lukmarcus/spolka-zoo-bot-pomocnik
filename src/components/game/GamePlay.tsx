@@ -100,6 +100,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     onBackToMenu();
   };
 
+  const confirmExitWithoutCopy = () => {
+    setShowExitModal(false);
+    onBackToMenu();
+  };
+
   const cancelExit = () => {
     setShowExitModal(false);
   };
@@ -299,10 +304,13 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
       <ConfirmModal
         isOpen={showExitModal}
-        message="🚪 Czy na pewno chcesz wyjść do głównego menu?"
-        confirmText="💾 Tak, skopiuj stan gry i wyjdź"
+        title="🚪 Wyjście z gry"
+        message="Czy na pewno chcesz wyjść do głównego menu?"
+        confirmText="💾 Skopiuj stan gry i wyjdź"
+        copyButtonText="🚪 Wyjdź bez zapisu"
         cancelText="Anuluj"
         onConfirm={confirmExitWithCopy}
+        onCopy={confirmExitWithoutCopy}
         onCancel={cancelExit}
       />
     </>
