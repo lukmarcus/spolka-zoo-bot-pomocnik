@@ -6,6 +6,7 @@
 | ------ | ------------ | ----------------------------------------------- | ---------------------------------------------------------------- |
 | 0.4.6  | ✅ Gotowe    | Architecture Refactoring - podział komponentów  | Rozdzielenie Game.tsx, path mapping, BaseModal, organizacja CSS  |
 | 0.4.7  | 🔮 Planowane | UX Fixes vol.2 - dopracowanie interfejsu        | Modal ZP, długie teksty przycisków, responsive fixes             |
+| 0.4.8  | 🔮 Planowane | Mobile UX Polish - dopracowanie wersji mobilnej | Padding, justowanie przycisków, layout ekranów mobilnych         |
 | 0.5.0  | 🔮 Planowane | Typography & Styling - własne czcionki i design | Implementacja własnych czcionek, ujednolicenie wielkości tekstów |
 | 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa     |
 
@@ -75,6 +76,33 @@ Planowane zadania:
 - **Czyszczenie menu głównego**
   - Usunięcie spisu usprawnień z różnych wersji z interfejsu
   - Uproszczenie głównego ekranu dla lepszej czytelności
+
+---
+
+### v0.4.8 — Mobile UX Polish - dopracowanie wersji mobilnej 🔮
+
+🎯 Cel: optymalizacja interfejsu dla urządzeń mobilnych
+
+Planowane zadania:
+
+- **Menu główne**
+
+  - Poprawa wyjustowania przycisków
+  - Ujednolicenie wielkości liter na przyciskach
+  - Dodanie odpowiedniego paddingu dla lepszego wyglądu
+  - Ogólna poprawa estetyki na małych ekranach
+
+- **Ekran rozpoczęcia gry (GameSetup)**
+
+  - Ujednolicenie wielkości wszystkich przycisków
+  - Dodanie delikatnego paddingu między elementami
+  - Zmniejszenie odległości na dole od stopki
+  - Lepsze wykorzystanie przestrzeni ekranu
+
+- **Ekran gry (GamePlay)**
+  - Umieszczenie licznika kart i botów w jednej linii
+  - Ujednolicenie czcionki na wszystkich przyciskach
+  - Optymalizacja układu dla lepszej czytelności na mobilnych
 
 ---
 

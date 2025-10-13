@@ -278,9 +278,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       </div>
 
       <div className={styles.bottomControls}>
-        <button className="btn-secondary" onClick={handleBackToMenuClick}>
-          ← Wróć do menu
-        </button>
         {(game.state.mode === "individual"
           ? game.state.botDecks && game.state.currentBot
             ? game.state.botDecks[game.state.currentBot - 1]
@@ -293,6 +290,9 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
             💾 Kopiuj stan gry
           </button>
         )}
+        <button className="btn-secondary" onClick={handleBackToMenuClick}>
+          ← Wróć do menu
+        </button>
       </div>
 
       {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
