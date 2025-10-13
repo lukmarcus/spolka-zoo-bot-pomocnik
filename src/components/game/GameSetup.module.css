@@ -275,4 +275,18 @@
   .modeOption {
     padding: 0.875rem 1.25rem;
   }
+
+  .bottomControls {
+    padding: 0.75rem;
+  }
+}
+
+/* Bottom Controls - similar to GamePlay */
+.bottomControls {
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }
