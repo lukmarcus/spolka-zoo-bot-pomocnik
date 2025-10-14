@@ -79,25 +79,27 @@ npm run dev
 src/
 ├── components/
 │   ├── game/          # Komponenty rozgrywki
-│   │   ├── Game.tsx   # Router: GameSetup ↔ GamePlay  
+│   │   ├── Game.tsx   # Router: GameSetup ↔ GamePlay
 │   │   ├── GameSetup.tsx + .module.css # Konfiguracja botów
 │   │   └── GamePlay.tsx + .module.css  # Aktywna rozgrywka
 │   └── ui/            # Komponenty interfejsu
 │       ├── BaseModal.tsx + .module.css # Bazowy modal
 │       ├── ConfirmModal.tsx + .module.css # Potwierdzenia
-│       ├── LoadGameModal.tsx + .module.css # Wczytywanie gry
+│       ├── LoadGame.tsx + .module.css # Pełnoekranowe wczytywanie gry
+│       ├── Home.tsx + .module.css # Menu główne
 │       └── Layout.tsx + .module.css # Layout aplikacji
 ├── lib/               # Logika biznesowa
 │   ├── GameContext.tsx # Zarządzanie stanem gry
-│   ├── botCards.ts    # Dane kart botów  
+│   ├── botCards.ts    # Dane kart botów
 │   ├── gameStorage.ts # Zapis/odczyt stanu gry
 │   └── types.ts       # Definicje TypeScript
 └── assets/            # Zasoby statyczne
 ```
 
 **TypeScript Path Mapping:**
+
 - `@lib/*` → `src/lib/*` (logika, context, typy)
-- `@ui/*` → `src/components/ui/*` (interfejs)  
+- `@ui/*` → `src/components/ui/*` (interfejs)
 - `@game/*` → `src/components/game/*` (rozgrywka)
 
 ## 🤝 Rozwój projektu
