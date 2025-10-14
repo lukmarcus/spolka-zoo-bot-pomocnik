@@ -83,10 +83,10 @@ src/
 │   │   ├── GameSetup.tsx + .module.css # Konfiguracja botów
 │   │   └── GamePlay.tsx + .module.css  # Aktywna rozgrywka
 │   └── ui/            # Komponenty interfejsu
-│       ├── BaseModal.tsx + .module.css # Bazowy modal
-│       ├── ConfirmModal.tsx + .module.css # Potwierdzenia
+│       ├── ConfirmModal.tsx + .module.css # Modal potwierdzeń
 │       ├── LoadGame.tsx + .module.css # Pełnoekranowe wczytywanie gry
 │       ├── Home.tsx + .module.css # Menu główne
+│       ├── BotCard.tsx + .module.css # Komponenty kart botów
 │       └── Layout.tsx + .module.css # Layout aplikacji
 ├── lib/               # Logika biznesowa
 │   ├── GameContext.tsx # Zarządzanie stanem gry
