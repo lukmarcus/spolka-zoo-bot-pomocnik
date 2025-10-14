@@ -77,11 +77,6 @@
   margin-bottom: 0;
 }
 
-.deckExhausted {
-  color: #d63384;
-  font-weight: 600;
-}
-
 .instructions {
   background: #f9f9f9;
   padding: 1.5rem;
@@ -151,20 +146,20 @@
   .container {
     padding: 1rem 0.5rem;
   }
-  
+
   .actions {
     flex-direction: column;
     gap: 0.75rem;
   }
-  
+
   .actions button {
     width: 100%;
   }
-  
+
   .instructions {
     margin-bottom: 1.5rem;
   }
-  
+
   .preview {
     margin-bottom: 1.5rem;
   }
@@ -175,11 +170,11 @@
     font-size: 0.9rem;
     padding: 0.75rem;
   }
-  
+
   .instructions {
     padding: 1rem;
   }
-  
+
   .preview {
     padding: 1rem;
   }

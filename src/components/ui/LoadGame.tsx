@@ -236,13 +236,6 @@ export default function LoadGame() {
                   )}
                 </>
               )}
-              {gamePreview.isDeckExhausted && (
-                <div
-                  className={`${styles.previewItem} ${styles.deckExhausted}`}
-                >
-                  ⚠️ Talia wyczerpana
-                </div>
-              )}
             </div>
           </div>
         )}
