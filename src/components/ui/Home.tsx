@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
-import LoadGameModal from "./LoadGameModal";
 import { useGame } from "@lib/GameContext";
-import type { GameState } from "@lib/types";
 import styles from "./Home.module.css";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { loadGame, newGame } = useGame();
-  const [isLoadModalOpen, setIsLoadModalOpen] = useState(false);
+  const { newGame } = useGame();
 
   const handleStartGame = () => {
     newGame(); // Always start fresh game
@@ -28,7 +25,7 @@ const Home: React.FC = () => {
       id: "load-game",
       title: "Wczytaj stan gry",
       description: "Użyj zapisanego kodu stanu gry",
-      action: () => setIsLoadModalOpen(true),
+      action: () => navigate("/load"),
       disabled: false,
     },
   ];
@@ -63,16 +60,6 @@ const Home: React.FC = () => {
           </button>
         ))}
       </div>
-
-      <LoadGameModal
-        isOpen={isLoadModalOpen}
-        onClose={() => setIsLoadModalOpen(false)}
-        onLoadGame={(gameState: GameState) => {
-          loadGame(gameState);
-          setIsLoadModalOpen(false);
-          navigate("/game");
-        }}
-      />
     </Layout>
   );
 };

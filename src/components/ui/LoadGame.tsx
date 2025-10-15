@@ -1,24 +1,17 @@
-// LoadGameModal - Component for loading game state from code
-// v0.2.3 - Game state preview and improved UX
+// LoadGame - Full-screen component for loading game state from code
+// Converted from LoadGameModal to provide better UX and responsive design
 
 import { useState } from "react";
-import BaseModal from "./BaseModal";
-import baseStyles from "./BaseModal.module.css";
-import styles from "./LoadGameModal.module.css";
+import { useNavigate } from "react-router-dom";
+import Layout from "./Layout";
+import styles from "./LoadGame.module.css";
 import { loadFromShareableCode, previewGameCode } from "@lib/gameStorage";
-import type { GameState, GameCodePreview } from "@lib/types";
+import { useGame } from "@lib/GameContext";
+import type { GameCodePreview } from "@lib/types";
 
-interface LoadGameModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onLoadGame: (gameState: GameState) => void;
-}
-
-export default function LoadGameModal({
-  isOpen,
-  onClose,
-  onLoadGame,
-}: LoadGameModalProps) {
+export default function LoadGame() {
+  const navigate = useNavigate();
+  const { loadGame } = useGame();
   const [gameCode, setGameCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -134,6 +127,7 @@ export default function LoadGameModal({
       }
     }
   };
+
   const handleLoadGame = async () => {
     if (!gameCode.trim()) {
       setError("Wprowadź kod gry");
@@ -152,8 +146,8 @@ export default function LoadGameModal({
     try {
       const gameState = loadFromShareableCode(gameCode);
       if (gameState) {
-        onLoadGame(gameState);
-        handleClose();
+        loadGame(gameState);
+        navigate("/game");
       } else {
         setError("Nie udało się wczytać gry. Sprawdź kod i spróbuj ponownie.");
       }
@@ -164,13 +158,6 @@ export default function LoadGameModal({
     }
   };
 
-  const handleClose = () => {
-    setGameCode("");
-    setError(null);
-    setGamePreview(null);
-    onClose();
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !isLoading) {
       handleLoadGame();
@@ -178,35 +165,33 @@ export default function LoadGameModal({
   };
 
   // Check if the current code is valid for button activation
-  // Button should be disabled if code is empty, too short, or preview shows invalid
   const isCodeValid =
     gameCode.length > 0 && (gamePreview === null ? false : gamePreview.isValid);
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      title="📥 Wczytaj stan gry"
-      onClose={handleClose}
-      maxWidth="500px"
+    <Layout
+      title="Wczytaj stan gry"
+      subtitle="Wprowadź skopiowany wcześniej kod gry"
+      backgroundType="home"
     >
-      <div className={baseStyles.content}>
-        <label className={styles.label}>Stan gry:</label>
-        <input
-          type="text"
-          value={gameCode}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Wprowadź skopiowany wcześniej stan gry"
-          className={`${styles.input} ${error ? styles.error : ""}`}
-          disabled={isLoading}
-          autoFocus
-        />
-
-        {error && <p className={styles.error}>⚠️ {error}</p>}
+      <div className={styles.container}>
+        <div className={styles.inputSection}>
+          <label className={styles.label}>Kod stanu gry:</label>
+          <input
+            type="text"
+            value={gameCode}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Wprowadź skopiowany wcześniej stan gry"
+            className={`${styles.input} ${error ? styles.error : ""}`}
+            autoFocus
+          />
+          {error && <div className={styles.errorMessage}>{error}</div>}
+        </div>
 
         {gamePreview && gamePreview.isValid && (
           <div className={styles.preview}>
-            <h4 className={styles.previewTitle}>✅ Podgląd stanu gry</h4>
+            <h3 className={styles.previewTitle}>✅ Podgląd stanu gry</h3>
             <div className={styles.previewContent}>
               {gamePreview.botCount === 1 ? (
                 <>
@@ -234,9 +219,9 @@ export default function LoadGameModal({
                   {gamePreview.botPositions ? (
                     <div className={styles.previewItem}>
                       <strong>Pozycje botów:</strong>
-                      <div style={{ marginLeft: "1rem", marginTop: "0.25rem" }}>
+                      <div className={styles.botPositions}>
                         {gamePreview.botPositions.map((bot) => (
-                          <div key={bot.botId}>
+                          <div key={bot.botId} className={styles.botPosition}>
                             Bot {bot.botId}: {bot.position}
                             {bot.botId === gamePreview.currentBot ? " ⬅️" : ""}
                           </div>
@@ -256,7 +241,7 @@ export default function LoadGameModal({
         )}
 
         <div className={styles.instructions}>
-          <h4 className={styles.instructionsTitle}>Jak wczytać stan gry:</h4>
+          <h3 className={styles.instructionsTitle}>Jak wczytać stan gry:</h3>
           <ol className={styles.instructionsList}>
             <li>Skopiuj stan gry z trwającej rozgrywki</li>
             <li>Wprowadź stan gry w polu powyżej</li>
@@ -264,25 +249,36 @@ export default function LoadGameModal({
             <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
             <li>Gra zostanie wczytana w zapisanym stanie</li>
           </ol>
+
+          <div className={styles.formatsInfo}>
+            <h4>Obsługiwane formaty:</h4>
+            <ul>
+              <li>
+                <strong>ZS</strong> - Jeden bot
+              </li>
+              <li>
+                <strong>ZM</strong> - Kilka botów, wspólna talia
+              </li>
+              <li>
+                <strong>ZP</strong> - Kilka botów, osobne talie
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className={styles.actions}>
+          <button className="btn-secondary" onClick={() => navigate("/")}>
+            ← Wróć do menu
+          </button>
+          <button
+            className="btn-primary"
+            onClick={handleLoadGame}
+            disabled={!isCodeValid || isLoading}
+          >
+            {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
+          </button>
         </div>
       </div>
-
-      <div className={`${baseStyles.actions} ${styles.actions}`}>
-        <button
-          className={`${baseStyles.button} ${baseStyles.cancelButton}`}
-          onClick={handleClose}
-          disabled={isLoading}
-        >
-          Anuluj
-        </button>
-        <button
-          className={`${baseStyles.button} ${baseStyles.confirmButton}`}
-          onClick={handleLoadGame}
-          disabled={isLoading || !isCodeValid}
-        >
-          {isLoading ? "🔄 Wczytywanie..." : "📥 Wczytaj stan gry"}
-        </button>
-      </div>
-    </BaseModal>
+    </Layout>
   );
 }

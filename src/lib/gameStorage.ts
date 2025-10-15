@@ -619,9 +619,7 @@ export function previewGameCode(code: string): GameCodePreview {
     const allCardsInGame = new Set<number>();
     allCardsInGame.add(parsed.cur);
 
-    let totalRemaining = 0;
     parsed.botDecks.forEach((deck) => {
-      totalRemaining += deck.remaining.length;
       deck.remaining.forEach((card) => allCardsInGame.add(card));
     });
 
@@ -668,7 +666,7 @@ export function previewGameCode(code: string): GameCodePreview {
       totalCards,
       gameProgress,
       isGameStarted: true,
-      isDeckExhausted: totalRemaining === 0,
+      isDeckExhausted: false, // ZP codes never indicate deck exhaustion during preview
       mode: "individual" as const,
       botPositions,
     };

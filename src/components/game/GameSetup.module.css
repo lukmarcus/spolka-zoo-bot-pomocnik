@@ -218,21 +218,27 @@
   padding: 1rem 2.5rem;
   font-weight: 600;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--button-primary), #a0522d);
-  transition: all 0.3s ease;
+  background: linear-gradient(
+    135deg,
+    var(--button-primary),
+    #a0522d
+  ) !important;
+  transition: all 0.3s ease !important;
+  transform: none;
 }
 
 .startGameButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #7a3f11, #8b4513);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+  background: linear-gradient(135deg, #7a3f11, #8b4513) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3) !important;
 }
 
 .startGameButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
-  background: var(--button-secondary);
+  transform: none !important;
+  background: var(--button-secondary) !important;
+  box-shadow: var(--shadow-light) !important;
 }
 
 /* Mobile responsive for bot selection */
@@ -275,4 +281,18 @@
   .modeOption {
     padding: 0.875rem 1.25rem;
   }
+
+  .bottomControls {
+    padding: 0.75rem;
+  }
+}
+
+/* Bottom Controls - similar to GamePlay */
+.bottomControls {
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }

@@ -190,7 +190,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         botDecks[botIdx] = {
           ...botDeck,
           cardSequence: generateShuffledSequence(),
-          currentCardIndex: 0,
+          currentCardIndex: -1,
           usedCards: [],
         };
         return {
@@ -202,7 +202,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       // Shared mode - reshuffle the shared deck
       return {
         ...state,
-        currentCardIndex: 0,
+        currentCardIndex: -1,
         cardSequence: generateShuffledSequence(),
         usedCards: [],
       };

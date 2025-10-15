@@ -2,87 +2,49 @@
 
 ## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                             |
-| ------ | ------------ | ----------------------------------------------- | ---------------------------------------------------------------- |
-| 0.4.6  | ✅ Gotowe    | Architecture Refactoring - podział komponentów  | Rozdzielenie Game.tsx, path mapping, BaseModal, organizacja CSS  |
-| 0.4.7  | 🔮 Planowane | UX Fixes vol.2 - dopracowanie interfejsu        | Modal ZP, długie teksty przycisków, responsive fixes             |
-| 0.5.0  | 🔮 Planowane | Typography & Styling - własne czcionki i design | Implementacja własnych czcionek, ujednolicenie wielkości tekstów |
-| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa     |
+| Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                          |
+| ------ | ------------ | ----------------------------------------------- | ------------------------------------------------------------- |
+| 0.4.7  | ✅ Gotowe    | UX Fixes vol.2 - dopracowanie interfejsu        | Pełnoekranowy LoadGame, modalne poprawki, usunięcie ostrzeżeń |
+| 0.5.0  | 🔮 Planowane | Typography & Visual Polish - czcionki i design  | Własne czcionki, ujednolicenie tekstów, design system         |
+| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa  |
+| 0.5.2  | 🔮 Planowane | Mobile UX Polish - dopracowanie wersji mobilnej | Padding, justowanie przycisków, layout ekranów mobilnych      |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.6 — ✅ Architecture Refactoring - podział komponentów (ukończone)
+### v0.4.7 — ✅ UX Fixes vol.2 - dopracowanie interfejsu (ukończone)
 
-🎯 Cel: poprawa architektury kodu przez rozdzielenie odpowiedzialności
+🎯 Cel: dokończenie poprawek interfejsu użytkownika
 
 ✅ **Ukończone zadania:**
 
-- **Rozdzielenie Game.tsx na 3 komponenty**
+- **Pełnoekranowy ekran wczytywania gry**
 
-  - **GameSetup.tsx** - konfiguracja botów i trybu gry (119 linii)
-  - **GamePlay.tsx** - aktywna rozgrywka i karty (313 linii)
-  - **Game.tsx** - router między fazami gry (78 linii)
+  - Zastąpienie LoadGameModal pełnym ekranem
+  - Lepsza responsywność na wszystkich urządzeniach
+  - Przycisk zamknięcia (X) dodany do modalów
 
-- **TypeScript Path Mapping**
+- **Poprawki modalów i przycisków**
 
-  - Aliasy `@lib`, `@game`, `@ui` dla czytelnych importów
-  - Konfiguracja w tsconfig.json i vite.config.ts
-  - Aktualizacja wszystkich importów w projekcie
+  - Uproszczenie struktury modalnej (4 pliki → 2 pliki)
+  - Trzeci przycisk "Wyjdź bez zapisu" w modalu wyjścia z gry
+  - Kolejność przycisków: "Kopiuj stan gry" przed "Wróć do menu"
+  - Przyciski w modalach wyrównane do prawej strony
 
-- **Reorganizacja struktury folderów**
+- **Poprawki tekstów i komunikatów**
 
-  - `src/components/game/` - komponenty rozgrywki
-  - `src/components/ui/` - komponenty interfejsu
-  - `src/lib/` - logika, context, typy i dane
+  - Tekst trybu gry: "1 bot, jedna talia" zamiast "osobne talie"
+  - Usunięto niepotrzebny komunikat "⚠️ Talia wyczerpana"
 
-- **Optymalizacja CSS i modalów**
-
-  - BaseModal jako uniwersalny komponent bazowy
-  - Eliminacja duplikatów stylów między modalami
-  - ConfirmModal i LoadGameModal dziedziczą z BaseModal
-
-- **Naprawy techniczne**
-  - Korupcja plików z polskimi znakami
-  - Problemy z kodowaniem UTF-8 w CSS
-  - Błędne ścieżki obrazków tła
-  - Ostrzeżenia Vite podczas build
+- **Naprawy błędów**
+  - Wskaźnik kart pokazuje 1/13 zamiast 2/13 po przetasowaniu
+  - Efekt hover na przycisku "Rozpocznij grę"
+  - Niewidoczne nagłówki w modalach
 
 ---
 
-### v0.4.7 — UX Fixes vol.2 - dopracowanie interfejsu 🔮
+### v0.5.0 — Typography & Visual Polish - czcionki i design 🔮
 
-🎯 Cel: dokończenie poprawek interfejsu użytkownika z v0.4.5
-
-Planowane zadania:
-
-- **Modal wczytywania kodu**
-
-  - Poprawa podglądu dla formatu ZP (zbyt duży na małych ekranach)
-  - Zapewnienie widoczności przycisków na wszystkich rozdzielczościach
-  - Lepsze przewijanie i responsive design
-
-- **Poprawki przycisków i tekstów**
-
-  - Skrócenie zbyt długich tekstów przycisków
-  - Ujednolicenie wielkości tekstów na kartach
-  - Zapewnienie stałego położenia przycisków (konsystentny layout)
-
-- **Opcja wyjścia z gry**
-
-  - Dodanie przycisku "Wróć do menu" bez konieczności kopiowania kodu
-  - Zachowanie opcji zapisu stanu gry (jeśli użytkownik chce)
-
-- **Czyszczenie menu głównego**
-  - Usunięcie spisu usprawnień z różnych wersji z interfejsu
-  - Uproszczenie głównego ekranu dla lepszej czytelności
-
----
-
-### v0.5.0 — Typography & Styling - własne czcionki i design 🔮
-
-🎯 Cel: implementacja własnych czcionek i dopracowanie wizualne
-
-⏱️ Przybliżony termin: Do ustalenia
+🎯 Cel: implementacja własnych czcionek i kompleksowe dopracowanie wizualne
 
 Planowane zadania:
 
@@ -127,6 +89,33 @@ Planowane zadania:
 - **Kredyty i acknowledgments**
   - Informacje o twórcach aplikacji
   - Ewentualne podziękowania
+
+---
+
+### v0.5.2 — Mobile UX Polish - dopracowanie wersji mobilnej 🔮
+
+🎯 Cel: optymalizacja interfejsu dla urządzeń mobilnych
+
+Planowane zadania:
+
+- **Menu główne**
+
+  - Poprawa wyjustowania przycisków
+  - Ujednolicenie wielkości liter na przyciskach
+  - Dodanie odpowiedniego paddingu dla lepszego wyglądu
+  - Ogólna poprawa estetyki na małych ekranach
+
+- **Ekran rozpoczęcia gry (GameSetup)**
+
+  - Ujednolicenie wielkości wszystkich przycisków
+  - Dodanie delikatnego paddingu między elementami
+  - Zmniejszenie odległości na dole od stopki
+  - Lepsze wykorzystanie przestrzeni ekranu
+
+- **Ekran gry (GamePlay)**
+  - Umieszczenie licznika kart i botów w jednej linii
+  - Ujednolicenie czcionki na wszystkich przyciskach
+  - Optymalizacja układu dla lepszej czytelności na mobilnych
 
 ---
 

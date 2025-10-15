@@ -47,12 +47,16 @@ const Game: React.FC = () => {
   // Dynamic subtitle based on game state
   const getPageSubtitle = () => {
     if (!inActiveGame) {
-      return "Wybierz liczbę botów";
+      return "Wybierz liczbę botów i tryb gry";
     }
 
     const botCount = game.state.botCount || 0;
-    const mode =
-      game.state.mode === "shared" ? "wspólna talia" : "osobne talie";
+    let mode;
+    if (botCount === 1) {
+      mode = "jedna talia";
+    } else {
+      mode = game.state.mode === "shared" ? "wspólna talia" : "osobne talie";
+    }
     return `${botCount} bot${botCount > 1 ? "y" : ""}, ${mode}`;
   };
 
@@ -63,7 +67,10 @@ const Game: React.FC = () => {
       backgroundType="game"
     >
       {!inActiveGame ? (
-        <GameSetup onGameStart={handleGameStart} />
+        <GameSetup
+          onGameStart={handleGameStart}
+          onBackToMenu={handleBackToMenu}
+        />
       ) : (
         <GamePlay onBackToMenu={handleBackToMenu} />
       )}

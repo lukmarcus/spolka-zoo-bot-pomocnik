@@ -1,6 +1,4 @@
 import React from "react";
-import BaseModal from "./BaseModal";
-import baseStyles from "./BaseModal.module.css";
 import styles from "./ConfirmModal.module.css";
 
 interface ConfirmModalProps {
@@ -26,36 +24,92 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   copyButtonText,
   onCopy,
 }) => {
-  return (
-    <BaseModal isOpen={isOpen} title={title} onClose={onCancel}>
-      <div className={baseStyles.content}>
-        <p className={styles.message}>{message}</p>
-      </div>
+  if (!isOpen) return null;
 
-      <div className={baseStyles.actions}>
-        <button
-          className={`${baseStyles.button} ${baseStyles.cancelButton}`}
-          onClick={onCancel}
-          autoFocus
-        >
-          {cancelText}
-        </button>
-        {copyButtonText && onCopy && (
-          <button
-            className={`${baseStyles.button} ${baseStyles.copyButton}`}
-            onClick={onCopy}
-          >
-            {copyButtonText}
-          </button>
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onCancel();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      onCancel();
+    }
+  };
+
+  return (
+    <div
+      className={styles.overlay}
+      onClick={handleOverlayClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+    >
+      <div className={styles.modal}>
+        {title && (
+          <div className={styles.header}>
+            <h3 className={styles.title}>{title}</h3>
+            <button 
+              className={styles.closeButton}
+              onClick={onCancel}
+              aria-label="Zamknij"
+            >
+              ×
+            </button>
+          </div>
         )}
-        <button
-          className={`${baseStyles.button} ${baseStyles.confirmButton}`}
-          onClick={onConfirm}
-        >
-          {confirmText}
-        </button>
+        
+        <div className={styles.content}>
+          <p className={styles.message}>{message}</p>
+        </div>
+
+        <div className={copyButtonText && onCopy ? styles.threeButtonActions : styles.actions}>
+          {copyButtonText && onCopy ? (
+            // Three-button layout: one wide button on top, two buttons below
+            <>
+              <button
+                className={`${styles.button} ${styles.confirmButton} ${styles.wideButton}`}
+                onClick={onConfirm}
+              >
+                {confirmText}
+              </button>
+              <div className={styles.bottomButtonRow}>
+                <button
+                  className={`${styles.button} ${styles.cancelButton}`}
+                  onClick={onCancel}
+                  autoFocus
+                >
+                  {cancelText}
+                </button>
+                <button
+                  className={`${styles.button} ${styles.copyButton}`}
+                  onClick={onCopy}
+                >
+                  {copyButtonText}
+                </button>
+              </div>
+            </>
+          ) : (
+            // Two-button layout: standard horizontal
+            <>
+              <button
+                className={`${styles.button} ${styles.cancelButton}`}
+                onClick={onCancel}
+                autoFocus
+              >
+                {cancelText}
+              </button>
+              <button
+                className={`${styles.button} ${styles.confirmButton}`}
+                onClick={onConfirm}
+              >
+                {confirmText}
+              </button>
+            </>
+          )}
+        </div>
       </div>
-    </BaseModal>
+    </div>
   );
 };
 

@@ -100,6 +100,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     onBackToMenu();
   };
 
+  const confirmExitWithoutCopy = () => {
+    setShowExitModal(false);
+    onBackToMenu();
+  };
+
   const cancelExit = () => {
     setShowExitModal(false);
   };
@@ -278,9 +283,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       </div>
 
       <div className={styles.bottomControls}>
-        <button className="btn-secondary" onClick={handleBackToMenuClick}>
-          ← Wróć do menu
-        </button>
         {(game.state.mode === "individual"
           ? game.state.botDecks && game.state.currentBot
             ? game.state.botDecks[game.state.currentBot - 1]
@@ -293,16 +295,22 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
             💾 Kopiuj stan gry
           </button>
         )}
+        <button className="btn-secondary" onClick={handleBackToMenuClick}>
+          ← Wróć do menu
+        </button>
       </div>
 
       {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
 
       <ConfirmModal
         isOpen={showExitModal}
-        message="🚪 Czy na pewno chcesz wyjść do głównego menu?"
-        confirmText="💾 Tak, skopiuj stan gry i wyjdź"
+        title="🚪 Wyjście z gry"
+        message="Czy na pewno chcesz wyjść do głównego menu?"
+        confirmText="💾 Skopiuj stan gry i wyjdź"
+        copyButtonText="🚪 Wyjdź bez zapisu"
         cancelText="Anuluj"
         onConfirm={confirmExitWithCopy}
+        onCopy={confirmExitWithoutCopy}
         onCancel={cancelExit}
       />
     </>

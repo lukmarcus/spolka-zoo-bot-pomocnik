@@ -5,6 +5,35 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.7] - 2025-10-15
+
+### Dodane
+
+- Pełnoekranowy ekran wczytywania gry zamiast modala
+- Przycisk zamknięcia (X) w modalu
+- Trzeci przycisk "Wyjdź bez zapisu" w modalu wyjścia z gry
+
+### Zmienione
+
+- Uproszczenie struktury modalnej (4 pliki → 2 pliki)
+- Przyciski w modalach wyrównane do prawej strony
+- Kolejność przycisków: "Kopiuj stan gry" przed "Wróć do menu"
+- Tekst trybu gry: "1 bot, jedna talia" zamiast "osobne talie"
+
+### Naprawione
+
+- Wskaźnik kart pokazuje 1/13 zamiast 2/13 po przetasowaniu
+- Efekt hover na przycisku "Rozpocznij grę"
+- Niewidoczne nagłówki w modalach
+- Usunięto niepotrzebny komunikat "Talia wyczerpana"
+
+### Usunięte
+
+- LoadGameModal (zastąpiony pełnym ekranem)
+- BaseModal (scalone z ConfirmModal)
+
+---
+
 ## [0.4.6] - 2025-10-12
 
 ### Dodane
