@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.4.6-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.4.7-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -73,7 +73,7 @@ npm run dev
 | [📜 CHANGELOG.md](CHANGELOG.md)   | Historia zmian i release notes           |
 | [🎮 GAME-CODES.md](GAME-CODES.md) | Formaty kodów gry i instrukcje           |
 
-## 🏗️ Architektura (v0.4.6)
+## 🏗️ Architektura
 
 ```
 src/
@@ -101,11 +101,6 @@ src/
 - `@lib/*` → `src/lib/*` (logika, context, typy)
 - `@ui/*` → `src/components/ui/*` (interfejs)
 - `@game/*` → `src/components/game/*` (rozgrywka)
-
-## 🤝 Rozwój projektu
-
-**Aktualna wersja:** 0.4.6 (Architecture Refactoring)  
-**Status:** Stabilny - gotowy do użycia
 
 ---
 
