@@ -11,7 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({
   children,
-  title = "Spółka ZOO",
+  title = "SPÓŁKA ZOO",
   subtitle,
   backgroundType = "default",
 }) => {

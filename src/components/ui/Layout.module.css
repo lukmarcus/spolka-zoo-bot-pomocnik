@@ -22,7 +22,11 @@
 
 .title {
   color: var(--text-header);
-  font-size: clamp(1.8rem, 5vw, 2.5rem); /* Responsive font size */
+  font-size: clamp(
+    2.2rem,
+    5vw,
+    2.6rem
+  ); /* Responsive: min 1.6rem, max 2.2rem */
   font-weight: bold;
   margin-bottom: 0.5rem;
   text-shadow: 1px 1px 2px rgba(139, 69, 19, 0.2);
@@ -67,10 +71,6 @@
     width: 100%;
   }
 
-  .title {
-    font-size: 3rem;
-  }
-
   .subtitle {
     font-size: 1.2rem;
   }
@@ -84,10 +84,6 @@
     margin: 0;
     box-sizing: border-box;
     max-width: none; /* Override any max-width constraints */
-  }
-
-  .title {
-    font-size: 1.8rem;
   }
 
   .subtitle {

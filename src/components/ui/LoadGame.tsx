@@ -170,7 +170,7 @@ export default function LoadGame() {
 
   return (
     <Layout
-      title="Wczytaj stan gry"
+      title="WCZYTAJ STAN GRY"
       subtitle="Wprowadź skopiowany wcześniej kod gry"
       backgroundType="home"
     >
