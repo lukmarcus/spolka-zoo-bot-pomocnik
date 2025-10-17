@@ -1,5 +1,12 @@
 /* Global styles - Spółka ZOO Bot Helper */
 
+/* Custom Fonts */
+@font-face {
+  font-family: "ChillScript";
+  src: url("./assets/fonts/ChillScript.woff2") format("woff2");
+  font-display: swap;
+}
+
 :root {
   /* Main colors (from game manual) */
   --bg-primary: linear-gradient(
@@ -47,6 +54,10 @@
 
   /* Background opacity */
   --bg-opacity: 0.15; /* Subtelność tła */
+
+  /* Typography */
+  --font-display: "ChillScript", cursive, serif;
+  --font-body: Georgia, "Times New Roman", serif;
 }
 
 /* Reset i podstawowe style */
@@ -62,7 +73,7 @@ html {
 }
 
 body {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
   line-height: 1.5;
   color: var(--text-primary);
   min-height: 100vh;
@@ -102,7 +113,7 @@ h6 {
 }
 
 h1 {
-  font-size: 2rem;
+  font-family: var(--font-display);
   text-align: center;
 }
 
@@ -306,10 +317,6 @@ button:active {
 @media (min-width: 481px) {
   .container {
     padding: 2rem;
-  }
-
-  h1 {
-    font-size: 2.5rem;
   }
 
   /* Enhance centering on desktop */
