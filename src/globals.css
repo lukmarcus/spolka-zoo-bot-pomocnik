@@ -7,6 +7,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "RooneySansBold";
+  src: url("./assets/fonts/RooneySansBold.woff2") format("woff2");
+  font-weight: bold;
+  font-display: swap;
+}
+
 :root {
   /* Main colors (from game manual) */
   --bg-primary: linear-gradient(
@@ -57,7 +64,7 @@
 
   /* Typography */
   --font-display: "ChillScript", cursive, serif;
-  --font-body: Georgia, "Times New Roman", serif;
+  --font-body: "RooneySansBold", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 }
 
 /* Reset i podstawowe style */
