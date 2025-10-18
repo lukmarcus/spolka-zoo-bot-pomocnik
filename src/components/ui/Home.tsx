@@ -16,14 +16,14 @@ const Home: React.FC = () => {
   const menuOptions = [
     {
       id: "start-game",
-      title: "Rozpocznij grę",
+      title: "ROZPOCZNIJ GRĘ",
       description: "Uruchom boty z kartami",
       action: handleStartGame,
       primary: true,
     },
     {
       id: "load-game",
-      title: "Wczytaj stan gry",
+      title: "WCZYTAJ STAN GRY",
       description: "Użyj zapisanego kodu stanu gry",
       action: () => navigate("/load"),
       disabled: false,

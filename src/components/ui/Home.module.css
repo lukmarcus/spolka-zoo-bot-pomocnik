@@ -73,7 +73,8 @@
 }
 
 .menuButtonTitle {
-  color: var(--text-header);
+  font-family: var(--font-display);
+  color: #a54617;
   font-size: var(--font-size-menu-title);
   font-weight: bold;
   margin: 0;
@@ -128,6 +129,7 @@
   }
 
   .menuButtonTitle {
+    font-family: var(--font-display);
     font-size: 1.4rem;
   }
 

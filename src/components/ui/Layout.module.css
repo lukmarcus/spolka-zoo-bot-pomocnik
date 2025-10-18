@@ -21,7 +21,7 @@
 }
 
 .title {
-  color: var(--text-header);
+  color: #6b2e06;
   font-size: clamp(
     2.2rem,
     5vw,
