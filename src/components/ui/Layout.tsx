@@ -7,6 +7,7 @@ interface LayoutProps {
   title?: string;
   subtitle?: string;
   backgroundType?: "home" | "game" | "default";
+  logo?: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({
@@ -14,6 +15,7 @@ const Layout: React.FC<LayoutProps> = ({
   title = "SPÓŁKA ZOO",
   subtitle,
   backgroundType = "default",
+  logo,
 }) => {
   useEffect(() => {
     // Apply background class to body for full-screen coverage
@@ -43,10 +45,13 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <div className={styles.layout}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>{title}</h1>
-        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
-      </header>
+      {logo && <div className={styles.logoSection}>{logo}</div>}
+      {title && (
+        <header className={styles.header}>
+          <h1 className={styles.title}>{title}</h1>
+          {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+        </header>
+      )}
 
       <main className={styles.main}>{children}</main>
 

@@ -31,9 +31,18 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <Layout backgroundType="home">
+    <Layout
+      backgroundType="home"
+      title="BOT POMOCNIK"
+      logo={
+        <img
+          src="/src/assets/images/game-logo.png"
+          alt="Spółka ZOO"
+          className={styles.gameLogo}
+        />
+      }
+    >
       <div className={styles.hero}>
-        <h2 className={styles.heroTitle}>Bot Pomocnik</h2>
         <p className={styles.heroDescription}>
           Cyfrowy zamiennik dla kart botów w grze planszowej{" "}
           <strong>Spółka ZOO</strong>. Zarządzaj 1-4 botami, przełączaj między

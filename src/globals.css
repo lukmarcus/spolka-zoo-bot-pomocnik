@@ -114,7 +114,11 @@ h6 {
 
 h1 {
   font-family: var(--font-display);
+  color: #6b2e06;
+  font-weight: 900;
   text-align: center;
+  text-shadow: -2px -2px 0 white, 2px -2px 0 white, -2px 2px 0 white,
+    2px 2px 0 white, 3px 3px 6px rgba(107, 46, 6, 0.4);
 }
 
 h2 {
