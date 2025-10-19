@@ -1,12 +1,16 @@
 /* LoadGame Component Styles */
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
+.mainSection {
+  margin-bottom: 2rem;
   padding: 2rem 1rem;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-medium);
 }
 
 .inputSection {
+  text-align: center;
   margin-bottom: 2rem;
 }
 
@@ -78,11 +82,9 @@
 }
 
 .instructions {
-  background: #f9f9f9;
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--card-border);
-  margin-bottom: 2rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(205, 133, 63, 0.3);
 }
 
 .instructionsTitle {

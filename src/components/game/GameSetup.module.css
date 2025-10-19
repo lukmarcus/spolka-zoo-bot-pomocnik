@@ -114,10 +114,7 @@
 }
 
 .botSelection h2 {
-  color: var(--text-header);
   margin-bottom: 1.5rem;
-  font-size: var(--font-size-lg);
-  font-weight: bold;
 }
 
 .botSelection p {

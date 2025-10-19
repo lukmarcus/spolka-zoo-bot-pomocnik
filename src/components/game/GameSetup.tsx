@@ -38,7 +38,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
     <div>
       <div className={styles.botSelection}>
         <div className={styles.botSelectionContent}>
-          <h2>Liczba botów</h2>
+          <h2>LICZBA BOTÓW</h2>
           <div className={styles.botButtons}>
             {[1, 2, 3, 4].map((count) => (
               <button
@@ -59,7 +59,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
           {/* Show mode selection - always visible when bot count is selected */}
           {selectedBotCount && (
             <div className={styles.modeSection}>
-              <h2>Tryb gry</h2>
+              <h2>TRYB GRY</h2>
               <div className={styles.modeButtons}>
                 {selectedBotCount === 1 ? (
                   <button

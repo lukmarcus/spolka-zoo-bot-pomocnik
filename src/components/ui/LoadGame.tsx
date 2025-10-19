@@ -174,9 +174,9 @@ export default function LoadGame() {
       subtitle="Wprowadź skopiowany wcześniej kod gry"
       backgroundType="home"
     >
-      <div className={styles.container}>
+      <div className={styles.mainSection}>
         <div className={styles.inputSection}>
-          <label className={styles.label}>Kod stanu gry:</label>
+          <h2>KOD STANU GRY</h2>
           <input
             type="text"
             value={gameCode}
@@ -265,19 +265,19 @@ export default function LoadGame() {
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className={styles.actions}>
-          <button className="btn-secondary" onClick={() => navigate("/")}>
-            ← Wróć do menu
-          </button>
-          <button
-            className="btn-primary"
-            onClick={handleLoadGame}
-            disabled={!isCodeValid || isLoading}
-          >
-            {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
-          </button>
-        </div>
+      <div className={styles.actions}>
+        <button className="btn-secondary" onClick={() => navigate("/")}>
+          ← Wróć do menu
+        </button>
+        <button
+          className="btn-primary"
+          onClick={handleLoadGame}
+          disabled={!isCodeValid || isLoading}
+        >
+          {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
+        </button>
       </div>
     </Layout>
   );
