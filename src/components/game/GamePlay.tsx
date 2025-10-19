@@ -209,77 +209,79 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
   return (
     <>
-      {showGameStatus && (
-        <div className={styles.gameStatus}>
-          <div className={styles.statusInfo}>
-            <span className={styles.cardCounter}>
-              {(game.state.mode === "individual"
-                ? game.state.botDecks && game.state.currentBot
-                  ? (game.state.botDecks[game.state.currentBot - 1]
-                      ?.currentCardIndex ?? -1) + 1
-                  : 0
-                : typeof game.state.currentCardIndex === "number"
-                ? game.state.currentCardIndex + 1
-                : 0) +
-                "/" +
-                BOT_CARDS.length}
-            </span>
-            {game.state.botCount && game.state.botCount > 1 && (
-              <div className={styles.botInfo}>
-                <div className={styles.currentBotIndicator}>
-                  <span className={styles.botIndicatorText}>
-                    🤖 Bot {game.state.currentBot}/{game.state.botCount}
-                  </span>
+      <div className={styles.gameContent}>
+        {showGameStatus && (
+          <div className={styles.gameStatus}>
+            <div className={styles.statusInfo}>
+              <span className={styles.cardCounter}>
+                {(game.state.mode === "individual"
+                  ? game.state.botDecks && game.state.currentBot
+                    ? (game.state.botDecks[game.state.currentBot - 1]
+                        ?.currentCardIndex ?? -1) + 1
+                    : 0
+                  : typeof game.state.currentCardIndex === "number"
+                  ? game.state.currentCardIndex + 1
+                  : 0) +
+                  "/" +
+                  BOT_CARDS.length}
+              </span>
+              {game.state.botCount && game.state.botCount > 1 && (
+                <div className={styles.botInfo}>
+                  <div className={styles.currentBotIndicator}>
+                    <span className={styles.botIndicatorText}>
+                      🤖 Bot {game.state.currentBot}/{game.state.botCount}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
+        )}
+
+        <div className={styles.cardArea}>
+          {currentCard ? (
+            <BotCard card={currentCard} className={styles.currentCard} />
+          ) : (
+            <div className={styles.noCard}>
+              {game.isDeckExhausted() ? (
+                <>
+                  <h3>Koniec talii</h3>
+                  <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
+                </>
+              ) : (
+                <div className={styles.cardReverse}>
+                  <img
+                    src="/images/card-reverse.jpg"
+                    alt="Zakryta karta"
+                    className={styles.cardReverseImage}
+                  />
+                  <p>Dobierz pierwszą kartę</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      )}
 
-      <div className={styles.cardArea}>
-        {currentCard ? (
-          <BotCard card={currentCard} className={styles.currentCard} />
-        ) : (
-          <div className={styles.noCard}>
-            {game.isDeckExhausted() ? (
-              <>
-                <h3>Koniec talii</h3>
-                <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
-              </>
-            ) : (
-              <div className={styles.cardReverse}>
-                <img
-                  src="/images/card-reverse.jpg"
-                  alt="Zakryta karta"
-                  className={styles.cardReverseImage}
-                />
-                <p>Dobierz pierwszą kartę</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className={styles.gameControls}>
-        {gameActions.primary && (
-          <button
-            className={gameActions.primary.className}
-            onClick={gameActions.primary.action}
-            disabled={gameActions.primary.disabled}
-          >
-            {gameActions.primary.text}
-          </button>
-        )}
-        {gameActions.secondary && (
-          <button
-            className={gameActions.secondary.className}
-            onClick={gameActions.secondary.action}
-            disabled={gameActions.secondary.disabled}
-          >
-            {gameActions.secondary.text}
-          </button>
-        )}
+        <div className={styles.gameControls}>
+          {gameActions.primary && (
+            <button
+              className={gameActions.primary.className}
+              onClick={gameActions.primary.action}
+              disabled={gameActions.primary.disabled}
+            >
+              {gameActions.primary.text}
+            </button>
+          )}
+          {gameActions.secondary && (
+            <button
+              className={gameActions.secondary.className}
+              onClick={gameActions.secondary.action}
+              disabled={gameActions.secondary.disabled}
+            >
+              {gameActions.secondary.text}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className={styles.bottomControls}>
