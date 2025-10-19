@@ -1,21 +1,12 @@
 /* BotCard Component Styles */
 
 .card {
-  background: var(--color-card-bg);
-  border: 2px solid var(--color-primary);
-  border-radius: 12px;
-  padding: var(--card-padding);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 100%; /* Use full available width from Layout container */
   width: 100%;
   margin: 0 auto;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+/* Removed hover effect - card is now borderless */
 
 .cardBody {
   display: flex;
@@ -30,15 +21,15 @@
 }
 
 .section {
-  background: var(--color-background);
+  background: rgba(255, 255, 255, 0.5);
   padding: 0.75rem;
   border-radius: 8px;
-  border-left: 3px solid var(--color-primary);
+  border-left: 3px solid var(--button-primary);
 }
 
 .sectionTitle {
-  color: var(--color-primary);
-  font-size: var(--font-size-md);
+  color: var(--button-primary);
+  font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
@@ -46,23 +37,17 @@
 .sectionText {
   margin: 0;
   font-size: var(--font-size-base);
-  color: var(--color-text);
+  color: var(--text-primary);
   line-height: 1.4;
 }
 
 /* Mobile optimizations */
 @media (max-width: 480px) {
-  .card {
-    margin: 0 1rem;
-    padding: var(--card-padding-mobile);
-  }
-
-  .effectTitle {
+  .sectionTitle {
     font-size: var(--font-size-base);
   }
 
-  .effect,
-  .abilityText {
+  .sectionText {
     font-size: var(--font-size-sm);
   }
 }

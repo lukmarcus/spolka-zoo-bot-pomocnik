@@ -56,6 +56,7 @@
   --font-size-menu-desc: 1rem;
   --font-size-lg: 1.5rem;
   --font-size-base: 1rem;
+  --font-size-sm: 0.9rem;
 
   /* Responsive spacing - will be overridden by media queries */
   --card-padding: 1.5rem;
@@ -307,6 +308,7 @@ button:active {
     --font-size-menu-desc: 0.9rem;
     --font-size-lg: 1.3rem;
     --font-size-base: 0.9rem;
+    --font-size-sm: 0.8rem;
 
     /* Small screen spacing */
     --card-padding: 0.25rem;
