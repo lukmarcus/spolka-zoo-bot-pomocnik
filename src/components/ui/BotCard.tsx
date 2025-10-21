@@ -11,11 +11,11 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
   // Determine effect labels based on number of effects
   const getEffectLabel = (index: number, totalEffects: number) => {
     if (totalEffects === 1) {
-      return "Efekt";
+      return "EFEKT";
     } else {
-      if (index === 0) return "Pierwszy efekt";
-      if (index === 1) return "Drugi efekt";
-      return `Efekt ${index + 1}`; // fallback for more than 2 effects
+      if (index === 0) return "PIERWSZY EFEKT";
+      if (index === 1) return "DRUGI EFEKT";
+      return `EFEKT ${index + 1}`; // fallback for more than 2 effects
     }
   };
 
@@ -25,9 +25,9 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
         <div className={styles.sections}>
           {card.effects.map((effect, index) => (
             <div key={index} className={styles.section}>
-              <h4 className={styles.sectionTitle}>
+              <h3 className={styles.sectionTitle}>
                 {getEffectLabel(index, card.effects.length)}
-              </h4>
+              </h3>
               <p
                 className={styles.sectionText}
                 dangerouslySetInnerHTML={{ __html: effect }}
@@ -35,7 +35,7 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
             </div>
           ))}
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Zdolność dodatkowa</h4>
+            <h3 className={styles.sectionTitle}>ZDOLNOSĆ DODATKOWA</h3>
             <p
               className={styles.sectionText}
               dangerouslySetInnerHTML={{ __html: card.ability as string }}
