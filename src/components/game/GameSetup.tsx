@@ -117,7 +117,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
               onClick={handleStartGame}
               disabled={!selectedBotCount}
             >
-              🎯 Rozpocznij grę
+              Rozpocznij grę
             </button>
           </div>
         </div>

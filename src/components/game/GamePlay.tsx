@@ -165,37 +165,18 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     // Secondary: operate on NEXT bot (draw or switch+shuffle+draw when exhausted)
     const primary = {
       text:
-        game.state.mode === "individual"
-          ? game.isDeckExhausted()
-            ? `🔀 Przetasuj talię tego Bota i dobierz kartę`
-            : `🎯 Dobierz kartę dla Bota ${game.state.currentBot}`
-          : game.isDeckExhausted()
-          ? `🔀 Przetasuj talię i dobierz kartę`
-          : `🎯 Dobierz kartę`,
+        game.state.botCount && game.state.botCount > 1
+          ? `Ten bot`
+          : `Dobierz kartę`,
       action: handlePrimaryForCurrentBot,
       disabled: false,
-      className: game.isDeckExhausted() ? "btn-secondary" : "btn-primary",
+      className: "btn-primary",
     };
 
     let secondary = null;
     if (game.state.botCount && game.state.botCount > 1) {
-      // compute next bot exhaustion state for labeling
-      const nextBot = game.state.currentBot
-        ? (game.state.currentBot % game.state.botCount) + 1
-        : 1;
-      const nextDeck = game.state.botDecks?.[nextBot - 1];
-      const nextIdx = nextDeck?.currentCardIndex ?? -1;
-      const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
-
       secondary = {
-        text:
-          game.state.mode === "individual"
-            ? nextExhausted
-              ? `👥 Przetasuj talię następnego bota i dobierz dla niego kartę`
-              : `👥 Dobierz kartę dla następnego Bota`
-            : game.isDeckExhausted()
-            ? `👥 Przetasuj i dobierz dla następnego bota`
-            : `👥 Dobierz kartę dla następnego Bota`,
+        text: `Następny bot`,
         action: handleSecondaryForNextBot,
         disabled: false,
         className: "btn-secondary",
@@ -238,6 +219,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           </div>
         )}
 
+        <h2>DOBIERZ KARTĘ</h2>
         <div className={styles.gameControls}>
           {gameActions.primary && (
             <button
@@ -259,6 +241,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           )}
         </div>
 
+        <h2>AKTUALNA KARTA</h2>
         <div className={styles.cardArea}>
           {currentCard ? (
             <BotCard card={currentCard} className={styles.currentCard} />

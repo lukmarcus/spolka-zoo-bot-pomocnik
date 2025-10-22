@@ -58,6 +58,16 @@
   margin-bottom: 1rem;
 }
 
+/* Section Headers */
+.gameContent h2 {
+  margin: 1.5rem 0 0.75rem 0;
+  text-align: center;
+}
+
+.gameContent h2:first-of-type {
+  margin-top: 0;
+}
+
 /* Card Display Area */
 .cardArea {
   display: flex;
@@ -136,9 +146,9 @@
 }
 
 .gameControls button {
-  min-width: 200px;
+  min-width: 140px;
   font-size: var(--font-size-base);
-  padding: 1rem 1.25rem;
+  padding: 0.8rem 1rem;
   font-weight: 600;
 }
 
