@@ -238,6 +238,27 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           </div>
         )}
 
+        <div className={styles.gameControls}>
+          {gameActions.primary && (
+            <button
+              className={gameActions.primary.className}
+              onClick={gameActions.primary.action}
+              disabled={gameActions.primary.disabled}
+            >
+              {gameActions.primary.text}
+            </button>
+          )}
+          {gameActions.secondary && (
+            <button
+              className={gameActions.secondary.className}
+              onClick={gameActions.secondary.action}
+              disabled={gameActions.secondary.disabled}
+            >
+              {gameActions.secondary.text}
+            </button>
+          )}
+        </div>
+
         <div className={styles.cardArea}>
           {currentCard ? (
             <BotCard card={currentCard} className={styles.currentCard} />
@@ -259,27 +280,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
                 </div>
               )}
             </div>
-          )}
-        </div>
-
-        <div className={styles.gameControls}>
-          {gameActions.primary && (
-            <button
-              className={gameActions.primary.className}
-              onClick={gameActions.primary.action}
-              disabled={gameActions.primary.disabled}
-            >
-              {gameActions.primary.text}
-            </button>
-          )}
-          {gameActions.secondary && (
-            <button
-              className={gameActions.secondary.className}
-              onClick={gameActions.secondary.action}
-              disabled={gameActions.secondary.disabled}
-            >
-              {gameActions.secondary.text}
-            </button>
           )}
         </div>
       </div>
