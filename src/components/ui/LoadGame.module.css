@@ -1,16 +1,40 @@
 /* LoadGame Component Styles */
 
-.mainSection {
-  margin-bottom: 2rem;
-  padding: 2rem 1rem;
+/* Main load game card - consistent with GameSetup */
+.loadGameCard {
+  text-align: center;
+  padding: 0.5rem 1rem 2rem 1rem;
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: 16px;
   box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
 }
 
+.loadGameCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.02),
+    rgba(205, 133, 63, 0.03)
+  );
+  z-index: 1;
+}
+
+.loadGameContent {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Input section within the card */
 .inputSection {
-  text-align: center;
   margin-bottom: 2rem;
 }
 
@@ -53,23 +77,21 @@
 }
 
 .preview {
-  background: #e8f5e8;
-  border: 2px solid #28a745;
-  border-radius: var(--border-radius);
+  background: #f5c67d;
+  border-left: 3px solid var(--button-primary);
+  border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
 }
 
-.previewTitle {
-  margin: 0 0 1rem 0;
-  color: #155724;
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+/* Fix h2 margin in preview section */
+.preview h2 {
+  margin-top: 0;
 }
 
 .previewContent {
   font-size: var(--font-size-base);
-  color: #155724;
+  color: var(--text-primary);
   line-height: 1.6;
 }
 
@@ -132,7 +154,11 @@
   font-size: 0.9rem;
 }
 
+/* Actions section within the card */
 .actions {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--card-border);
   display: flex;
   gap: 1rem;
   justify-content: space-between;
@@ -143,10 +169,10 @@
   flex: 1;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - consistent with GameSetup */
 @media (max-width: 768px) {
-  .container {
-    padding: 1rem 0.5rem;
+  .loadGameCard {
+    padding: 1rem 0.75rem 1.5rem 0.75rem;
   }
 
   .actions {
@@ -168,6 +194,11 @@
 }
 
 @media (max-width: 480px) {
+  .loadGameCard {
+    padding: 0.75rem 0.5rem 1.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
   .input {
     font-size: 0.9rem;
     padding: 0.75rem;
