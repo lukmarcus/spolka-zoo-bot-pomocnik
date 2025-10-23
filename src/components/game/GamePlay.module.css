@@ -59,11 +59,6 @@
 }
 
 /* Section Headers */
-.gameContent h2 {
-  margin: 1.5rem 0 0.75rem 0;
-  text-align: center;
-}
-
 .gameContent h2:first-of-type {
   margin-top: 0;
 }
