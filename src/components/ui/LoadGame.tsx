@@ -246,46 +246,57 @@ export default function LoadGame() {
             </div>
           )}
 
-          <div className={styles.instructions}>
-            <h3 className={styles.instructionsTitle}>Jak wczytać stan gry:</h3>
-            <ol className={styles.instructionsList}>
-              <li>Skopiuj stan gry z trwającej rozgrywki</li>
-              <li>Wprowadź stan gry w polu powyżej</li>
-              <li>Zweryfikuj poprawność stanu gry</li>
-              <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
-              <li>Gra zostanie wczytana w zapisanym stanie</li>
-            </ol>
+          {/* Instructions Section - show only when no valid preview */}
+          {!gamePreview?.isValid && (
+            <div className={styles.instructions}>
+              <h3 className={styles.instructionsTitle}>
+                Jak wczytać stan gry:
+              </h3>
+              <ol className={styles.instructionsList}>
+                <li>Skopiuj stan gry z trwającej rozgrywki</li>
+                <li>Wprowadź stan gry w polu powyżej</li>
+                <li>Zweryfikuj poprawność stanu gry</li>
+                <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
+                <li>Gra zostanie wczytana w zapisanym stanie</li>
+              </ol>
 
-            <div className={styles.formatsInfo}>
-              <h4>Obsługiwane formaty:</h4>
-              <ul>
-                <li>
-                  <strong>ZS</strong> - Jeden bot
-                </li>
-                <li>
-                  <strong>ZM</strong> - Kilka botów, wspólna talia
-                </li>
-                <li>
-                  <strong>ZP</strong> - Kilka botów, osobne talie
-                </li>
-              </ul>
+              <div className={styles.formatsInfo}>
+                <h4>Obsługiwane formaty:</h4>
+                <ul>
+                  <li>
+                    <strong>ZS</strong> - Jeden bot
+                  </li>
+                  <li>
+                    <strong>ZM</strong> - Kilka botów, wspólna talia
+                  </li>
+                  <li>
+                    <strong>ZP</strong> - Kilka botów, osobne talie
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Actions Section */}
-          <div className={styles.actions}>
-            <button className="btn-secondary" onClick={() => navigate("/")}>
-              ← Wróć do menu
-            </button>
-            <button
-              className="btn-primary"
-              onClick={handleLoadGame}
-              disabled={!isCodeValid || isLoading}
-            >
-              {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
-            </button>
-          </div>
+          {/* Load Game Button - only when valid preview */}
+          {gamePreview?.isValid && (
+            <div className={styles.actions}>
+              <button
+                className="btn-primary"
+                onClick={handleLoadGame}
+                disabled={!isCodeValid || isLoading}
+              >
+                {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
+              </button>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Back button outside the card */}
+      <div className={styles.bottomControls}>
+        <button className="btn-secondary" onClick={() => navigate("/")}>
+          ← Wróć do menu
+        </button>
       </div>
     </Layout>
   );
