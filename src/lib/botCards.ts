@@ -2,13 +2,18 @@
 // Real card content from Spółka ZOO board game
 
 import type { BotCard } from "./types";
+import moneyIcon from "../assets/images/interface/money.png";
+import cardIcon from "../assets/images/interface/card.png";
+import appleIcon from "../assets/images/interface/apple.png";
+import lemonIcon from "../assets/images/interface/lemon.png";
+import pineappleIcon from "../assets/images/interface/pineapple.png";
 
 export const ICONS = {
-  money: "/src/assets/images/interface/money.png",
-  card: "/src/assets/images/interface/card.png",
-  apple: "/src/assets/images/interface/apple.png",
-  lemon: "/src/assets/images/interface/lemon.png",
-  pineapple: "/src/assets/images/interface/pineapple.png",
+  money: moneyIcon,
+  card: cardIcon,
+  apple: appleIcon,
+  lemon: lemonIcon,
+  pineapple: pineappleIcon,
 };
 
 // Real Spółka ZOO cards (13 cards total)
