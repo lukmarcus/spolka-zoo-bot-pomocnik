@@ -165,37 +165,18 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     // Secondary: operate on NEXT bot (draw or switch+shuffle+draw when exhausted)
     const primary = {
       text:
-        game.state.mode === "individual"
-          ? game.isDeckExhausted()
-            ? `🔀 Przetasuj talię tego Bota i dobierz kartę`
-            : `🎯 Dobierz kartę dla Bota ${game.state.currentBot}`
-          : game.isDeckExhausted()
-          ? `🔀 Przetasuj talię i dobierz kartę`
-          : `🎯 Dobierz kartę`,
+        game.state.botCount && game.state.botCount > 1
+          ? `Ten bot`
+          : `Dobierz kartę`,
       action: handlePrimaryForCurrentBot,
       disabled: false,
-      className: game.isDeckExhausted() ? "btn-secondary" : "btn-primary",
+      className: "btn-primary",
     };
 
     let secondary = null;
     if (game.state.botCount && game.state.botCount > 1) {
-      // compute next bot exhaustion state for labeling
-      const nextBot = game.state.currentBot
-        ? (game.state.currentBot % game.state.botCount) + 1
-        : 1;
-      const nextDeck = game.state.botDecks?.[nextBot - 1];
-      const nextIdx = nextDeck?.currentCardIndex ?? -1;
-      const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
-
       secondary = {
-        text:
-          game.state.mode === "individual"
-            ? nextExhausted
-              ? `👥 Przetasuj talię następnego bota i dobierz dla niego kartę`
-              : `👥 Dobierz kartę dla następnego Bota`
-            : game.isDeckExhausted()
-            ? `👥 Przetasuj i dobierz dla następnego bota`
-            : `👥 Dobierz kartę dla następnego Bota`,
+        text: `Następny bot`,
         action: handleSecondaryForNextBot,
         disabled: false,
         className: "btn-secondary",
@@ -209,77 +190,81 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
   return (
     <>
-      {showGameStatus && (
-        <div className={styles.gameStatus}>
-          <div className={styles.statusInfo}>
-            <span className={styles.cardCounter}>
-              {(game.state.mode === "individual"
-                ? game.state.botDecks && game.state.currentBot
-                  ? (game.state.botDecks[game.state.currentBot - 1]
-                      ?.currentCardIndex ?? -1) + 1
-                  : 0
-                : typeof game.state.currentCardIndex === "number"
-                ? game.state.currentCardIndex + 1
-                : 0) +
-                "/" +
-                BOT_CARDS.length}
-            </span>
-            {game.state.botCount && game.state.botCount > 1 && (
-              <div className={styles.botInfo}>
-                <div className={styles.currentBotIndicator}>
-                  <span className={styles.botIndicatorText}>
-                    🤖 Bot {game.state.currentBot}/{game.state.botCount}
-                  </span>
+      <div className={styles.gameContent}>
+        {showGameStatus && (
+          <div className={styles.gameStatus}>
+            <div className={styles.statusInfo}>
+              <span className={styles.cardCounter}>
+                {(game.state.mode === "individual"
+                  ? game.state.botDecks && game.state.currentBot
+                    ? (game.state.botDecks[game.state.currentBot - 1]
+                        ?.currentCardIndex ?? -1) + 1
+                    : 0
+                  : typeof game.state.currentCardIndex === "number"
+                  ? game.state.currentCardIndex + 1
+                  : 0) +
+                  "/" +
+                  BOT_CARDS.length}
+              </span>
+              {game.state.botCount && game.state.botCount > 1 && (
+                <div className={styles.botInfo}>
+                  <div className={styles.currentBotIndicator}>
+                    <span className={styles.botIndicatorText}>
+                      🤖 Bot {game.state.currentBot}/{game.state.botCount}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
+        )}
+
+        <h2>DOBIERZ KARTĘ</h2>
+        <div className={styles.gameControls}>
+          {gameActions.primary && (
+            <button
+              className={gameActions.primary.className}
+              onClick={gameActions.primary.action}
+              disabled={gameActions.primary.disabled}
+            >
+              {gameActions.primary.text}
+            </button>
+          )}
+          {gameActions.secondary && (
+            <button
+              className={gameActions.secondary.className}
+              onClick={gameActions.secondary.action}
+              disabled={gameActions.secondary.disabled}
+            >
+              {gameActions.secondary.text}
+            </button>
+          )}
         </div>
-      )}
 
-      <div className={styles.cardArea}>
-        {currentCard ? (
-          <BotCard card={currentCard} className={styles.currentCard} />
-        ) : (
-          <div className={styles.noCard}>
-            {game.isDeckExhausted() ? (
-              <>
-                <h3>Koniec talii</h3>
-                <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
-              </>
-            ) : (
-              <div className={styles.cardReverse}>
-                <img
-                  src="/images/card-reverse.jpg"
-                  alt="Zakryta karta"
-                  className={styles.cardReverseImage}
-                />
-                <p>Dobierz pierwszą kartę</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className={styles.gameControls}>
-        {gameActions.primary && (
-          <button
-            className={gameActions.primary.className}
-            onClick={gameActions.primary.action}
-            disabled={gameActions.primary.disabled}
-          >
-            {gameActions.primary.text}
-          </button>
-        )}
-        {gameActions.secondary && (
-          <button
-            className={gameActions.secondary.className}
-            onClick={gameActions.secondary.action}
-            disabled={gameActions.secondary.disabled}
-          >
-            {gameActions.secondary.text}
-          </button>
-        )}
+        <h2>AKTUALNA KARTA</h2>
+        <div className={styles.cardArea}>
+          {currentCard ? (
+            <BotCard card={currentCard} className={styles.currentCard} />
+          ) : (
+            <div className={styles.noCard}>
+              {game.isDeckExhausted() ? (
+                <>
+                  <h3>Koniec talii</h3>
+                  <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
+                </>
+              ) : (
+                <div className={styles.cardReverse}>
+                  <img
+                    src="/images/card-reverse.jpg"
+                    alt="Zakryta karta"
+                    className={styles.cardReverseImage}
+                  />
+                  <p>Dobierz pierwszą kartę</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className={styles.bottomControls}>

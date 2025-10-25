@@ -36,30 +36,32 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
 
   return (
     <div>
-      <div className={styles.botSelection}>
-        <div className={styles.botSelectionContent}>
-          <h2>Liczba botów</h2>
-          <div className={styles.botButtons}>
-            {[1, 2, 3, 4].map((count) => (
-              <button
-                key={count}
-                className={`${styles.botOption} ${
-                  selectedBotCount === count ? styles.selected : ""
-                }`}
-                onClick={() => handleBotSelection(count)}
-              >
-                <span className={styles.botNumber}>{count}</span>
-                <span className={styles.botLabel}>
-                  {count === 1 ? "bot" : "boty"}
-                </span>
-              </button>
-            ))}
+      <div className={styles.gameSetupCard}>
+        <div className={styles.gameSetupContent}>
+          <div className={styles.botSelectionSection}>
+            <h2>LICZBA BOTÓW</h2>
+            <div className={styles.botButtons}>
+              {[1, 2, 3, 4].map((count) => (
+                <button
+                  key={count}
+                  className={`${styles.botOption} ${
+                    selectedBotCount === count ? styles.selected : ""
+                  }`}
+                  onClick={() => handleBotSelection(count)}
+                >
+                  <span className={styles.botNumber}>{count}</span>
+                  <span className={styles.botLabel}>
+                    {count === 1 ? "bot" : "boty"}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Show mode selection - always visible when bot count is selected */}
+          {/* Mode selection section */}
           {selectedBotCount && (
             <div className={styles.modeSection}>
-              <h2>Tryb gry</h2>
+              <h2>TRYB GRY</h2>
               <div className={styles.modeButtons}>
                 {selectedBotCount === 1 ? (
                   <button
@@ -92,6 +94,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
             </div>
           )}
 
+          {/* Start game section */}
           <div className={styles.startGameSection}>
             {selectedBotCount ? (
               <p className={styles.selectedInfo}>
@@ -117,7 +120,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
               onClick={handleStartGame}
               disabled={!selectedBotCount}
             >
-              🎯 Rozpocznij grę
+              Rozpocznij grę
             </button>
           </div>
         </div>

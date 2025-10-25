@@ -77,22 +77,19 @@
 }
 
 /* Bot Selection Styles */
-.botSelection {
+/* Main game setup card - contains all sections */
+.gameSetupCard {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 0.5rem 1rem 2rem 1rem;
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: 16px;
-  min-height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   box-shadow: var(--shadow-medium);
   position: relative;
   overflow: hidden;
 }
 
-.botSelection::before {
+.gameSetupCard::before {
   content: "";
   position: absolute;
   top: 0;
@@ -107,20 +104,18 @@
   z-index: 1;
 }
 
-.botSelectionContent {
+.gameSetupContent {
   width: 100%;
   position: relative;
   z-index: 2;
 }
 
-.botSelection h2 {
-  color: var(--text-header);
-  margin-bottom: 1.5rem;
-  font-size: var(--font-size-lg);
-  font-weight: bold;
+/* Bot selection section within the card */
+.botSelectionSection {
+  margin-bottom: 2rem;
 }
 
-.botSelection p {
+.gameSetupCard p {
   margin-bottom: 1.5rem;
   color: var(--text-primary);
   font-size: var(--font-size-base);
@@ -190,6 +185,7 @@
 }
 
 .botNumber {
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
@@ -241,11 +237,10 @@
   box-shadow: var(--shadow-light) !important;
 }
 
-/* Mobile responsive for bot selection */
+/* Mobile responsive for game setup card */
 @media (max-width: 480px) {
-  .botSelection {
+  .gameSetupCard {
     padding: 1.5rem 1rem;
-    min-height: 350px;
     border-radius: 12px;
   }
 
@@ -261,6 +256,7 @@
   }
 
   .botNumber {
+    font-family: var(--font-display);
     font-size: 1.25rem;
   }
 

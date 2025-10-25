@@ -5,10 +5,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-background);
-  padding: 0.125rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
+  padding: 0 0 1rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(205, 133, 63, 0.3);
 }
 
 .statusInfo {
@@ -49,6 +48,21 @@
   font-weight: 500;
 }
 
+/* Game Content Container */
+.gameContent {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-medium);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Section Headers */
+.gameContent h2:first-of-type {
+  margin-top: 0;
+}
+
 /* Card Display Area */
 .cardArea {
   display: flex;
@@ -75,15 +89,15 @@
 
 .noCard {
   text-align: center;
-  color: var(--color-text);
-  background: var(--color-background);
-  padding: 0.75rem;
+  color: var(--text-primary);
+  background: var(--card-bg);
+  padding: 1rem;
   border-radius: 12px;
-  border: 2px dashed var(--color-border);
+  border: 2px dashed var(--card-border);
 }
 
 .noCard h3 {
-  color: var(--color-secondary);
+  color: var(--text-header);
   margin-bottom: 0.5rem;
   font-size: var(--font-size-lg);
 }
@@ -120,14 +134,16 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 0 0 1rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(205, 133, 63, 0.3);
   flex-wrap: wrap;
 }
 
 .gameControls button {
-  min-width: 200px;
+  min-width: 140px;
   font-size: var(--font-size-base);
-  padding: 1rem 1.25rem;
+  padding: 0.8rem 1rem;
   font-weight: 600;
 }
 
@@ -144,7 +160,7 @@
 /* Bottom Controls */
 .bottomControls {
   padding: 1rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--card-border);
   display: flex;
   justify-content: center;
   gap: 1rem;

@@ -170,114 +170,133 @@ export default function LoadGame() {
 
   return (
     <Layout
-      title="Wczytaj stan gry"
-      subtitle="Wprowadź skopiowany wcześniej kod gry"
+      title="WCZYTAJ STAN GRY"
+      subtitle="Wprowadź skopiowany wcześniej stan gry"
       backgroundType="home"
     >
-      <div className={styles.container}>
-        <div className={styles.inputSection}>
-          <label className={styles.label}>Kod stanu gry:</label>
-          <input
-            type="text"
-            value={gameCode}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Wprowadź skopiowany wcześniej stan gry"
-            className={`${styles.input} ${error ? styles.error : ""}`}
-            autoFocus
-          />
-          {error && <div className={styles.errorMessage}>{error}</div>}
-        </div>
+      <div className={styles.loadGameCard}>
+        <div className={styles.loadGameContent}>
+          {/* Input Section */}
+          <div className={styles.inputSection}>
+            <h2>KOD STANU GRY</h2>
+            <input
+              type="text"
+              value={gameCode}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Wprowadź skopiowany wcześniej stan gry"
+              className={`${styles.input} ${error ? styles.error : ""}`}
+              autoFocus
+            />
+            {error && <div className={styles.errorMessage}>{error}</div>}
+          </div>
 
-        {gamePreview && gamePreview.isValid && (
-          <div className={styles.preview}>
-            <h3 className={styles.previewTitle}>✅ Podgląd stanu gry</h3>
-            <div className={styles.previewContent}>
-              {gamePreview.botCount === 1 ? (
-                <>
-                  <div className={styles.previewItem}>
-                    <strong>Liczba botów:</strong> 1
-                  </div>
-                  <div className={styles.previewItem}>
-                    <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className={styles.previewItem}>
-                    <strong>Liczba botów:</strong> {gamePreview.botCount}
-                  </div>
-                  <div className={styles.previewItem}>
-                    <strong>Talia:</strong>{" "}
-                    {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
-                  </div>
-                  {gamePreview.currentBot && (
+          {/* Preview Section */}
+          {gamePreview && gamePreview.isValid && (
+            <div className={styles.preview}>
+              <h2>PODGLĄD STANU GRY</h2>
+              <div className={styles.previewContent}>
+                {gamePreview.botCount === 1 ? (
+                  <>
                     <div className={styles.previewItem}>
-                      <strong>Aktualny bot:</strong> {gamePreview.currentBot}
+                      <strong>Liczba botów:</strong> 1
                     </div>
-                  )}
-                  {gamePreview.botPositions ? (
-                    <div className={styles.previewItem}>
-                      <strong>Pozycje botów:</strong>
-                      <div className={styles.botPositions}>
-                        {gamePreview.botPositions.map((bot) => (
-                          <div key={bot.botId} className={styles.botPosition}>
-                            Bot {bot.botId}: {bot.position}
-                            {bot.botId === gamePreview.currentBot ? " ⬅️" : ""}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
                     <div className={styles.previewItem}>
                       <strong>Aktualna karta:</strong>{" "}
                       {gamePreview.gameProgress}
                     </div>
-                  )}
-                </>
-              )}
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.previewItem}>
+                      <strong>Liczba botów:</strong> {gamePreview.botCount}
+                    </div>
+                    <div className={styles.previewItem}>
+                      <strong>Talia:</strong>{" "}
+                      {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
+                    </div>
+                    {gamePreview.currentBot && (
+                      <div className={styles.previewItem}>
+                        <strong>Aktualny bot:</strong> {gamePreview.currentBot}
+                      </div>
+                    )}
+                    {gamePreview.botPositions ? (
+                      <div className={styles.previewItem}>
+                        <strong>Pozycje botów:</strong>
+                        <div className={styles.botPositions}>
+                          {gamePreview.botPositions.map((bot) => (
+                            <div key={bot.botId} className={styles.botPosition}>
+                              Bot {bot.botId}: {bot.position}
+                              {bot.botId === gamePreview.currentBot
+                                ? " ⬅️"
+                                : ""}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={styles.previewItem}>
+                        <strong>Aktualna karta:</strong>{" "}
+                        {gamePreview.gameProgress}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className={styles.instructions}>
-          <h3 className={styles.instructionsTitle}>Jak wczytać stan gry:</h3>
-          <ol className={styles.instructionsList}>
-            <li>Skopiuj stan gry z trwającej rozgrywki</li>
-            <li>Wprowadź stan gry w polu powyżej</li>
-            <li>Zweryfikuj poprawność stanu gry</li>
-            <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
-            <li>Gra zostanie wczytana w zapisanym stanie</li>
-          </ol>
+          {/* Instructions Section - show only when no valid preview */}
+          {!gamePreview?.isValid && (
+            <div className={styles.instructions}>
+              <h3 className={styles.instructionsTitle}>
+                Jak wczytać stan gry:
+              </h3>
+              <ol className={styles.instructionsList}>
+                <li>Skopiuj stan gry z trwającej rozgrywki</li>
+                <li>Wprowadź stan gry w polu powyżej</li>
+                <li>Zweryfikuj poprawność stanu gry</li>
+                <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
+                <li>Gra zostanie wczytana w zapisanym stanie</li>
+              </ol>
 
-          <div className={styles.formatsInfo}>
-            <h4>Obsługiwane formaty:</h4>
-            <ul>
-              <li>
-                <strong>ZS</strong> - Jeden bot
-              </li>
-              <li>
-                <strong>ZM</strong> - Kilka botów, wspólna talia
-              </li>
-              <li>
-                <strong>ZP</strong> - Kilka botów, osobne talie
-              </li>
-            </ul>
-          </div>
+              <div className={styles.formatsInfo}>
+                <h4>Obsługiwane formaty:</h4>
+                <ul>
+                  <li>
+                    <strong>ZS</strong> - Jeden bot
+                  </li>
+                  <li>
+                    <strong>ZM</strong> - Kilka botów, wspólna talia
+                  </li>
+                  <li>
+                    <strong>ZP</strong> - Kilka botów, osobne talie
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Load Game Button - only when valid preview */}
+          {gamePreview?.isValid && (
+            <div className={styles.actions}>
+              <button
+                className="btn-primary"
+                onClick={handleLoadGame}
+                disabled={!isCodeValid || isLoading}
+              >
+                {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
+              </button>
+            </div>
+          )}
         </div>
+      </div>
 
-        <div className={styles.actions}>
-          <button className="btn-secondary" onClick={() => navigate("/")}>
-            ← Wróć do menu
-          </button>
-          <button
-            className="btn-primary"
-            onClick={handleLoadGame}
-            disabled={!isCodeValid || isLoading}
-          >
-            {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
-          </button>
-        </div>
+      {/* Back button outside the card */}
+      <div className={styles.bottomControls}>
+        <button className="btn-secondary" onClick={() => navigate("/")}>
+          ← Wróć do menu
+        </button>
       </div>
     </Layout>
   );

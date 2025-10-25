@@ -16,14 +16,14 @@ const Home: React.FC = () => {
   const menuOptions = [
     {
       id: "start-game",
-      title: "Rozpocznij grę",
+      title: "ROZPOCZNIJ GRĘ",
       description: "Uruchom boty z kartami",
       action: handleStartGame,
       primary: true,
     },
     {
       id: "load-game",
-      title: "Wczytaj stan gry",
+      title: "WCZYTAJ STAN GRY",
       description: "Użyj zapisanego kodu stanu gry",
       action: () => navigate("/load"),
       disabled: false,
@@ -31,16 +31,18 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <Layout backgroundType="home">
-      <div className={styles.hero}>
-        <h2 className={styles.heroTitle}>Bot Pomocnik</h2>
-        <p className={styles.heroDescription}>
-          Cyfrowy zamiennik dla kart botów w grze planszowej{" "}
-          <strong>Spółka ZOO</strong>. Zarządzaj 1-4 botami, przełączaj między
-          nimi i zapisuj stan gry.
-        </p>
-      </div>
-
+    <Layout
+      backgroundType="home"
+      title="BOT POMOCNIK"
+      subtitle="Cyfrowy zamiennik dla kart botów"
+      logo={
+        <img
+          src="/src/assets/images/game-logo.png"
+          alt="Spółka ZOO"
+          className={styles.gameLogo}
+        />
+      }
+    >
       <div className={styles.menu}>
         {menuOptions.map((option) => (
           <button

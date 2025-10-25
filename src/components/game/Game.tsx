@@ -42,7 +42,7 @@ const Game: React.FC = () => {
         game.state.currentCardIndex >= 0));
 
   // Dynamic title based on actual game state
-  const pageTitle = inActiveGame ? "Gra w toku" : "Rozpocznij grę";
+  const pageTitle = inActiveGame ? "GRA W TOKU" : "ROZPOCZNIJ GRĘ";
 
   // Dynamic subtitle based on game state
   const getPageSubtitle = () => {

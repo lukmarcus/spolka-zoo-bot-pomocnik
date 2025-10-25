@@ -5,6 +5,38 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-10-25
+
+### Dodane
+
+- System trzech czcionek: ChillScript (nagłówki), RooneySansBold (tekst), MarvinRound (karty)
+- Logo Spółka ZOO na stronie głównej z integracją w komponencie Layout
+- Zmienne CSS dla typografii: --font-display, --font-body, --font-card
+- Globalne style dla wszystkich nagłówków (h1, h2, h3, h4)
+- Zunifikowany system kart we wszystkich komponentach
+- Sekcja podglądu w stylu karty bota dla LoadGame
+
+### Zmienione
+
+- System typografii: h1 z cieniem tekstu, h2 wyśrodkowane z ChillScript
+- Struktura GameSetup: jedna karta z trzema sekcjami (boty, tryb, start)
+- Interfejs LoadGame: warunkowo pokazuje instrukcje lub podgląd
+- Układ GamePlay: przycisk "DOBIERZ KARTĘ" nad kartą dla lepszego UX
+- Stylowanie BotCard: czcionka MarvinRound dla lepszej czytelności
+- Komponent Layout: refaktor z obsługą logo jako właściwość
+- Przyciski używają var(--font-body) zamiast dziedziczenia czcionki
+
+### Naprawione
+
+- Spójność h2: usunięcie lokalnych nadpisań na rzecz globalnych stylów
+- Jednolity rozmiar czcionki: wszystkie h2 używają 1.5rem
+- Marginesy podglądu: poprawne odstępy w sekcji podglądu LoadGame  
+- Padding kart: zoptymalizowane odstępy (2rem→0.5rem na górze)
+- Spójność kolorów: kolory błędów używają var(--danger)
+- Pozycjonowanie akcji: przyciski poza ramką dla spójności z innymi ekranami
+
+---
+
 ## [0.4.7] - 2025-10-15
 
 ### Dodane
