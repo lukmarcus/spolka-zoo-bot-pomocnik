@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import { useGame } from "@lib/GameContext";
 import styles from "./Home.module.css";
+import gameLogo from "../../assets/images/game-logo.png";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -35,13 +36,7 @@ const Home: React.FC = () => {
       backgroundType="home"
       title="BOT POMOCNIK"
       subtitle="Cyfrowy zamiennik dla kart botów"
-      logo={
-        <img
-          src="/src/assets/images/game-logo.png"
-          alt="Spółka ZOO"
-          className={styles.gameLogo}
-        />
-      }
+      logo={<img src={gameLogo} alt="Spółka ZOO" className={styles.gameLogo} />}
     >
       <div className={styles.menu}>
         {menuOptions.map((option) => (
