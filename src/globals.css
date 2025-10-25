@@ -149,12 +149,24 @@ h2 {
 }
 
 h3 {
+  font-family: var(--font-display);
+  color: var(--accent-primary);
   font-size: 1.25rem;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem 0;
+}
+
+h4 {
+  font-family: var(--font-display);
+  color: var(--accent-primary);
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0.75rem 0 0.5rem 0;
 }
 
 /* Przyciski */
 button {
-  font-family: inherit;
+  font-family: var(--font-body);
   cursor: pointer;
   border: none;
   border-radius: var(--border-radius);

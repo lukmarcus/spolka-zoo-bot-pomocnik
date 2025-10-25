@@ -65,12 +65,12 @@
 }
 
 .input.error {
-  border-color: #dc3545;
+  border-color: var(--danger);
   background: #fff5f5;
 }
 
 .errorMessage {
-  color: #dc3545;
+  color: var(--danger);
   font-size: 0.9rem;
   margin-top: 0.5rem;
   font-weight: 500;
