@@ -8,7 +8,7 @@ import "./globals.css";
 function App() {
   return (
     <GameProvider>
-      <Router>
+      <Router basename="/spolka-zoo-bot-pomocnik">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/game" element={<Game />} />
