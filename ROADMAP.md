@@ -2,67 +2,46 @@
 
 ## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                                     | Szczegóły techniczne                                          |
-| ------ | ------------ | ----------------------------------------------- | ------------------------------------------------------------- |
-| 0.4.7  | ✅ Gotowe    | UX Fixes vol.2 - dopracowanie interfejsu        | Pełnoekranowy LoadGame, modalne poprawki, usunięcie ostrzeżeń |
-| 0.5.0  | 🔮 Planowane | Typography & Visual Polish - czcionki i design  | Własne czcionki, ujednolicenie tekstów, design system         |
-| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi  | GitHub, bug reports, informacje o grze, linki do wydawnictwa  |
-| 0.5.2  | 🔮 Planowane | Mobile UX Polish - dopracowanie wersji mobilnej | Padding, justowanie przycisków, layout ekranów mobilnych      |
+| Wersja | Status       | Opis krótki                                    | Szczegóły techniczne                                         |
+| ------ | ------------ | ---------------------------------------------- | ------------------------------------------------------------ |
+| 0.5.0  | ✅ Gotowe    | Typography & Core Design System                | 3 czcionki, logo, podstawowe style, core CSS variables       |
+| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi | GitHub, bug reports, informacje o grze, linki do wydawnictwa |
+| 0.5.2  | 🔮 Planowane | Mobile UX Polish + CSS Refinements             | Mobile padding/spacing, pełny system CSS vars, color cleanup |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.4.7 — ✅ UX Fixes vol.2 - dopracowanie interfejsu (ukończone)
+### v0.5.0 — ⚠️ Typography & Core Design System (w trakcie)
 
-🎯 Cel: dokończenie poprawek interfejsu użytkownika
+🎯 Cel: implementacja podstawowego systemu typografii i core design
 
 ✅ **Ukończone zadania:**
 
-- **Pełnoekranowy ekran wczytywania gry**
+- **System trzech czcionek**
 
-  - Zastąpienie LoadGameModal pełnym ekranem
-  - Lepsza responsywność na wszystkich urządzeniach
-  - Przycisk zamknięcia (X) dodany do modalów
+  - ✅ ChillScript.woff2 - dla nagłówków i elementów display
+  - ✅ RooneySansBold.woff2 - dla tekstu podstawowego
+  - ✅ MarvinRound.woff2 - dla tekstów na kartach botów
+  - ✅ CSS Variables: --font-display, --font-body, --font-card
 
-- **Poprawki modalów i przycisków**
+- **Core typography system**
 
-  - Uproszczenie struktury modalnej (4 pliki → 2 pliki)
-  - Trzeci przycisk "Wyjdź bez zapisu" w modalu wyjścia z gry
-  - Kolejność przycisków: "Kopiuj stan gry" przed "Wróć do menu"
-  - Przyciski w modalach wyrównane do prawej strony
+  - ✅ Globalne style h1 z text-shadow i ChillScript
+  - ✅ Globalne style h2 z centrowanie i spójnymi marginesami
+  - ✅ Globalne style h3, h4 z odpowiednimi czcionkami i kolorami
+  - ✅ Podstawowe kolory: #a54617, #6b2e06, #f5c67d
 
-- **Poprawki tekstów i komunikatów**
+- **Layout foundations**
 
-  - Tekst trybu gry: "1 bot, jedna talia" zamiast "osobne talie"
-  - Usunięto niepotrzebny komunikat "⚠️ Talia wyczerpana"
+  - ✅ Logo Spółka ZOO zintegrowane z Layout komponentem
+  - ✅ Card-based design dla wszystkich ekranów
+  - ✅ Refaktor GameSetup: jedna karta z trzema sekcjami
+  - ✅ LoadGame: warunkowo instrukcje vs podgląd
+  - ✅ GamePlay: lepsze pozycjonowanie przycisków
 
-- **Naprawy błędów**
-  - Wskaźnik kart pokazuje 1/13 zamiast 2/13 po przetasowaniu
-  - Efekt hover na przycisku "Rozpocznij grę"
-  - Niewidoczne nagłówki w modalach
-
----
-
-### v0.5.0 — Typography & Visual Polish - czcionki i design 🔮
-
-🎯 Cel: implementacja własnych czcionek i kompleksowe dopracowanie wizualne
-
-Planowane zadania:
-
-- **System czcionek**
-
-  - Implementacja własnych plików czcionek (nie Google Fonts)
-  - Optymalizacja ładowania czcionek
-  - Fallback fonts dla compatibility
-
-- **Ujednolicenie stylingu**
-
-  - Konsistentne wielkości tekstów w całej aplikacji
-  - Spójny vertical rhythm i spacing
-  - Harmonijny system typograficzny
-
-- **Design system**
-  - Dokumentacja używanych czcionek i rozmiarów
-  - Style guide dla przyszłych zmian
+- **Finalizacja core typography**
+  - ✅ Przyciski: zmiana font-family z inherit na --font-body
+  - ✅ Core CSS variables: użycie var(--danger) dla error colors
+  - ✅ Kompletny system h1, h2, h3, h4 z odpowiednimi stylami
 
 ---
 
@@ -92,30 +71,32 @@ Planowane zadania:
 
 ---
 
-### v0.5.2 — Mobile UX Polish - dopracowanie wersji mobilnej 🔮
+### v0.5.2 — Mobile UX Polish + CSS Refinements 🔮
 
-🎯 Cel: optymalizacja interfejsu dla urządzeń mobilnych
+🎯 Cel: dopracowanie mobile UX i finalizacja systemu design
+
+⏱️ Przybliżony termin: Po v0.5.1
 
 Planowane zadania:
 
-- **Menu główne**
+- **Mobile UX Polish** (z oryginalnego planu v0.5.2)
 
-  - Poprawa wyjustowania przycisków
-  - Ujednolicenie wielkości liter na przyciskach
-  - Dodanie odpowiedniego paddingu dla lepszego wyglądu
-  - Ogólna poprawa estetyki na małych ekranach
+  - **Menu główne**: poprawa wyjustowania przycisków, padding, estetyka na małych ekranach
+  - **GameSetup**: ujednolicenie przycisków, lepsze wykorzystanie przestrzeni
+  - **GamePlay**: liczniki w jednej linii, optymalizacja układu na mobile
+  - Szczegółowe testowanie na różnych ekranach (320px, 768px, 1024px+)
 
-- **Ekran rozpoczęcia gry (GameSetup)**
+- **CSS System Refinements** (przeniesione z v0.5.0)
 
-  - Ujednolicenie wielkości wszystkich przycisków
-  - Dodanie delikatnego paddingu między elementami
-  - Zmniejszenie odległości na dole od stopki
-  - Lepsze wykorzystanie przestrzeni ekranu
+  - **Kompletny system CSS Variables**: wszystkie hardcodowane kolory → zmienne
+  - **Kolory efektów kart**: system dla zielonych, czerwonych, niebieskich, etc.
+  - **System semantic colors**: success, warning, info, danger variables
+  - **Spacing system**: zmienne dla wszystkich rozmiarów, shadows, paddings
 
-- **Ekran gry (GamePlay)**
-  - Umieszczenie licznika kart i botów w jednej linii
-  - Ujednolicenie czcionki na wszystkich przyciskach
-  - Optymalizacja układu dla lepszej czytelności na mobilnych
+- **UX Flow Polish**
+  - Consistency check wszystkich stanów interfejsu
+  - Fine-tuning transitions i micro-interactions
+  - Accessibility improvements
 
 ---
 

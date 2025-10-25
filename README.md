@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.4.7-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.5.0-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -10,11 +10,13 @@
 
 🤖 **Zarządzanie botami** - Obsługa 1-4 botów z niezależnymi taliami  
 🎯 **Inteligentne akcje** - Automatyczna kolejność i dobieranie kart  
-💾 **Zapisywanie stanu** - Kompaktowe kody gry z podglądem  
+💾 **Zapisywanie stanu** - Kompaktowe kody gry z podglądem w stylu kart  
 🔗 **Cross-device** - Kompatybilność między urządzeniami  
 📱 **Responsywne UI** - Optymalizacja dla wszystkich ekranów (320px+)  
 ⚡ **Real-time validation** - Walidacja kodów w czasie rzeczywistym  
-🎨 **Profesjonalny design** - Własny favicon i dynamiczne tytuły
+🎨 **Profesjonalny design** - Własne czcionki, logo Spółka ZOO i spójny system kart  
+✨ **Nowoczesna typografia** - Trzy czcionki (ChillScript, RooneySans, MarvinRound)  
+🃏 **Card-based interface** - Zunifikowany design w stylu sekcji kart botów
 
 ## 🚀 Szybki start
 
