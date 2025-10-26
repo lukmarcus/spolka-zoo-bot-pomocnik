@@ -1,0 +1,197 @@
+/* About Component Styles */
+
+.aboutContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Main about card - consistent with other components */
+.aboutCard {
+  text-align: left;
+  padding: 2rem;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.aboutCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.02),
+    rgba(205, 133, 63, 0.03)
+  );
+  z-index: 1;
+}
+
+/* Sections */
+.section {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2.5rem;
+}
+
+.section:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.section h2 {
+  color: var(--primary-dark);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent-light);
+  padding-bottom: 0.5rem;
+}
+
+.section h3 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Game info section */
+.gameInfo p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.gameDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(245, 198, 125, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-light);
+}
+
+.label {
+  font-weight: bold;
+  color: var(--primary-dark);
+}
+
+/* App info section */
+.appInfo p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.features h3 {
+  margin-bottom: 1rem;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+.features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2ecc71;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* Developer info */
+.developerInfo p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+/* Links */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.externalLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 2px solid var(--primary);
+}
+
+.externalLink:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Bottom controls */
+.bottomControls {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--accent-light);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .aboutContainer {
+    padding: 0.5rem;
+  }
+
+  .aboutCard {
+    padding: 1.5rem;
+  }
+
+  .gameDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .detail {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .links {
+    gap: 0.5rem;
+  }
+
+  .externalLink {
+    justify-content: center;
+    text-align: center;
+  }
+}
