@@ -58,11 +58,6 @@
   margin-bottom: 1rem;
 }
 
-/* Section Headers */
-.gameContent h2:first-of-type {
-  margin-top: 0;
-}
-
 /* Card Display Area */
 .cardArea {
   display: flex;

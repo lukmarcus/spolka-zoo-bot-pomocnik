@@ -84,10 +84,7 @@
   margin-bottom: 2rem;
 }
 
-/* Fix h2 margin in preview section */
-.preview h2 {
-  margin-top: 0;
-}
+
 
 .previewContent {
   font-size: var(--font-size-base);
