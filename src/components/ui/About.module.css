@@ -1,16 +1,9 @@
 /* About Component Styles */
 
-.aboutContainer {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* Main about card - consistent with other components */
+/* Main about card - consistent with LoadGame and GameSetup */
 .aboutCard {
   text-align: left;
-  padding: 2rem;
+  padding: 0.5rem 1rem 2rem 1rem;
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: 16px;
@@ -45,17 +38,25 @@
   margin-bottom: 1rem;
 }
 
-.section h2 {
-  color: var(--primary-dark);
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--accent-light);
-  padding-bottom: 0.5rem;
-}
-
 .section h3 {
   color: var(--primary);
   margin-bottom: 1rem;
   font-size: 1.1rem;
+}
+
+/* Game cover */
+.gameCoverContainer {
+  text-align: center;
+  margin: 0.75rem 0;
+}
+
+.gameCover {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: var(--shadow-medium);
+  border: 2px solid var(--card-border);
 }
 
 /* Game info section */
@@ -66,11 +67,28 @@
   color: var(--text-dark);
 }
 
+.gameDescription {
+  font-size: 0.9rem !important;
+  line-height: 1.5;
+  color: var(--text-secondary, #666);
+}
+
 .gameDetails {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+.gameInfoCompact {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  text-align: center;
+  padding: 0.75rem 1rem;
+  background: rgba(245, 198, 125, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid var(--card-border);
 }
 
 .detail {
@@ -80,12 +98,46 @@
   padding: 0.75rem;
   background: rgba(245, 198, 125, 0.1);
   border-radius: 8px;
-  border-left: 4px solid var(--accent-light);
+  border-left: 4px solid var(--card-border);
+}
+
+.linkDetail {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.linkDetail:hover {
+  background: rgba(245, 198, 125, 0.2);
+  transform: translateY(-1px);
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: rgba(245, 198, 125, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid var(--card-border);
 }
 
 .label {
   font-weight: bold;
   color: var(--primary-dark);
+}
+
+.linkDetail {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.linkDetail:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+  background: rgba(245, 198, 125, 0.2);
 }
 
 /* App info section */
@@ -163,17 +215,17 @@
   text-align: center;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--accent-light);
+  border-top: 1px solid var(--card-border);
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .aboutContainer {
-    padding: 0.5rem;
+  .aboutCard {
+    padding: 0.5rem 0.75rem 1.5rem 0.75rem;
   }
 
-  .aboutCard {
-    padding: 1.5rem;
+  .gameCover {
+    max-width: 250px;
   }
 
   .gameDetails {

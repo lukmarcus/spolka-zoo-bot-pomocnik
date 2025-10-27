@@ -31,7 +31,7 @@ const Home: React.FC = () => {
     },
     {
       id: "about",
-      title: "O GRZE I APLIKACJI",
+      title: "O GRZE I O APLIKACJI",
       description: "Informacje i linki",
       action: () => navigate("/about"),
       disabled: false,
