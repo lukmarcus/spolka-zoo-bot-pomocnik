@@ -31,6 +31,9 @@ const About: React.FC = () => {
               className={styles.gameCover}
             />
           </div>
+          <div className={styles.gameInfoCompact}>
+            autor gry: Mateusz Kiszło
+          </div>
           <div className={styles.gameLinks}>
             <div className={styles.linksRow}>
               <a
