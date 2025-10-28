@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import { useGame } from "@lib/GameContext";
 import styles from "./Home.module.css";
-import gameLogo from "../../assets/images/game-logo.png";
+import gameLogo from "../../assets/images/game/game-logo.png";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();

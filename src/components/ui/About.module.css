@@ -82,15 +82,19 @@
   background: rgba(245, 198, 125, 0.1);
   border-radius: 8px;
   border-left: 4px solid var(--card-border);
-  margin-bottom: 1.5rem;
 }
 
 .gameLinks {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: 1rem;
   margin-bottom: 1.5rem;
-  flex-wrap: nowrap;
+}
+
+.linksRow {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .logoButton {
@@ -253,6 +257,10 @@
   }
 
   .gameLinks {
+    gap: 0.75rem;
+  }
+
+  .linksRow {
     gap: 0.75rem;
   }
 
