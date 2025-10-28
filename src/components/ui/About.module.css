@@ -73,13 +73,6 @@
   color: var(--text-secondary, #666);
 }
 
-.gameDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
 .gameInfoCompact {
   font-size: 1.1rem;
   font-weight: 500;
@@ -89,27 +82,39 @@
   background: rgba(245, 198, 125, 0.1);
   border-radius: 8px;
   border-left: 4px solid var(--card-border);
+  margin-bottom: 1.5rem;
 }
 
-.detail {
+.gameLinks {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem;
-  background: rgba(245, 198, 125, 0.1);
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: nowrap;
+}
+
+.logoButton {
+  display: inline-block;
+  padding: 0.5rem;
   border-radius: 8px;
-  border-left: 4px solid var(--card-border);
-}
-
-.linkDetail {
-  text-decoration: none;
-  color: inherit;
+  background: rgba(245, 198, 125, 0.1);
+  border: 1px solid rgba(245, 198, 125, 0.3);
   transition: all 0.3s ease;
+  text-decoration: none;
+  flex: 0 0 auto;
 }
 
-.linkDetail:hover {
+.logoButton:hover {
   background: rgba(245, 198, 125, 0.2);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.logoImage {
+  height: 32px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .detail {
@@ -245,5 +250,17 @@
   .externalLink {
     justify-content: center;
     text-align: center;
+  }
+
+  .gameLinks {
+    gap: 0.75rem;
+  }
+
+  .logoButton {
+    padding: 0.4rem;
+  }
+
+  .logoImage {
+    height: 28px;
   }
 }

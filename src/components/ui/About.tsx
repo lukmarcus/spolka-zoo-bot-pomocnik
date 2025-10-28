@@ -2,7 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import styles from "./About.module.css";
-import gameCover from "../../assets/images/game-cover.jpg";
+import gameCover from "../../assets/images/game/game-cover.jpg";
+import coconutSaladLogo from "../../assets/images/logos/coconut-salad-logo.png";
+import bggLogo from "../../assets/images/logos/bgg-logo.png";
+import planszeoLogo from "../../assets/images/logos/planszeo-logo.png";
 
 const About: React.FC = () => {
   const navigate = useNavigate();
@@ -27,36 +30,46 @@ const About: React.FC = () => {
               className={styles.gameCover}
             />
           </div>
-          <div className={styles.gameInfo}>
-            <div className={styles.gameDetails}>
-              <a
-                href="https://boardgamegeek.com/boardgame/402521/spolka-zoo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.detail} ${styles.linkDetail}`}
-              >
-                <span className={styles.label}>BoardGameGeek:</span>
-                <span>Zobacz na BGG →</span>
-              </a>
-              <a
-                href="https://planszeo.pl/gry-planszowe/animal-fair"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.detail} ${styles.linkDetail}`}
-              >
-                <span className={styles.label}>Planszeo:</span>
-                <span>Zobacz na Planszeo →</span>
-              </a>
-              <a
-                href="https://www.coconutsalad.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.detail} ${styles.linkDetail}`}
-              >
-                <span className={styles.label}>Wydawca:</span>
-                <span>Coconut Salad →</span>
-              </a>
-            </div>
+          <div className={styles.gameLinks}>
+            <a
+              href="https://www.coconutsalad.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.logoButton}
+              title="Coconut Salad"
+            >
+              <img
+                src={coconutSaladLogo}
+                alt="Coconut Salad"
+                className={styles.logoImage}
+              />
+            </a>
+            <a
+              href="https://planszeo.pl/gry-planszowe/animal-fair"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.logoButton}
+              title="Planszeo"
+            >
+              <img
+                src={planszeoLogo}
+                alt="Planszeo"
+                className={styles.logoImage}
+              />
+            </a>
+            <a
+              href="https://boardgamegeek.com/boardgame/402521/spolka-zoo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.logoButton}
+              title="BoardGameGeek"
+            >
+              <img
+                src={bggLogo}
+                alt="BoardGameGeek"
+                className={styles.logoImage}
+              />
+            </a>
           </div>
         </section>
 
