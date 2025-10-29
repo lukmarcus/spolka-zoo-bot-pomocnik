@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import { useGame } from "@lib/GameContext";
 import styles from "./Home.module.css";
-import gameLogo from "../../assets/images/game-logo.png";
+import gameLogo from "../../assets/images/game/game-logo.png";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -27,6 +27,13 @@ const Home: React.FC = () => {
       title: "WCZYTAJ STAN GRY",
       description: "Użyj zapisanego kodu stanu gry",
       action: () => navigate("/load"),
+      disabled: false,
+    },
+    {
+      id: "about",
+      title: "O GRZE I O APLIKACJI",
+      description: "Informacje i linki",
+      action: () => navigate("/about"),
       disabled: false,
     },
   ];
