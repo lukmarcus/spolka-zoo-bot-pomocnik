@@ -122,6 +122,14 @@
   object-fit: contain;
 }
 
+/* Small inline icon used inside buttons (GitHub / Issue) */
+.icon {
+  height: 18px;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
 .detail {
   display: flex;
   justify-content: space-between;
@@ -218,14 +226,16 @@
   transform: translateY(-2px);
 }
 
-/* Bottom controls */
+/* Bottom controls (About) - no top separator so the button sits cleanly outside the card */
 .bottomControls {
   position: relative;
   z-index: 2;
   text-align: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--card-border);
+  /* slightly smaller gap than other views so it visually matches the About layout */
+  margin-top: 1.5rem;
+  /* remove extra top padding and border to avoid visible separator line */
+  padding-top: 0.5rem;
+  border-top: none;
 }
 
 /* Responsive design */

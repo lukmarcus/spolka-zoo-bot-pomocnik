@@ -7,6 +7,10 @@ import coconutSaladLogo from "../../assets/images/logos/coconut-salad-logo.png";
 import bggLogo from "../../assets/images/logos/bgg-logo.png";
 import planszeoLogo from "../../assets/images/logos/planszeo-logo.png";
 import facebookLogo from "../../assets/images/logos/facebook-logo.png";
+import githubLogo from "../../assets/images/logos/github-logo.png";
+import bugIcon from "../../assets/images/icons/bug.png";
+import emailIcon from "../../assets/images/icons/email.png";
+import changelogIcon from "../../assets/images/icons/changelog.png";
 
 const About: React.FC = () => {
   const navigate = useNavigate();
@@ -101,6 +105,7 @@ const About: React.FC = () => {
               ZOO. Aplikacja pozwala na łatwe zarządzanie kartami AI podczas gry
               solo lub z mniejszą liczbą graczy.
             </p>
+            <div className={styles.gameInfoCompact}>autor: Marek Szumny</div>
             <div className={styles.features}>
               <h3>Funkcje aplikacji:</h3>
               <ul>
@@ -122,32 +127,81 @@ const About: React.FC = () => {
               programowania.
             </p>
             <div className={styles.links}>
-              <a
-                href="https://github.com/lukmarcus/spolka-zoo-bot-pomocnik"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.externalLink}
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() =>
+                  window.open(
+                    "https://github.com/lukmarcus/spolka-zoo-bot-pomocnik",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+                aria-label="Kod źródłowy na GitHub (otworzy nową kartę)"
               >
-                📦 Kod źródłowy na GitHub
-              </a>
-              <a
-                href="https://github.com/lukmarcus/spolka-zoo-bot-pomocnik/issues"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.externalLink}
+                <img src={githubLogo} alt="GitHub" className={styles.icon} />
+                Kod źródłowy na GitHub
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() =>
+                  window.open(
+                    "https://github.com/lukmarcus/spolka-zoo-bot-pomocnik/issues/new",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+                aria-label="Zgłoś błąd lub sugestię (otworzy nową kartę)"
               >
-                🐛 Zgłoś błąd lub sugestię
-              </a>
+                <img src={bugIcon} alt="Zgłoszenie" className={styles.icon} />
+                Zgłoś błąd lub sugestię
+              </button>
+              <div style={{ height: 8 }} />
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => window.open("mailto:lukmarcus@gmail.com")}
+                >
+                  <img src={emailIcon} alt="Email" className={styles.icon} />
+                  kontakt
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() =>
+                    window.open(
+                      "https://github.com/lukmarcus/spolka-zoo-bot-pomocnik/blob/main/CHANGELOG.md",
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
+                  }
+                >
+                  <img
+                    src={changelogIcon}
+                    alt="Changelog"
+                    className={styles.icon}
+                  />
+                  Changelog
+                </button>
+              </div>
             </div>
           </div>
         </section>
+      </div>
 
-        {/* Przycisk powrotu */}
-        <div className={styles.bottomControls}>
-          <button className="btn-secondary" onClick={() => navigate("/")}>
-            Powrót do menu głównego
-          </button>
-        </div>
+      {/* Przycisk powrotu poza ramką */}
+      <div className={styles.bottomControls}>
+        <button className="btn-secondary" onClick={() => navigate("/")}>
+          ← Wróć do menu
+        </button>
       </div>
     </Layout>
   );
