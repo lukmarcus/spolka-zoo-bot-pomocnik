@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.5.0-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.5.1-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -60,18 +60,18 @@ npm run dev
 ✅ Cross-device - kody działają między urządzeniami  
 ✅ Real-time validation - błędy wykrywane na żywo
 
-## �️ Technologie
+## 🛠️ Technologie
 
 **Frontend:** React 19.1.1 + TypeScript 5.8.3 + Vite 5.4.19  
 **Styling:** CSS Modules + Responsive Design  
 **Routing:** React Router DOM 7.8.1  
 **Architecture:** Context API + Reducer Pattern
 
-## �📚 Dokumentacja
+## 📚 Dokumentacja
 
 | Dokument                          | Opis                                     |
 | --------------------------------- | ---------------------------------------- |
-| [� ROADMAP.md](ROADMAP.md)        | Plany rozwoju i przyszłe funkcjonalności |
+| [🗺️ ROADMAP.md](ROADMAP.md)       | Plany rozwoju i przyszłe funkcjonalności |
 | [📜 CHANGELOG.md](CHANGELOG.md)   | Historia zmian i release notes           |
 | [🎮 GAME-CODES.md](GAME-CODES.md) | Formaty kodów gry i instrukcje           |
 
@@ -89,6 +89,7 @@ src/
 │       ├── LoadGame.tsx + .module.css # Pełnoekranowe wczytywanie gry
 │       ├── Home.tsx + .module.css # Menu główne
 │       ├── BotCard.tsx + .module.css # Komponenty kart botów
+│       ├── About.tsx + .module.css # Strona "About" (informacje i linki)
 │       └── Layout.tsx + .module.css # Layout aplikacji
 ├── lib/               # Logika biznesowa
 │   ├── GameContext.tsx # Zarządzanie stanem gry

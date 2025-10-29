@@ -4,46 +4,11 @@
 
 | Wersja | Status       | Opis krótki                                    | Szczegóły techniczne                                         |
 | ------ | ------------ | ---------------------------------------------- | ------------------------------------------------------------ |
-| 0.5.0  | ✅ Gotowe    | Typography & Core Design System                | 3 czcionki, logo, podstawowe style, core CSS variables       |
-| 0.5.1  | 🔮 Planowane | Informacje i linki - połączenia z zewnętrznymi | GitHub, bug reports, informacje o grze, linki do wydawnictwa |
-| 0.5.2  | 🔮 Planowane | Mobile UX Polish + CSS Refinements             | Mobile padding/spacing, pełny system CSS vars, color cleanup |
+| 0.5.1  | ✅ Gotowe    | Informacje i linki - połączenia z zewnętrznymi | GitHub, bug reports, informacje o grze, linki do wydawnictwa |
+| 0.5.2  | 🔮 Planowane | Ekran ładowania kodu - poprawki                | Poprawki UX/validation/podpowiedzi przy wczytywaniu kodu     |
+| 0.5.3  | 🔮 Planowane | Mobile UX Polish + CSS Refinements             | Mobile padding/spacing, pełny system CSS vars, color cleanup |
 
 ## 📋 Szczegółowe plany rozwoju
-
-### v0.5.0 — ⚠️ Typography & Core Design System (w trakcie)
-
-🎯 Cel: implementacja podstawowego systemu typografii i core design
-
-✅ **Ukończone zadania:**
-
-- **System trzech czcionek**
-
-  - ✅ ChillScript.woff2 - dla nagłówków i elementów display
-  - ✅ RooneySansBold.woff2 - dla tekstu podstawowego
-  - ✅ MarvinRound.woff2 - dla tekstów na kartach botów
-  - ✅ CSS Variables: --font-display, --font-body, --font-card
-
-- **Core typography system**
-
-  - ✅ Globalne style h1 z text-shadow i ChillScript
-  - ✅ Globalne style h2 z centrowanie i spójnymi marginesami
-  - ✅ Globalne style h3, h4 z odpowiednimi czcionkami i kolorami
-  - ✅ Podstawowe kolory: #a54617, #6b2e06, #f5c67d
-
-- **Layout foundations**
-
-  - ✅ Logo Spółka ZOO zintegrowane z Layout komponentem
-  - ✅ Card-based design dla wszystkich ekranów
-  - ✅ Refaktor GameSetup: jedna karta z trzema sekcjami
-  - ✅ LoadGame: warunkowo instrukcje vs podgląd
-  - ✅ GamePlay: lepsze pozycjonowanie przycisków
-
-- **Finalizacja core typography**
-  - ✅ Przyciski: zmiana font-family z inherit na --font-body
-  - ✅ Core CSS variables: użycie var(--danger) dla error colors
-  - ✅ Kompletny system h1, h2, h3, h4 z odpowiednimi stylami
-
----
 
 ### v0.5.1 — Informacje i linki - połączenia z zewnętrznymi 🔮
 
@@ -71,11 +36,44 @@ Planowane zadania:
 
 ---
 
-### v0.5.2 — Mobile UX Polish + CSS Refinements 🔮
+### v0.5.2 — Ekran ładowania kodu (Loading screen) 🔧
+
+🎯 Cel: poprawić UX i walidację przy wczytywaniu kodów gry
+
+⏱️ Przybliżony termin: Po v0.5.1
+
+Planowane zadania:
+
+- **Walidacja i komunikaty**
+
+  - Lepsze walidowanie formatu kodu przed próbą wczytania
+  - Jasne komunikaty błędów i wskazówki naprawy (np. niepoprawna długość, nieznane tokeny)
+  - Feedback dla użytkownika (loading spinner → stan sukcesu/błąd)
+
+- **UX dla ekranu wczytywania**
+
+  - Zoptymalizowane rozmieszczenie elementów: pole wprowadzania, podgląd, przyciski akcji
+  - Podpowiedzi kontekstowe i przykładowy kod obok pola
+  - Przycisk "Wczytaj" dezaktywowany do momentu przejścia podstawowej walidacji
+
+- **Obsługa błędów i przywracanie stanu**
+
+  - Bezpieczne zachowanie przy błędach parsowania (nie tracimy bieżącej gry)
+  - Opcja podglądu zmian przed zatwierdzeniem wczytania
+  - Lepsze testy jednostkowe i e2e dla parsera kodów
+
+- **Drobne poprawki wizualne**
+
+  - Animacja spinnera i mikro-interakcje (przejścia przy błędzie/sukcesie)
+  - Ujednolicenie przycisków używając `.btn-secondary` gdzie pasuje
+
+---
+
+### v0.5.3 — Mobile UX Polish + CSS Refinements 🔮
 
 🎯 Cel: dopracowanie mobile UX i finalizacja systemu design
 
-⏱️ Przybliżony termin: Po v0.5.1
+⏱️ Przybliżony termin: Po v0.5.2
 
 Planowane zadania:
 
@@ -86,12 +84,12 @@ Planowane zadania:
   - **GamePlay**: liczniki w jednej linii, optymalizacja układu na mobile
   - Szczegółowe testowanie na różnych ekranach (320px, 768px, 1024px+)
 
-- **CSS System Refinements** (przeniesione z v0.5.0)
+-- **CSS System Refinements**
 
-  - **Kompletny system CSS Variables**: wszystkie hardcodowane kolory → zmienne
-  - **Kolory efektów kart**: system dla zielonych, czerwonych, niebieskich, etc.
-  - **System semantic colors**: success, warning, info, danger variables
-  - **Spacing system**: zmienne dla wszystkich rozmiarów, shadows, paddings
+- **Kompletny system CSS Variables**: wszystkie hardcodowane kolory → zmienne
+- **Kolory efektów kart**: system dla zielonych, czerwonych, niebieskich, etc.
+- **System semantic colors**: success, warning, info, danger variables
+- **Spacing system**: zmienne dla wszystkich rozmiarów, shadows, paddings
 
 - **UX Flow Polish**
   - Consistency check wszystkich stanów interfejsu
@@ -100,7 +98,7 @@ Planowane zadania:
 
 ---
 
-## � Pomysły na przyszłość - luźny spis ewentualnych usprawnień
+## 💡 Pomysły na przyszłość - luźny spis ewentualnych usprawnień
 
 Lista potencjalnych funkcjonalności do rozważenia w przyszłych wersjach:
 
@@ -131,48 +129,13 @@ Lista potencjalnych funkcjonalności do rozważenia w przyszłych wersjach:
 - **Tryby turniejowe** - specjalne zasady dla turniejów
 - **Tryb wieloosobowy** - gra przez sieć (daleka przyszłość)
 - **Wyzwania** - specjalne scenariusze do rozegrania
-  nformacjami
 
-  - Linki do wydawnictwa/oficjalnej strony gry
-  - Informacje o zasadach (jeśli potrzebne)
+### 🔁 Kredyty i acknowledgments
 
-- **Kredyty i acknowledgments**
-  - Informacje o twórcach aplikacji
-  - Ewentualne podziękowania
+- Informacje o twórcach aplikacji
+- Ewentualne podziękowania
 
 ---
-
-## � Pomysły na przyszłość - luźny spis ewentualnych usprawnień
-
-Lista potencjalnych funkcjonalności do rozważenia w przyszłych wersjach:
-
-### 🎨 Wizualizacja i UX
-
-- **Graficzna reprezentacja kart** - zastąpienie tekstów obrazkami/ikonami kart
-- **Animacje** - płynne animacje dobierania, odwracania, tasowania
-- **System projektowania** - spójny język wizualny, ikony, kolory
-- **Responsive design** - lepsze dostosowanie do małych ekranów
-- **Ciemny motyw** - opcja dark mode dla aplikacji
-
-### 📊 Funkcje zaawansowane
-
-- **Statystyki gry** - historia ruchów, częstotliwość kart, analizy
-- **Panel analityczny** - szczegółowe statystyki dla zaawansowanych użytkowników
-- **Tryb treningowy** - możliwość cofania ruchów (undo)
-- **Timer** - opcjonalny pomiar czasu gry
-
-### 💾 System zapisów
-
-- **Wiele slotów zapisu** - zapisywanie różnych stanów gry
-- **Zapisy w chmurze** - synchronizacja między urządzeniami
-- **Historia sesji** - możliwość odtwarzania poprzednich gier
-- **Eksport/import** - wymiana zapisów między użytkownikami
-
-### 🏆 Tryby rozgrywki
-
-- **Tryby turniejowe** - specjalne zasady dla turniejów
-- **Tryb wieloosobowy** - gra przez sieć (daleka przyszłość)
-- **Wyzwania** - specjalne scenariusze do rozegrania
 
 ## 📖 Dokumentacja techniczna (skrót)
 

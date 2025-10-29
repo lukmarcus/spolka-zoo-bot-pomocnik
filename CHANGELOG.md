@@ -5,6 +5,23 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2025-10-29
+
+### Dodane
+
+- About page (`/about`) z informacjami o grze i aplikacji
+- Sekcja gry z linkami (BGG, Planszeo, Facebook)
+- Menu: przycisk "O grze i aplikacji"
+- Plik stylów `About.module.css` dla strony About
+- Bezpieczne otwieranie linków zewnętrznych w About (target/rel)
+
+### Zmienione
+
+- Przeniesienie i porządkowanie assetów (logos/, icons/)
+- Ujednolicenie przycisków na About (użycie `.btn-secondary`)
+
+---
+
 ## [0.5.0] - 2025-10-25
 
 ### Dodane
@@ -30,7 +47,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Spójność h2: usunięcie lokalnych nadpisań na rzecz globalnych stylów
 - Jednolity rozmiar czcionki: wszystkie h2 używają 1.5rem
-- Marginesy podglądu: poprawne odstępy w sekcji podglądu LoadGame  
+- Marginesy podglądu: poprawne odstępy w sekcji podglądu LoadGame
 - Padding kart: zoptymalizowane odstępy (2rem→0.5rem na górze)
 - Spójność kolorów: kolory błędów używają var(--danger)
 - Pozycjonowanie akcji: przyciski poza ramką dla spójności z innymi ekranami
