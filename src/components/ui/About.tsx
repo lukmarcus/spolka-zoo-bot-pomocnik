@@ -28,16 +28,6 @@ const About: React.FC = () => {
           <div className={styles.gameInfoCompact}>
             1-5 graczy • 45-90 min • od 10 lat
           </div>
-          <div className={styles.gameCoverContainer}>
-            <img
-              src={gameCover}
-              alt="Okładka gry Spółka ZOO"
-              className={styles.gameCover}
-            />
-          </div>
-          <div className={styles.gameInfoCompact}>
-            autor gry: Mateusz Kiszło
-          </div>
           <div className={styles.gameLinks}>
             <div className={styles.linksRow}>
               <a
@@ -94,39 +84,30 @@ const About: React.FC = () => {
               </a>
             </div>
           </div>
+          <div className={styles.gameInfoCompact}>
+            autor gry: Mateusz Kiszło
+          </div>
+          <div className={styles.gameCoverContainer}>
+            <img
+              src={gameCover}
+              alt="Okładka gry Spółka ZOO"
+              className={styles.gameCover}
+            />
+          </div>
         </section>
 
         {/* Sekcja o aplikacji */}
         <section className={styles.section}>
           <h2>BOT POMOCNIK</h2>
           <div className={styles.appInfo}>
-            <p>
-              Bot Pomocnik to cyfrowy zamiennik dla kart botów w grze Spółka
-              ZOO. Aplikacja pozwala na łatwe zarządzanie kartami AI podczas gry
-              solo lub z mniejszą liczbą graczy.
-            </p>
             <div className={styles.gameInfoCompact}>autor: Marek Szumny</div>
-            <div className={styles.features}>
-              <h3>Funkcje aplikacji:</h3>
-              <ul>
-                <li>Losowanie i zarządzanie kartami botów</li>
-                <li>Zapisywanie i wczytywanie stanu gry</li>
-                <li>Intuicyjny interfejs dostosowany do gry</li>
-                <li>Responsywny design dla urządzeń mobilnych</li>
-              </ul>
-            </div>
           </div>
         </section>
 
         {/* Sekcja linków deweloperskich */}
         <section className={styles.section}>
-          <h2>Deweloper i wsparcie</h2>
           <div className={styles.developerInfo}>
-            <p>
-              Aplikacja została stworzona z pasji do gier planszowych i
-              programowania.
-            </p>
-            <div className={styles.links}>
+            <div className={styles.devGrid}>
               <button
                 type="button"
                 className="btn-secondary"
@@ -140,8 +121,28 @@ const About: React.FC = () => {
                 aria-label="Kod źródłowy na GitHub (otworzy nową kartę)"
               >
                 <img src={githubLogo} alt="GitHub" className={styles.icon} />
-                Kod źródłowy na GitHub
+                GitHub
               </button>
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() =>
+                  window.open(
+                    "https://github.com/lukmarcus/spolka-zoo-bot-pomocnik/blob/main/CHANGELOG.md",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+              >
+                <img
+                  src={changelogIcon}
+                  alt="Changelog"
+                  className={styles.icon}
+                />
+                Changelog
+              </button>
+
               <button
                 type="button"
                 className="btn-secondary"
@@ -155,43 +156,17 @@ const About: React.FC = () => {
                 aria-label="Zgłoś błąd lub sugestię (otworzy nową kartę)"
               >
                 <img src={bugIcon} alt="Zgłoszenie" className={styles.icon} />
-                Zgłoś błąd lub sugestię
+                Zgłoś błąd
               </button>
-              <div style={{ height: 8 }} />
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  justifyContent: "center",
-                }}
+
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => window.open("mailto:lukmarcus@gmail.com")}
               >
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => window.open("mailto:lukmarcus@gmail.com")}
-                >
-                  <img src={emailIcon} alt="Email" className={styles.icon} />
-                  kontakt
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() =>
-                    window.open(
-                      "https://github.com/lukmarcus/spolka-zoo-bot-pomocnik/blob/main/CHANGELOG.md",
-                      "_blank",
-                      "noopener,noreferrer"
-                    )
-                  }
-                >
-                  <img
-                    src={changelogIcon}
-                    alt="Changelog"
-                    className={styles.icon}
-                  />
-                  Changelog
-                </button>
-              </div>
+                <img src={emailIcon} alt="Email" className={styles.icon} />
+                Napisz
+              </button>
             </div>
           </div>
         </section>
