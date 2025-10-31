@@ -84,8 +84,6 @@
   margin-bottom: 2rem;
 }
 
-
-
 .previewContent {
   font-size: var(--font-size-base);
   color: var(--text-primary);
@@ -104,13 +102,6 @@
   margin-top: 2rem;
   padding-top: 2rem;
   border-top: 1px solid rgba(205, 133, 63, 0.3);
-}
-
-.instructionsTitle {
-  margin: 0 0 1rem 0;
-  color: var(--text-primary);
-  font-size: var(--font-size-base);
-  font-weight: 600;
 }
 
 .instructionsList {

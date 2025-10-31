@@ -249,9 +249,7 @@ export default function LoadGame() {
           {/* Instructions Section - show only when no valid preview */}
           {!gamePreview?.isValid && (
             <div className={styles.instructions}>
-              <h3 className={styles.instructionsTitle}>
-                Jak wczytać stan gry:
-              </h3>
+              <h2>JAK WCZYTAĆ STAN GRY?</h2>
               <ol className={styles.instructionsList}>
                 <li>Skopiuj stan gry z trwającej rozgrywki</li>
                 <li>Wprowadź stan gry w polu powyżej</li>
@@ -261,7 +259,7 @@ export default function LoadGame() {
               </ol>
 
               <div className={styles.formatsInfo}>
-                <h4>Obsługiwane formaty:</h4>
+                <h2>OBSŁUGIWANE FORMATY</h2>
                 <ul>
                   <li>
                     <strong>ZS</strong> - Jeden bot
