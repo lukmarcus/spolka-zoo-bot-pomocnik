@@ -225,6 +225,37 @@ button:active {
   background: #b71c3c;
 }
 
+.btn-logo {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(245, 198, 125, 0.08);
+  border: 1px solid rgba(245, 198, 125, 0.18);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn-logo:hover {
+  background: rgba(245, 198, 125, 0.15);
+  border-color: rgba(245, 198, 125, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
+}
+
+.info-box {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--primary-dark);
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(245, 198, 125, 0.08);
+  border-radius: 8px;
+  border-left: 3px solid var(--button-secondary);
+  box-shadow: 0 2px 8px rgba(139, 69, 19, 0.08);
+  margin-bottom: 0.5rem;
+}
+
 /* Main layout */
 .container {
   max-width: var(--max-width);
@@ -245,7 +276,7 @@ button:active {
 /* Karty */
 .card {
   text-align: center;
-  padding: 0.5rem 1rem 2rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   background: var(--card-bg);
   border: 2px solid var(--card-border);
   border-radius: 16px;
@@ -267,6 +298,11 @@ button:active {
     rgba(205, 133, 63, 0.03)
   );
   z-index: 1;
+}
+
+.card > * {
+  position: relative;
+  z-index: 2;
 }
 
 .card-header {
@@ -463,13 +499,13 @@ button:active {
 /* Responsive card styles */
 @media (max-width: 768px) {
   .card {
-    padding: 1rem 0.75rem 1.5rem 0.75rem;
+    padding: 1rem 0.75rem 0.5rem 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 0.75rem 0.5rem 1.25rem 0.5rem;
+    padding: 0.75rem 0.5rem 0.25rem 0.5rem;
     border-radius: 12px;
   }
 }

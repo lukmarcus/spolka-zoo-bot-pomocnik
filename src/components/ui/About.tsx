@@ -25,16 +25,14 @@ const About: React.FC = () => {
         {/* Sekcja o grze */}
         <section className="section">
           <h2>SPÓŁKA ZOO</h2>
-          <div className={styles.gameInfoCompact}>
-            1-5 graczy • 45-90 min • od 10 lat
-          </div>
+          <div className="info-box">1-5 graczy • 45-90 min • od 10 lat</div>
           <div className={styles.gameLinks}>
             <div className={styles.linksRow}>
               <a
                 href="https://www.coconutsalad.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.logoButton}
+                className="btn-logo"
                 title="Coconut Salad"
               >
                 <img
@@ -47,7 +45,7 @@ const About: React.FC = () => {
                 href="https://www.facebook.com/profile.php?id=100082443393992"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.logoButton}
+                className="btn-logo"
                 title="Facebook"
               >
                 <img
@@ -60,7 +58,7 @@ const About: React.FC = () => {
                 href="https://planszeo.pl/gry-planszowe/animal-fair"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.logoButton}
+                className="btn-logo"
                 title="Planszeo"
               >
                 <img
@@ -73,7 +71,7 @@ const About: React.FC = () => {
                 href="https://boardgamegeek.com/boardgame/402521/spolka-zoo"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.logoButton}
+                className="btn-logo"
                 title="BoardGameGeek"
               >
                 <img
@@ -84,9 +82,7 @@ const About: React.FC = () => {
               </a>
             </div>
           </div>
-          <div className={styles.gameInfoCompact}>
-            autor gry: Mateusz Kiszło
-          </div>
+          <div className="info-box">autor gry: Mateusz Kiszło</div>
           <div className={styles.gameCoverContainer}>
             <img
               src={gameCover}
@@ -99,9 +95,7 @@ const About: React.FC = () => {
         {/* Sekcja o aplikacji */}
         <section className="section">
           <h2>BOT POMOCNIK</h2>
-          <div className={styles.appInfo}>
-            <div className={styles.gameInfoCompact}>autor: Marek Szumny</div>
-          </div>
+          <div className="info-box">autor: Marek Szumny</div>
         </section>
 
         {/* Sekcja linków deweloperskich */}

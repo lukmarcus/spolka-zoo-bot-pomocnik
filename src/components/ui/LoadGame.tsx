@@ -193,7 +193,7 @@ export default function LoadGame() {
 
           {/* Preview Section */}
           {gamePreview && gamePreview.isValid && (
-            <div className={styles.preview}>
+            <div className="info-box">
               <h2>PODGLĄD STANU GRY</h2>
               <div className={styles.previewContent}>
                 {gamePreview.botCount === 1 ? (
