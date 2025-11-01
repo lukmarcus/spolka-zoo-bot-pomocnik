@@ -1,32 +1,5 @@
 /* LoadGame Component Styles */
 
-/* Main load game card - consistent with GameSetup */
-.loadGameCard {
-  text-align: center;
-  padding: 0.5rem 1rem 2rem 1rem;
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-medium);
-  position: relative;
-  overflow: hidden;
-}
-
-.loadGameCard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(139, 69, 19, 0.02),
-    rgba(205, 133, 63, 0.03)
-  );
-  z-index: 1;
-}
-
 .loadGameContent {
   width: 100%;
   position: relative;
@@ -141,19 +114,11 @@
   margin-top: 2rem;
 }
 
-/* Mobile Responsive - consistent with GameSetup */
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .loadGameCard {
-    padding: 1rem 0.75rem 1.5rem 0.75rem;
-  }
-
   .actions button,
   .bottomControls button {
     width: 100%;
-  }
-
-  .instructions {
-    margin-bottom: 1.5rem;
   }
 
   .preview {
@@ -162,18 +127,9 @@
 }
 
 @media (max-width: 480px) {
-  .loadGameCard {
-    padding: 0.75rem 0.5rem 1.25rem 0.5rem;
-    border-radius: 12px;
-  }
-
   .input {
     font-size: 0.9rem;
     padding: 0.75rem;
-  }
-
-  .instructions {
-    padding: 1rem;
   }
 
   .preview {

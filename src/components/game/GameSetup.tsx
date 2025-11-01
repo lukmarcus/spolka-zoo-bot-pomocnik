@@ -36,7 +36,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
 
   return (
     <div>
-      <div className={styles.gameSetupCard}>
+      <div className="card">
         <div className={styles.gameSetupContent}>
           <div className="section">
             <h2>LICZBA BOTÓW</h2>

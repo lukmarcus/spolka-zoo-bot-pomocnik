@@ -244,11 +244,29 @@ button:active {
 
 /* Karty */
 .card {
+  text-align: center;
+  padding: 0.5rem 1rem 2rem 1rem;
   background: var(--card-bg);
   border: 2px solid var(--card-border);
-  border-radius: var(--border-radius);
-  padding: var(--padding);
+  border-radius: 16px;
   box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.02),
+    rgba(205, 133, 63, 0.03)
+  );
+  z-index: 1;
 }
 
 .card-header {
@@ -291,6 +309,11 @@ button:active {
   margin-bottom: var(--gap);
 }
 .mb-3 {
+  margin-bottom: 1.5rem;
+}
+
+/* Global section spacing - consistent across all components */
+.section {
   margin-bottom: 1.5rem;
 }
 
@@ -435,4 +458,18 @@ button:active {
   ); /* Very subtle overlay for text readability */
   pointer-events: none;
   z-index: 0;
+}
+
+/* Responsive card styles */
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem 0.75rem 1.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 0.75rem 0.5rem 1.25rem 0.5rem;
+    border-radius: 12px;
+  }
 }

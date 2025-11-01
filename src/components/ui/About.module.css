@@ -1,16 +1,5 @@
 /* Cleaned About styles: only rules referenced by About.tsx */
 
-.aboutCard {
-  text-align: left;
-  padding: 0.5rem 1rem 2rem 1rem;
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-medium);
-  position: relative;
-  overflow: hidden;
-}
-
 .appInfo {
   text-align: center;
 }

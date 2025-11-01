@@ -174,7 +174,7 @@ export default function LoadGame() {
       subtitle="Wprowadź skopiowany wcześniej stan gry"
       backgroundType="home"
     >
-      <div className={styles.loadGameCard}>
+      <div className="card">
         <div className={styles.loadGameContent}>
           {/* Input Section */}
           <div className="section">

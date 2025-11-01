@@ -21,7 +21,7 @@ const About: React.FC = () => {
       title="INFORMACJE"
       subtitle="O grze planszowej i o aplikacji"
     >
-      <div className={styles.aboutCard}>
+      <div className="card">
         {/* Sekcja o grze */}
         <section className="section">
           <h2>SPÓŁKA ZOO</h2>
