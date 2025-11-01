@@ -38,7 +38,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
     <div>
       <div className={styles.gameSetupCard}>
         <div className={styles.gameSetupContent}>
-          <div className={styles.botSelectionSection}>
+          <div className="section">
             <h2>LICZBA BOTÓW</h2>
             <div className={styles.botButtons}>
               {[1, 2, 3, 4].map((count) => (
@@ -60,7 +60,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
 
           {/* Mode selection section */}
           {selectedBotCount && (
-            <div className={styles.modeSection}>
+            <div className="section">
               <h2>TRYB GRY</h2>
               <div className={styles.modeButtons}>
                 {selectedBotCount === 1 ? (
@@ -95,7 +95,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
           )}
 
           {/* Start game section */}
-          <div className={styles.startGameSection}>
+          <div className="section">
             {selectedBotCount ? (
               <p className={styles.selectedInfo}>
                 Wybrano: {selectedBotCount} bot

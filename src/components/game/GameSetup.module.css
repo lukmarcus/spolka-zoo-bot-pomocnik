@@ -110,11 +110,6 @@
   z-index: 2;
 }
 
-/* Bot selection section within the card */
-.botSelectionSection {
-  margin-bottom: 2rem;
-}
-
 .gameSetupCard p {
   margin-bottom: 1.5rem;
   color: var(--text-primary);
@@ -194,12 +189,6 @@
 .botLabel {
   font-size: 0.875rem;
   opacity: 0.9;
-}
-
-.startGameSection {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--card-border);
 }
 
 .selectedInfo {

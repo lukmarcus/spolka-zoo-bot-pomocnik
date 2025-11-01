@@ -11,12 +11,6 @@
   overflow: hidden;
 }
 
-.section {
-  position: relative;
-  z-index: 2;
-  margin-bottom: 1.5rem;
-}
-
 .appInfo {
   text-align: center;
 }

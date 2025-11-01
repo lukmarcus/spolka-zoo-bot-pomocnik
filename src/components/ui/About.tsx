@@ -23,7 +23,7 @@ const About: React.FC = () => {
     >
       <div className={styles.aboutCard}>
         {/* Sekcja o grze */}
-        <section className={styles.section}>
+        <section className="section">
           <h2>SPÓŁKA ZOO</h2>
           <div className={styles.gameInfoCompact}>
             1-5 graczy • 45-90 min • od 10 lat
@@ -97,7 +97,7 @@ const About: React.FC = () => {
         </section>
 
         {/* Sekcja o aplikacji */}
-        <section className={styles.section}>
+        <section className="section">
           <h2>BOT POMOCNIK</h2>
           <div className={styles.appInfo}>
             <div className={styles.gameInfoCompact}>autor: Marek Szumny</div>
@@ -105,7 +105,7 @@ const About: React.FC = () => {
         </section>
 
         {/* Sekcja linków deweloperskich */}
-        <section className={styles.section}>
+        <section className="section">
           <div className={styles.developerInfo}>
             <div className={styles.devGrid}>
               <button

@@ -33,11 +33,6 @@
   z-index: 2;
 }
 
-/* Input section within the card */
-.inputSection {
-  margin-bottom: 2rem;
-}
-
 .label {
   display: block;
   margin-bottom: 0.5rem;
@@ -98,12 +93,6 @@
   margin-bottom: 0;
 }
 
-.instructions {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(205, 133, 63, 0.3);
-}
-
 .instructionsList {
   margin: 0;
   padding-left: 1.5rem;
@@ -112,12 +101,6 @@
 
 .instructionsList li {
   margin-bottom: 0.5rem;
-}
-
-.formatsInfo {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--card-border);
 }
 
 .formatsInfo h4 {

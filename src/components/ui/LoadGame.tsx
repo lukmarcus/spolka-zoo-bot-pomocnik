@@ -177,7 +177,7 @@ export default function LoadGame() {
       <div className={styles.loadGameCard}>
         <div className={styles.loadGameContent}>
           {/* Input Section */}
-          <div className={styles.inputSection}>
+          <div className="section">
             <h2>KOD STANU GRY</h2>
             <input
               type="text"
@@ -248,17 +248,19 @@ export default function LoadGame() {
 
           {/* Instructions Section - show only when no valid preview */}
           {!gamePreview?.isValid && (
-            <div className={styles.instructions}>
-              <h2>JAK WCZYTAĆ STAN GRY?</h2>
-              <ol className={styles.instructionsList}>
-                <li>Skopiuj stan gry z trwającej rozgrywki</li>
-                <li>Wprowadź stan gry w polu powyżej</li>
-                <li>Zweryfikuj poprawność stanu gry</li>
-                <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
-                <li>Gra zostanie wczytana w zapisanym stanie</li>
-              </ol>
+            <>
+              <div className="section">
+                <h2>JAK WCZYTAĆ STAN GRY?</h2>
+                <ol className={styles.instructionsList}>
+                  <li>Skopiuj stan gry z trwającej rozgrywki</li>
+                  <li>Wprowadź stan gry w polu powyżej</li>
+                  <li>Zweryfikuj poprawność stanu gry</li>
+                  <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
+                  <li>Gra zostanie wczytana w zapisanym stanie</li>
+                </ol>
+              </div>
 
-              <div className={styles.formatsInfo}>
+              <div className="section">
                 <h2>OBSŁUGIWANE FORMATY</h2>
                 <ul>
                   <li>
@@ -272,7 +274,7 @@ export default function LoadGame() {
                   </li>
                 </ul>
               </div>
-            </div>
+            </>
           )}
 
           {/* Load Game Button - only when valid preview */}
