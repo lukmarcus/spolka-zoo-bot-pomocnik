@@ -179,12 +179,16 @@ export default function LoadGame() {
           {/* Input Section */}
           <div className="section">
             <h2>KOD STANU GRY</h2>
+            <label htmlFor="gameCode" className={styles.label}>
+              Wklej skopiowany stan gry
+            </label>
             <input
+              id="gameCode"
               type="text"
               value={gameCode}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder="Wprowadź skopiowany wcześniej stan gry"
+              placeholder="np. ZS1A2B3C..."
               className={`${styles.input} ${error ? styles.error : ""}`}
               autoFocus
             />
@@ -244,37 +248,6 @@ export default function LoadGame() {
                 )}
               </div>
             </div>
-          )}
-
-          {/* Instructions Section - show only when no valid preview */}
-          {!gamePreview?.isValid && (
-            <>
-              <div className="section">
-                <h2>JAK WCZYTAĆ STAN GRY?</h2>
-                <ol className={styles.instructionsList}>
-                  <li>Skopiuj stan gry z trwającej rozgrywki</li>
-                  <li>Wprowadź stan gry w polu powyżej</li>
-                  <li>Zweryfikuj poprawność stanu gry</li>
-                  <li>Kliknij "Wczytaj stan gry" albo naciśnij Enter</li>
-                  <li>Gra zostanie wczytana w zapisanym stanie</li>
-                </ol>
-              </div>
-
-              <div className="section">
-                <h2>OBSŁUGIWANE FORMATY</h2>
-                <ul>
-                  <li>
-                    <strong>ZS</strong> - Jeden bot
-                  </li>
-                  <li>
-                    <strong>ZM</strong> - Kilka botów, wspólna talia
-                  </li>
-                  <li>
-                    <strong>ZP</strong> - Kilka botów, osobne talie
-                  </li>
-                </ul>
-              </div>
-            </>
           )}
 
           {/* Load Game Button - only when valid preview */}
