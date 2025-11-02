@@ -45,9 +45,7 @@ export default function LoadGame() {
     // Validate format (supports ZS, ZM, ZP formats)
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
       setGamePreview(null);
-      setError(
-        "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot)"
-      );
+      setError("Kod musi zaczynać się od Z");
       return;
     }
 
@@ -55,25 +53,73 @@ export default function LoadGame() {
       const prefix = filteredValue.substring(0, 2);
       if (prefix !== "ZS" && prefix !== "ZM" && prefix !== "ZP") {
         setGamePreview(null);
-        setError(
-          "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot)"
-        );
+        setError("Nieprawidłowy prefiks - użyj ZS, ZM albo ZP");
         return;
       }
-    }
 
-    if (filteredValue.length >= 3) {
-      const prefix = filteredValue.substring(0, 3);
-      if (
-        !prefix.startsWith("ZS") &&
-        !prefix.startsWith("ZM") &&
-        !prefix.startsWith("ZP")
-      ) {
-        setGamePreview(null);
-        setError(
-          "Prawidłowy format: ZS (single-bot), ZM (multi-shared), ZP (per-bot)"
-        );
-        return;
+      // Format-specific validation
+      if (prefix === "ZS") {
+        // ZS: sprawdź duplikaty kart (każda karta może wystąpić tylko raz)
+        if (filteredValue.length >= 3) {
+          const cards = filteredValue.substring(2); // wszystkie karty po ZS
+          const uniqueCards = new Set(cards);
+          if (uniqueCards.size !== cards.length) {
+            setGamePreview(null);
+            setError("Każda karta może wystąpić tylko raz w kodzie");
+            return;
+          }
+          // Nie sprawdzamy cards.length > 13 bo jest to niemożliwe:
+          // - Talia ma tylko 13 unikatowych kart (0-9,A-C)
+          // - Jeśli nie ma duplikatów, maksimum to 13 kart
+          // - Inne znaki są już odfiltrowane wcześniej
+        }
+      } else if (prefix === "ZM") {
+        // ZM: minimum 6 znaków (ZM + n_botów + aktualny + karta + Z + pozostałe)
+        if (filteredValue.length >= 3) {
+          const botCount = parseInt(filteredValue.charAt(2));
+          if (isNaN(botCount) || botCount < 2 || botCount > 4) {
+            setGamePreview(null);
+            setError("ZM: liczba botów musi być 2-4");
+            return;
+          }
+          if (filteredValue.length >= 4) {
+            const currentBot = parseInt(filteredValue.charAt(3));
+            if (isNaN(currentBot) || currentBot < 1 || currentBot > botCount) {
+              setGamePreview(null);
+              setError(`ZM: aktualny bot musi być 1-${botCount}`);
+              return;
+            }
+          }
+          // Podstawowa walidacja - szczegóły w gameStorage.ts
+        }
+      } else if (prefix === "ZP") {
+        // ZP: podobna logika do ZM, ale wymaga więcej separatorów Z
+        if (filteredValue.length >= 3) {
+          const botCount = parseInt(filteredValue.charAt(2));
+          if (isNaN(botCount) || botCount < 2 || botCount > 4) {
+            setGamePreview(null);
+            setError("ZP: liczba botów musi być 2-4");
+            return;
+          }
+          if (filteredValue.length >= 4) {
+            const currentBot = parseInt(filteredValue.charAt(3));
+            if (isNaN(currentBot) || currentBot < 1 || currentBot > botCount) {
+              setGamePreview(null);
+              setError(`ZP: aktualny bot musi być 1-${botCount}`);
+              return;
+            }
+          }
+          if (filteredValue.length >= 6) {
+            const separatorCount = (filteredValue.match(/Z/g) || []).length;
+            if (separatorCount === 0) {
+              setGamePreview(null);
+              setError("ZP: brakuje separatorów Z");
+              return;
+            }
+
+            // Szczegóły walidacji w gameStorage.ts
+          }
+        }
       }
     }
 
@@ -102,7 +148,7 @@ export default function LoadGame() {
         if (invalidChars.length > 0) {
           setGamePreview(null);
           setError(
-            "Prawidłowy format: ZS/ZM/ZP + 0-9,A-C (ZM/ZP z separatorem Z)"
+            "Kod zawiera nieprawidłowe znaki - używaj tylko cyfr 0-9 i liter A-C"
           );
           return;
         }
@@ -112,18 +158,23 @@ export default function LoadGame() {
     // Preview game state if code is potentially complete
     let shouldPreview = false;
     if (filteredValue.startsWith("ZS") && filteredValue.length >= 3) {
-      shouldPreview = true; // ZS format can be short
+      shouldPreview = true; // ZS: minimum ZS + obecna karta
     } else if (filteredValue.startsWith("ZM") && filteredValue.length >= 5) {
-      shouldPreview = true; // ZM format needs at least ZM + bot count + current bot + card
-    } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 5) {
-      shouldPreview = true; // ZP format needs at least ZP + bot count + current bot + card
+      // ZM: zawsze wywołaj preview dla kodów >= 5 znaków (ZM + bots + current + card)
+      // Szczegółowa walidacja w gameStorage.ts
+      shouldPreview = true;
+    } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 6) {
+      // ZP: sprawdź czy są jakiekolwiek separatory Z po prefiksie
+      const dataWithoutPrefix = filteredValue.substring(2);
+      const hasAnySeparator = dataWithoutPrefix.includes("Z");
+      shouldPreview = hasAnySeparator; // ZP: minimum ZP + n_botów + aktualny + karta + Z
     }
 
     if (shouldPreview) {
       const preview = previewGameCode(filteredValue);
       setGamePreview(preview);
       if (!preview.isValid) {
-        setError(preview.errorMessage || "Nieprawidłowy kod gry");
+        setError(preview.errorMessage || "Kod jest niepełny lub zawiera błędy");
       }
     }
   };
@@ -171,7 +222,7 @@ export default function LoadGame() {
   return (
     <Layout
       title="WCZYTAJ STAN GRY"
-      subtitle="Wprowadź skopiowany wcześniej stan gry"
+      subtitle="Kontynuuj wcześniej zapisaną grę"
       backgroundType="home"
     >
       <div className="card">
@@ -180,7 +231,7 @@ export default function LoadGame() {
           <div className="section">
             <h2>KOD STANU GRY</h2>
             <label htmlFor="gameCode" className={styles.label}>
-              Wklej skopiowany stan gry
+              Miejsce na kod stanu gry
             </label>
             <input
               id="gameCode"

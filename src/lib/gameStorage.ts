@@ -114,6 +114,115 @@ function decodeMultiSharedReadablePayload(payload: string): {
   }
 }
 
+// Helper function to get detailed error message for ZM codes
+function getZMValidationError(payload: string): string {
+  if (!payload || payload.length < 4) {
+    return "ZM: kod za krótki (minimum 4 znaki)";
+  }
+
+  try {
+    const botCount = parseInt(payload[0], 10);
+    const currentBot = parseInt(payload[1], 10);
+
+    if (botCount < 2 || botCount > 4) {
+      return "ZM: liczba botów musi być 2-4";
+    }
+    if (currentBot < 1 || currentBot > botCount) {
+      return `ZM: aktualny bot musi być 1-${botCount}`;
+    }
+
+    const cur = decodeCard(payload[2]);
+
+    if (payload[3] !== "Z") {
+      return "ZM: brakuje separatora Z po obecnej karcie";
+    }
+
+    const remainingSection = payload.slice(4);
+    const remaining: number[] = [];
+
+    if (remainingSection.length > 0) {
+      const chars = remainingSection.split("");
+      for (const char of chars) {
+        remaining.push(decodeCard(char));
+      }
+    }
+
+    const allCards = [cur, ...remaining];
+    const uniqueCards = new Set(allCards);
+    if (uniqueCards.size !== allCards.length) {
+      return "ZM: każda karta może wystąpić tylko raz w kodzie";
+    }
+
+    if (allCards.length < 1 || allCards.length > 13) {
+      return "ZM: nieprawidłowa liczba kart";
+    }
+
+    return "ZM: nieznany błąd walidacji";
+  } catch {
+    return "ZM: nieprawidłowe znaki w kodzie";
+  }
+}
+
+// Helper function to get detailed error message for ZP codes
+function getZPValidationError(payload: string): string {
+  if (!payload || payload.length < 4) {
+    return "ZP: kod za krótki (minimum 4 znaki)";
+  }
+
+  try {
+    const botCount = parseInt(payload[0], 10);
+    const currentBot = parseInt(payload[1], 10);
+
+    if (botCount < 2 || botCount > 4) {
+      return "ZP: liczba botów musi być 2-4";
+    }
+    if (currentBot < 1 || currentBot > botCount) {
+      return `ZP: aktualny bot musi być 1-${botCount}`;
+    }
+
+    const cur = decodeCard(payload[2]);
+
+    if (payload[3] !== "Z") {
+      return "ZP: brakuje separatora Z po obecnej karcie";
+    }
+
+    const remainingPayload = payload.slice(4);
+    const blocks = remainingPayload.split("Z");
+
+    if (blocks.length !== botCount) {
+      return `ZP: nieprawidłowa liczba bloków (oczekiwano ${botCount}, znaleziono ${blocks.length})`;
+    }
+
+    // Check each bot block
+    for (let i = 0; i < botCount; i++) {
+      const block = blocks[i];
+      const remaining: number[] = [];
+      const isCurrentBotBlock = i + 1 === currentBot;
+
+      if (block.length > 0) {
+        const chars = block.split("");
+        for (const char of chars) {
+          const card = decodeCard(char);
+
+          if (isCurrentBotBlock && card === cur) {
+            return `ZP: obecna karta (${char}) nie może występować w bloku aktualnego bota`;
+          }
+
+          if (remaining.includes(card)) {
+            return `ZP: duplikat karty (${char}) w bloku bota ${i + 1}`;
+          }
+
+          remaining.push(card);
+        }
+      }
+    }
+
+    return "ZP: nieznany błąd walidacji";
+  } catch {
+    return "ZP: nieprawidłowe znaki w kodzie";
+  }
+}
+
 function encodePerBotReadable(gameState: GameState): string {
   if (
     !gameState.botDecks ||
@@ -468,8 +577,7 @@ export function previewGameCode(code: string): GameCodePreview {
     if (!parsed)
       return {
         isValid: false,
-        errorMessage:
-          "Kod ZM zawiera nieprawidłowe dane lub błędną liczbę botów",
+        errorMessage: getZMValidationError(multiMatch[1]),
         botCount: 1,
         currentBot: undefined,
         currentCardIndex: -1,
@@ -579,31 +687,14 @@ export function previewGameCode(code: string): GameCodePreview {
       perBotMatch[1] + perBotMatch[2] + perBotMatch[3] + perBotMatch[4]
     );
     if (!parsed) {
-      // Try to provide more specific error messages
-      const botCountChar = perBotMatch[1];
-      const currentBotChar = perBotMatch[2];
-      const botCount = parseInt(botCountChar, 10);
-      const currentBot = parseInt(currentBotChar, 10);
-
-      if (currentBot > botCount) {
-        return {
-          isValid: false,
-          errorMessage: `Aktualny bot (${currentBot}) poza zakresem (1-${botCount})`,
-          botCount: botCount,
-          currentBot: currentBot,
-          currentCardIndex: -1,
-          totalCards: 13,
-          gameProgress: "0/13",
-          isGameStarted: false,
-          isDeckExhausted: false,
-          mode: "individual" as const,
-        };
-      }
+      const payload =
+        perBotMatch[1] + perBotMatch[2] + perBotMatch[3] + perBotMatch[4];
+      const botCount = parseInt(perBotMatch[1], 10);
+      const currentBot = parseInt(perBotMatch[2], 10);
 
       return {
         isValid: false,
-        errorMessage:
-          "Kod ZP zawiera nieprawidłowe dane (sprawdź duplikaty lub obecną kartę w blokach)",
+        errorMessage: getZPValidationError(payload),
         botCount: botCount,
         currentBot: currentBot,
         currentCardIndex: -1,
@@ -670,6 +761,61 @@ export function previewGameCode(code: string): GameCodePreview {
       mode: "individual" as const,
       botPositions,
     };
+  }
+
+  // Handle partial ZM codes - support codes during typing
+  if (trimmed.match(/^ZM[2-4]?[1-4]?[0-9A-C]?.*$/i)) {
+    const partialZMMatch = trimmed.match(
+      /^ZM([2-4]?)([1-4]?)([0-9A-C]?)(.*?)$/i
+    );
+    if (partialZMMatch) {
+      const [, botCountStr, currentBotStr, cardStr, remaining] = partialZMMatch;
+
+      if (botCountStr && currentBotStr && cardStr) {
+        // We have bot count, current bot, and card - check if Z separator is missing
+        if (!remaining.startsWith("Z")) {
+          return {
+            isValid: false,
+            errorMessage: "ZM: brakuje separatora Z po obecnej karcie",
+            botCount: parseInt(botCountStr, 10),
+            currentBot: parseInt(currentBotStr, 10),
+            currentCardIndex: -1,
+            totalCards: 13,
+            gameProgress: "0/13",
+            isGameStarted: false,
+            isDeckExhausted: false,
+          };
+        }
+
+        // If we have Z but invalid format after it
+        return {
+          isValid: false,
+          errorMessage: getZMValidationError(
+            botCountStr + currentBotStr + cardStr + remaining
+          ),
+          botCount: parseInt(botCountStr, 10),
+          currentBot: parseInt(currentBotStr, 10),
+          currentCardIndex: -1,
+          totalCards: 13,
+          gameProgress: "0/13",
+          isGameStarted: false,
+          isDeckExhausted: false,
+        };
+      }
+
+      // Incomplete code during typing
+      return {
+        isValid: false,
+        errorMessage: "ZM: kod niepełny - kontynuuj wpisywanie",
+        botCount: botCountStr ? parseInt(botCountStr, 10) : 1,
+        currentBot: currentBotStr ? parseInt(currentBotStr, 10) : 1,
+        currentCardIndex: -1,
+        totalCards: 13,
+        gameProgress: "0/13",
+        isGameStarted: false,
+        isDeckExhausted: false,
+      };
+    }
   }
 
   return {
