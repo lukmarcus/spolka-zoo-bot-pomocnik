@@ -70,15 +70,20 @@
   padding-left: 1.25rem;
 }
 
-.botPositions {
-  margin-left: 1rem;
-  margin-top: 0.25rem;
+.botSummary {
+  margin-top: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--text-primary);
 }
 
-.botPosition {
-  margin-bottom: 0.25rem;
-  font-family: monospace;
-  font-size: 0.9rem;
+.currentBotText {
+  color: var(--button-primary);
+  font-weight: bold;
+  border: 1px solid var(--button-primary);
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 
 /* Actions section within the card - only load button */

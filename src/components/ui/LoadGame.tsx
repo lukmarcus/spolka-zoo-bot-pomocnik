@@ -277,16 +277,25 @@ export default function LoadGame() {
                     )}
                     {gamePreview.botPositions ? (
                       <div className={styles.previewItem}>
-                        <strong>Pozycje botów:</strong>
-                        <div className={styles.botPositions}>
-                          {gamePreview.botPositions.map((bot) => (
-                            <div key={bot.botId} className={styles.botPosition}>
-                              Bot {bot.botId}: {bot.position}
-                              {bot.botId === gamePreview.currentBot
-                                ? " ⬅️"
-                                : ""}
-                            </div>
-                          ))}
+                        <strong>Stany talii:</strong>
+                        <div className={styles.botSummary}>
+                          {" "}
+                          {gamePreview.botPositions.map((bot, index) => {
+                            const isActive =
+                              bot.botId === gamePreview.currentBot;
+                            return (
+                              <span key={bot.botId}>
+                                {index > 0 && " • "}
+                                <span
+                                  className={
+                                    isActive ? styles.currentBotText : ""
+                                  }
+                                >
+                                  {bot.botId} ({bot.position})
+                                </span>
+                              </span>
+                            );
+                          })}
                         </div>
                       </div>
                     ) : (
@@ -309,7 +318,7 @@ export default function LoadGame() {
                 onClick={handleLoadGame}
                 disabled={!isCodeValid || isLoading}
               >
-                {isLoading ? "Wczytywanie..." : "🎯 Wczytaj i rozpocznij grę"}
+                {isLoading ? "Wczytywanie..." : "Wczytaj i kontynuuj grę"}
               </button>
             </div>
           )}
