@@ -2,52 +2,38 @@
 
 ## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                                    | Szczegóły techniczne                                         |
-| ------ | ------------ | ---------------------------------------------- | ------------------------------------------------------------ |
-| 0.5.1  | ✅ Gotowe    | Informacje i linki - połączenia z zewnętrznymi | GitHub, bug reports, informacje o grze, linki do wydawnictwa |
-| 0.5.2  | 🔮 Planowane | Ekran ładowania kodu - poprawki                | Poprawki UX/validation/podpowiedzi przy wczytywaniu kodu     |
-| 0.5.3  | 🔮 Planowane | Mobile UX Polish + CSS Refinements             | Mobile padding/spacing, pełny system CSS vars, color cleanup |
+| Wersja | Status       | Opis krótki                         | Szczegóły techniczne                                              |
+| ------ | ------------ | ----------------------------------- | ----------------------------------------------------------------- |
+| 0.5.2  | ✅ Gotowe    | Globalne CSS + precyzyjna walidacja | System globalnych klas, szczegółowe komunikaty błędów ZM/ZP       |
+| 0.5.3  | 🔮 Planowane | Mobile UX + Poprawa ekranu gry      | Mobile UX, wygląd kart/przycisków, system CSS vars, color cleanup |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.5.1 — Informacje i linki - połączenia z zewnętrznymi 🔮
+### v0.5.2 — Globalne CSS + precyzyjna walidacja ✅
 
-🎯 Cel: dodanie informacji o grze i przydatnych linków
+🎯 Cel: unifikacja designu i poprawa walidacji kodów gry
 
-⏱️ Przybliżony termin: Do ustalenia
+⏱️ Zakończono: 2025-11-02
 
-Planowane zadania:
+Zrealizowane zadania:
 
-- **Linki zewnętrzne**
+- **System globalnych CSS**
 
-  - Odnośnik do repozytorium GitHub
-  - Formularz/link do zgłaszania błędów
-  - Kontakt z deweloperem
+  - Klasy `.card`, `.section`, `.btn-logo`, `.info-box` dla spójności designu
+  - Centralizacja stylów i eliminacja duplikatów
+  - Poprawki z-index i hierarchii nagłówków
 
-- **Informacje o grze**
+- **Precyzyjna walidacja**
 
-  - Sekcja "O grze" z podstawowymi informacjami
-  - Linki do wydawnictwa/oficjalnej strony gry
-  - Informacje o zasadach (jeśli potrzebne)
+  - Funkcje `getZMValidationError()` i `getZPValidationError()` w gameStorage.ts
+  - Szczegółowe komunikaty błędów zamiast ogólnych
+  - Poprawa walidacji ZM: separator Z vs prefiks
 
-- **Kredyty i acknowledgments**
-  - Informacje o twórcach aplikacji
-  - Ewentualne podziękowania
+- **LoadGame UX**
 
----
-
-### v0.5.2 — Ekran ładowania kodu (Loading screen) 🔧
-
-🎯 Cel: poprawić UX i walidację przy wczytywaniu kodów gry
-
-⏱️ Przybliżony termin: Po v0.5.1
-
-Planowane zadania:
-
-- **Walidacja i komunikaty**
-
-  - Lepsze walidowanie formatu kodu przed próbą wczytania
-  - Jasne komunikaty błędów i wskazówki naprawy (np. niepoprawna długość, nieznane tokeny)
+  - Uproszczenie interfejsu, usunięcie verbose instrukcji
+  - Elegancki wyświetlacz stanu talii z borderem dla aktywnego bota
+  - Centralizacja walidacji w warstwie logiki biznesowej
   - Feedback dla użytkownika (loading spinner → stan sukcesu/błąd)
 
 - **UX dla ekranu wczytywania**
@@ -83,6 +69,11 @@ Planowane zadania:
   - **GameSetup**: ujednolicenie przycisków, lepsze wykorzystanie przestrzeni
   - **GamePlay**: liczniki w jednej linii, optymalizacja układu na mobile
   - Szczegółowe testowanie na różnych ekranach (320px, 768px, 1024px+)
+
+- **Poprawa ekranu gry**
+  - **Wygląd zawartości kart**: lepsze formatowanie opisów, kolorowanie fraz kluczowych
+  - **Stylowanie przycisków**: ujednolicenie designu przycisków akcji w grze
+  - **Responsywność kart**: optymalizacja wyświetlania kart na różnych ekranach
 
 -- **CSS System Refinements**
 

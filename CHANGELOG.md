@@ -5,6 +5,34 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2025-11-02
+
+### Dodane
+
+- System globalnych klas CSS (`.card`, `.section`, `.btn-logo`, `.info-box`) dla spójności designu
+- Precyzyjny system walidacji kodów gry z szczegółowymi komunikatami błędów
+- Funkcje pomocnicze `getZMValidationError()` i `getZPValidationError()` w gameStorage.ts
+
+### Zmienione
+
+- Uproszczenie LoadGame UX: usunięcie verbose instrukcji, lepszy placeholder
+- Centralizacja walidacji: szczegółowe błędy w gameStorage.ts zamiast UI
+- Elegancki wyświetlacz stanu talii: kompaktowy format z borderem dla aktywnego bota
+
+### Naprawione
+
+- Walidacja ZM: `includes("Z")` znajdował Z z prefiksu zamiast separatora
+- Ogólne komunikaty błędów zastąpione precyzyjnymi (ZM/ZP formaty)
+- Z-index konflikty między kartami a przyciskami
+- Spójność odstępów i hierarchii nagłówków
+
+### Usunięte
+
+- Duplikujące się style CSS z komponentów
+- Verbose sekcje instrukcji w LoadGame
+
+---
+
 ## [0.5.1] - 2025-10-29
 
 ### Dodane
@@ -414,98 +442,58 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.3] - 2025-08-21
 
-### ✨ Nowe funkcjonalności
+### Dodane
 
-- **🎨 System grafik tła**
-  - Dodano grafikę `home-bg.jpg` na stronie głównej dla lepszego efektu wizualnego
-  - Dodano grafikę `game-bg.jpg` na ekranie gry jako pełne tło (nie overlay)
-  - Implementacja grafiki `card-reverse.jpg` na ekranie 0/13 - symbolizuje zakryty stos kart
-  - CSS utility classes: `.bg-home`, `.bg-game` dla łatwego zarządzania tłami
-  - CSS variables: `--home-bg`, `--game-bg` dla elastycznej konfiguracji
+- System grafik tła: `home-bg.jpg`, `game-bg.jpg`, `card-reverse.jpg`
+- CSS utility classes `.bg-home`, `.bg-game` i zmienne `--home-bg`, `--game-bg`
+- Responsywne tła z `background-size: cover` i `background-position: center`
 
-### 🎨 Ulepszenia UX
+### Zmienione
 
-- **⚡ Drastyczna optymalizacja interfejsu**
-  - Zmniejszenie margin header z 32px na 12px (62% redukcja)
-  - Kompaktowy padding w gameStatus z 16px na 2px w pionie (87% redukcja)
-  - Globalny --gap zmniejszony z 12px na 8px (33% redukcja)
-  - CardArea min-height z 300px na 150px (50% redukcja)
-  - Card reverse image max-width z 250px na 200px (20% redukcja)
+- Optymalizacja interfejsu: zmniejszenie marginesów i paddingów
+- Layout component z `backgroundType` prop i `getBackgroundClass()`
+- Media queries dla lepszej responsywności na urządzeniach mobilnych
 
-### 🔧 Zmiany techniczne
+### Naprawione
 
-- **🧩 Rozszerzony Layout component**
-
-  - Dodano `backgroundType` prop dla dynamicznego wyboru tła
-  - Implementacja `getBackgroundClass()` dla type-safe background switching
-  - Import CSS-in-TS dla card-reverse.jpg asset optimization
-
-- **📱 Responsive improvements**
-  - Poprawki w media query `@media (max-width: 768px)` dla gameStatus
-  - Spójny padding na wszystkich urządzeniach mobilnych
-  - Zachowana funkcjonalność przy maksymalnie kompaktowym designie
-
-### 🎨 Polepszenia wizualne
-
-- **🎨 Efektowne tła**
-  - Pełne grafiki tła zamiast subtelnych overlay effects
-  - Responsywne tła z `background-size: cover` i `background-position: center`
-  - Professional card-reverse visualization dla stanu początkowego gry
+- Centrowanie aplikacji na szerszych ekranach desktop
+- Spójność szerokości elementów między różnymi ekranami
+- Reset stanu gry przy powrocie do menu
 
 ## [0.1.2] - 2025-08-20
 
-### ✨ Nowe funkcjonalności
+### Dodane
 
-- **🔄 Profesjonalny modal potwierdzenia**
-  - Zastąpienie natywnego `window.confirm()` przeglądarki
-  - Komponent `ConfirmModal` z pełną responsywnością i animacjami
-  - Spójny design system z kolorystyką ZOO
-  - Obsługa klawisza Escape i kliknięcia poza modal
-  - Opcjonalny tytuł - modal może działać z nagłówkiem lub bez
+- Komponent `ConfirmModal` zastępujący natywny `window.confirm()`
+- Obsługa klawisza Escape i kliknięcia poza modal
+- Opcjonalny tytuł dla różnych przypadków użycia
 
-### 🎨 Ulepszenia UX
+### Zmienione
 
-- **⚡ Płynny gameplay**
-  - Natychmiastowe dobieranie kart bez przeszkód
-  - Modal tylko dla wyjścia z gry (rzeczywisty "punkt bez powrotu")
-  - Krótsza, jaśniejsza wiadomość: "Czy na pewno wrócić do głównego menu? Stan gry zostanie utracony."
+- Natychmiastowe dobieranie kart bez przeszkód
+- Modal tylko dla wyjścia z gry
+- Kolorystyka ZOO z wykorzystaniem zmiennych CSS
 
-### 🎨 Polepszenia wizualne
+### Naprawione
 
-- **🎨 Spójne kolory**
-  - Modal dopasowany do kolorystyki ZOO (kremowe tło, brązowe elementy)
-  - Wykorzystanie zmiennych CSS z głównego design systemu
-  - Profesjonalne animacje fade/slide z responsywnym designem
-
-### 🔧 Zmiany techniczne
-
-- **🧩 Uniwersalny komponent ConfirmModal**
-  - Wielokrotnego użytku z konfigurowalnymi props
-  - Opcjonalny `title` dla różnych przypadków użycia
-  - Gotowy do wykorzystania w przyszłych funkcjonalnościach
+- Profesjonalne animacje fade/slide z responsywnym designem
 
 ## [0.1.1] - 2025-08-19
 
-### 🎨 Ulepszenia UX
+### Dodane
 
-- **🔄 Uproszczony interfejs gry**
-  - Konsolidacja 3 przycisków do 1 dynamicznego przycisku głównego:
-    - 0/13: "🎯 Dobierz pierwszą kartę"
-    - 1-11/13: "🎯 Dobierz następną kartę"
-    - 12/13: "🎯 Dobierz ostatnią kartę"
-    - 13/13: "🔀 Przetasuj i dobierz kartę"
-  - Usunięcie redundantnej informacji o pozostałych kartach
-  - Całkowite usunięcie przycisku "Reset gry" dla czystszego interfejsu
-  - Lepsze wyśrodkowanie statusu gry i informacji
-  - Zwiększenie rozmiaru głównego przycisku akcji
-  - Poprawiona responsywność na urządzeniach mobilnych
+- Dynamiczny przycisk główny z kontekstowymi komunikatami
 
-### 📱 Responsywność
+### Zmienione
 
-- **📱 Optymalizacja mobilna**
-  - Lepsze wyśrodkowanie elementów na małych ekranach
-  - Uproszczony układ kontrolek (tylko 1 główny przycisk + powrót do menu)
-  - Ulepszony układ statusu gry dla urządzeń mobilnych
+- Konsolidacja 3 przycisków do 1 dynamicznego przycisku głównego
+- Lepsze wyśrodkowanie elementów na małych ekranach
+- Zwiększenie rozmiaru głównego przycisku akcji
+
+### Usunięte
+
+- Redundantne informacje o pozostałych kartach
+- Przycisk "Reset gry" dla czystszego interfejsu
 
 ## [0.1.0] - 2025-08-19
 

@@ -77,42 +77,10 @@
 }
 
 /* Bot Selection Styles */
-/* Main game setup card - contains all sections */
-.gameSetupCard {
-  text-align: center;
-  padding: 0.5rem 1rem 2rem 1rem;
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-medium);
-  position: relative;
-  overflow: hidden;
-}
-
-.gameSetupCard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(139, 69, 19, 0.02),
-    rgba(205, 133, 63, 0.03)
-  );
-  z-index: 1;
-}
-
 .gameSetupContent {
   width: 100%;
   position: relative;
   z-index: 2;
-}
-
-/* Bot selection section within the card */
-.botSelectionSection {
-  margin-bottom: 2rem;
 }
 
 .gameSetupCard p {
@@ -194,12 +162,6 @@
 .botLabel {
   font-size: 0.875rem;
   opacity: 0.9;
-}
-
-.startGameSection {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--card-border);
 }
 
 .selectedInfo {

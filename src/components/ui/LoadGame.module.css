@@ -1,41 +1,9 @@
 /* LoadGame Component Styles */
 
-/* Main load game card - consistent with GameSetup */
-.loadGameCard {
-  text-align: center;
-  padding: 0.5rem 1rem 2rem 1rem;
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-medium);
-  position: relative;
-  overflow: hidden;
-}
-
-.loadGameCard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(139, 69, 19, 0.02),
-    rgba(205, 133, 63, 0.03)
-  );
-  z-index: 1;
-}
-
 .loadGameContent {
   width: 100%;
   position: relative;
   z-index: 2;
-}
-
-/* Input section within the card */
-.inputSection {
-  margin-bottom: 2rem;
 }
 
 .label {
@@ -44,6 +12,7 @@
   font-weight: 600;
   color: var(--text-primary);
   font-size: var(--font-size-base);
+  text-align: left;
 }
 
 .input {
@@ -76,16 +45,6 @@
   font-weight: 500;
 }
 
-.preview {
-  background: #f5c67d;
-  border-left: 3px solid var(--button-primary);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-
-
 .previewContent {
   font-size: var(--font-size-base);
   color: var(--text-primary);
@@ -100,35 +59,6 @@
   margin-bottom: 0;
 }
 
-.instructions {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(205, 133, 63, 0.3);
-}
-
-.instructionsTitle {
-  margin: 0 0 1rem 0;
-  color: var(--text-primary);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-}
-
-.instructionsList {
-  margin: 0;
-  padding-left: 1.5rem;
-  color: var(--text-primary);
-}
-
-.instructionsList li {
-  margin-bottom: 0.5rem;
-}
-
-.formatsInfo {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--card-border);
-}
-
 .formatsInfo h4 {
   margin: 0 0 0.5rem 0;
   font-size: 0.9rem;
@@ -140,15 +70,20 @@
   padding-left: 1.25rem;
 }
 
-.botPositions {
-  margin-left: 1rem;
-  margin-top: 0.25rem;
+.botSummary {
+  margin-top: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--text-primary);
 }
 
-.botPosition {
-  margin-bottom: 0.25rem;
-  font-family: monospace;
-  font-size: 0.9rem;
+.currentBotText {
+  color: var(--button-primary);
+  font-weight: bold;
+  border: 1px solid var(--button-primary);
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 
 /* Actions section within the card - only load button */
@@ -167,42 +102,17 @@
   margin-top: 2rem;
 }
 
-/* Mobile Responsive - consistent with GameSetup */
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .loadGameCard {
-    padding: 1rem 0.75rem 1.5rem 0.75rem;
-  }
-
   .actions button,
   .bottomControls button {
     width: 100%;
   }
-
-  .instructions {
-    margin-bottom: 1.5rem;
-  }
-
-  .preview {
-    margin-bottom: 1.5rem;
-  }
 }
 
 @media (max-width: 480px) {
-  .loadGameCard {
-    padding: 0.75rem 0.5rem 1.25rem 0.5rem;
-    border-radius: 12px;
-  }
-
   .input {
     font-size: 0.9rem;
     padding: 0.75rem;
-  }
-
-  .instructions {
-    padding: 1rem;
-  }
-
-  .preview {
-    padding: 1rem;
   }
 }
