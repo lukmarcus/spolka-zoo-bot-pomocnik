@@ -126,7 +126,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
         </div>
       </div>
 
-      <div className={styles.bottomControls}>
+  <div className="bottom-controls">
         <button className="btn-secondary" onClick={onBackToMenu}>
           ← Wróć do menu
         </button>

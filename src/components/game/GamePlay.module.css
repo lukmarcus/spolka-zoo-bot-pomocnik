@@ -153,13 +153,7 @@
 }
 
 /* Bottom Controls */
-.bottomControls {
-  padding: 1rem;
-  border-top: 1px solid var(--card-border);
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
+
 
 /* Copy Message */
 .copyMessage {
@@ -217,14 +211,6 @@
     min-width: auto;
     width: 100%;
   }
-
-  .bottomControls {
-    padding: 1rem;
-  }
-
-  .bottomControls button {
-    width: 100%;
-  }
 }
 
 /* Extra small screens */
@@ -241,9 +227,6 @@
     font-size: var(--font-size-sm);
     padding: 0.875rem 1rem;
   }
-
-  .bottomControls {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
 }
+
+

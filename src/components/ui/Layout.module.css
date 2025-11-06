@@ -56,7 +56,7 @@
   padding-top: 0.25rem;
   /* Provide bottom spacing and respect device safe-area */
   padding-bottom: calc(max(0.25rem, env(safe-area-inset-bottom)));
-  border-top: 1px solid var(--card-border);
+  border-top: 2px solid var(--card-border);
   text-align: center;
 }
 

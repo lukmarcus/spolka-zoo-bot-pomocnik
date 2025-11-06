@@ -243,6 +243,29 @@ button:active {
   box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
 }
 
+/* Shared bottom controls (used across pages) */
+.bottom-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .bottom-controls button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .bottom-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
 .info-box {
   font-size: 1.1rem;
   font-weight: 500;

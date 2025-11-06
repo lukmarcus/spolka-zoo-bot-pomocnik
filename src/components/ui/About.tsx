@@ -167,7 +167,7 @@ const About: React.FC = () => {
       </div>
 
       {/* Przycisk powrotu poza ramką */}
-      <div className={styles.bottomControls}>
+  <div className="bottom-controls">
         <button className="btn-secondary" onClick={() => navigate("/")}>
           ← Wróć do menu
         </button>

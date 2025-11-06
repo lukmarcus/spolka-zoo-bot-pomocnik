@@ -172,8 +172,13 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       disabled: false,
       className: "btn-primary",
     };
+    let secondary: {
+      text: string;
+      action: () => void;
+      disabled: boolean;
+      className: string;
+    } | null = null;
 
-    let secondary = null;
     if (game.state.botCount && game.state.botCount > 1) {
       secondary = {
         text: `Następny bot`,
@@ -267,7 +272,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
         </div>
       </div>
 
-      <div className={styles.bottomControls}>
+      <div className="bottom-controls">
         {(game.state.mode === "individual"
           ? game.state.botDecks && game.state.currentBot
             ? game.state.botDecks[game.state.currentBot - 1]

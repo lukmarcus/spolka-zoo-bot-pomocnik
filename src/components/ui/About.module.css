@@ -55,14 +55,7 @@
   width: 100%;
 }
 
-.bottomControls {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  margin-top: 1.5rem;
-  padding-top: 0.5rem;
-  border-top: none;
-}
+
 
 @media (max-width: 768px) {
   .gameCover {

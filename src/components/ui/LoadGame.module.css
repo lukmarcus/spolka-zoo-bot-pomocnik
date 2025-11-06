@@ -95,17 +95,12 @@
   justify-content: center;
 }
 
-/* Bottom controls outside the card */
-.bottomControls {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-}
+/* Bottom controls outside the card - keep local spacing only */
+
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .actions button,
-  .bottomControls button {
+  .actions button {
     width: 100%;
   }
 }

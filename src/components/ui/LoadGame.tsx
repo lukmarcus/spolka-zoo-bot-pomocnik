@@ -326,7 +326,7 @@ export default function LoadGame() {
       </div>
 
       {/* Back button outside the card */}
-      <div className={styles.bottomControls}>
+  <div className={`bottom-controls`}>
         <button className="btn-secondary" onClick={() => navigate("/")}>
           ← Wróć do menu
         </button>
