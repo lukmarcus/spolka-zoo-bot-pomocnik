@@ -19,29 +19,44 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
     }
   };
 
+  // build sections array (effects + ability) so we can render without an extra wrapper
+  const sections = card.effects.map((effect, index) => ({
+    key: `effect-${index}`,
+    title: getEffectLabel(index, card.effects.length),
+    html: effect,
+  }));
+
+  sections.push({
+    key: `ability`,
+    title: "ZDOLNOSĆ DODATKOWA",
+    html: card.ability as string,
+  });
+
   return (
     <div className={`${styles.card} ${className || ""}`}>
       <div className={styles.cardBody}>
-        <div className={styles.sections}>
-          {card.effects.map((effect, index) => (
-            <div key={index} className={styles.section}>
-              <h3 className={styles.sectionTitle}>
-                {getEffectLabel(index, card.effects.length)}
-              </h3>
-              <p
-                className={styles.sectionText}
-                dangerouslySetInnerHTML={{ __html: effect }}
-              />
-            </div>
-          ))}
+        {sections.length > 1 ? (
+          <div className={styles.sections}>
+            {sections.map((s) => (
+              <div key={s.key} className={styles.section}>
+                <h3 className={styles.sectionTitle}>{s.title}</h3>
+                <p
+                  className={styles.sectionText}
+                  dangerouslySetInnerHTML={{ __html: s.html }}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          // single section - render directly to avoid unnecessary wrapper
           <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>ZDOLNOSĆ DODATKOWA</h3>
+            <h3 className={styles.sectionTitle}>{sections[0].title}</h3>
             <p
               className={styles.sectionText}
-              dangerouslySetInnerHTML={{ __html: card.ability as string }}
+              dangerouslySetInnerHTML={{ __html: sections[0].html }}
             />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

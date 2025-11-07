@@ -246,30 +246,14 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           )}
         </div>
 
-        <h2>AKTUALNA KARTA</h2>
-        <div className={styles.cardArea}>
-          {currentCard ? (
-            <BotCard card={currentCard} className={styles.currentCard} />
-          ) : (
-            <div className={styles.noCard}>
-              {game.isDeckExhausted() ? (
-                <>
-                  <h3>Koniec talii</h3>
-                  <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
-                </>
-              ) : (
-                <div className={styles.cardReverse}>
-                  <img
-                    src="/images/card-reverse.jpg"
-                    alt="Zakryta karta"
-                    className={styles.cardReverseImage}
-                  />
-                  <p>Dobierz pierwszą kartę</p>
-                </div>
-              )}
+        {currentCard && (
+          <>
+            <h2>AKTUALNA KARTA</h2>
+            <div className={styles.cardArea}>
+              <BotCard card={currentCard} className={styles.currentCard} />
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
       <div className="bottom-controls">
