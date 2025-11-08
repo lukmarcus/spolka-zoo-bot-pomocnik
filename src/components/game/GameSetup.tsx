@@ -37,8 +37,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
   return (
     <div>
       <div className="card">
-        <div className={styles.gameSetupContent}>
-          <div className="section">
+        <div className="section">
             <h2>LICZBA BOTÓW</h2>
             <div className={styles.botButtons}>
               {[1, 2, 3, 4].map((count) => (
@@ -123,7 +122,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
               Rozpocznij grę
             </button>
           </div>
-        </div>
       </div>
 
   <div className="bottom-controls">

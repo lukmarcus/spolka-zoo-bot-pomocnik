@@ -1,11 +1,5 @@
 /* LoadGame Component Styles */
 
-.loadGameContent {
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
-
 .label {
   display: block;
   margin-bottom: 0.5rem;
@@ -86,17 +80,14 @@
   padding: 2px 4px;
 }
 
-/* Actions section within the card - only load button */
+/* Actions section within info-box - only load button */
 .actions {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--card-border);
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
 }
 
 /* Bottom controls outside the card - keep local spacing only */
-
 
 /* Mobile Responsive */
 @media (max-width: 768px) {

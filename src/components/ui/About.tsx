@@ -26,8 +26,7 @@ const About: React.FC = () => {
         <section className="section">
           <h2>SPÓŁKA ZOO</h2>
           <div className="info-box">1-5 graczy • 45-90 min • od 10 lat</div>
-          <div className={styles.gameLinks}>
-            <div className={styles.linksRow}>
+          <div className={styles.linksRow}>
               <a
                 href="https://www.coconutsalad.com/"
                 target="_blank"
@@ -81,7 +80,6 @@ const About: React.FC = () => {
                 />
               </a>
             </div>
-          </div>
           <div className="info-box">autor gry: Mateusz Kiszło</div>
           <div className={styles.gameCoverContainer}>
             <img
@@ -96,12 +94,8 @@ const About: React.FC = () => {
         <section className="section">
           <h2>BOT POMOCNIK</h2>
           <div className="info-box">autor: Marek Szumny</div>
-        </section>
-
-        {/* Sekcja linków deweloperskich */}
-        <section className="section">
-          <div className={styles.developerInfo}>
-            <div className={styles.devGrid}>
+          
+          <div className={styles.devGrid}>
               <button
                 type="button"
                 className="btn-secondary"
@@ -162,7 +156,6 @@ const About: React.FC = () => {
                 Napisz
               </button>
             </div>
-          </div>
         </section>
       </div>
 

@@ -8,12 +8,6 @@
 
 /* Removed hover effect - card is now borderless */
 
-.cardBody {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
 .sections {
   display: flex;
   flex-direction: column;

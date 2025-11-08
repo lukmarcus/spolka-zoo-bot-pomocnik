@@ -34,30 +34,28 @@ const BotCard: React.FC<BotCardProps> = ({ card, className }) => {
 
   return (
     <div className={`${styles.card} ${className || ""}`}>
-      <div className={styles.cardBody}>
-        {sections.length > 1 ? (
-          <div className={styles.sections}>
-            {sections.map((s) => (
-              <div key={s.key} className={styles.section}>
-                <h3 className={styles.sectionTitle}>{s.title}</h3>
-                <p
-                  className={styles.sectionText}
-                  dangerouslySetInnerHTML={{ __html: s.html }}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          // single section - render directly to avoid unnecessary wrapper
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>{sections[0].title}</h3>
-            <p
-              className={styles.sectionText}
-              dangerouslySetInnerHTML={{ __html: sections[0].html }}
-            />
-          </div>
-        )}
-      </div>
+      {sections.length > 1 ? (
+        <div className={styles.sections}>
+          {sections.map((s) => (
+            <div key={s.key} className={styles.section}>
+              <h3 className={styles.sectionTitle}>{s.title}</h3>
+              <p
+                className={styles.sectionText}
+                dangerouslySetInnerHTML={{ __html: s.html }}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        // single section - render directly to avoid unnecessary wrapper
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>{sections[0].title}</h3>
+          <p
+            className={styles.sectionText}
+            dangerouslySetInnerHTML={{ __html: sections[0].html }}
+          />
+        </div>
+      )}
     </div>
   );
 };

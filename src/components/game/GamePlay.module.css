@@ -48,25 +48,6 @@
   font-weight: 500;
 }
 
-/* Game Content Container */
-.gameContent {
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-medium);
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-/* Card Display Area */
-.cardArea {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem;
-  min-height: 150px;
-}
-
 .currentCard {
   animation: slideIn 0.3s ease-out;
 }
@@ -154,7 +135,6 @@
 
 /* Bottom Controls */
 
-
 /* Copy Message */
 .copyMessage {
   position: fixed;
@@ -198,11 +178,6 @@
     width: 100%;
   }
 
-  .cardArea {
-    padding: 0.5rem;
-    min-height: 250px;
-  }
-
   .gameControls {
     padding: 1rem;
   }
@@ -215,10 +190,6 @@
 
 /* Extra small screens */
 @media (max-width: 480px) {
-  .cardArea {
-    min-height: 200px;
-  }
-
   .cardReverseImage {
     max-width: 200px;
   }
@@ -228,5 +199,3 @@
     padding: 0.875rem 1rem;
   }
 }
-
-

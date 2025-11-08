@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useGame } from "@lib/GameContext";
 import { BOT_CARDS } from "@lib/botCards";
 import { copyGameCodeToClipboard } from "@lib/gameStorage";
-import BotCard from "@ui/BotCard";
 import ConfirmModal from "@ui/ConfirmModal";
 import styles from "./GamePlay.module.css";
+import cardStyles from "@ui/BotCard.module.css";
 
 interface GamePlayProps {
   onBackToMenu: () => void;
@@ -195,7 +195,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
   return (
     <>
-      <div className={styles.gameContent}>
+      <div className="card">
         {showGameStatus && (
           <div className={styles.gameStatus}>
             <div className={styles.statusInfo}>
@@ -224,35 +224,84 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           </div>
         )}
 
-        <h2>DOBIERZ KARTĘ</h2>
-        <div className={styles.gameControls}>
-          {gameActions.primary && (
-            <button
-              className={gameActions.primary.className}
-              onClick={gameActions.primary.action}
-              disabled={gameActions.primary.disabled}
-            >
-              {gameActions.primary.text}
-            </button>
-          )}
-          {gameActions.secondary && (
-            <button
-              className={gameActions.secondary.className}
-              onClick={gameActions.secondary.action}
-              disabled={gameActions.secondary.disabled}
-            >
-              {gameActions.secondary.text}
-            </button>
-          )}
-        </div>
+        <section className="section">
+          <h2>DOBIERZ KARTĘ</h2>
+          <div className={styles.gameControls}>
+            {gameActions.primary && (
+              <button
+                className={gameActions.primary.className}
+                onClick={gameActions.primary.action}
+                disabled={gameActions.primary.disabled}
+              >
+                {gameActions.primary.text}
+              </button>
+            )}
+            {gameActions.secondary && (
+              <button
+                className={gameActions.secondary.className}
+                onClick={gameActions.secondary.action}
+                disabled={gameActions.secondary.disabled}
+              >
+                {gameActions.secondary.text}
+              </button>
+            )}
+          </div>
+        </section>
 
         {currentCard && (
-          <>
+          <section className="section">
             <h2>AKTUALNA KARTA</h2>
-            <div className={styles.cardArea}>
-              <BotCard card={currentCard} className={styles.currentCard} />
-            </div>
-          </>
+            {(() => {
+              // Determine effect labels based on number of effects
+              const getEffectLabel = (index: number, totalEffects: number) => {
+                if (totalEffects === 1) {
+                  return "EFEKT";
+                } else {
+                  if (index === 0) return "PIERWSZY EFEKT";
+                  if (index === 1) return "DRUGI EFEKT";
+                  return `EFEKT ${index + 1}`; // fallback for more than 2 effects
+                }
+              };
+
+              // build sections array (effects + ability)
+              const sections = currentCard.effects.map((effect, index) => ({
+                key: `effect-${index}`,
+                title: getEffectLabel(index, currentCard.effects.length),
+                html: effect,
+              }));
+
+              sections.push({
+                key: `ability`,
+                title: "ZDOLNOSĆ DODATKOWA",
+                html: currentCard.ability as string,
+              });
+
+              return sections.length > 1 ? (
+                <div className={cardStyles.sections}>
+                  {sections.map((s) => (
+                    <div key={s.key} className={cardStyles.section}>
+                      <h3 className={cardStyles.sectionTitle}>{s.title}</h3>
+                      <p
+                        className={cardStyles.sectionText}
+                        dangerouslySetInnerHTML={{ __html: s.html }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // single section - render directly to avoid unnecessary wrapper
+                <div className={cardStyles.section}>
+                  <h3 className={cardStyles.sectionTitle}>
+                    {sections[0].title}
+                  </h3>
+                  <p
+                    className={cardStyles.sectionText}
+                    dangerouslySetInnerHTML={{ __html: sections[0].html }}
+                  />
+                </div>
+              );
+            })()}
+          </section>
         )}
       </div>
 
