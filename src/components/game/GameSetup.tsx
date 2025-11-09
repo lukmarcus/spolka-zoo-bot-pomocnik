@@ -35,7 +35,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
   };
 
   return (
-    <div>
+    <>
       <div className="card">
         <section className="section">
           <h2>KONFIGURACJA GRY</h2>
@@ -131,7 +131,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
           ← Wróć do menu
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

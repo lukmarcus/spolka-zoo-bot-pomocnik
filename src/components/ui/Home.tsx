@@ -45,25 +45,21 @@ const Home: React.FC = () => {
       subtitle="Cyfrowy zamiennik dla kart botów"
       logo={<img src={gameLogo} alt="Spółka ZOO" className={styles.gameLogo} />}
     >
-      <div className={styles.menu}>
-        {menuOptions.map((option) => (
-          <button
-            key={option.id}
-            className={`${styles.menuButton} ${
-              option.primary ? styles.primary : styles.secondary
-            }`}
-            onClick={option.action}
-            disabled={option.disabled}
-          >
-            <div className={styles.menuButtonContent}>
-              <h3 className={styles.menuButtonTitle}>{option.title}</h3>
-              <p className={styles.menuButtonDescription}>
-                {option.description}
-              </p>
-            </div>
-          </button>
-        ))}
-      </div>
+      {menuOptions.map((option) => (
+        <button
+          key={option.id}
+          className={`${styles.menuButton} ${
+            option.primary ? styles.primary : styles.secondary
+          }`}
+          onClick={option.action}
+          disabled={option.disabled}
+        >
+          <div className={styles.menuButtonTitle}>{option.title}</div>
+          <p className={styles.menuButtonDescription}>
+            {option.description}
+          </p>
+        </button>
+      ))}
     </Layout>
   );
 };

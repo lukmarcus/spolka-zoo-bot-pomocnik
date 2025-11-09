@@ -4,7 +4,6 @@ import { BOT_CARDS } from "@lib/botCards";
 import { copyGameCodeToClipboard } from "@lib/gameStorage";
 import ConfirmModal from "@ui/ConfirmModal";
 import styles from "./GamePlay.module.css";
-import cardStyles from "@ui/BotCard.module.css";
 
 interface GamePlayProps {
   onBackToMenu: () => void;
@@ -276,29 +275,17 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
                 html: currentCard.ability as string,
               });
 
-              return sections.length > 1 ? (
-                <div className={cardStyles.sections}>
+              return (
+                <>
                   {sections.map((s) => (
-                    <div key={s.key} className={cardStyles.section}>
-                      <h3 className={cardStyles.sectionTitle}>{s.title}</h3>
-                      <p
-                        className={cardStyles.sectionText}
-                        dangerouslySetInnerHTML={{ __html: s.html }}
-                      />
-                    </div>
+                    <React.Fragment key={s.key}>
+                      <h3>{s.title}</h3>
+                      <div className="card-content">
+                        <p dangerouslySetInnerHTML={{ __html: s.html }} />
+                      </div>
+                    </React.Fragment>
                   ))}
-                </div>
-              ) : (
-                // single section - render directly to avoid unnecessary wrapper
-                <div className={cardStyles.section}>
-                  <h3 className={cardStyles.sectionTitle}>
-                    {sections[0].title}
-                  </h3>
-                  <p
-                    className={cardStyles.sectionText}
-                    dangerouslySetInnerHTML={{ __html: sections[0].html }}
-                  />
-                </div>
+                </>
               );
             })()}
           </section>
