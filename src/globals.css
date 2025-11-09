@@ -202,15 +202,6 @@ button:active {
   transform: translateY(-1px);
 }
 
-.btn-danger {
-  background: var(--danger);
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #b71c3c;
-}
-
 .btn-logo {
   display: inline-block;
   padding: 0.5rem;
@@ -369,72 +360,14 @@ button:active {
   z-index: 2;
 }
 
-.card-header {
-  border-bottom: 1px solid var(--card-border);
-  margin-bottom: var(--gap);
-  padding-bottom: var(--gap);
-}
-
 /* Utility classes */
 .text-center {
   text-align: center;
 }
 
-.text-success {
-  color: var(--success);
-}
-
-.text-warning {
-  color: var(--warning);
-}
-
-.text-danger {
-  color: var(--danger);
-}
-
-.mt-1 {
-  margin-top: 0.5rem;
-}
-.mt-2 {
-  margin-top: var(--gap);
-}
-.mt-3 {
-  margin-top: 1.5rem;
-}
-
-.mb-1 {
-  margin-bottom: 0.5rem;
-}
-.mb-2 {
-  margin-bottom: var(--gap);
-}
-.mb-3 {
-  margin-bottom: 1.5rem;
-}
-
 /* Global section spacing - consistent across all components */
 .section {
   margin-bottom: 1.5rem;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.gap-2 {
-  gap: var(--gap);
 }
 
 /* Responsiveness */
