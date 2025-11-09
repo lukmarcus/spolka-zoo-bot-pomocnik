@@ -247,9 +247,9 @@ export default function LoadGame() {
 
         {/* Preview Section */}
         {gamePreview && gamePreview.isValid && (
-          <div className="info-box">
+          <section className="section">
             <h2>PODGLĄD STANU GRY</h2>
-            <div className={styles.previewContent}>
+            <div className="info-box">
               {gamePreview.botCount === 1 ? (
                 <>
                   <div className={styles.previewItem}>
@@ -303,18 +303,16 @@ export default function LoadGame() {
                   )}
                 </>
               )}
-              
-              <div className={styles.actions}>
-                <button
-                  className="btn-primary"
-                  onClick={handleLoadGame}
-                  disabled={!isCodeValid || isLoading}
-                >
-                  {isLoading ? "Wczytywanie..." : "Wczytaj i kontynuuj grę"}
-                </button>
-              </div>
             </div>
-          </div>
+            
+            <button
+              className={`btn-primary ${styles.loadButton}`}
+              onClick={handleLoadGame}
+              disabled={!isCodeValid || isLoading}
+            >
+              {isLoading ? "Wczytywanie..." : "Wczytaj i kontynuuj grę"}
+            </button>
+          </section>
         )}
       </div>
 

@@ -37,30 +37,31 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
   return (
     <div>
       <div className="card">
-        <div className="section">
-            <h2>LICZBA BOTÓW</h2>
-            <div className={styles.botButtons}>
-              {[1, 2, 3, 4].map((count) => (
-                <button
-                  key={count}
-                  className={`${styles.botOption} ${
-                    selectedBotCount === count ? styles.selected : ""
-                  }`}
-                  onClick={() => handleBotSelection(count)}
-                >
-                  <span className={styles.botNumber}>{count}</span>
-                  <span className={styles.botLabel}>
-                    {count === 1 ? "bot" : "boty"}
-                  </span>
-                </button>
-              ))}
-            </div>
+        <section className="section">
+          <h2>KONFIGURACJA GRY</h2>
+
+          <h3>LICZBA BOTÓW</h3>
+          <div className={styles.botButtons}>
+            {[1, 2, 3, 4].map((count) => (
+              <button
+                key={count}
+                className={`${styles.botOption} ${
+                  selectedBotCount === count ? styles.selected : ""
+                }`}
+                onClick={() => handleBotSelection(count)}
+              >
+                <span className={styles.botNumber}>{count}</span>
+                <span className={styles.botLabel}>
+                  {count === 1 ? "bot" : "boty"}
+                </span>
+              </button>
+            ))}
           </div>
 
           {/* Mode selection section */}
           {selectedBotCount && (
-            <div className="section">
-              <h2>TRYB GRY</h2>
+            <div>
+              <h3>TRYB GRY</h3>
               <div className={styles.modeButtons}>
                 {selectedBotCount === 1 ? (
                   <button
@@ -94,7 +95,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
           )}
 
           {/* Start game section */}
-          <div className="section">
+          <div>
             {selectedBotCount ? (
               <p className={styles.selectedInfo}>
                 Wybrano: {selectedBotCount} bot
@@ -122,9 +123,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
               Rozpocznij grę
             </button>
           </div>
+        </section>
       </div>
 
-  <div className="bottom-controls">
+      <div className="bottom-controls">
         <button className="btn-secondary" onClick={onBackToMenu}>
           ← Wróć do menu
         </button>

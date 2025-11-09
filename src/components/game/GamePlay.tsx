@@ -197,7 +197,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     <>
       <div className="card">
         {showGameStatus && (
-          <div className={styles.gameStatus}>
+          <section className={`section ${styles.gameStatus}`}>
             <div className={styles.statusInfo}>
               <span className={styles.cardCounter}>
                 {(game.state.mode === "individual"
@@ -221,7 +221,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
                 </div>
               )}
             </div>
-          </div>
+          </section>
         )}
 
         <section className="section">

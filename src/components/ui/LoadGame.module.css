@@ -80,18 +80,17 @@
   padding: 2px 4px;
 }
 
-/* Actions section within info-box - only load button */
-.actions {
+/* Load button within section */
+.loadButton {
   margin-top: 1rem;
-  display: flex;
-  justify-content: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-/* Bottom controls outside the card - keep local spacing only */
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .actions button {
+  .loadButton {
     width: 100%;
   }
 }
