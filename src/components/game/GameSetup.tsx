@@ -35,103 +35,99 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
   };
 
   return (
-    <div>
+    <>
       <div className="card">
-        <div className={styles.gameSetupContent}>
-          <div className="section">
-            <h2>LICZBA BOTÓW</h2>
-            <div className={styles.botButtons}>
-              {[1, 2, 3, 4].map((count) => (
-                <button
-                  key={count}
-                  className={`${styles.botOption} ${
-                    selectedBotCount === count ? styles.selected : ""
-                  }`}
-                  onClick={() => handleBotSelection(count)}
-                >
-                  <span className={styles.botNumber}>{count}</span>
-                  <span className={styles.botLabel}>
-                    {count === 1 ? "bot" : "boty"}
-                  </span>
-                </button>
-              ))}
-            </div>
+        <section className="section">
+          <h2>LICZBA BOTÓW</h2>
+          <div className={styles.botButtons}>
+            {[1, 2, 3, 4].map((count) => (
+              <button
+                key={count}
+                className={`${styles.botOption} ${
+                  selectedBotCount === count ? styles.selected : ""
+                }`}
+                onClick={() => handleBotSelection(count)}
+              >
+                <span className={styles.botNumber}>{count}</span>
+                <span className={styles.botLabel}>
+                  {count === 1 ? "bot" : "boty"}
+                </span>
+              </button>
+            ))}
           </div>
+        </section>
 
-          {/* Mode selection section */}
-          {selectedBotCount && (
-            <div className="section">
-              <h2>TRYB GRY</h2>
-              <div className={styles.modeButtons}>
-                {selectedBotCount === 1 ? (
+        {/* Mode selection section */}
+        {selectedBotCount && (
+          <section className="section">
+            <h2>TRYB GRY</h2>
+            <div className={styles.modeButtons}>
+              {selectedBotCount === 1 ? (
+                <button
+                  className={`${styles.modeOption} ${styles.selected}`}
+                  disabled
+                >
+                  Jedna talia
+                </button>
+              ) : (
+                <>
                   <button
-                    className={`${styles.modeOption} ${styles.selected}`}
-                    disabled
+                    className={`${styles.modeOption} ${
+                      selectedMode === "shared" ? styles.selected : ""
+                    }`}
+                    onClick={() => handleModeSelection("shared")}
                   >
-                    Jedna talia
+                    Wspólna talia
                   </button>
-                ) : (
-                  <>
-                    <button
-                      className={`${styles.modeOption} ${
-                        selectedMode === "shared" ? styles.selected : ""
-                      }`}
-                      onClick={() => handleModeSelection("shared")}
-                    >
-                      Wspólna talia
-                    </button>
-                    <button
-                      className={`${styles.modeOption} ${
-                        selectedMode === "individual" ? styles.selected : ""
-                      }`}
-                      onClick={() => handleModeSelection("individual")}
-                    >
-                      Osobne talie
-                    </button>
-                  </>
-                )}
-              </div>
+                  <button
+                    className={`${styles.modeOption} ${
+                      selectedMode === "individual" ? styles.selected : ""
+                    }`}
+                    onClick={() => handleModeSelection("individual")}
+                  >
+                    Osobne talie
+                  </button>
+                </>
+              )}
             </div>
+          </section>
+        )}
+
+        {/* Start game section */}
+        <section className="section">
+          {selectedBotCount ? (
+            <p className={styles.selectedInfo}>
+              Wybrano: {selectedBotCount} bot
+              {selectedBotCount > 1 ? "y" : ""}
+              {selectedBotCount > 1 ? (
+                <>
+                  ,{" "}
+                  {selectedMode === "shared" ? "wspólna talia" : "osobne talie"}
+                </>
+              ) : null}
+            </p>
+          ) : (
+            <p className={styles.selectedInfo}>
+              Wybierz ustawienia, aby rozpocząć
+            </p>
           )}
 
-          {/* Start game section */}
-          <div className="section">
-            {selectedBotCount ? (
-              <p className={styles.selectedInfo}>
-                Wybrano: {selectedBotCount} bot
-                {selectedBotCount > 1 ? "y" : ""}
-                {selectedBotCount > 1 ? (
-                  <>
-                    ,{" "}
-                    {selectedMode === "shared"
-                      ? "wspólna talia"
-                      : "osobne talie"}
-                  </>
-                ) : null}
-              </p>
-            ) : (
-              <p className={styles.selectedInfo}>
-                Wybierz ustawienia, aby rozpocząć
-              </p>
-            )}
-
-            <button
-              className={`btn-primary ${styles.startGameButton}`}
-              onClick={handleStartGame}
-              disabled={!selectedBotCount}
-            >
-              Rozpocznij grę
-            </button>
-          </div>
-        </div>
+          <button
+            className={`btn-primary ${styles.startGameButton}`}
+            onClick={handleStartGame}
+            disabled={!selectedBotCount}
+          >
+            Rozpocznij grę
+          </button>
+        </section>
       </div>
 
-      <div className={styles.bottomControls}>
+      <div className="bottom-controls">
         <button className="btn-secondary" onClick={onBackToMenu}>
           ← Wróć do menu
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

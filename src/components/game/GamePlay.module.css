@@ -48,25 +48,6 @@
   font-weight: 500;
 }
 
-/* Game Content Container */
-.gameContent {
-  background: var(--card-bg);
-  border: 2px solid var(--card-border);
-  border-radius: 16px;
-  box-shadow: var(--shadow-medium);
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-/* Card Display Area */
-.cardArea {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem;
-  min-height: 150px;
-}
-
 .currentCard {
   animation: slideIn 0.3s ease-out;
 }
@@ -131,7 +112,6 @@
   gap: 1rem;
   padding: 0 0 1rem 0;
   margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(205, 133, 63, 0.3);
   flex-wrap: wrap;
 }
 
@@ -153,13 +133,6 @@
 }
 
 /* Bottom Controls */
-.bottomControls {
-  padding: 1rem;
-  border-top: 1px solid var(--card-border);
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
 
 /* Copy Message */
 .copyMessage {
@@ -204,11 +177,6 @@
     width: 100%;
   }
 
-  .cardArea {
-    padding: 0.5rem;
-    min-height: 250px;
-  }
-
   .gameControls {
     padding: 1rem;
   }
@@ -217,22 +185,10 @@
     min-width: auto;
     width: 100%;
   }
-
-  .bottomControls {
-    padding: 1rem;
-  }
-
-  .bottomControls button {
-    width: 100%;
-  }
 }
 
 /* Extra small screens */
 @media (max-width: 480px) {
-  .cardArea {
-    min-height: 200px;
-  }
-
   .cardReverseImage {
     max-width: 200px;
   }
@@ -240,10 +196,5 @@
   .gameControls button {
     font-size: var(--font-size-sm);
     padding: 0.875rem 1rem;
-  }
-
-  .bottomControls {
-    flex-direction: column;
-    gap: 0.75rem;
   }
 }

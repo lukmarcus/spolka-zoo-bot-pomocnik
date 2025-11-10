@@ -21,10 +21,10 @@ export const BOT_CARDS: BotCard[] = [
   {
     id: 1,
     effects: [
-      `Kup najtańszy <span class='text-white'>Owoc</span> z <span class='text-white'>Magazynu</span>. Jeśli danego <span class='text-white'>Owocu</span> nie ma w <span class='text-white'>Magazynie</span>, odkup go od innego gracza (pierwszego z lewej, który ma ten <span class='text-white'>Owoc</span> w swojej puli).`,
-      `Kup najtańszy <span class='text-white'>Owoc</span> z <span class='text-white'>Magazynu</span>. Jeśli danego <span class='text-white'>Owocu</span> nie ma w <span class='text-white'>Magazynie</span>, odkup go od innego gracza (pierwszego z lewej, który ma ten <span class='text-white'>Owoc</span> w swojej puli).`,
+      `Kup najtańszy <span class='text-gray'>Owoc</span> z <span class='text-gray'>Magazynu</span>. Jeśli danego <span class='text-gray'>Owocu</span> nie ma w <span class='text-gray'>Magazynie</span>, odkup go od innego gracza (pierwszego z lewej, który ma ten <span class='text-gray'>Owoc</span> w swojej puli).`,
+      `Kup najtańszy <span class='text-gray'>Owoc</span> z <span class='text-gray'>Magazynu</span>. Jeśli danego <span class='text-gray'>Owocu</span> nie ma w <span class='text-gray'>Magazynie</span>, odkup go od innego gracza (pierwszego z lewej, który ma ten <span class='text-gray'>Owoc</span> w swojej puli).`,
     ],
-    ability: `Jeśli kupiłeś przynajmniej 1 <span class='text-white'>Owoc</span>, dobierz 3<img src="${ICONS.money}" class="card-icon" />.`,
+    ability: `Jeśli kupiłeś przynajmniej 1 <span class='text-gray'>Owoc</span>, dobierz 3<img src="${ICONS.money}" class="card-icon" />.`,
   },
   {
     id: 2,
@@ -53,7 +53,7 @@ export const BOT_CARDS: BotCard[] = [
   {
     id: 5,
     effects: [
-      `Sprzedaj ze swojej puli <span class='text-white'>Owoc</span> kosztujący 3<img src="${ICONS.money}" class="card-icon" /> lub więcej.`,
+      `Sprzedaj ze swojej puli <span class='text-gray'>Owoc</span> kosztujący 3<img src="${ICONS.money}" class="card-icon" /> lub więcej.`,
       "Usuń wszystkie odkryte karty <span class='text-green'>Talii Wpływu</span>. Następnie uzupełnij <span class='text-green'>Talię Wpływu</span>.",
     ],
     ability: `Dobierz 6<img src="${ICONS.money}" class="card-icon" />.`,

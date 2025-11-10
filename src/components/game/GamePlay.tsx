@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useGame } from "@lib/GameContext";
 import { BOT_CARDS } from "@lib/botCards";
 import { copyGameCodeToClipboard } from "@lib/gameStorage";
-import BotCard from "@ui/BotCard";
 import ConfirmModal from "@ui/ConfirmModal";
 import styles from "./GamePlay.module.css";
 
@@ -13,7 +12,12 @@ interface GamePlayProps {
 const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
-  const [copyMessage, setCopyMessage] = useState<string>("");
+  const [copyStatus, setCopyStatus] = useState<"none" | "success" | "error">(
+    "none"
+  );
+  const [buttonCopyStatus, setButtonCopyStatus] = useState<
+    "idle" | "copied" | "error"
+  >("idle");
 
   // v0.4.0 Handlers per-user spec:
   const handlePrimaryForCurrentBot = () => {
@@ -56,17 +60,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     }
   };
 
-  const handleCopyGameCode = async () => {
-    try {
-      const message = await copyGameCodeToClipboard(game.state);
-      setCopyMessage(message);
-      setTimeout(() => setCopyMessage(""), 2500);
-    } catch {
-      setCopyMessage("❌ Błąd kopiowania");
-      setTimeout(() => setCopyMessage(""), 2500);
-    }
-  };
-
   const handleBackToMenuClick = () => {
     // Check if we're actually in a game (cards have been drawn)
     const inActiveGame =
@@ -88,16 +81,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
     // If in active game, show confirmation modal
     setShowExitModal(true);
-  };
-
-  const confirmExitWithCopy = async () => {
-    try {
-      await copyGameCodeToClipboard(game.state);
-    } catch (error) {
-      console.error("Error copying game code:", error);
-    }
-    setShowExitModal(false);
-    onBackToMenu();
+    setCopyStatus("none"); // Reset copy status when modal opens
   };
 
   const confirmExitWithoutCopy = () => {
@@ -109,28 +93,46 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     setShowExitModal(false);
   };
 
+  const copyGameCode = async () => {
+    try {
+      await copyGameCodeToClipboard(game.state);
+      setCopyStatus("success");
+    } catch (error) {
+      console.error("Error copying game code:", error);
+      setCopyStatus("error");
+    }
+  };
+
+  const handleCopyGameCode = async () => {
+    try {
+      await copyGameCodeToClipboard(game.state);
+      setButtonCopyStatus("copied");
+      setTimeout(() => setButtonCopyStatus("idle"), 2500);
+    } catch (error) {
+      console.error("Error copying game code:", error);
+      setButtonCopyStatus("error");
+      setTimeout(() => setButtonCopyStatus("idle"), 2500);
+    }
+  };
+
+  // Generate modal message with copy status
+  const getModalMessage = () => {
+    const baseMessage = "Czy na pewno chcesz wyjść z gry do menu?";
+
+    if (copyStatus === "none") {
+      return `${baseMessage}\nPamiętaj o skopiowaniu stanu gry!`;
+    } else if (copyStatus === "success") {
+      return `${baseMessage}\n✅ Skopiowano stan gry!`;
+    } else {
+      return `${baseMessage}\n❌ Nie udało się skopiować stanu gry!`;
+    }
+  };
+
   const currentCardId = game.getCurrentCard();
   const currentCard =
     typeof currentCardId === "number"
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
-
-  // Determine whether to show the top game status: only when bots are selected AND
-  // the relevant deck (shared or current bot's deck) has at least one drawn card.
-  const showGameStatus = (() => {
-    if (!game.state.botsSelected) return false;
-    if (game.state.mode === "individual") {
-      if (!game.state.botDecks || !game.state.currentBot) return false;
-      const idx =
-        game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ?? -1;
-      return typeof idx === "number" && idx >= 0;
-    }
-    const sharedIdx =
-      typeof game.state.currentCardIndex === "number"
-        ? game.state.currentCardIndex
-        : -1;
-    return sharedIdx >= 0;
-  })();
 
   // v0.3.3 New game action logic - two buttons
   const getGameActions = () => {
@@ -166,17 +168,25 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     const primary = {
       text:
         game.state.botCount && game.state.botCount > 1
-          ? `Ten bot`
+          ? `Dla tego bota (${game.state.currentBot}/${game.state.botCount})`
           : `Dobierz kartę`,
       action: handlePrimaryForCurrentBot,
       disabled: false,
       className: "btn-primary",
     };
+    let secondary: {
+      text: string;
+      action: () => void;
+      disabled: boolean;
+      className: string;
+    } | null = null;
 
-    let secondary = null;
     if (game.state.botCount && game.state.botCount > 1) {
+      const nextBot = game.state.currentBot
+        ? (game.state.currentBot % (game.state.botCount || 1)) + 1
+        : 1;
       secondary = {
-        text: `Następny bot`,
+        text: `Dla następnego bota (${nextBot}/${game.state.botCount})`,
         action: handleSecondaryForNextBot,
         disabled: false,
         className: "btn-secondary",
@@ -190,84 +200,99 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
   return (
     <>
-      <div className={styles.gameContent}>
-        {showGameStatus && (
-          <div className={styles.gameStatus}>
-            <div className={styles.statusInfo}>
-              <span className={styles.cardCounter}>
-                {(game.state.mode === "individual"
-                  ? game.state.botDecks && game.state.currentBot
-                    ? (game.state.botDecks[game.state.currentBot - 1]
-                        ?.currentCardIndex ?? -1) + 1
-                    : 0
-                  : typeof game.state.currentCardIndex === "number"
-                  ? game.state.currentCardIndex + 1
-                  : 0) +
-                  "/" +
-                  BOT_CARDS.length}
-              </span>
-              {game.state.botCount && game.state.botCount > 1 && (
-                <div className={styles.botInfo}>
-                  <div className={styles.currentBotIndicator}>
-                    <span className={styles.botIndicatorText}>
-                      🤖 Bot {game.state.currentBot}/{game.state.botCount}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
+      <div className="card">
+        <section
+          className="section"
+          style={
+            game.state.botCount && game.state.botCount > 1
+              ? {}
+              : { paddingTop: "0.75rem" }
+          }
+        >
+          {game.state.botCount && game.state.botCount > 1 && (
+            <h2>DOBIERZ KARTĘ</h2>
+          )}
+          <div className={styles.gameControls}>
+            {gameActions.primary && (
+              <button
+                className={gameActions.primary.className}
+                onClick={gameActions.primary.action}
+                disabled={gameActions.primary.disabled}
+              >
+                {gameActions.primary.text}
+              </button>
+            )}
+            {gameActions.secondary && (
+              <button
+                className={gameActions.secondary.className}
+                onClick={gameActions.secondary.action}
+                disabled={gameActions.secondary.disabled}
+              >
+                {gameActions.secondary.text}
+              </button>
+            )}
           </div>
-        )}
+        </section>
 
-        <h2>DOBIERZ KARTĘ</h2>
-        <div className={styles.gameControls}>
-          {gameActions.primary && (
-            <button
-              className={gameActions.primary.className}
-              onClick={gameActions.primary.action}
-              disabled={gameActions.primary.disabled}
-            >
-              {gameActions.primary.text}
-            </button>
-          )}
-          {gameActions.secondary && (
-            <button
-              className={gameActions.secondary.className}
-              onClick={gameActions.secondary.action}
-              disabled={gameActions.secondary.disabled}
-            >
-              {gameActions.secondary.text}
-            </button>
-          )}
-        </div>
+        {currentCard && (
+          <section className="section">
+            <h2>
+              AKTUALNA KARTA (
+              {(game.state.mode === "individual"
+                ? game.state.botDecks && game.state.currentBot
+                  ? (game.state.botDecks[game.state.currentBot - 1]
+                      ?.currentCardIndex ?? -1) + 1
+                  : 0
+                : typeof game.state.currentCardIndex === "number"
+                ? game.state.currentCardIndex + 1
+                : 0) +
+                "/" +
+                BOT_CARDS.length}
+              )
+            </h2>
+            {(() => {
+              // Determine effect labels based on number of effects
+              const getEffectLabel = (index: number, totalEffects: number) => {
+                if (totalEffects === 1) {
+                  return "EFEKT";
+                } else {
+                  if (index === 0) return "PIERWSZY EFEKT";
+                  if (index === 1) return "DRUGI EFEKT";
+                  return `EFEKT ${index + 1}`; // fallback for more than 2 effects
+                }
+              };
 
-        <h2>AKTUALNA KARTA</h2>
-        <div className={styles.cardArea}>
-          {currentCard ? (
-            <BotCard card={currentCard} className={styles.currentCard} />
-          ) : (
-            <div className={styles.noCard}>
-              {game.isDeckExhausted() ? (
+              // build sections array (effects + ability)
+              const sections = currentCard.effects.map((effect, index) => ({
+                key: `effect-${index}`,
+                title: getEffectLabel(index, currentCard.effects.length),
+                html: effect,
+              }));
+
+              sections.push({
+                key: `ability`,
+                title: "ZDOLNOSĆ DODATKOWA",
+                html: currentCard.ability as string,
+              });
+
+              return (
                 <>
-                  <h3>Koniec talii</h3>
-                  <p>Naciśnij przycisk, aby przetasować i kontynuować grę.</p>
+                  {sections.map((s) => (
+                    <React.Fragment key={s.key}>
+                      <h3>{s.title}</h3>
+                      <div className="card-content">
+                        <p dangerouslySetInnerHTML={{ __html: s.html }} />
+                      </div>
+                    </React.Fragment>
+                  ))}
                 </>
-              ) : (
-                <div className={styles.cardReverse}>
-                  <img
-                    src="/images/card-reverse.jpg"
-                    alt="Zakryta karta"
-                    className={styles.cardReverseImage}
-                  />
-                  <p>Dobierz pierwszą kartę</p>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+              );
+            })()}
+          </section>
+        )}
       </div>
 
-      <div className={styles.bottomControls}>
+      <div className="bottom-controls">
         {(game.state.mode === "individual"
           ? game.state.botDecks && game.state.currentBot
             ? game.state.botDecks[game.state.currentBot - 1]
@@ -276,8 +301,16 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           : typeof game.state.currentCardIndex === "number"
           ? game.state.currentCardIndex
           : -1) >= 0 && (
-          <button className="btn-tertiary" onClick={handleCopyGameCode}>
-            💾 Kopiuj stan gry
+          <button
+            className="btn-tertiary"
+            onClick={handleCopyGameCode}
+            disabled={buttonCopyStatus === "copied"}
+          >
+            {buttonCopyStatus === "copied"
+              ? "✅ Skopiowano!"
+              : buttonCopyStatus === "error"
+              ? "❌ Błąd!"
+              : "Kopiuj stan gry"}
           </button>
         )}
         <button className="btn-secondary" onClick={handleBackToMenuClick}>
@@ -285,17 +318,15 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
         </button>
       </div>
 
-      {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
-
       <ConfirmModal
         isOpen={showExitModal}
-        title="🚪 Wyjście z gry"
-        message="Czy na pewno chcesz wyjść do głównego menu?"
-        confirmText="💾 Skopiuj stan gry i wyjdź"
-        copyButtonText="🚪 Wyjdź bez zapisu"
+        title="WYJŚCIE Z GRY"
+        message={getModalMessage()}
+        confirmText="Wyjdź"
+        copyButtonText="Kopiuj stan gry"
         cancelText="Anuluj"
-        onConfirm={confirmExitWithCopy}
-        onCopy={confirmExitWithoutCopy}
+        onConfirm={confirmExitWithoutCopy}
+        onCopy={copyGameCode}
         onCancel={cancelExit}
       />
     </>

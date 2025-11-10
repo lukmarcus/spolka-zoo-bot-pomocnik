@@ -2,64 +2,63 @@
 
 ## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                         | Szczegóły techniczne                                              |
-| ------ | ------------ | ----------------------------------- | ----------------------------------------------------------------- |
-| 0.5.2  | ✅ Gotowe    | Globalne CSS + precyzyjna walidacja | System globalnych klas, szczegółowe komunikaty błędów ZM/ZP       |
-| 0.5.3  | 🔮 Planowane | Mobile UX + Poprawa ekranu gry      | Mobile UX, wygląd kart/przycisków, system CSS vars, color cleanup |
+| Wersja | Status       | Opis krótki                    | Szczegóły techniczne                                              |
+| ------ | ------------ | ------------------------------ | ----------------------------------------------------------------- |
+| 0.5.3  | ✅ Gotowe    | Code cleanup + Modal UX        | Czyszczenie kodu, unifikacja CSS, lepszy modal i kopiowanie       |
+| 0.5.4  | 🔮 Planowane | Mobile UX + Design System      | Mobile UX, wygląd kart/przycisków, system CSS vars, color cleanup |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.5.2 — Globalne CSS + precyzyjna walidacja ✅
+### v0.5.3 — Code cleanup + Modal UX improvements ✅
 
-🎯 Cel: unifikacja designu i poprawa walidacji kodów gry
+🎯 Cel: oczyszczenie kodu i poprawa UX kopiowania stanu gry
 
-⏱️ Zakończono: 2025-11-02
+⏱️ Zakończono: 2025-11-09
 
 Zrealizowane zadania:
 
-- **System globalnych CSS**
+- **Czyszczenie martwego kodu**
 
-  - Klasy `.card`, `.section`, `.btn-logo`, `.info-box` dla spójności designu
-  - Centralizacja stylów i eliminacja duplikatów
-  - Poprawki z-index i hierarchii nagłówków
+  - Usunięto nieużywany `BotCard.tsx` i `BotCard.module.css` (~60 linii)
+  - Usunięto nieużywane obrazki: `card-reverse.jpg`, `image*.png` (6 plików)
+  - Oczyszczono `globals.css` z nieużywanych styli (~30 linii)
+  - **Łącznie usunięto ~160 linii martwego kodu**
 
-- **Precyzyjna walidacja**
+- **Refaktoring struktury DOM**
 
-  - Funkcje `getZMValidationError()` i `getZPValidationError()` w gameStorage.ts
-  - Szczegółowe komunikaty błędów zamiast ogólnych
-  - Poprawa walidacji ZM: separator Z vs prefiks
+  - Unifikacja CSS classes - wszystkie komponenty używają globalnego `.card`
+  - Usunięcie 8+ niepotrzebnych wrapper divów (menuButtonContent, footerText, etc.)
+  - Uporządkowanie semantycznej struktury HTML5 z `<section className="section">`
+  - Przeniesienie logo do `<header>` dla lepszej semantyki
 
-- **LoadGame UX**
+- **Ulepszenie ConfirmModal**
 
-  - Uproszczenie interfejsu, usunięcie verbose instrukcji
-  - Elegancki wyświetlacz stanu talii z borderem dla aktywnego bota
-  - Centralizacja walidacji w warstwie logiki biznesowej
-  - Feedback dla użytkownika (loading spinner → stan sukcesu/błąd)
+  - Uproszczenie z 3 różnych layoutów do 1 prostego (3 przyciski poziomo)
+  - Usunięcie niepotrzebnych boolean'ów i warunków (skrócenie o ~80 linii)
+  - Dynamiczne wiadomości z kolorowym statusem kopiowania
+  - Środkowy przycisk szerszy (flex: 1.5) dla lepszego UX
 
-- **UX dla ekranu wczytywania**
+- **Poprawa UX kopiowania stanu gry**
+  - Modal z real-time feedback: "Pamiętaj..." → "✅ Skopiowano!" / "❌ Błąd!"
+  - Przycisk "Kopiuj kod" tylko kopiuje (nie zamyka modala)
+  - Przycisk w grze: "💾 Kopiuj stan gry" → "✅ Skopiowano!" → auto-reset (2.5s)
+  - Zastąpienie toast'ów bardziej intuicyjnym systemem w miejscu akcji
 
-  - Zoptymalizowane rozmieszczenie elementów: pole wprowadzania, podgląd, przyciski akcji
-  - Podpowiedzi kontekstowe i przykładowy kod obok pola
-  - Przycisk "Wczytaj" dezaktywowany do momentu przejścia podstawowej walidacji
-
-- **Obsługa błędów i przywracanie stanu**
-
-  - Bezpieczne zachowanie przy błędach parsowania (nie tracimy bieżącej gry)
-  - Opcja podglądu zmian przed zatwierdzeniem wczytania
-  - Lepsze testy jednostkowe i e2e dla parsera kodów
-
-- **Drobne poprawki wizualne**
-
-  - Animacja spinnera i mikro-interakcje (przejścia przy błędzie/sukcesie)
-  - Ujednolicenie przycisków używając `.btn-secondary` gdzie pasuje
+- **Optymalizacja interfejsu gry**
+  - Licznik kart przeniesiony do nagłówka "AKTUALNA KARTA (1/13)"
+  - Numeracja botów w przyciskach: "Dla tego bota (1/4)", "Dla następnego bota (2/4)"
+  - Usunięto sekcję statusu - informacje przeniesione bezpośrednio do przycisków
+  - Ukryto nagłówek "DOBIERZ KARTĘ" dla jednego bota (zachowano spacing)
+  - Poprawiono strukturę sekcji w GameSetup (każda część w osobnej sekcji)
+  - Usunięto dolną ramkę z gameControls dla płynniejszego przejścia
 
 ---
 
-### v0.5.3 — Mobile UX Polish + CSS Refinements 🔮
+### v0.5.4 — Mobile UX Polish + CSS Refinements 🔮
 
-🎯 Cel: dopracowanie mobile UX i finalizacja systemu design
+🎯 Cel: dopracowanie mobile UX i finalizacja systemu designu
 
-⏱️ Przybliżony termin: Po v0.5.2
+⏱️ Przybliżony termin: Po v0.5.3
 
 Planowane zadania:
 

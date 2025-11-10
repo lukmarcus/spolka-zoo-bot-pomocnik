@@ -226,107 +226,98 @@ export default function LoadGame() {
       backgroundType="home"
     >
       <div className="card">
-        <div className={styles.loadGameContent}>
-          {/* Input Section */}
-          <div className="section">
-            <h2>KOD STANU GRY</h2>
-            <label htmlFor="gameCode" className={styles.label}>
-              Miejsce na kod stanu gry
-            </label>
-            <input
-              id="gameCode"
-              type="text"
-              value={gameCode}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="np. ZS1A2B3C..."
-              className={`${styles.input} ${error ? styles.error : ""}`}
-              autoFocus
-            />
-            {error && <div className={styles.errorMessage}>{error}</div>}
-          </div>
+        {/* Input Section */}
+        <section className="section">
+          <h2>KOD STANU GRY</h2>
+          <label htmlFor="gameCode" className={styles.label}>
+            Miejsce na kod stanu gry
+          </label>
+          <input
+            id="gameCode"
+            type="text"
+            value={gameCode}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="np. ZS1A2B3C..."
+            className={`${styles.input} ${error ? styles.error : ""}`}
+            autoFocus
+          />
+          {error && <div className={styles.errorMessage}>{error}</div>}
+        </section>
 
-          {/* Preview Section */}
-          {gamePreview && gamePreview.isValid && (
+        {/* Preview Section */}
+        {gamePreview && gamePreview.isValid && (
+          <section className="section">
+            <h2>PODGLĄD STANU GRY</h2>
             <div className="info-box">
-              <h2>PODGLĄD STANU GRY</h2>
-              <div className={styles.previewContent}>
-                {gamePreview.botCount === 1 ? (
-                  <>
+              {gamePreview.botCount === 1 ? (
+                <>
+                  <div className={styles.previewItem}>
+                    <strong>Liczba botów:</strong> 1
+                  </div>
+                  <div className={styles.previewItem}>
+                    <strong>Aktualna karta:</strong> {gamePreview.gameProgress}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className={styles.previewItem}>
+                    <strong>Liczba botów:</strong> {gamePreview.botCount}
+                  </div>
+                  <div className={styles.previewItem}>
+                    <strong>Talia:</strong>{" "}
+                    {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
+                  </div>
+                  {gamePreview.currentBot && (
                     <div className={styles.previewItem}>
-                      <strong>Liczba botów:</strong> 1
+                      <strong>Aktualny bot:</strong> {gamePreview.currentBot}
                     </div>
+                  )}
+                  {gamePreview.botPositions ? (
+                    <div className={styles.previewItem}>
+                      <strong>Stany talii:</strong>
+                      <div className={styles.botSummary}>
+                        {" "}
+                        {gamePreview.botPositions.map((bot, index) => {
+                          const isActive = bot.botId === gamePreview.currentBot;
+                          return (
+                            <span key={bot.botId}>
+                              {index > 0 && " • "}
+                              <span
+                                className={
+                                  isActive ? styles.currentBotText : ""
+                                }
+                              >
+                                {bot.botId} ({bot.position})
+                              </span>
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : (
                     <div className={styles.previewItem}>
                       <strong>Aktualna karta:</strong>{" "}
                       {gamePreview.gameProgress}
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.previewItem}>
-                      <strong>Liczba botów:</strong> {gamePreview.botCount}
-                    </div>
-                    <div className={styles.previewItem}>
-                      <strong>Talia:</strong>{" "}
-                      {gamePreview.mode === "individual" ? "osobna" : "wspólna"}
-                    </div>
-                    {gamePreview.currentBot && (
-                      <div className={styles.previewItem}>
-                        <strong>Aktualny bot:</strong> {gamePreview.currentBot}
-                      </div>
-                    )}
-                    {gamePreview.botPositions ? (
-                      <div className={styles.previewItem}>
-                        <strong>Stany talii:</strong>
-                        <div className={styles.botSummary}>
-                          {" "}
-                          {gamePreview.botPositions.map((bot, index) => {
-                            const isActive =
-                              bot.botId === gamePreview.currentBot;
-                            return (
-                              <span key={bot.botId}>
-                                {index > 0 && " • "}
-                                <span
-                                  className={
-                                    isActive ? styles.currentBotText : ""
-                                  }
-                                >
-                                  {bot.botId} ({bot.position})
-                                </span>
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className={styles.previewItem}>
-                        <strong>Aktualna karta:</strong>{" "}
-                        {gamePreview.gameProgress}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+                  )}
+                </>
+              )}
             </div>
-          )}
-
-          {/* Load Game Button - only when valid preview */}
-          {gamePreview?.isValid && (
-            <div className={styles.actions}>
-              <button
-                className="btn-primary"
-                onClick={handleLoadGame}
-                disabled={!isCodeValid || isLoading}
-              >
-                {isLoading ? "Wczytywanie..." : "Wczytaj i kontynuuj grę"}
-              </button>
-            </div>
-          )}
-        </div>
+            
+            <button
+              className={`btn-primary ${styles.loadButton}`}
+              onClick={handleLoadGame}
+              disabled={!isCodeValid || isLoading}
+            >
+              {isLoading ? "Wczytywanie..." : "Wczytaj i kontynuuj grę"}
+            </button>
+          </section>
+        )}
       </div>
 
       {/* Back button outside the card */}
-      <div className={styles.bottomControls}>
+      <div className={`bottom-controls`}>
         <button className="btn-secondary" onClick={() => navigate("/")}>
           ← Wróć do menu
         </button>

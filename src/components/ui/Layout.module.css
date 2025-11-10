@@ -6,7 +6,8 @@
   max-width: var(--max-width);
   width: 100%; /* Ensure full width usage */
   margin: 0 auto;
-  padding: var(--padding);
+  /* Top/left/right padding 1rem, no bottom padding here (footer owns bottom spacing) */
+  padding: 1rem 1rem 0;
   overflow-x: hidden; /* Prevent horizontal scroll */
   box-sizing: border-box; /* Include padding in width calculation */
   position: relative; /* Ensure layout is positioned above background overlay */
@@ -20,7 +21,6 @@
 
 .header {
   text-align: center;
-  margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--card-border);
 }
@@ -42,31 +42,31 @@
 }
 
 .main {
-  flex: 1;
+  flex: 1 0 auto; /* allow growing and prevent shrinking below content */
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  padding: 1rem 0; /* Consistent top and bottom spacing on all pages */
   animation: fadeIn 0.3s ease-out;
 }
 
 .footer {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--card-border);
+  /* Allow footer to be pushed to the bottom when main grows */
+  padding-top: 0.25rem;
+  /* Provide bottom spacing and respect device safe-area */
+  padding-bottom: calc(max(0.25rem, env(safe-area-inset-bottom)));
+  border-top: 2px solid var(--card-border);
   text-align: center;
-}
-
-.footerText {
   color: var(--text-primary);
   font-size: 0.9rem;
   opacity: 0.7;
-  margin: 0;
 }
 
 /* Responsiveness */
 @media (min-width: 481px) {
   .layout {
-    padding: 2rem;
+    /* Desktop: 1rem top/side padding, bottom handled by footer */
+    padding: 1rem 1rem 0;
     max-width: 480px; /* Fixed desktop width */
     margin: 0 auto; /* Ensure perfect centering */
     width: 100%;

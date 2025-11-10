@@ -45,10 +45,10 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <div className={styles.layout}>
-      {logo && <div className={styles.logoSection}>{logo}</div>}
-      {title && (
+      {(title || logo) && (
         <header className={styles.header}>
-          <h1 className={styles.title}>{title}</h1>
+          {logo && <div className={styles.logoSection}>{logo}</div>}
+          {title && <h1 className={styles.title}>{title}</h1>}
           {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         </header>
       )}
@@ -56,9 +56,7 @@ const Layout: React.FC<LayoutProps> = ({
       <main className={styles.main}>{children}</main>
 
       <footer className={styles.footer}>
-        <p className={styles.footerText}>
-          v{packageJson.version} • Spółka ZOO • Bot Pomocnik
-        </p>
+        v{packageJson.version} • Marek Szumny • Spółka ZOO • Bot Pomocnik
       </footer>
     </div>
   );

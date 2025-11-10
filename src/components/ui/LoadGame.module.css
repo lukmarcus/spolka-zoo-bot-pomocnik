@@ -1,11 +1,5 @@
 /* LoadGame Component Styles */
 
-.loadGameContent {
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
-
 .label {
   display: block;
   margin-bottom: 0.5rem;
@@ -86,26 +80,17 @@
   padding: 2px 4px;
 }
 
-/* Actions section within the card - only load button */
-.actions {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid var(--card-border);
-  display: flex;
-  justify-content: center;
-}
-
-/* Bottom controls outside the card */
-.bottomControls {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+/* Load button within section */
+.loadButton {
+  margin-top: 1rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .actions button,
-  .bottomControls button {
+  .loadButton {
     width: 100%;
   }
 }
