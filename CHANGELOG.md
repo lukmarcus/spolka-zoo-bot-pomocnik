@@ -5,6 +5,37 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.3] - 2025-11-09
+
+### Dodane
+
+- Dynamiczne komunikaty w modalu z real-time feedback kopiowania
+- Licznik kart w nagłówku "AKTUALNA KARTA (1/13)"
+- Numeracja botów w przyciskach: "Dla tego bota (1/4)", "Dla następnego bota (2/4)"
+- Auto-reset przycisku kopiowania po akcji (2.5s)
+
+### Zmienione
+
+- Uproszczenie ConfirmModal do jednego układu 3-przyciskowego
+- Unifikacja CSS: wszystkie komponenty używają globalnego `.card`
+- Płaska struktura DOM: usunięto nadmiarowe wrappery
+- Przeniesienie logo do nagłówka dla lepszej semantyki
+- Ukryto nagłówek "DOBIERZ KARTĘ" dla jednego bota (zachowano spacing)
+- Rozdzielenie funkcji kopiowania w modalu i przycisku gry
+
+### Naprawione
+
+- Spójność użycia `<section className="section">` w komponentach
+- Właściwa hierarchia nagłówków w całej aplikacji
+- Równomierny spacing dla wszystkich trybów gry
+- Usunięto dolną ramkę z gameControls
+
+### Usunięte
+
+- Nieużywany komponent BotCard i powiązane style
+- Nieużywane pliki graficzne i style CSS
+- System toast na rzecz bezpośredniego feedback
+
 ## [0.5.2] - 2025-11-02
 
 ### Dodane

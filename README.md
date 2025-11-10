@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.5.2-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.5.3-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -21,13 +21,16 @@
 ## 🚀 Szybki start
 
 ```bash
-# Klonowanie i instalacja
+# 1. Klonowanie repozytorium
 git clone https://github.com/lukmarcus/spolka-zoo-bot-pomocnik.git
 cd spolka-zoo-bot-pomocnik
+
+# 2. Instalacja zależności
 npm install
 
-# Uruchomienie
+# 3. Uruchomienie w trybie dev
 npm run dev
+# Aplikacja dostępna na http://localhost:5173
 ```
 
 **Dostępne komendy:**
@@ -80,23 +83,24 @@ npm run dev
 ```
 src/
 ├── components/
-│   ├── game/          # Komponenty rozgrywki
-│   │   ├── Game.tsx   # Router: GameSetup ↔ GamePlay
-│   │   ├── GameSetup.tsx + .module.css # Konfiguracja botów
-│   │   └── GamePlay.tsx + .module.css  # Aktywna rozgrywka
-│   └── ui/            # Komponenty interfejsu
-│       ├── ConfirmModal.tsx + .module.css # Modal potwierdzeń
-│       ├── LoadGame.tsx + .module.css # Pełnoekranowe wczytywanie gry
-│       ├── Home.tsx + .module.css # Menu główne
-│       ├── BotCard.tsx + .module.css # Komponenty kart botów
-│       ├── About.tsx + .module.css # Strona "About" (informacje i linki)
-│       └── Layout.tsx + .module.css # Layout aplikacji
-├── lib/               # Logika biznesowa
-│   ├── GameContext.tsx # Zarządzanie stanem gry
-│   ├── botCards.ts    # Dane kart botów
-│   ├── gameStorage.ts # Zapis/odczyt stanu gry
-│   └── types.ts       # Definicje TypeScript
-└── assets/            # Zasoby statyczne
+│   ├── game/                    # Rozgrywka
+│   │   ├── Game.tsx            # Router: Setup ↔ Play
+│   │   ├── GameSetup.tsx       # Konfiguracja botów
+│   │   └── GamePlay.tsx        # Aktywna rozgrywka
+│   └── ui/                     # Interfejs
+│       ├── Home.tsx            # Menu główne
+│       ├── LoadGame.tsx        # Wczytywanie gry
+│       ├── About.tsx           # Strona informacyjna
+│       ├── Layout.tsx          # Layout aplikacji
+│       └── ConfirmModal.tsx    # Modalne okna
+├── lib/                        # Logika
+│   ├── GameContext.tsx         # Stan gry (Context API)
+│   ├── botCards.ts            # Dane kart (13 kart)
+│   ├── gameStorage.ts         # Kody gry (ZS/ZM/ZP)
+│   └── types.ts               # TypeScript typy
+└── assets/                    # Zasoby
+    ├── fonts/                 # Czcionki (3 rodziny)
+    └── images/               # Ikony i tła
 ```
 
 **TypeScript Path Mapping:**
