@@ -38,9 +38,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
     <>
       <div className="card">
         <section className="section">
-          <h2>KONFIGURACJA GRY</h2>
-
-          <h3>LICZBA BOTÓW</h3>
+          <h2>LICZBA BOTÓW</h2>
           <div className={styles.botButtons}>
             {[1, 2, 3, 4].map((count) => (
               <button
@@ -57,72 +55,70 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
               </button>
             ))}
           </div>
+        </section>
 
-          {/* Mode selection section */}
-          {selectedBotCount && (
-            <div>
-              <h3>TRYB GRY</h3>
-              <div className={styles.modeButtons}>
-                {selectedBotCount === 1 ? (
+        {/* Mode selection section */}
+        {selectedBotCount && (
+          <section className="section">
+            <h2>TRYB GRY</h2>
+            <div className={styles.modeButtons}>
+              {selectedBotCount === 1 ? (
+                <button
+                  className={`${styles.modeOption} ${styles.selected}`}
+                  disabled
+                >
+                  Jedna talia
+                </button>
+              ) : (
+                <>
                   <button
-                    className={`${styles.modeOption} ${styles.selected}`}
-                    disabled
+                    className={`${styles.modeOption} ${
+                      selectedMode === "shared" ? styles.selected : ""
+                    }`}
+                    onClick={() => handleModeSelection("shared")}
                   >
-                    Jedna talia
+                    Wspólna talia
                   </button>
-                ) : (
-                  <>
-                    <button
-                      className={`${styles.modeOption} ${
-                        selectedMode === "shared" ? styles.selected : ""
-                      }`}
-                      onClick={() => handleModeSelection("shared")}
-                    >
-                      Wspólna talia
-                    </button>
-                    <button
-                      className={`${styles.modeOption} ${
-                        selectedMode === "individual" ? styles.selected : ""
-                      }`}
-                      onClick={() => handleModeSelection("individual")}
-                    >
-                      Osobne talie
-                    </button>
-                  </>
-                )}
-              </div>
+                  <button
+                    className={`${styles.modeOption} ${
+                      selectedMode === "individual" ? styles.selected : ""
+                    }`}
+                    onClick={() => handleModeSelection("individual")}
+                  >
+                    Osobne talie
+                  </button>
+                </>
+              )}
             </div>
+          </section>
+        )}
+
+        {/* Start game section */}
+        <section className="section">
+          {selectedBotCount ? (
+            <p className={styles.selectedInfo}>
+              Wybrano: {selectedBotCount} bot
+              {selectedBotCount > 1 ? "y" : ""}
+              {selectedBotCount > 1 ? (
+                <>
+                  ,{" "}
+                  {selectedMode === "shared" ? "wspólna talia" : "osobne talie"}
+                </>
+              ) : null}
+            </p>
+          ) : (
+            <p className={styles.selectedInfo}>
+              Wybierz ustawienia, aby rozpocząć
+            </p>
           )}
 
-          {/* Start game section */}
-          <div>
-            {selectedBotCount ? (
-              <p className={styles.selectedInfo}>
-                Wybrano: {selectedBotCount} bot
-                {selectedBotCount > 1 ? "y" : ""}
-                {selectedBotCount > 1 ? (
-                  <>
-                    ,{" "}
-                    {selectedMode === "shared"
-                      ? "wspólna talia"
-                      : "osobne talie"}
-                  </>
-                ) : null}
-              </p>
-            ) : (
-              <p className={styles.selectedInfo}>
-                Wybierz ustawienia, aby rozpocząć
-              </p>
-            )}
-
-            <button
-              className={`btn-primary ${styles.startGameButton}`}
-              onClick={handleStartGame}
-              disabled={!selectedBotCount}
-            >
-              Rozpocznij grę
-            </button>
-          </div>
+          <button
+            className={`btn-primary ${styles.startGameButton}`}
+            onClick={handleStartGame}
+            disabled={!selectedBotCount}
+          >
+            Rozpocznij grę
+          </button>
         </section>
       </div>
 

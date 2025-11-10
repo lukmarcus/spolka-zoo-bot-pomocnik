@@ -134,23 +134,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
 
-  // Determine whether to show the top game status: only when bots are selected AND
-  // the relevant deck (shared or current bot's deck) has at least one drawn card.
-  const showGameStatus = (() => {
-    if (!game.state.botsSelected) return false;
-    if (game.state.mode === "individual") {
-      if (!game.state.botDecks || !game.state.currentBot) return false;
-      const idx =
-        game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ?? -1;
-      return typeof idx === "number" && idx >= 0;
-    }
-    const sharedIdx =
-      typeof game.state.currentCardIndex === "number"
-        ? game.state.currentCardIndex
-        : -1;
-    return sharedIdx >= 0;
-  })();
-
   // v0.3.3 New game action logic - two buttons
   const getGameActions = () => {
     // During bot selection, no buttons are shown
@@ -185,7 +168,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     const primary = {
       text:
         game.state.botCount && game.state.botCount > 1
-          ? `Ten bot`
+          ? `Dla tego bota (${game.state.currentBot}/${game.state.botCount})`
           : `Dobierz kartę`,
       action: handlePrimaryForCurrentBot,
       disabled: false,
@@ -199,8 +182,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     } | null = null;
 
     if (game.state.botCount && game.state.botCount > 1) {
+      const nextBot = game.state.currentBot
+        ? (game.state.currentBot % (game.state.botCount || 1)) + 1
+        : 1;
       secondary = {
-        text: `Następny bot`,
+        text: `Dla następnego bota (${nextBot}/${game.state.botCount})`,
         action: handleSecondaryForNextBot,
         disabled: false,
         className: "btn-secondary",
@@ -215,36 +201,17 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
   return (
     <>
       <div className="card">
-        {showGameStatus && (
-          <section className={`section ${styles.gameStatus}`}>
-            <div className={styles.statusInfo}>
-              <span className={styles.cardCounter}>
-                {(game.state.mode === "individual"
-                  ? game.state.botDecks && game.state.currentBot
-                    ? (game.state.botDecks[game.state.currentBot - 1]
-                        ?.currentCardIndex ?? -1) + 1
-                    : 0
-                  : typeof game.state.currentCardIndex === "number"
-                  ? game.state.currentCardIndex + 1
-                  : 0) +
-                  "/" +
-                  BOT_CARDS.length}
-              </span>
-              {game.state.botCount && game.state.botCount > 1 && (
-                <div className={styles.botInfo}>
-                  <div className={styles.currentBotIndicator}>
-                    <span className={styles.botIndicatorText}>
-                      🤖 Bot {game.state.currentBot}/{game.state.botCount}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        <section className="section">
-          <h2>DOBIERZ KARTĘ</h2>
+        <section
+          className="section"
+          style={
+            game.state.botCount && game.state.botCount > 1
+              ? {}
+              : { paddingTop: "0.75rem" }
+          }
+        >
+          {game.state.botCount && game.state.botCount > 1 && (
+            <h2>DOBIERZ KARTĘ</h2>
+          )}
           <div className={styles.gameControls}>
             {gameActions.primary && (
               <button
@@ -269,7 +236,20 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
         {currentCard && (
           <section className="section">
-            <h2>AKTUALNA KARTA</h2>
+            <h2>
+              AKTUALNA KARTA (
+              {(game.state.mode === "individual"
+                ? game.state.botDecks && game.state.currentBot
+                  ? (game.state.botDecks[game.state.currentBot - 1]
+                      ?.currentCardIndex ?? -1) + 1
+                  : 0
+                : typeof game.state.currentCardIndex === "number"
+                ? game.state.currentCardIndex + 1
+                : 0) +
+                "/" +
+                BOT_CARDS.length}
+              )
+            </h2>
             {(() => {
               // Determine effect labels based on number of effects
               const getEffectLabel = (index: number, totalEffects: number) => {
@@ -330,7 +310,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
               ? "✅ Skopiowano!"
               : buttonCopyStatus === "error"
               ? "❌ Błąd!"
-              : "💾 Kopiuj stan gry"}
+              : "Kopiuj stan gry"}
           </button>
         )}
         <button className="btn-secondary" onClick={handleBackToMenuClick}>
