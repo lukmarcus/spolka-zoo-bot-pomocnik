@@ -12,7 +12,12 @@ interface GamePlayProps {
 const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
-  const [copyMessage, setCopyMessage] = useState<string>("");
+  const [copyStatus, setCopyStatus] = useState<"none" | "success" | "error">(
+    "none"
+  );
+  const [buttonCopyStatus, setButtonCopyStatus] = useState<
+    "idle" | "copied" | "error"
+  >("idle");
 
   // v0.4.0 Handlers per-user spec:
   const handlePrimaryForCurrentBot = () => {
@@ -55,17 +60,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     }
   };
 
-  const handleCopyGameCode = async () => {
-    try {
-      const message = await copyGameCodeToClipboard(game.state);
-      setCopyMessage(message);
-      setTimeout(() => setCopyMessage(""), 2500);
-    } catch {
-      setCopyMessage("❌ Błąd kopiowania");
-      setTimeout(() => setCopyMessage(""), 2500);
-    }
-  };
-
   const handleBackToMenuClick = () => {
     // Check if we're actually in a game (cards have been drawn)
     const inActiveGame =
@@ -87,16 +81,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
     // If in active game, show confirmation modal
     setShowExitModal(true);
-  };
-
-  const confirmExitWithCopy = async () => {
-    try {
-      await copyGameCodeToClipboard(game.state);
-    } catch (error) {
-      console.error("Error copying game code:", error);
-    }
-    setShowExitModal(false);
-    onBackToMenu();
+    setCopyStatus("none"); // Reset copy status when modal opens
   };
 
   const confirmExitWithoutCopy = () => {
@@ -106,6 +91,41 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
 
   const cancelExit = () => {
     setShowExitModal(false);
+  };
+
+  const copyGameCode = async () => {
+    try {
+      await copyGameCodeToClipboard(game.state);
+      setCopyStatus("success");
+    } catch (error) {
+      console.error("Error copying game code:", error);
+      setCopyStatus("error");
+    }
+  };
+
+  const handleCopyGameCode = async () => {
+    try {
+      await copyGameCodeToClipboard(game.state);
+      setButtonCopyStatus("copied");
+      setTimeout(() => setButtonCopyStatus("idle"), 2500);
+    } catch (error) {
+      console.error("Error copying game code:", error);
+      setButtonCopyStatus("error");
+      setTimeout(() => setButtonCopyStatus("idle"), 2500);
+    }
+  };
+
+  // Generate modal message with copy status
+  const getModalMessage = () => {
+    const baseMessage = "Czy na pewno chcesz wyjść z gry do menu?";
+
+    if (copyStatus === "none") {
+      return `${baseMessage}\nPamiętaj o skopiowaniu stanu gry!`;
+    } else if (copyStatus === "success") {
+      return `${baseMessage}\n✅ Skopiowano stan gry!`;
+    } else {
+      return `${baseMessage}\n❌ Nie udało się skopiować stanu gry!`;
+    }
   };
 
   const currentCardId = game.getCurrentCard();
@@ -301,8 +321,16 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           : typeof game.state.currentCardIndex === "number"
           ? game.state.currentCardIndex
           : -1) >= 0 && (
-          <button className="btn-tertiary" onClick={handleCopyGameCode}>
-            💾 Kopiuj stan gry
+          <button
+            className="btn-tertiary"
+            onClick={handleCopyGameCode}
+            disabled={buttonCopyStatus === "copied"}
+          >
+            {buttonCopyStatus === "copied"
+              ? "✅ Skopiowano!"
+              : buttonCopyStatus === "error"
+              ? "❌ Błąd!"
+              : "💾 Kopiuj stan gry"}
           </button>
         )}
         <button className="btn-secondary" onClick={handleBackToMenuClick}>
@@ -310,17 +338,15 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
         </button>
       </div>
 
-      {copyMessage && <div className={styles.copyMessage}>{copyMessage}</div>}
-
       <ConfirmModal
         isOpen={showExitModal}
-        title="🚪 Wyjście z gry"
-        message="Czy na pewno chcesz wyjść do głównego menu?"
-        confirmText="💾 Skopiuj stan gry i wyjdź"
-        copyButtonText="🚪 Wyjdź bez zapisu"
+        title="WYJŚCIE Z GRY"
+        message={getModalMessage()}
+        confirmText="Wyjdź"
+        copyButtonText="Kopiuj stan gry"
         cancelText="Anuluj"
-        onConfirm={confirmExitWithCopy}
-        onCopy={confirmExitWithoutCopy}
+        onConfirm={confirmExitWithoutCopy}
+        onCopy={copyGameCode}
         onCancel={cancelExit}
       />
     </>

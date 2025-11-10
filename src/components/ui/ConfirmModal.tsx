@@ -49,7 +49,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         {title && (
           <div className={styles.header}>
             <h3 className={styles.title}>{title}</h3>
-            <button 
+            <button
               className={styles.closeButton}
               onClick={onCancel}
               aria-label="Zamknij"
@@ -58,55 +58,44 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             </button>
           </div>
         )}
-        
+
         <div className={styles.content}>
-          <p className={styles.message}>{message}</p>
+          {message.split("\n").map((line, index) => (
+            <p
+              key={index}
+              className={`${styles.message} ${
+                line.includes("✅")
+                  ? styles.successMessage
+                  : line.includes("❌")
+                  ? styles.errorMessage
+                  : ""
+              }`}
+            >
+              {line}
+            </p>
+          ))}
         </div>
 
-        <div className={copyButtonText && onCopy ? styles.threeButtonActions : styles.actions}>
-          {copyButtonText && onCopy ? (
-            // Three-button layout: one wide button on top, two buttons below
-            <>
-              <button
-                className={`${styles.button} ${styles.confirmButton} ${styles.wideButton}`}
-                onClick={onConfirm}
-              >
-                {confirmText}
-              </button>
-              <div className={styles.bottomButtonRow}>
-                <button
-                  className={`${styles.button} ${styles.cancelButton}`}
-                  onClick={onCancel}
-                  autoFocus
-                >
-                  {cancelText}
-                </button>
-                <button
-                  className={`${styles.button} ${styles.copyButton}`}
-                  onClick={onCopy}
-                >
-                  {copyButtonText}
-                </button>
-              </div>
-            </>
-          ) : (
-            // Two-button layout: standard horizontal
-            <>
-              <button
-                className={`${styles.button} ${styles.cancelButton}`}
-                onClick={onCancel}
-                autoFocus
-              >
-                {cancelText}
-              </button>
-              <button
-                className={`${styles.button} ${styles.confirmButton}`}
-                onClick={onConfirm}
-              >
-                {confirmText}
-              </button>
-            </>
-          )}
+        <div className={styles.threeButtonHorizontal}>
+          <button
+            className={`${styles.button} ${styles.cancelButton}`}
+            onClick={onCancel}
+            autoFocus
+          >
+            {cancelText}
+          </button>
+          <button
+            className={`${styles.button} ${styles.confirmButton} ${styles.widerButton}`}
+            onClick={onCopy}
+          >
+            {copyButtonText}
+          </button>
+          <button
+            className={`${styles.button} ${styles.copyButton}`}
+            onClick={onConfirm}
+          >
+            {confirmText}
+          </button>
         </div>
       </div>
     </div>
