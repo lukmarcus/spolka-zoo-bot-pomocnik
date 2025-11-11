@@ -198,3 +198,14 @@
     padding: 0.875rem 1rem;
   }
 }
+
+/* Very small screens - minimal improvements */
+@media (max-width: 360px) {
+  .cardReverseImage {
+    max-width: 205px; /* Just slightly larger card image */
+  }
+
+  .gameControls button {
+    padding: 0.85rem 1rem; /* Very minimal padding increase */
+  }
+}

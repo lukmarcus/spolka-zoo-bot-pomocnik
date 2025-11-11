@@ -239,8 +239,13 @@
   .modeOption {
     padding: 0.875rem 1.25rem;
   }
+}
 
+/* Very small screens - minimal improvements */
+@media (max-width: 360px) {
+  .botNumber {
+    font-size: 1.28rem; /* Very slightly larger numbers */
+  }
 }
 
 /* Bottom Controls - similar to GamePlay */
-

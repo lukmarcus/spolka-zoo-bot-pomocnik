@@ -374,7 +374,7 @@ button:active {
 @media (max-width: 360px) {
   /* Unified style for all small screens ≤360px (including WCAG 320px) */
   :root {
-    --padding: 0; /* No padding for small screens */
+    --padding: 0.25rem; /* Very minimal padding for small screens */
     --gap: 0.5rem;
     --max-width: 100%; /* Use full available width */
 
@@ -388,14 +388,14 @@ button:active {
     --font-size-sm: 0.8rem;
 
     /* Small screen spacing */
-    --card-padding: 0.25rem;
-    --card-margin: 0.25rem;
+    --card-padding: 0.25rem; /* 4px */
+    --card-margin: 0; /* 0px - żeby razem było 4px */
   }
 
   body {
     font-size: 13px;
     margin: 0;
-    padding: 0;
+    padding: 0.25rem; /* 4px padding (0.25rem = 4px at 16px base) */
     overflow-x: hidden; /* Prevent horizontal scroll */
   }
 }
@@ -503,6 +503,15 @@ button:active {
 @media (max-width: 480px) {
   .card {
     padding: 0.75rem 0.5rem 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+}
+
+/* Very small screens - minimal card improvements */
+@media (max-width: 360px) {
+  .card {
+    padding: var(--card-padding); /* Use consistent padding from variables */
+    margin: var(--card-margin); /* Minimal margin between cards */
     border-radius: 12px;
   }
 }

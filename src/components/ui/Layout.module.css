@@ -80,14 +80,14 @@
 @media (max-width: 360px) {
   /* Unified style for all small screens ≤360px (including WCAG 320px) */
   .layout {
-    padding: 0; /* No padding for small screens */
-    width: 100%;
-    margin: 0;
+    padding: var(--padding); /* Use consistent padding from variables */
+    width: calc(100% - 2 * var(--padding)); /* Account for padding in width */
+    margin: 0 auto;
     box-sizing: border-box;
     max-width: none; /* Override any max-width constraints */
   }
 
   .subtitle {
-    font-size: 0.95rem;
+    font-size: 0.95rem; /* Keep original size */
   }
 }
