@@ -85,9 +85,16 @@
     margin: 0 auto;
     box-sizing: border-box;
     max-width: none; /* Override any max-width constraints */
+    min-height: calc(
+      100dvh - 0.5rem
+    ); /* Subtract body padding to prevent overflow */
   }
 
   .subtitle {
     font-size: 0.95rem; /* Keep original size */
+  }
+
+  .footer {
+    font-size: 0.8rem; /* Smaller text to fit on 320px */
   }
 }

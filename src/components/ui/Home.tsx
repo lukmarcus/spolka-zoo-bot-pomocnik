@@ -42,7 +42,7 @@ const Home: React.FC = () => {
     <Layout
       backgroundType="home"
       title="BOT POMOCNIK"
-      subtitle="Cyfrowy zamiennik dla kart botów"
+      subtitle="Oficjalny cyfrowy zamiennik dla kart botów"
       logo={<img src={gameLogo} alt="Spółka ZOO" className={styles.gameLogo} />}
     >
       {menuOptions.map((option) => (
@@ -55,9 +55,7 @@ const Home: React.FC = () => {
           disabled={option.disabled}
         >
           <div className={styles.menuButtonTitle}>{option.title}</div>
-          <p className={styles.menuButtonDescription}>
-            {option.description}
-          </p>
+          <p className={styles.menuButtonDescription}>{option.description}</p>
         </button>
       ))}
     </Layout>

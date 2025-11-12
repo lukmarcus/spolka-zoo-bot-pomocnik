@@ -63,10 +63,3 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* Very small screens - minimal improvements */
-@media (max-width: 360px) {
-  .logoImage {
-    height: 29px; /* Very slightly larger logos */
-  }
-}

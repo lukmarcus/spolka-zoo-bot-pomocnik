@@ -374,7 +374,7 @@ button:active {
 @media (max-width: 360px) {
   /* Unified style for all small screens ≤360px (including WCAG 320px) */
   :root {
-    --padding: 0.25rem; /* Very minimal padding for small screens */
+    --padding: 0; /* No container padding on small screens */
     --gap: 0.5rem;
     --max-width: 100%; /* Use full available width */
 
@@ -395,7 +395,7 @@ button:active {
   body {
     font-size: 13px;
     margin: 0;
-    padding: 0.25rem; /* 4px padding (0.25rem = 4px at 16px base) */
+    padding: 0.25rem; /* 4px padding TOTAL (0.25rem = 4px at 16px base) */
     overflow-x: hidden; /* Prevent horizontal scroll */
   }
 }
@@ -493,7 +493,7 @@ button:active {
   z-index: 0;
 }
 
-/* Responsive card styles */
+/* Responsive card styles - consolidated */
 @media (max-width: 768px) {
   .card {
     padding: 1rem 0.75rem 0.5rem 0.75rem;
@@ -507,11 +507,9 @@ button:active {
   }
 }
 
-/* Very small screens - minimal card improvements */
 @media (max-width: 360px) {
   .card {
-    padding: var(--card-padding); /* Use consistent padding from variables */
-    margin: var(--card-margin); /* Minimal margin between cards */
-    border-radius: 12px;
+    padding: var(--card-padding);
+    margin: var(--card-margin);
   }
 }
