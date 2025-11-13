@@ -1,5 +1,3 @@
-/* Cleaned About styles: only rules referenced by About.tsx */
-
 .gameCoverContainer {
   text-align: center;
   margin: 0.75rem 0;
@@ -7,8 +5,6 @@
 
 .gameCover {
   max-width: 300px;
-  width: 100%;
-  height: auto;
   border-radius: 12px;
   box-shadow: var(--shadow-medium);
   border: 2px solid var(--card-border);
@@ -23,9 +19,6 @@
 
 .logoImage {
   height: 32px;
-  width: auto;
-  display: block;
-  object-fit: contain;
 }
 
 .icon {
@@ -37,7 +30,7 @@
 
 .devGrid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
   text-align: center;
 }
@@ -46,20 +39,11 @@
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .gameCover {
-    max-width: 250px;
-  }
-
+@media (max-width: 400px) {
   .linksRow {
-    gap: 0.75rem;
-  }
-
-  .logoImage {
-    height: 28px;
-  }
-
-  .devGrid {
-    grid-template-columns: 1fr;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 200px;
+    margin: 0 auto 1rem auto;
   }
 }
