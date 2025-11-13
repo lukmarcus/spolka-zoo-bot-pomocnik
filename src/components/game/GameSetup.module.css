@@ -16,21 +16,6 @@
   transition: opacity 0.3s ease;
 }
 
-.modeSection {
-  transition: opacity 0.3s ease;
-}
-
-.modeSection.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modeSection.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
 .modeButtons {
   display: flex;
   gap: 1rem;
@@ -73,18 +58,6 @@
 
 .modeOption.selected::before {
   display: none;
-}
-
-.gameSetupContent {
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
-
-.gameSetupCard p {
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  font-size: var(--font-size-base);
 }
 
 .botButtons {
