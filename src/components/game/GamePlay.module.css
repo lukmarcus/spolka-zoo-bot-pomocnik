@@ -24,3 +24,10 @@
 .gameControls button:disabled:hover {
   transform: none;
 }
+
+@media (max-width: 360px) {
+  .gameControls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

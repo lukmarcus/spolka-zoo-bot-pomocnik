@@ -1,17 +1,16 @@
 .layout {
   min-height: 100vh;
-  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   max-width: var(--max-width);
-  width: 100%; /* Ensure full width usage */
+  width: 100%;
   margin: 0 auto;
-  /* Top/left/right padding 1rem, no bottom padding here (footer owns bottom spacing) */
   padding: 1rem 1rem 0;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-  box-sizing: border-box; /* Include padding in width calculation */
-  position: relative; /* Ensure layout is positioned above background overlay */
-  z-index: 1; /* Above background overlay */
+  overflow-x: hidden;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 .logoSection {
@@ -26,12 +25,8 @@
 }
 
 .title {
-  font-size: clamp(
-    2.2rem,
-    5vw,
-    2.6rem
-  ); /* Responsive: min 1.6rem, max 2.2rem */
-  line-height: 1.2; /* Better line height for mobile */
+  font-size: clamp(2.2rem, 5vw, 2.6rem);
+  line-height: 1.2;
 }
 
 .subtitle {
@@ -42,18 +37,16 @@
 }
 
 .main {
-  flex: 1 0 auto; /* allow growing and prevent shrinking below content */
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  padding: 1rem 0; /* Consistent top and bottom spacing on all pages */
+  padding: 1rem 0;
   animation: fadeIn 0.3s ease-out;
 }
 
 .footer {
-  /* Allow footer to be pushed to the bottom when main grows */
   padding-top: 0.25rem;
-  /* Provide bottom spacing and respect device safe-area */
   padding-bottom: calc(max(0.25rem, env(safe-area-inset-bottom)));
   border-top: 2px solid var(--card-border);
   text-align: center;
@@ -62,39 +55,21 @@
   opacity: 0.7;
 }
 
-/* Responsiveness */
-@media (min-width: 481px) {
-  .layout {
-    /* Desktop: 1rem top/side padding, bottom handled by footer */
-    padding: 1rem 1rem 0;
-    max-width: 480px; /* Fixed desktop width */
-    margin: 0 auto; /* Ensure perfect centering */
-    width: 100%;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-  }
-}
-
 @media (max-width: 360px) {
-  /* Unified style for all small screens ≤360px (including WCAG 320px) */
   .layout {
-    padding: var(--padding); /* Use consistent padding from variables */
-    width: calc(100% - 2 * var(--padding)); /* Account for padding in width */
+    padding: var(--padding);
+    width: calc(100% - 2 * var(--padding));
     margin: 0 auto;
     box-sizing: border-box;
-    max-width: none; /* Override any max-width constraints */
-    min-height: calc(
-      100dvh - 0.5rem
-    ); /* Subtract body padding to prevent overflow */
+    max-width: none;
+    min-height: calc(100dvh - 0.5rem);
   }
 
   .subtitle {
-    font-size: 0.95rem; /* Keep original size */
+    font-size: 0.95rem;
   }
 
   .footer {
-    font-size: 0.8rem; /* Smaller text to fit on 320px */
+    font-size: 0.8rem;
   }
 }

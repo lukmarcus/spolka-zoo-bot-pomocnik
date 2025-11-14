@@ -1,6 +1,3 @@
-/* ConfirmModal - Standalone modal component styles */
-
-/* Modal overlay and base styles */
 .overlay {
   position: fixed;
   top: 0;
@@ -111,7 +108,6 @@
   font-weight: 500;
 }
 
-/* Button actions */
 .button {
   padding: 0.75rem 1.5rem;
   border-radius: var(--border-radius);
@@ -166,7 +162,6 @@
   transform: translateY(-1px);
 }
 
-/* Three-button horizontal layout */
 .threeButtonHorizontal {
   display: flex;
   gap: 0.75rem;
@@ -185,23 +180,4 @@
 
 .threeButtonHorizontal .widerButton {
   flex: 1.5;
-}
-
-/* Mobile Responsive */
-@media (max-width: 480px) {
-  .modal {
-    width: 95%;
-    margin: 1rem;
-  }
-
-  .threeButtonHorizontal {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .threeButtonHorizontal .button {
-    flex: none;
-    font-size: 0.9rem;
-    padding: 0.75rem 1rem;
-  }
 }
