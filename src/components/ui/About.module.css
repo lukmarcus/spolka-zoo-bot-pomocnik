@@ -46,4 +46,8 @@
     max-width: 200px;
     margin: 0 auto 1rem auto;
   }
+
+  .gameCover {
+    max-width: 280px;
+  }
 }
