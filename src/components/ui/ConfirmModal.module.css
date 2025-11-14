@@ -181,3 +181,20 @@
 .threeButtonHorizontal .widerButton {
   flex: 1.5;
 }
+
+@media (max-width: 480px) {
+  .threeButtonHorizontal {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .threeButtonHorizontal .button {
+    flex: none;
+    width: 100%;
+  }
+
+  .threeButtonHorizontal .widerButton {
+    flex: none;
+    width: 100%;
+  }
+}

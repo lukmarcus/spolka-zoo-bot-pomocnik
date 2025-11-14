@@ -149,3 +149,14 @@
   background: var(--button-secondary);
   box-shadow: var(--shadow-light);
 }
+
+@media (max-width: 480px) {
+  .modeButtons {
+    gap: 0.75rem;
+  }
+
+  .modeOption {
+    width: 100%;
+    padding: 0.875rem 1rem;
+  }
+}
