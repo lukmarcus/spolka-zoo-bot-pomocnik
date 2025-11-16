@@ -1,5 +1,4 @@
 // LoadGame - Full-screen component for loading game state from code
-// Converted from LoadGameModal to provide better UX and responsive design
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -35,14 +34,11 @@ export default function LoadGame() {
       }
     }, 0);
 
-    // Validate from the first character
     if (filteredValue.length === 0) {
-      // No error for empty input
       setGamePreview(null);
       return;
     }
 
-    // Validate format (supports ZS, ZM, ZP formats)
     if (filteredValue.length >= 1 && !filteredValue.startsWith("Z")) {
       setGamePreview(null);
       setError("Kod musi zaczynać się od Z");
@@ -57,24 +53,19 @@ export default function LoadGame() {
         return;
       }
 
-      // Format-specific validation
       if (prefix === "ZS") {
-        // ZS: sprawdź duplikaty kart (każda karta może wystąpić tylko raz)
+        // ZS: Check for duplicate cards
         if (filteredValue.length >= 3) {
-          const cards = filteredValue.substring(2); // wszystkie karty po ZS
+          const cards = filteredValue.substring(2);
           const uniqueCards = new Set(cards);
           if (uniqueCards.size !== cards.length) {
             setGamePreview(null);
             setError("Każda karta może wystąpić tylko raz w kodzie");
             return;
           }
-          // Nie sprawdzamy cards.length > 13 bo jest to niemożliwe:
-          // - Talia ma tylko 13 unikatowych kart (0-9,A-C)
-          // - Jeśli nie ma duplikatów, maksimum to 13 kart
-          // - Inne znaki są już odfiltrowane wcześniej
         }
       } else if (prefix === "ZM") {
-        // ZM: minimum 6 znaków (ZM + n_botów + aktualny + karta + Z + pozostałe)
+        // ZM: minimum 6 characters
         if (filteredValue.length >= 3) {
           const botCount = parseInt(filteredValue.charAt(2));
           if (isNaN(botCount) || botCount < 2 || botCount > 4) {
@@ -90,10 +81,10 @@ export default function LoadGame() {
               return;
             }
           }
-          // Podstawowa walidacja - szczegóły w gameStorage.ts
+
         }
       } else if (prefix === "ZP") {
-        // ZP: podobna logika do ZM, ale wymaga więcej separatorów Z
+        // ZP: similar to ZM but requires more Z separators
         if (filteredValue.length >= 3) {
           const botCount = parseInt(filteredValue.charAt(2));
           if (isNaN(botCount) || botCount < 2 || botCount > 4) {
@@ -117,7 +108,7 @@ export default function LoadGame() {
               return;
             }
 
-            // Szczegóły walidacji w gameStorage.ts
+
           }
         }
       }
@@ -158,16 +149,13 @@ export default function LoadGame() {
     // Preview game state if code is potentially complete
     let shouldPreview = false;
     if (filteredValue.startsWith("ZS") && filteredValue.length >= 3) {
-      shouldPreview = true; // ZS: minimum ZS + obecna karta
+      shouldPreview = true;
     } else if (filteredValue.startsWith("ZM") && filteredValue.length >= 5) {
-      // ZM: zawsze wywołaj preview dla kodów >= 5 znaków (ZM + bots + current + card)
-      // Szczegółowa walidacja w gameStorage.ts
       shouldPreview = true;
     } else if (filteredValue.startsWith("ZP") && filteredValue.length >= 6) {
-      // ZP: sprawdź czy są jakiekolwiek separatory Z po prefiksie
       const dataWithoutPrefix = filteredValue.substring(2);
       const hasAnySeparator = dataWithoutPrefix.includes("Z");
-      shouldPreview = hasAnySeparator; // ZP: minimum ZP + n_botów + aktualny + karta + Z
+      shouldPreview = hasAnySeparator;
     }
 
     if (shouldPreview) {
@@ -215,7 +203,6 @@ export default function LoadGame() {
     }
   };
 
-  // Check if the current code is valid for button activation
   const isCodeValid =
     gameCode.length > 0 && (gamePreview === null ? false : gamePreview.isValid);
 

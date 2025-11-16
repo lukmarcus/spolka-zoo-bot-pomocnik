@@ -1,5 +1,4 @@
-// Game Context - Spółka ZOO Bot Helper
-// Manages bot card game state and actions
+// Game Context - Spolka ZOO Bot Helper
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -23,11 +22,11 @@ type GameAction =
   | { type: "RESET_GAME" }
   | { type: "NEW_GAME" }
   | { type: "LOAD_GAME"; payload: GameState }
-  | { type: "SELECT_BOTS"; payload: number } // v0.3.0+ bot count selection
-  | { type: "SWITCH_BOT"; payload: number } // v0.3.0+ switch current bot
-  | { type: "NEXT_BOT" } // v0.3.3+ go to next bot in sequence
-  | { type: "NEXT_BOT_AND_DRAW" } // v0.3.3+ go to next bot and draw card
-  | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }; // v0.4.1+ atomic: switch to next bot, reshuffle if needed, and draw
+  | { type: "SELECT_BOTS"; payload: number }
+  | { type: "SWITCH_BOT"; payload: number }
+  | { type: "NEXT_BOT" }
+  | { type: "NEXT_BOT_AND_DRAW" }
+  | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" };
 
 // Utility function to generate shuffled sequence
 function generateShuffledSequence(): number[] {
@@ -102,11 +101,11 @@ const initialState: GameState = getInitialState();
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "NEW_GAME": {
-      // Tryb shared/individual z zachowaniem botCount
+      // Shared/individual mode preserving botCount
       return getCleanState(state.mode, state.botCount || 1);
     }
     case "SELECT_BOTS": {
-      // Tryb shared/individual z nową liczbą botów
+
       if (state.mode === "individual") {
         return {
           ...state,
@@ -116,7 +115,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           botsSelected: true,
         };
       }
-      // shared
       const shuffledSequence = generateShuffledSequence();
       return {
         ...state,
@@ -131,7 +129,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case "DRAW_CARD": {
       if (state.mode === "individual" && state.botDecks && state.currentBot) {
-        // Pobierz deck aktualnego bota
+        // Get current bot's deck
         const botIdx = state.currentBot - 1;
         const botDecks = [...state.botDecks];
         const botDeck = botDecks[botIdx];
@@ -222,7 +220,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "NEXT_BOT": {
-      // v0.3.3+ Go to next bot in sequence (1, 2, 3, 4 -> 1)
+
       const nextBot =
         state.currentBot && state.botCount
           ? (state.currentBot % state.botCount) + 1
@@ -411,10 +409,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "SELECT_BOTS", payload: count }),
       switchBot: (botNumber: number) =>
         dispatch({ type: "SWITCH_BOT", payload: botNumber }),
-      nextBot: () => dispatch({ type: "NEXT_BOT" }), // v0.3.3+ go to next bot
-      nextBotAndDraw: () => dispatch({ type: "NEXT_BOT_AND_DRAW" }), // v0.3.3+ go to next bot and draw
+      nextBot: () => dispatch({ type: "NEXT_BOT" }),
+      nextBotAndDraw: () => dispatch({ type: "NEXT_BOT_AND_DRAW" }),
       nextBotAndShuffleAndDraw: () =>
-        dispatch({ type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }), // v0.4.1 atomic
+        dispatch({ type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }),
       getCurrentCard: () => {
         if (state.mode === "individual" && state.botDecks && state.currentBot) {
           const botIdx = state.currentBot - 1;

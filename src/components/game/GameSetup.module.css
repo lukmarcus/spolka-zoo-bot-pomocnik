@@ -1,4 +1,3 @@
-/* Common hover overlay for interactive elements */
 .modeOption::before,
 .botOption::before {
   content: "";

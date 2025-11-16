@@ -10,7 +10,7 @@ const Home: React.FC = () => {
   const { newGame } = useGame();
 
   const handleStartGame = () => {
-    newGame(); // Always start fresh game
+    newGame();
     navigate("/game");
   };
 

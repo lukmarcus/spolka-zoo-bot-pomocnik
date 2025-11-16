@@ -24,7 +24,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
 
   const handleStartGame = () => {
     if (selectedBotCount) {
-      // Ustaw tryb gry w stanie
       game.state.mode = selectedMode;
       game.selectBots(selectedBotCount);
       setTimeout(() => {

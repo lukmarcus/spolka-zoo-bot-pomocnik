@@ -22,7 +22,7 @@ const About: React.FC = () => {
       subtitle="O grze planszowej i o aplikacji"
     >
       <div className="card">
-        {/* Sekcja o grze */}
+        {/* Game section */}
         <section className="section">
           <h2>SPÓŁKA ZOO</h2>
           <div className="info-box">1-5 graczy • 45-90 min • od 10 lat</div>
@@ -90,7 +90,7 @@ const About: React.FC = () => {
           </div>
         </section>
 
-        {/* Sekcja o aplikacji */}
+        {/* Application section */}
         <section className="section">
           <h2>BOT POMOCNIK</h2>
           <div className="info-box">autor: Marek Szumny</div>
@@ -159,7 +159,7 @@ const About: React.FC = () => {
         </section>
       </div>
 
-      {/* Przycisk powrotu poza ramką */}
+      {/* Back button outside frame */}
   <div className="bottom-controls">
         <button className="btn-secondary" onClick={() => navigate("/")}>
           ← Wróć do menu
