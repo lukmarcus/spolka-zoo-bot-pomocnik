@@ -87,8 +87,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     try {
       await copyGameCodeToClipboard(game.state);
       setCopyStatus("success");
-    } catch (error) {
-      console.error("Error copying game code:", error);
+    } catch {
       setCopyStatus("error");
     }
   };
@@ -98,8 +97,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       await copyGameCodeToClipboard(game.state);
       setButtonCopyStatus("copied");
       setTimeout(() => setButtonCopyStatus("idle"), 2500);
-    } catch (error) {
-      console.error("Error copying game code:", error);
+    } catch {
       setButtonCopyStatus("error");
       setTimeout(() => setButtonCopyStatus("idle"), 2500);
     }
@@ -287,6 +285,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
             className="btn-tertiary"
             onClick={handleCopyGameCode}
             disabled={buttonCopyStatus === "copied"}
+            aria-label="Skopiuj aktualny stan gry do schowka"
           >
             {buttonCopyStatus === "copied"
               ? "✅ Skopiowano!"
@@ -295,7 +294,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
               : "Kopiuj stan gry"}
           </button>
         )}
-        <button className="btn-secondary" onClick={handleBackToMenuClick}>
+        <button 
+          className="btn-secondary" 
+          onClick={handleBackToMenuClick}
+          aria-label="Wróć do menu głównego"
+        >
           ← Wróć do menu
         </button>
       </div>

@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import { useGame } from "@lib/GameContext";
 import styles from "./Home.module.css";
 import gameLogo from "../../assets/images/game/game-logo.png";
 
-const Home: React.FC = () => {
+const Home: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const { newGame } = useGame();
 
-  const handleStartGame = () => {
-    newGame();
+  const handleStartGame = useCallback(() => {
+    newGame(); // Always start fresh game
     navigate("/game");
-  };
+  }, [newGame, navigate]);
+
+  const handleLoadGame = useCallback(() => navigate("/load"), [navigate]);
+  const handleAbout = useCallback(() => navigate("/about"), [navigate]);
 
   const menuOptions = [
     {
@@ -26,14 +29,14 @@ const Home: React.FC = () => {
       id: "load-game",
       title: "WCZYTAJ STAN GRY",
       description: "Użyj zapisanego kodu stanu gry",
-      action: () => navigate("/load"),
+      action: handleLoadGame,
       disabled: false,
     },
     {
       id: "about",
       title: "O GRZE I O APLIKACJI",
       description: "Informacje i linki",
-      action: () => navigate("/about"),
+      action: handleAbout,
       disabled: false,
     },
   ];
@@ -53,6 +56,7 @@ const Home: React.FC = () => {
           }`}
           onClick={option.action}
           disabled={option.disabled}
+          aria-label={`${option.title}: ${option.description}`}
         >
           <div className={styles.menuButtonTitle}>{option.title}</div>
           <p className={styles.menuButtonDescription}>{option.description}</p>
@@ -60,6 +64,8 @@ const Home: React.FC = () => {
       ))}
     </Layout>
   );
-};
+});
+
+Home.displayName = "Home";
 
 export default Home;

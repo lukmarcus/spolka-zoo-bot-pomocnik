@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import styles from "./About.module.css";
@@ -12,8 +12,10 @@ import bugIcon from "../../assets/images/icons/bug.png";
 import emailIcon from "../../assets/images/icons/email.png";
 import changelogIcon from "../../assets/images/icons/changelog.png";
 
-const About: React.FC = () => {
+const About: React.FC = React.memo(() => {
   const navigate = useNavigate();
+
+  const handleNavigateHome = useCallback(() => navigate("/"), [navigate]);
 
   return (
     <Layout
@@ -161,12 +163,14 @@ const About: React.FC = () => {
 
       {/* Back button outside frame */}
   <div className="bottom-controls">
-        <button className="btn-secondary" onClick={() => navigate("/")}>
+        <button className="btn-secondary" onClick={handleNavigateHome}>
           ← Wróć do menu
         </button>
       </div>
     </Layout>
   );
-};
+});
+
+About.displayName = 'About';
 
 export default About;
