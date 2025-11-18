@@ -5,6 +5,35 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.4] - 2025-11-16
+
+### Dodane
+
+- Oficjalne oznaczenie aplikacji jako "Oficjalny cyfrowy zamiennik dla kart botów" za zgodą autora gry planszowej
+- Responsywne przyciski mobilne: pełna szerokość na ekranach ≤480px zgodnie ze standardami dostępności
+- System zmiennych CSS: przekonwertowano wszystkie hardcodowane kolory na centralne zmienne
+- Kompletne meta tagi SEO i obsługa błędów z interfejsem odzyskiwania
+
+### Zmienione
+
+- Oczyszczenie kodu: usunięto ~50+ niepotrzebnych komentarzy i standaryzacja języka na angielski
+- Optymalizacja responsywności i wydajności (React.memo, useCallback, aria-labels)
+
+### Naprawione
+
+- Responsywność przycisków na urządzeniach mobilnych
+- Spójność systemu kolorów w całej aplikacji
+
+### Usunięte
+
+- Nieużywane style CSS w komponencie Home (infoCard, featureList)
+- Zbędne media queries i duplikacje w About, GameSetup i Layout
+- Nadmiarowe reguły responsywne zastąpione uniwersalnymi stylami bazowymi
+- Nieaktywne selektory CSS (modeSection, gameSetupContent)
+- Komentarze wersjonowania (v0.3.0+, v0.4.1+) z całego codebase
+- Polskie komentarze w kodzie TypeScript/TSX (przetłumaczone na angielski)
+- Zbędne komentarze techniczne i oczywiste opisy w plikach źródłowych
+
 ## [0.5.3] - 2025-11-09
 
 ### Dodane
