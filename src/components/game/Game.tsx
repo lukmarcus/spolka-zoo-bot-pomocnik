@@ -10,9 +10,7 @@ const Game: React.FC = () => {
   const game = useGame();
   const hasReset = useRef(false);
 
-  // Reset game state on page refresh to ensure clean bot selection
   React.useEffect(() => {
-    // Only reset once on component mount
     if (!hasReset.current && !game.state.botsSelected) {
       hasReset.current = true;
       game.resetGame();
@@ -25,11 +23,9 @@ const Game: React.FC = () => {
   };
 
   const handleGameStart = () => {
-    // Game start is handled by GameSetup component
-    // The setup component draws the first card and transitions to GamePlay
+    // Handled by GameSetup component
   };
 
-  // Check if we're actually in a game (cards have been drawn)
   const inActiveGame =
     game.state.botsSelected &&
     ((game.state.mode === "individual" &&
@@ -41,10 +37,7 @@ const Game: React.FC = () => {
         typeof game.state.currentCardIndex === "number" &&
         game.state.currentCardIndex >= 0));
 
-  // Dynamic title based on actual game state
   const pageTitle = inActiveGame ? "GRA W TOKU" : "ROZPOCZNIJ GRĘ";
-
-  // Dynamic subtitle based on game state
   const getPageSubtitle = () => {
     if (!inActiveGame) {
       return "Wybierz liczbę botów i tryb gry";

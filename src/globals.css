@@ -1,6 +1,6 @@
-/* Global styles - Spółka ZOO Bot Helper */
+/* ===== GLOBAL STYLES - SPOLKA ZOO BOT HELPER ===== */
 
-/* Custom Fonts */
+/* ===== 1. FONTS ===== */
 @font-face {
   font-family: "ChillScript";
   src: url("./assets/fonts/ChillScript.woff2") format("woff2");
@@ -20,65 +20,37 @@
   font-display: swap;
 }
 
+/* ===== 2. CSS CUSTOM PROPERTIES ===== */
 :root {
-  /* Main colors (from game manual) */
-  --bg-primary: linear-gradient(
-    135deg,
-    #e8f5e8,
-    #f0f8c7
-  ); /* Yellow-green background */
-  --text-primary: #4a2c17; /* Dark brown text */
-  --text-header: #8b4513; /* Brown headers */
-
-  /* Cards */
-  --card-bg: #fff8dc; /* Cream card background */
-  --card-border: #cd853f; /* Orange-brown border */
-  --card-accent: #228b22; /* Green accents */
-
-  /* UI elementy */
+  --bg-primary: linear-gradient(135deg, #e8f5e8, #f0f8c7);
+  --text-primary: #4a2c17;
+  --text-header: #8b4513;
+  --card-bg: #fff8dc;
+  --card-border: #cd853f;
   --button-primary: #8b4513;
   --button-secondary: #cd853f;
   --success: #228b22;
-  --warning: #ff8c00;
   --danger: #dc143c;
-
-  /* Cienie i efekty */
   --shadow-light: 0 2px 4px rgba(139, 69, 19, 0.1);
   --shadow-medium: 0 4px 8px rgba(139, 69, 19, 0.15);
   --border-radius: 8px;
-
-  /* Responsiveness */
-  --max-width: min(
-    480px,
-    calc(100vw - 2rem)
-  ); /* Ensure space for margins on narrow screens */
-  --padding: min(1rem, 4vw); /* Responsive padding for very small screens */
+  --max-width: min(480px, calc(100vw - 2rem));
+  --padding: min(1rem, 4vw);
   --gap: 0.5rem;
-
-  /* Responsive font sizes - will be overridden by media queries */
-  --font-size-hero-title: 2rem;
-  --font-size-hero-desc: 1.1rem;
   --font-size-menu-title: 1.3rem;
   --font-size-menu-desc: 1rem;
   --font-size-lg: 1.5rem;
   --font-size-base: 1rem;
   --font-size-sm: 0.9rem;
-
-  /* Responsive spacing - will be overridden by media queries */
   --card-padding: 1.5rem;
   --card-margin: 0.5rem;
-
-  /* Background opacity */
-  --bg-opacity: 0.15; /* Subtelność tła */
-
-  /* Typography */
   --font-display: "ChillScript", cursive, serif;
   --font-body: "RooneySansBold", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Arial, sans-serif;
   --font-card: "MarvinRound", sans-serif;
 }
 
-/* Reset i podstawowe style */
+/* ===== 3. RESET & BASE STYLES ===== */
 * {
   margin: 0;
   padding: 0;
@@ -86,7 +58,7 @@
 }
 
 html {
-  font-size: clamp(14px, 2.5vw, 16px); /* Responsive base font size */
+  font-size: clamp(14px, 2.5vw, 16px);
   height: 100%;
 }
 
@@ -95,7 +67,7 @@ body {
   line-height: 1.5;
   color: var(--text-primary);
   min-height: 100vh;
-  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
@@ -104,10 +76,9 @@ body {
   flex-direction: column;
 }
 
-/* Default gradient background when no image background is set */
 body:not(.bg-home):not(.bg-game) {
   background: var(--bg-primary);
-  background-attachment: fixed; /* Fixes background cut-off on mobile */
+  background-attachment: fixed;
 }
 
 #root {
@@ -115,7 +86,7 @@ body:not(.bg-home):not(.bg-game) {
   flex: 1;
 }
 
-/* Typografia */
+/* ===== 4. TYPOGRAPHY ===== */
 h1,
 h2,
 h3 {
@@ -150,7 +121,7 @@ h3 {
   margin: 1rem 0 0.5rem 0;
 }
 
-/* Przyciski */
+/* ===== 5. BUTTONS ===== */
 button {
   font-family: var(--font-body);
   cursor: pointer;
@@ -220,33 +191,37 @@ button:active {
   box-shadow: 0 2px 8px rgba(139, 69, 19, 0.1);
 }
 
-/* Shared bottom controls (used across pages) */
+/* ===== 6. LAYOUT COMPONENTS ===== */
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--padding);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
 .bottom-controls {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  padding: 0.5rem 1rem 0 1rem; /* Reduced top padding - main gap provides base spacing */
+  padding: 0.5rem 1rem 0 1rem;
   box-sizing: border-box;
   width: 100%;
-}
-
-@media (max-width: 768px) {
-  .bottom-controls button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .bottom-controls {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
 }
 
 .info-box {
   font-size: 1.1rem;
   font-weight: 500;
-  color: var(--primary-dark);
+  color: var(--text-primary);
   text-align: center;
   padding: 0.5rem 0.75rem;
   background: rgba(245, 198, 125, 0.08);
@@ -274,61 +249,17 @@ button:active {
   margin: 0;
 }
 
-/* Card Text Icons - v0.3.5 */
 .card-icon {
-  height: 20px; /* desired visual height */
-  width: auto; /* preserve aspect ratio */
-  vertical-align: middle; /* center relative to text */
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
   margin: 0;
   display: inline-block;
-  object-fit: contain; /* ensure proper scaling for images */
+  object-fit: contain;
   line-height: 1;
 }
 
-/* Responsive icon sizing */
-@media (max-width: 768px) {
-  .card-icon {
-    height: 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-icon {
-    height: 16px;
-  }
-}
-
-.text-green {
-  color: #77812b;
-}
-.text-red {
-  color: #d14019;
-}
-.text-orange {
-  color: #e76c33;
-}
-.text-gray {
-  color: #6e6e6e;
-}
-
-/* Main layout */
-.container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: var(--padding);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
-/* Karty */
+/* ===== 7. CARDS & CONTENT ===== */
 .card {
   text-align: center;
   padding: 0.5rem 1rem 0.5rem 1rem;
@@ -360,93 +291,36 @@ button:active {
   z-index: 2;
 }
 
-/* Utility classes */
+/* ===== 8. UTILITY CLASSES ===== */
+
+.text-green {
+  color: #77812b;
+}
+.text-red {
+  color: #d14019;
+}
+.text-orange {
+  color: #e76c33;
+}
+.text-gray {
+  color: #6e6e6e;
+}
+
 .text-center {
   text-align: center;
 }
 
-/* Global section spacing - consistent across all components */
 .section {
   margin-bottom: 1.5rem;
 }
 
-/* Responsiveness */
-@media (max-width: 360px) {
-  /* Unified style for all small screens ≤360px (including WCAG 320px) */
-  :root {
-    --padding: 0; /* No padding for small screens */
-    --gap: 0.5rem;
-    --max-width: 100%; /* Use full available width */
-
-    /* Small screen font sizes */
-    --font-size-hero-title: 1.4rem;
-    --font-size-hero-desc: 0.85rem;
-    --font-size-menu-title: 1.1rem;
-    --font-size-menu-desc: 0.9rem;
-    --font-size-lg: 1.3rem;
-    --font-size-base: 0.9rem;
-    --font-size-sm: 0.8rem;
-
-    /* Small screen spacing */
-    --card-padding: 0.25rem;
-    --card-margin: 0.25rem;
-  }
-
-  body {
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-  }
-}
-
-@media (min-width: 361px) and (max-width: 380px) {
-  /* Small screens between 361px and 380px */
-  :root {
-    --padding: 0.75rem;
-    --gap: 0.5rem;
-  }
-
-  body {
-    font-size: 14px;
-  }
-}
-
-@media (min-width: 481px) {
-  .container {
-    padding: 2rem;
-  }
-
-  /* Enhance centering on desktop */
-  :root {
-    --max-width: 480px; /* Fixed width on desktop for consistency */
-    --padding: 2rem; /* More padding on desktop */
-  }
-}
-
-/* Animacje */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* Background utilities (v0.1.3) */
+/* ===== 9. BACKGROUND UTILITIES ===== */
 .bg-home {
   background: url("./assets/images/backgrounds/home-bg.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Stable background on scroll */
+  background-attachment: fixed;
   position: relative;
 }
 
@@ -457,12 +331,7 @@ button:active {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(
-    232,
-    245,
-    232,
-    0.05
-  ); /* Very subtle overlay for text readability */
+  background: rgba(232, 245, 232, 0.05);
   pointer-events: none;
   z-index: 0;
 }
@@ -472,7 +341,7 @@ button:active {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Stable background on scroll */
+  background-attachment: fixed;
   position: relative;
 }
 
@@ -483,26 +352,60 @@ button:active {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(
-    240,
-    248,
-    199,
-    0.05
-  ); /* Very subtle overlay for text readability */
+  background: rgba(240, 248, 199, 0.05);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Responsive card styles */
+/* ===== 10. RESPONSIVE BREAKPOINTS ===== */
+
 @media (max-width: 768px) {
+  .card-icon {
+    height: 18px;
+  }
+
   .card {
     padding: 1rem 0.75rem 0.5rem 0.75rem;
   }
 }
 
 @media (max-width: 480px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-tertiary {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn-logo {
+    width: auto !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --padding: 0;
+    --gap: 0.5rem;
+    --max-width: 100%;
+
+    --font-size-lg: 1.3rem;
+    --font-size-base: 0.9rem;
+    --font-size-sm: 0.8rem;
+
+    --card-padding: 0.25rem;
+    --card-margin: 0;
+  }
+
+  body {
+    font-size: 13px;
+    margin: 0;
+    padding: 0.25rem;
+    overflow-x: hidden;
+  }
+
   .card {
-    padding: 0.75rem 0.5rem 0.25rem 0.5rem;
-    border-radius: 12px;
+    padding: var(--card-padding);
+    margin: var(--card-margin);
   }
 }

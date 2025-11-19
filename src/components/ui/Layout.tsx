@@ -18,13 +18,10 @@ const Layout: React.FC<LayoutProps> = ({
   logo,
 }) => {
   useEffect(() => {
-    // Apply background class to body for full-screen coverage
     const body = document.body;
 
-    // Remove any existing background classes
     body.classList.remove("bg-home", "bg-game");
 
-    // Add the appropriate background class
     switch (backgroundType) {
       case "home":
         body.classList.add("bg-home");
@@ -33,11 +30,9 @@ const Layout: React.FC<LayoutProps> = ({
         body.classList.add("bg-game");
         break;
       default:
-        // Use default gradient background (no additional class needed)
         break;
     }
 
-    // Cleanup function to remove background classes when component unmounts
     return () => {
       body.classList.remove("bg-home", "bg-game");
     };

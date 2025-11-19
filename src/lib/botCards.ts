@@ -1,5 +1,4 @@
-// Bot Cards Data - Spółka ZOO Bot Helper
-// Real card content from Spółka ZOO board game
+// Bot Cards Data - Spolka ZOO Bot Helper
 
 import type { BotCard } from "./types";
 import moneyIcon from "../assets/images/interface/money.png";
@@ -16,7 +15,7 @@ export const ICONS = {
   pineapple: pineappleIcon,
 };
 
-// Real Spółka ZOO cards (13 cards total)
+// Real Spolka ZOO cards (13 cards total)
 export const BOT_CARDS: BotCard[] = [
   {
     id: 1,

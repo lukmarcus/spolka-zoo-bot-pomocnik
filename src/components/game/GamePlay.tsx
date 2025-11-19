@@ -19,10 +19,9 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     "idle" | "copied" | "error"
   >("idle");
 
-  // v0.4.0 Handlers per-user spec:
   const handlePrimaryForCurrentBot = () => {
     if (game.isDeckExhausted()) {
-      game.shuffleDeck(); // Shuffle the current bot's deck
+      game.shuffleDeck();
       game.drawCard();
     } else {
       game.drawCard();
@@ -30,28 +29,22 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
   };
 
   const handleSecondaryForNextBot = () => {
-    // Find the next bot in a rotational manner
     const nextBot = game.state.currentBot
       ? (game.state.currentBot % (game.state.botCount || 1)) + 1
       : 1;
 
-    // If individual mode, check if the NEXT bot's deck is exhausted before switching
     if (game.state.mode === "individual") {
       const nextDeck = game.state.botDecks?.[nextBot - 1];
       const nextIdx = nextDeck?.currentCardIndex ?? -1;
       const nextExhausted = nextIdx >= BOT_CARDS.length - 1;
 
-      // Switch to next bot first
       game.switchBot(nextBot);
 
-      // If next bot's deck is exhausted after switching, shuffle then draw
       if (nextExhausted) {
-        game.shuffleDeck(); // This shuffles the newly-active bot's deck
+        game.shuffleDeck();
       }
-      game.drawCard(); // Draw for the newly-active bot
+      game.drawCard();
     } else {
-      // In shared mode, we switch to next bot and draw from shared deck
-      // If the shared deck is exhausted, shuffle first
       if (game.isDeckExhausted()) {
         game.shuffleDeck();
       }
@@ -61,7 +54,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
   };
 
   const handleBackToMenuClick = () => {
-    // Check if we're actually in a game (cards have been drawn)
     const inActiveGame =
       game.state.botsSelected &&
       ((game.state.mode === "individual" &&
@@ -74,14 +66,12 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           game.state.currentCardIndex >= 0));
 
     if (!inActiveGame) {
-      // During bot selection or before any cards drawn, exit immediately without modal
       onBackToMenu();
       return;
     }
 
-    // If in active game, show confirmation modal
     setShowExitModal(true);
-    setCopyStatus("none"); // Reset copy status when modal opens
+    setCopyStatus("none");
   };
 
   const confirmExitWithoutCopy = () => {
@@ -97,8 +87,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     try {
       await copyGameCodeToClipboard(game.state);
       setCopyStatus("success");
-    } catch (error) {
-      console.error("Error copying game code:", error);
+    } catch {
       setCopyStatus("error");
     }
   };
@@ -108,14 +97,12 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       await copyGameCodeToClipboard(game.state);
       setButtonCopyStatus("copied");
       setTimeout(() => setButtonCopyStatus("idle"), 2500);
-    } catch (error) {
-      console.error("Error copying game code:", error);
+    } catch {
       setButtonCopyStatus("error");
       setTimeout(() => setButtonCopyStatus("idle"), 2500);
     }
   };
 
-  // Generate modal message with copy status
   const getModalMessage = () => {
     const baseMessage = "Czy na pewno chcesz wyjść z gry do menu?";
 
@@ -134,14 +121,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
       : null;
 
-  // v0.3.3 New game action logic - two buttons
   const getGameActions = () => {
-    // During bot selection, no buttons are shown
     if (!game.state.botsSelected) {
       return { primary: null, secondary: null };
     }
 
-    // Determine current index depending on mode
     let currentIndex = -1;
     if (
       game.state.mode === "individual" &&
@@ -157,14 +141,10 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
           : -1;
     }
 
-    // If no cards drawn yet for the current deck
     if (currentIndex === -1) {
       return { primary: null, secondary: null };
     }
 
-    // Decide button semantics according to the user's specification.
-    // Primary: operate on CURRENT bot (draw or shuffle+draw when exhausted)
-    // Secondary: operate on NEXT bot (draw or switch+shuffle+draw when exhausted)
     const primary = {
       text:
         game.state.botCount && game.state.botCount > 1
@@ -305,6 +285,7 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
             className="btn-tertiary"
             onClick={handleCopyGameCode}
             disabled={buttonCopyStatus === "copied"}
+            aria-label="Skopiuj aktualny stan gry do schowka"
           >
             {buttonCopyStatus === "copied"
               ? "✅ Skopiowano!"
@@ -313,7 +294,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
               : "Kopiuj stan gry"}
           </button>
         )}
-        <button className="btn-secondary" onClick={handleBackToMenuClick}>
+        <button 
+          className="btn-secondary" 
+          onClick={handleBackToMenuClick}
+          aria-label="Wróć do menu głównego"
+        >
           ← Wróć do menu
         </button>
       </div>

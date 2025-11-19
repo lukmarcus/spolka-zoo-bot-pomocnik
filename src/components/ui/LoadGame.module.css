@@ -1,5 +1,3 @@
-/* LoadGame Component Styles */
-
 .label {
   display: block;
   margin-bottom: 0.5rem;
@@ -39,29 +37,12 @@
   font-weight: 500;
 }
 
-.previewContent {
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  line-height: 1.6;
-}
-
 .previewItem {
   margin-bottom: 0.5rem;
 }
 
 .previewItem:last-child {
   margin-bottom: 0;
-}
-
-.formatsInfo h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.9rem;
-  color: var(--text-primary);
-}
-
-.formatsInfo ul {
-  margin: 0;
-  padding-left: 1.25rem;
 }
 
 .botSummary {
@@ -80,24 +61,7 @@
   padding: 2px 4px;
 }
 
-/* Load button within section */
 .loadButton {
-  margin-top: 1rem;
+  margin: 1rem auto 0 auto;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .loadButton {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .input {
-    font-size: 0.9rem;
-    padding: 0.75rem;
-  }
 }

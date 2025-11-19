@@ -2,7 +2,7 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.5.3-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.5.4-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
@@ -16,7 +16,10 @@
 ⚡ **Real-time validation** - Walidacja kodów w czasie rzeczywistym  
 🎨 **Profesjonalny design** - Własne czcionki, logo Spółka ZOO i spójny system kart  
 ✨ **Nowoczesna typografia** - Trzy czcionki (ChillScript, RooneySans, MarvinRound)  
-🃏 **Card-based interface** - Zunifikowany design w stylu sekcji kart botów
+🃏 **Card-based interface** - Zunifikowany design w stylu sekcji kart botów  
+🔍 **Optymalizacja SEO** - Meta tagi, Open Graph, Twitter Cards dla lepszego udostępniania  
+🛡️ **Obsługa błędów** - Eleganckie zarządzanie błędami z możliwością przywracania  
+♿ **Dostępność** - Przyciski zgodne z WCAG i etykiety dla czytników ekranu
 
 ## 🚀 Szybki start
 
@@ -66,9 +69,11 @@ npm run dev
 ## 🛠️ Technologie
 
 **Frontend:** React 19.1.1 + TypeScript 5.8.3 + Vite 5.4.19  
-**Styling:** CSS Modules + Responsive Design  
+**Stylowanie:** CSS Modules + CSS Variables + Responsywny Design  
 **Routing:** React Router DOM 7.8.1  
-**Architecture:** Context API + Reducer Pattern
+**Architektura:** Context API + Reducer Pattern + Obsługa błędów  
+**Wydajność:** React.memo, optymalizacje useCallback + preładowanie czcionek  
+**Jakość:** Dostępność WCAG + optymalizacja SEO
 
 ## 📚 Dokumentacja
 

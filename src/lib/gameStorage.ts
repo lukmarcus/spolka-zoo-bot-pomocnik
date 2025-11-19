@@ -1,6 +1,6 @@
 import type { GameState, GameCodePreview } from "./types";
 
-// Modern game code formats (v0.4.4)
+// Game code formats:
 // - ZS Single-bot: 'ZS' + card chars (0-9,A-C)
 // - ZM Multi-shared: 'ZM' + [bots][current][card]Z[remaining] (0-9,A-C)
 // - ZP Per-bot: 'ZP' + [bots][current][card]Z[bot1]Z[bot2]Z... (0-9,A-C)
