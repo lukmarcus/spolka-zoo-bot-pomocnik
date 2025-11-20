@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useGame } from "@lib/GameContext";
+import type { GameModules } from "@lib/types";
+import { calculateBonusCoins } from "@lib/types";
 import styles from "./GameSetup.module.css";
 
 interface GameSetupProps {
@@ -13,6 +15,11 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
   const [selectedMode, setSelectedMode] = useState<"shared" | "individual">(
     "shared"
   );
+  const [selectedModules, setSelectedModules] = useState<GameModules>({
+    events: false,
+    hiddenGoals: false,
+    intrigues: false,
+  });
 
   const handleBotSelection = (count: number) => {
     setSelectedBotCount(count);
@@ -22,9 +29,17 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
     setSelectedMode(mode);
   };
 
+  const handleModuleToggle = (module: keyof GameModules) => {
+    setSelectedModules((prev) => ({
+      ...prev,
+      [module]: !prev[module],
+    }));
+  };
+
   const handleStartGame = () => {
     if (selectedBotCount) {
       game.state.mode = selectedMode;
+      game.state.modules = selectedModules;
       game.selectBots(selectedBotCount);
       setTimeout(() => {
         game.drawCard();
@@ -92,19 +107,62 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
           </section>
         )}
 
+        {/* Modules selection section */}
+        {selectedBotCount && (
+          <section className="section">
+            <h2>DODATKOWE MODUŁY</h2>
+            <div className={styles.moduleCheckboxes}>
+              <label className={styles.moduleCheckbox}>
+                <input
+                  type="checkbox"
+                  checked={selectedModules.events}
+                  onChange={() => handleModuleToggle("events")}
+                />
+                <span className={styles.checkboxLabel}>Wydarzenia</span>
+              </label>
+              <label className={styles.moduleCheckbox}>
+                <input
+                  type="checkbox"
+                  checked={selectedModules.hiddenGoals}
+                  onChange={() => handleModuleToggle("hiddenGoals")}
+                />
+                <span className={styles.checkboxLabel}>Ukryte Cele</span>
+              </label>
+              <label className={styles.moduleCheckbox}>
+                <input
+                  type="checkbox"
+                  checked={selectedModules.intrigues}
+                  onChange={() => handleModuleToggle("intrigues")}
+                />
+                <span className={styles.checkboxLabel}>Intrygi</span>
+              </label>
+            </div>
+            {(selectedModules.hiddenGoals || selectedModules.intrigues) && (
+              <p className={styles.moduleSummary}>
+                Każdy bot otrzyma dodatkowe{" "}
+                <strong>{calculateBonusCoins(selectedModules)} monet</strong>
+              </p>
+            )}
+          </section>
+        )}
+
         {/* Start game section */}
         <section className="section">
           {selectedBotCount ? (
-            <p className={styles.selectedInfo}>
-              Wybrano: {selectedBotCount} bot
-              {selectedBotCount > 1 ? "y" : ""}
-              {selectedBotCount > 1 ? (
-                <>
-                  ,{" "}
-                  {selectedMode === "shared" ? "wspólna talia" : "osobne talie"}
-                </>
-              ) : null}
-            </p>
+            <>
+              <p className={styles.selectedInfo}>
+                Wybrano: {selectedBotCount} bot
+                {selectedBotCount > 1 ? "y" : ""}
+                {selectedBotCount > 1 ? (
+                  <>
+                    ,{" "}
+                    {selectedMode === "shared"
+                      ? "wspólna talia"
+                      : "osobne talie"}
+                  </>
+                ) : null}
+              </p>
+            </>
           ) : (
             <p className={styles.selectedInfo}>
               Wybierz ustawienia, aby rozpocząć

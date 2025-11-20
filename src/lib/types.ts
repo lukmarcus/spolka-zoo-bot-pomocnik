@@ -11,8 +11,15 @@ export interface BotDeck {
   usedCards: number[];
 }
 
+export interface GameModules {
+  events: boolean;
+  hiddenGoals: boolean;
+  intrigues: boolean;
+}
+
 export interface GameState {
   mode: "shared" | "individual";
+  modules?: GameModules;
   currentCardIndex?: number;
   cardSequence?: number[];
   usedCards?: number[];
@@ -79,3 +86,11 @@ export const CardType = {
 
 export type GameModeType = (typeof GameMode)[keyof typeof GameMode];
 export type CardTypeType = (typeof CardType)[keyof typeof CardType];
+
+// Helper function to calculate bonus coins from modules
+export const calculateBonusCoins = (modules: GameModules): number => {
+  let bonus = 0;
+  if (modules.hiddenGoals) bonus += 20;
+  if (modules.intrigues) bonus += 20;
+  return bonus;
+};
