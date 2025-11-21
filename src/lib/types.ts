@@ -12,7 +12,6 @@ export interface BotDeck {
 }
 
 export interface GameModules {
-  events: boolean;
   hiddenGoals: boolean;
   intrigues: boolean;
 }

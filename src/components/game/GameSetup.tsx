@@ -16,7 +16,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
     "shared"
   );
   const [selectedModules, setSelectedModules] = useState<GameModules>({
-    events: false,
     hiddenGoals: false,
     intrigues: false,
   });
@@ -111,31 +110,23 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
         {selectedBotCount && (
           <section className="section">
             <h2>DODATKOWE MODUŁY</h2>
-            <div className={styles.moduleCheckboxes}>
-              <label className={styles.moduleCheckbox}>
-                <input
-                  type="checkbox"
-                  checked={selectedModules.events}
-                  onChange={() => handleModuleToggle("events")}
-                />
-                <span className={styles.checkboxLabel}>Wydarzenia</span>
-              </label>
-              <label className={styles.moduleCheckbox}>
-                <input
-                  type="checkbox"
-                  checked={selectedModules.hiddenGoals}
-                  onChange={() => handleModuleToggle("hiddenGoals")}
-                />
-                <span className={styles.checkboxLabel}>Ukryte Cele</span>
-              </label>
-              <label className={styles.moduleCheckbox}>
-                <input
-                  type="checkbox"
-                  checked={selectedModules.intrigues}
-                  onChange={() => handleModuleToggle("intrigues")}
-                />
-                <span className={styles.checkboxLabel}>Intrygi</span>
-              </label>
+            <div className={styles.moduleButtons}>
+              <button
+                className={`${styles.moduleOption} ${
+                  selectedModules.hiddenGoals ? styles.selected : ""
+                }`}
+                onClick={() => handleModuleToggle("hiddenGoals")}
+              >
+                Ukryte Cele
+              </button>
+              <button
+                className={`${styles.moduleOption} ${
+                  selectedModules.intrigues ? styles.selected : ""
+                }`}
+                onClick={() => handleModuleToggle("intrigues")}
+              >
+                Intrygi
+              </button>
             </div>
             {(selectedModules.hiddenGoals || selectedModules.intrigues) && (
               <p className={styles.moduleSummary}>
