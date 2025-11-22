@@ -150,14 +150,6 @@
 }
 
 /* Module selection styles */
-.moduleDescription {
-  color: var(--text-secondary);
-  font-size: var(--font-size-small);
-  margin-bottom: 1rem;
-  text-align: center;
-  font-style: italic;
-}
-
 .moduleButtons {
   display: flex;
   gap: 1rem;
@@ -166,6 +158,9 @@
 }
 
 .moduleOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   background: linear-gradient(135deg, #fff8dc, #f5f5dc);
   border: 2px solid var(--card-border);
   border-radius: 12px;
@@ -178,7 +173,18 @@
   box-shadow: var(--shadow-light);
   position: relative;
   overflow: hidden;
-  flex: 1;
+}
+
+.moduleCheckbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--button-primary);
+  flex-shrink: 0;
+}
+
+.moduleLabel {
+  user-select: none;
 }
 
 .moduleOption::before {
@@ -219,15 +225,6 @@
   display: none;
 }
 
-.moduleBonus {
-  font-size: var(--font-size-small);
-  color: var(--button-primary);
-  font-weight: 700;
-  background: rgba(139, 69, 19, 0.1);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-}
-
 .moduleSummary {
   text-align: center;
   color: var(--button-primary);
@@ -255,6 +252,5 @@
 
   .moduleOption {
     padding: 1rem;
-    flex: none;
   }
 }

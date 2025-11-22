@@ -111,22 +111,32 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
           <section className="section">
             <h2>DODATKOWE MODUŁY</h2>
             <div className={styles.moduleButtons}>
-              <button
+              <label
                 className={`${styles.moduleOption} ${
                   selectedModules.hiddenGoals ? styles.selected : ""
                 }`}
-                onClick={() => handleModuleToggle("hiddenGoals")}
               >
-                Ukryte Cele
-              </button>
-              <button
+                <input
+                  type="checkbox"
+                  checked={selectedModules.hiddenGoals}
+                  onChange={() => handleModuleToggle("hiddenGoals")}
+                  className={styles.moduleCheckbox}
+                />
+                <span className={styles.moduleLabel}>Ukryte Cele</span>
+              </label>
+              <label
                 className={`${styles.moduleOption} ${
                   selectedModules.intrigues ? styles.selected : ""
                 }`}
-                onClick={() => handleModuleToggle("intrigues")}
               >
-                Intrygi
-              </button>
+                <input
+                  type="checkbox"
+                  checked={selectedModules.intrigues}
+                  onChange={() => handleModuleToggle("intrigues")}
+                  className={styles.moduleCheckbox}
+                />
+                <span className={styles.moduleLabel}>Intrygi</span>
+              </label>
             </div>
             {(selectedModules.hiddenGoals || selectedModules.intrigues) && (
               <p className={styles.moduleSummary}>
