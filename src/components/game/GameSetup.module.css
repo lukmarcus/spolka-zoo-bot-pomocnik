@@ -227,12 +227,23 @@
 
 .moduleSummary {
   text-align: center;
-  color: var(--button-primary);
+  color: var(--text-primary);
   font-weight: 600;
   background: rgba(139, 69, 19, 0.05);
   padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid rgba(139, 69, 19, 0.2);
+  margin-top: 1rem;
+}
+
+.summaryLine {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.summaryLine + .summaryLine {
+  margin-top: 0.25rem;
+  color: var(--button-primary);
 }
 
 @media (max-width: 480px) {

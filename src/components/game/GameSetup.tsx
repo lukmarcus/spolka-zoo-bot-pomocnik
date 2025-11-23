@@ -138,33 +138,36 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
                 <span className={styles.moduleLabel}>Intrygi</span>
               </label>
             </div>
-            {(selectedModules.hiddenGoals || selectedModules.intrigues) && (
-              <p className={styles.moduleSummary}>
-                Każdy bot otrzyma dodatkowe{" "}
-                <strong>{calculateBonusCoins(selectedModules)} monet</strong>
-              </p>
+            {selectedBotCount && (
+              <div className={styles.moduleSummary}>
+                <p className={styles.summaryLine}>
+                  Wybrano: {selectedBotCount} bot
+                  {selectedBotCount > 1 ? "y" : ""}
+                  {selectedBotCount > 1 ? (
+                    <>
+                      ,{" "}
+                      {selectedMode === "shared"
+                        ? "wspólna talia"
+                        : "osobne talie"}
+                    </>
+                  ) : null}
+                </p>
+                {(selectedModules.hiddenGoals || selectedModules.intrigues) && (
+                  <p className={styles.summaryLine}>
+                    <strong>
+                      +{calculateBonusCoins(selectedModules)} monet
+                    </strong>{" "}
+                    dla każdego bota
+                  </p>
+                )}
+              </div>
             )}
           </section>
         )}
 
         {/* Start game section */}
         <section className="section">
-          {selectedBotCount ? (
-            <>
-              <p className={styles.selectedInfo}>
-                Wybrano: {selectedBotCount} bot
-                {selectedBotCount > 1 ? "y" : ""}
-                {selectedBotCount > 1 ? (
-                  <>
-                    ,{" "}
-                    {selectedMode === "shared"
-                      ? "wspólna talia"
-                      : "osobne talie"}
-                  </>
-                ) : null}
-              </p>
-            </>
-          ) : (
+          {!selectedBotCount && (
             <p className={styles.selectedInfo}>
               Wybierz ustawienia, aby rozpocząć
             </p>
