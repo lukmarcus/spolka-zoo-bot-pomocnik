@@ -159,7 +159,8 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
                     <img
                       src={moneyIcon}
                       alt="monet"
-                      className={styles.moneyIcon}
+                      className="card-icon"
+                      style={{ margin: "0 0.25rem" }}
                     />
                     dla każdego bota
                   </p>
