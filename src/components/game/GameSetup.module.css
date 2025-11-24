@@ -246,6 +246,16 @@
   color: var(--button-primary);
 }
 
+.moneyIcon {
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 0.25rem;
+  display: inline-block;
+  object-fit: contain;
+  line-height: 1;
+}
+
 @media (max-width: 480px) {
   .modeButtons {
     gap: 0.75rem;

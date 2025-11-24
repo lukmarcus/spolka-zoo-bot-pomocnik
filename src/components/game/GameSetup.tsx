@@ -3,6 +3,7 @@ import { useGame } from "@lib/GameContext";
 import type { GameModules } from "@lib/types";
 import { calculateBonusCoins } from "@lib/types";
 import styles from "./GameSetup.module.css";
+import moneyIcon from "@images/interface/money.png";
 
 interface GameSetupProps {
   onGameStart: () => void;
@@ -154,9 +155,12 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
                 </p>
                 {(selectedModules.hiddenGoals || selectedModules.intrigues) && (
                   <p className={styles.summaryLine}>
-                    <strong>
-                      +{calculateBonusCoins(selectedModules)} monet
-                    </strong>{" "}
+                    <strong>+{calculateBonusCoins(selectedModules)}</strong>
+                    <img
+                      src={moneyIcon}
+                      alt="monet"
+                      className={styles.moneyIcon}
+                    />
                     dla każdego bota
                   </p>
                 )}
