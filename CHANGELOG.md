@@ -5,7 +5,20 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.4] - 2025-11-16
+## [0.5.5] - 2025-11-26
+
+### Dodane
+
+- System modułów dodatków: checkboxy "Ukryte Cele" (+20) i "Intrygi" (+20) z informacją o bonusie monet
+- Ikona monety w podsumowaniu, ramka łącząca wybór botów/trybu/modułów
+- Alias `@images` w vite.config.ts, wszystkie importy grafik zamienione na `@images/*`
+
+### Zmienione
+
+- Custom style checkboxów modułów (wygląd buttonów z widocznym checkboxem)
+- Ujednolicenie stylów ikon - użycie globalnej `.card-icon`
+
+## [0.5.4] - 2025-11-18
 
 ### Dodane
 
@@ -34,7 +47,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Polskie komentarze w kodzie TypeScript/TSX (przetłumaczone na angielski)
 - Zbędne komentarze techniczne i oczywiste opisy w plikach źródłowych
 
-## [0.5.3] - 2025-11-09
+## [0.5.3] - 2025-11-10
 
 ### Dodane
 
@@ -65,7 +78,7 @@ projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Nieużywane pliki graficzne i style CSS
 - System toast na rzecz bezpośredniego feedback
 
-## [0.5.2] - 2025-11-02
+## [0.5.2] - 2025-11-04
 
 ### Dodane
 

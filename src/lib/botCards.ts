@@ -1,11 +1,11 @@
 // Bot Cards Data - Spolka ZOO Bot Helper
 
 import type { BotCard } from "./types";
-import moneyIcon from "../assets/images/interface/money.png";
-import cardIcon from "../assets/images/interface/card.png";
-import appleIcon from "../assets/images/interface/apple.png";
-import lemonIcon from "../assets/images/interface/lemon.png";
-import pineappleIcon from "../assets/images/interface/pineapple.png";
+import moneyIcon from "@images/interface/money.png";
+import cardIcon from "@images/interface/card.png";
+import appleIcon from "@images/interface/apple.png";
+import lemonIcon from "@images/interface/lemon.png";
+import pineappleIcon from "@images/interface/pineapple.png";
 
 export const ICONS = {
   money: moneyIcon,

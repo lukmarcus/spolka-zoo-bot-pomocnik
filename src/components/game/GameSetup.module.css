@@ -149,6 +149,103 @@
   box-shadow: var(--shadow-light);
 }
 
+/* Module selection styles */
+.moduleButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.moduleOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #fff8dc, #f5f5dc);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.moduleCheckbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--button-primary);
+  flex-shrink: 0;
+}
+
+.moduleLabel {
+  user-select: none;
+}
+
+.moduleOption::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 69, 19, 0.03),
+    rgba(255, 140, 0, 0.05)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.moduleOption:hover {
+  border-color: var(--button-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.moduleOption:hover::before {
+  opacity: 1;
+}
+
+.moduleOption.selected {
+  border-color: var(--button-primary);
+  background: linear-gradient(135deg, var(--button-primary), #a0522d);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+}
+
+.moduleOption.selected::before {
+  display: none;
+}
+
+.moduleSummary {
+  text-align: center;
+  color: var(--text-primary);
+  font-weight: 600;
+  background: rgba(139, 69, 19, 0.05);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 69, 19, 0.2);
+  margin-top: 1rem;
+}
+
+.summaryLine {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.summaryLine + .summaryLine {
+  margin-top: 0.25rem;
+  color: var(--button-primary);
+}
+
 @media (max-width: 480px) {
   .modeButtons {
     gap: 0.75rem;
@@ -157,5 +254,14 @@
   .modeOption {
     width: 100%;
     padding: 0.875rem 1rem;
+  }
+
+  .moduleButtons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .moduleOption {
+    padding: 1rem;
   }
 }

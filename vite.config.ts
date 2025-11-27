@@ -11,6 +11,7 @@ export default defineConfig({
       "@lib": resolve("./src/lib"),
       "@game": resolve("./src/components/game"),
       "@ui": resolve("./src/components/ui"),
+      "@images": resolve("./src/assets/images"),
     },
   },
 });
