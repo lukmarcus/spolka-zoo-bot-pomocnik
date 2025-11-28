@@ -15,6 +15,7 @@ const Home: React.FC = React.memo(() => {
   }, [newGame, navigate]);
 
   const handleLoadGame = useCallback(() => navigate("/load"), [navigate]);
+  const handleRules = useCallback(() => navigate("/rules"), [navigate]);
   const handleAbout = useCallback(() => navigate("/about"), [navigate]);
 
   const menuOptions = [
@@ -30,6 +31,13 @@ const Home: React.FC = React.memo(() => {
       title: "WCZYTAJ STAN GRY",
       description: "Użyj zapisanego kodu stanu gry",
       action: handleLoadGame,
+      disabled: false,
+    },
+    {
+      id: "rules",
+      title: "ZASADY GRY",
+      description: "Zasady specjalne dla botów",
+      action: handleRules,
       disabled: false,
     },
     {
