@@ -36,7 +36,7 @@ const Home: React.FC = React.memo(() => {
     {
       id: "rules",
       title: "ZASADY GRY",
-      description: "Zasady specjalne dla botów",
+      description: "Przypomnienie reguł do gry z botami",
       action: handleRules,
       disabled: false,
     },

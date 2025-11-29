@@ -5,6 +5,7 @@ import Home from "@ui/Home";
 import Game from "@game/Game";
 import LoadGame from "@ui/LoadGame";
 import About from "@ui/About";
+import Rules from "@ui/Rules";
 import "./globals.css";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/game" element={<Game />} />
             <Route path="/load" element={<LoadGame />} />
+            <Route path="/rules" element={<Rules />} />
             <Route path="/about" element={<About />} />
           </Routes>
         </Router>
