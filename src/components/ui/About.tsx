@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
+import BottomControls from "./BottomControls";
 import styles from "./About.module.css";
 import gameCover from "@images/game/game-cover.jpg";
 import coconutSaladLogo from "@images/logos/coconut-salad-logo.png";
@@ -162,11 +163,7 @@ const About: React.FC = React.memo(() => {
       </div>
 
       {/* Back button outside frame */}
-      <div className="bottom-controls">
-        <button className="btn-secondary" onClick={handleNavigateHome}>
-          ← Wróć do menu
-        </button>
-      </div>
+      <BottomControls onBackClick={handleNavigateHome} />
     </Layout>
   );
 });

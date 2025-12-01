@@ -1,8 +1,7 @@
-// LoadGame - Full-screen component for loading game state from code
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
+import BottomControls from "./BottomControls";
 import styles from "./LoadGame.module.css";
 import { loadFromShareableCode, previewGameCode } from "@lib/gameStorage";
 import { useGame } from "@lib/GameContext";
@@ -81,7 +80,6 @@ export default function LoadGame() {
               return;
             }
           }
-
         }
       } else if (prefix === "ZP") {
         // ZP: similar to ZM but requires more Z separators
@@ -107,8 +105,6 @@ export default function LoadGame() {
               setError("ZP: brakuje separatorów Z");
               return;
             }
-
-
           }
         }
       }
@@ -291,7 +287,7 @@ export default function LoadGame() {
                 </>
               )}
             </div>
-            
+
             <button
               className={`btn-primary ${styles.loadButton}`}
               onClick={handleLoadGame}
@@ -304,11 +300,7 @@ export default function LoadGame() {
       </div>
 
       {/* Back button outside the card */}
-      <div className={`bottom-controls`}>
-        <button className="btn-secondary" onClick={() => navigate("/")}>
-          ← Wróć do menu
-        </button>
-      </div>
+      <BottomControls onBackClick={() => navigate("/")} />
     </Layout>
   );
 }

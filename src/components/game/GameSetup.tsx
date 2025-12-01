@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useGame } from "@lib/GameContext";
 import type { GameModules } from "@lib/types";
 import { calculateBonusCoins } from "@lib/types";
+import BottomControls from "@ui/BottomControls";
 import styles from "./GameSetup.module.css";
 import moneyIcon from "@images/interface/money.png";
 
@@ -188,11 +189,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onGameStart, onBackToMenu }) => {
         </section>
       </div>
 
-      <div className="bottom-controls">
-        <button className="btn-secondary" onClick={onBackToMenu}>
-          ← Wróć do menu
-        </button>
-      </div>
+      <BottomControls onBackClick={onBackToMenu} />
     </>
   );
 };

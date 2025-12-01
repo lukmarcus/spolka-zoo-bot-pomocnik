@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
+import BottomControls from "./BottomControls";
 import styles from "./Rules.module.css";
 
 const Rules: React.FC = React.memo(() => {
@@ -85,11 +86,7 @@ const Rules: React.FC = React.memo(() => {
         </section>
       </div>
 
-      <div className="bottom-controls">
-        <button className="btn-secondary" onClick={handleNavigateHome}>
-          ← Wróć do menu
-        </button>
-      </div>
+      <BottomControls onBackClick={handleNavigateHome} />
     </Layout>
   );
 });
