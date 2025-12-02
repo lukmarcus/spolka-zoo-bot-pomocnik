@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "./Layout";
-import BottomControls from "./BottomControls";
-import styles from "./Rules.module.css";
+import Layout from "@ui/Layout";
+import BottomControls from "@ui/BottomControls";
+import styles from "@ui/Rules.module.css";
 
 const Rules: React.FC = React.memo(() => {
   const navigate = useNavigate();

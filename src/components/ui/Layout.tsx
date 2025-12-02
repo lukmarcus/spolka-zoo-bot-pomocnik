@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "./Layout.module.css";
+import styles from "@ui/Layout.module.css";
 import packageJson from "../../../package.json";
 
 interface LayoutProps {

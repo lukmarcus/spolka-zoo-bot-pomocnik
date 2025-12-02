@@ -2,8 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import { useGame } from "@lib/GameContext";
 import Layout from "@ui/Layout";
-import GameSetup from "./GameSetup";
-import GamePlay from "./GamePlay";
+import GameSetup from "@game/GameSetup";
+import GamePlay from "@game/GamePlay";
 
 const Game: React.FC = () => {
   const navigate = useNavigate();

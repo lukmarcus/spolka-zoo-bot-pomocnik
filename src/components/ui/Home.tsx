@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "./Layout";
+import Layout from "@ui/Layout";
 import { useGame } from "@lib/GameContext";
-import styles from "./Home.module.css";
+import styles from "@ui/Home.module.css";
 import gameLogo from "@images/game/game-logo.png";
 
 const Home: React.FC = React.memo(() => {

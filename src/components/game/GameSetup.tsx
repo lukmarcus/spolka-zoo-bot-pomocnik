@@ -3,7 +3,7 @@ import { useGame } from "@lib/GameContext";
 import type { GameModules } from "@lib/types";
 import { calculateBonusCoins } from "@lib/types";
 import BottomControls from "@ui/BottomControls";
-import styles from "./GameSetup.module.css";
+import styles from "@game/GameSetup.module.css";
 import moneyIcon from "@images/interface/money.png";
 
 interface GameSetupProps {

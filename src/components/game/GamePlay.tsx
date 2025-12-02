@@ -4,7 +4,7 @@ import { BOT_CARDS } from "@lib/botCards";
 import { copyGameCodeToClipboard } from "@lib/gameStorage";
 import ConfirmModal from "@ui/ConfirmModal";
 import BottomControls from "@ui/BottomControls";
-import styles from "./GamePlay.module.css";
+import styles from "@game/GamePlay.module.css";
 
 interface GamePlayProps {
   onBackToMenu: () => void;

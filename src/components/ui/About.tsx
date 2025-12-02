@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "./Layout";
-import BottomControls from "./BottomControls";
-import styles from "./About.module.css";
+import Layout from "@ui/Layout";
+import BottomControls from "@ui/BottomControls";
+import styles from "@ui/About.module.css";
 import gameCover from "@images/game/game-cover.jpg";
 import coconutSaladLogo from "@images/logos/coconut-salad-logo.png";
 import bggLogo from "@images/logos/bgg-logo.png";

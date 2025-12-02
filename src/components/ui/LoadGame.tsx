@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "./Layout";
-import BottomControls from "./BottomControls";
-import styles from "./LoadGame.module.css";
+import Layout from "@ui/Layout";
+import BottomControls from "@ui/BottomControls";
+import styles from "@ui/LoadGame.module.css";
 import { loadFromShareableCode, previewGameCode } from "@lib/gameStorage";
 import { useGame } from "@lib/GameContext";
 import type { GameCodePreview } from "@lib/types";
