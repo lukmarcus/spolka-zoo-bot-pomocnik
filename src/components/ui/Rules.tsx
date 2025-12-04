@@ -17,71 +17,135 @@ const Rules: React.FC = React.memo(() => {
     >
       <div className="card">
         <section className={styles.section}>
-          <h2>BOT JAKO GRACZ</h2>
+          <h2>OGÓLNE ZASADY BOTA</h2>
           <ul>
+            <li>Na potrzeby różnych efektów Bota uważa się za gracza.</li>
             <li>
-              Działa jak normalny gracz: ma własne pieniądze, owoce i udziały.
+              Boty obowiązują w większości takie same zasady co gracze (w tym
+              dotyczące startowych pieniędzy, Owoców i żetonów Udziałów).
             </li>
-            <li>Bierze udział w podziale Owoców między Udziałowców.</li>
-            <li>Może być pierwszym graczem i może wygrać grę.</li>
-            <li>Większość efektów gry działa na niego normalnie.</li>
+            <li>
+              Z żetonów Udziałów należy stworzyć osobną pulę dla każdego Bota.
+            </li>
+            <li>Bot może zostać Pierwszym Graczem.</li>
+            <li>Bot może stać się Udziałowcem (także Większościowym).</li>
+            <li>Bot bierze udział w podziale Owoców ze Spółek.</li>
+            <li>
+              Efekty kart Wpływu i Pomocników odnoszące się do graczy działają
+              również na Boty.
+            </li>
+            <li>Bot może zostać zwycięzcą gry.</li>
           </ul>
 
-          <h2>TALIA I TURA BOTA</h2>
+          <h2>PRZYGOTOWANIE GRY</h2>
           <ul>
-            <li>Bot korzysta z talii 13 kart zamiast żetonów akcji.</li>
+            <li>Łączna liczba graczy i Botów nie może przekroczyć pięciu.</li>
             <li>
-              Bot odkrywa kartę i wykonuje wszystkie możliwe efekty z tej karty.
+              W przygotowaniu do rozgrywki należy uwzględnić Boty jako graczy.
             </li>
-            <li>
-              Jeśli karta nie pozwala na wykonanie żadnego efektu, Bot dobiera
-              kolejną.
-            </li>
-            <li>Talia jest tasowana dopiero po jej całkowitym wyczerpaniu.</li>
+            <li>Każdy Bot rozpatruje swoją turę oddzielnie.</li>
+            <li>Bot może rozgrywać turę bezpośrednio po turze innego Bota.</li>
           </ul>
 
-          <h2>WYBORY BOTA (OWOCE I UDZIAŁY)</h2>
+          <h2>OBSŁUGA BOTA</h2>
           <ul>
             <li>
-              Bot zawsze wybiera pierwszą możliwą Spółkę od lewej do prawej.
+              Obsługą Bota zajmuje się zawsze jeden z sąsiadujących z nim
+              graczy.
             </li>
-            <li>Dotyczy to zarówno wyboru Owocu, jak i zakupu Udziału.</li>
             <li>
-              Kupując lub sprzedając zasoby, Bot normalnie zmienia ceny na
-              torach cen.
+              Kupno lub sprzedaż dokonana przez Bota wpływa na ceny tak samo jak
+              u graczy (przesuwa znacznik ceny).
+            </li>
+            <li>
+              Wszystkie sporne sytuacje rozstrzyga się według kolejności plansz
+              Spółek (od lewej do prawej).
+            </li>
+          </ul>
+
+          <h2>BOT W TRAKCIE GRY</h2>
+          <ul>
+            <li>
+              Boty nie używają żetonów Akcji — zastępuje je talia Bota (13
+              kart).
+            </li>
+            <li>
+              Gdy przychodzi tura Bota, gracz obsługujący odkrywa wierzchnią
+              kartę talii.
+            </li>
+            <li>Karty Bota mogą mieć jeden lub dwa efekty.</li>
+            <li>
+              Jeśli możliwe jest wykonanie obu efektów z karty — należy je
+              wykonać.
+            </li>
+            <li>
+              Jeśli nie da się wykonać przynajmniej jednego efektu — karta jest
+              odrzucana i dobierana jest kolejna.
+            </li>
+            <li>
+              Dobieranie powtarza się aż do skutku (min. 1 efekt musi zostać
+              wykonany).
+            </li>
+            <li>
+              Jeśli talia się wyczerpie — przetasowuje się stos odrzuconych i
+              tworzy nową talię.
+            </li>
+            <li>
+              Talia jest tasowana wyłącznie wtedy, gdy została wyczerpana lub
+              zakończyła się bieżąca runda.
             </li>
           </ul>
 
           <h2>POMOCNICY</h2>
           <ul>
             <li>
-              Bot może zatrudnić Pomocnika, jeśli pozwala na to karta i posiada
-              wymagane owoce.
+              Bot może zatrudniać Pomocników, lecz nigdy nie używa ich
+              zdolności.
+            </li>
+            <li>Punkty Chwały z ich kart liczą się dla niego na koniec gry.</li>
+            <li>
+              Może zatrudnić Pomocnika tylko, jeśli efekt karty Bota na to
+              pozwala i dysponuje odpowiednimi Owocami.
+            </li>
+            <li>Bot płaci koszt Owocami ze swojej puli.</li>
+            <li>
+              Przy zatrudnianiu zawsze sprawdza karty rynku od lewej (najbliżej
+              stosu Pomocników).
             </li>
             <li>
-              Zawsze wybiera pierwszego Pomocnika dostępnego od lewej strony
-              rynku.
+              Jeśli stać go na pierwszego w kolejności — zatrudnia go; jeśli nie
+              stać go na żadnego — nie zatrudnia nikogo.
+            </li>
+            <li>Po zakupie Pomocnika rynek należy uzupełnić.</li>
+          </ul>
+
+          <h2>WYBORY BOTA</h2>
+          <ul>
+            <li>
+              Zawsze, gdy Bot dobiera/odrzuca/kupuje/sprzedaje Udział lub Owoc,
+              wybór dokonywany jest według kolejności plansz Spółek — od lewej
+              do prawej.
             </li>
             <li>
-              Nie używa ich zdolności, a zdolności innych graczy nie dotyczą go,
-              jeśli wymagają wyboru/decydowania.
+              Zasada ta dotyczy wszystkich wyborów związanych z zasobami Bota.
             </li>
-            <li>Punkty Chwały z Pomocników liczą się do wyniku końcowego.</li>
+            <li>
+              Jest to również podstawowa reguła rozstrzygania niejasności.
+            </li>
           </ul>
 
           <h2>MODUŁY DODATKOWE</h2>
           <ul>
-            <li>Bot nie korzysta z Intryg ani Ukrytych Celów.</li>
+            <li>Moduły można wykorzystywać w grze z udziałem Botów.</li>
             <li>
-              Za każdy używany moduł Bot otrzymuje +20 monet (łącznie do +40).
+              Jeśli zasady modułów odnoszą się do „graczy”, obejmuje to również
+              Boty.
             </li>
-          </ul>
-
-          <h2>ORGANIZACJA I OBSŁUGA BOTÓW</h2>
-          <ul>
-            <li>Każdy Bot ma własną pulę zasobów oznaczoną żetonami Bota.</li>
-            <li>Ruchy Bota wykonuje gracz siedzący obok.</li>
-            <li>Kilku Botów może działać jeden po drugim.</li>
+            <li>Wyjątek: Boty nie otrzymują kart Ukrytych Celów ani Intryg.</li>
+            <li>
+              Zamiast tego każdy Bot otrzymuje: +20 monet za brak jednego
+              modułu, +40 monet jeśli nie używa się obu.
+            </li>
           </ul>
         </section>
       </div>
