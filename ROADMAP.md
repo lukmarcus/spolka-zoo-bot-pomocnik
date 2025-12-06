@@ -2,53 +2,57 @@
 
 ## 🎯 Plan rozwoju
 
-| Wersja | Status       | Opis krótki                | Szczegóły techniczne                                                         |
-| ------ | ------------ | -------------------------- | ---------------------------------------------------------------------------- |
-| 0.5.5  | ✅ Gotowe    | System modułów dodatków    | Checkboxy Ukryte Cele i Intrygi z bonusem monet, ikona monety, alias @images |
-| 0.5.6  | 🔮 Planowane | Sekcja zasad gry dla botów | Strona /rules z zasadami specjalnymi, różnice vs gra solo, FAQ               |
+| Wersja | Status       | Opis krótki                | Szczegóły techniczne                                                     |
+| ------ | ------------ | -------------------------- | ------------------------------------------------------------------------ |
+| 0.5.6  | ✅ Gotowe    | Sekcja zasad gry dla botów | Strona /rules z zasadami specjalnymi, refaktoryzacja komponentów, aliasy |
+| 0.5.7  | 🔮 Planowane | Koniec rundy - tasowanie   | Przycisk "Koniec rundy" resetujący i tasujący talie botów                |
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.5.5 — System modułów dodatków ✅
-
-🎯 Cel: informowanie gracza o bonusach startowych dla botów z modułami
-
-⏱️ Zakończono: 2025-11-24
-
-Zrealizowane zadania:
-
-- **System modułów dodatków** ✅
-
-  - 2 checkboxy w GameSetup: "Ukryte Cele" (+20) i "Intrygi" (+20)
-  - Custom checkbox style - wygląd buttonów z widocznym checkboxem
-  - Moduły nie wpływają na logikę gry - tylko informacyjne
-  - Dynamiczne podsumowanie: "+20/+40 monet dla każdego bota"
-  - Ikona monety z `@images/interface/money.png`
-  - Integracja z `game.state.modules` - gotowe do przyszłego rozszerzenia
-  - Ramka podsumowania łącząca wybór botów, trybu i modułów
-
-- **Code Quality & Infrastructure** ✅
-
-  - Nowy alias `@images` w vite.config.ts
-  - Wszystkie importy grafik zamienione na `@images/*`
-  - Ujednolicenie stylów ikon - użycie globalnej `.card-icon`
-  - Usunięcie duplikacji CSS
-
-**Uwaga**: Zdecydowano o usunięciu modułu "Wydarzenia" (+0 monet) jako nieistotnego.
-
-### v0.5.6 — Sekcja zasad gry dla botów 🔮
+### v0.5.6 — Sekcja zasad gry dla botów ✅
 
 🎯 Cel: pomoc graczom w prawidłowym stosowaniu zasad specjalnych dla botów
 
-Planowane zadania:
+⏱️ Zakończono: 2025-12-06
 
-- **Sekcja zasad specjalnych dla botów** 📖
+Zrealizowane zadania:
+
+- **Sekcja zasad specjalnych dla botów** ✅
 
   - Nowa strona `/rules` dostępna z menu głównego
-  - Streszczenie zasad specjalnych przy grze z botami
-  - Różnice względem gry solo
-  - Najczęstsze błędy i FAQ
-  - Konsultacja z autorem gry w sprawie treści
+  - 6 sekcji zasad: Bot jako gracz, Talia i tura, Wybory, Pomocnicy, Moduły dodatkowe, Organizacja
+  - Custom styling list (list-style-position: outside, optymalne marginesy)
+  - Komponenty Rules.tsx + Rules.module.css
+
+- **Refaktoryzacja i Code Quality** ✅
+
+  - Nowy komponent BottomControls (unifikacja przycisków powrotu)
+  - Obsługa opcjonalnego przycisku "Kopiuj stan gry" w BottomControls
+  - Zamiana wszystkich względnych importów na aliasy @ui, @game, @lib
+  - Konsekwentne użycie aliasów także dla CSS Modules
+  - Usunięcie zbytecznego komponentu BackButton
+
+### v0.5.7 — Koniec rundy - tasowanie tali 🔮
+
+🎯 Cel: poprawna implementacja mechaniki tasowania tali botów po rundzie
+
+**Problem**: Obecnie talie botów są tasowane dopiero po wyczerpaniu wszystkich kart. Według zasad gry powinny być tasowane na koniec każdej rundy.
+
+Planowane zadania:
+
+- **Mechanika końca rundy** 🔄
+
+  - Nowy przycisk "Koniec rundy" w GamePlay
+  - Przycisk resetuje `currentCardIndex` dla wszystkich tali botów
+  - Tasowanie wszystkich tali botów (zarówno w trybie individual, jak i shared)
+  - Wizualna informacja o wykonanym tasowaniu
+  - Opcjonalne potwierdzenie akcji (modal), aby uniknąć przypadkowego kliknięcia
+
+- **Aktualizacja stanu gry** 🎮
+
+  - Dodanie metody `endRound()` w GameContext
+  - Aktualizacja logiki tasowania - oddzielenie tasowania rundy od tasowania wyczerpania
+  - Zapisywanie informacji o zakończonych rundach w stanie gry (opcjonalnie)
 
 ---
 

@@ -1,0 +1,15 @@
+/* Rules page styles */
+
+.section {
+  text-align: left;
+}
+
+.section ul {
+  list-style-position: outside;
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+}
+
+.section li {
+  margin: 0.25rem 0;
+}

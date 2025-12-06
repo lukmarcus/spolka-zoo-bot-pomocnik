@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "./Layout";
+import Layout from "@ui/Layout";
 import { useGame } from "@lib/GameContext";
-import styles from "./Home.module.css";
+import styles from "@ui/Home.module.css";
 import gameLogo from "@images/game/game-logo.png";
 
 const Home: React.FC = React.memo(() => {
@@ -15,6 +15,7 @@ const Home: React.FC = React.memo(() => {
   }, [newGame, navigate]);
 
   const handleLoadGame = useCallback(() => navigate("/load"), [navigate]);
+  const handleRules = useCallback(() => navigate("/rules"), [navigate]);
   const handleAbout = useCallback(() => navigate("/about"), [navigate]);
 
   const menuOptions = [
@@ -30,6 +31,13 @@ const Home: React.FC = React.memo(() => {
       title: "WCZYTAJ STAN GRY",
       description: "Użyj zapisanego kodu stanu gry",
       action: handleLoadGame,
+      disabled: false,
+    },
+    {
+      id: "rules",
+      title: "ZASADY GRY",
+      description: "Przypomnienie reguł do gry z botami",
+      action: handleRules,
       disabled: false,
     },
     {

@@ -5,6 +5,22 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.6] - 2025-12-06
+
+### Dodane
+
+- Strona zasad gry dla botów (`/rules`) dostępna z menu głównego
+- Komponent `BottomControls` unifikujący przyciski dolne we wszystkich widokach
+
+### Zmienione
+
+- Refaktoryzacja importów: wszystkie względne ścieżki zamienione na aliasy `@ui`, `@game`, `@lib`
+- Aliasy stosowane konsekwentnie także dla CSS Modules
+
+### Usunięte
+
+- Komponent BackButton (zastąpiony przez BottomControls)
+
 ## [0.5.5] - 2025-11-26
 
 ### Dodane

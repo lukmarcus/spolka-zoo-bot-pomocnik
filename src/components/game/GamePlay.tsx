@@ -3,7 +3,8 @@ import { useGame } from "@lib/GameContext";
 import { BOT_CARDS } from "@lib/botCards";
 import { copyGameCodeToClipboard } from "@lib/gameStorage";
 import ConfirmModal from "@ui/ConfirmModal";
-import styles from "./GamePlay.module.css";
+import BottomControls from "@ui/BottomControls";
+import styles from "@game/GamePlay.module.css";
 
 interface GamePlayProps {
   onBackToMenu: () => void;
@@ -272,36 +273,28 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
         )}
       </div>
 
-      <div className="bottom-controls">
-        {(game.state.mode === "individual"
-          ? game.state.botDecks && game.state.currentBot
-            ? game.state.botDecks[game.state.currentBot - 1]
-                ?.currentCardIndex ?? -1
-            : -1
-          : typeof game.state.currentCardIndex === "number"
-          ? game.state.currentCardIndex
-          : -1) >= 0 && (
-          <button
-            className="btn-tertiary"
-            onClick={handleCopyGameCode}
-            disabled={buttonCopyStatus === "copied"}
-            aria-label="Skopiuj aktualny stan gry do schowka"
-          >
-            {buttonCopyStatus === "copied"
-              ? "✅ Skopiowano!"
-              : buttonCopyStatus === "error"
-              ? "❌ Błąd!"
-              : "Kopiuj stan gry"}
-          </button>
-        )}
-        <button 
-          className="btn-secondary" 
-          onClick={handleBackToMenuClick}
-          aria-label="Wróć do menu głównego"
-        >
-          ← Wróć do menu
-        </button>
-      </div>
+      <BottomControls
+        onBackClick={handleBackToMenuClick}
+        showCopyButton={
+          (game.state.mode === "individual"
+            ? game.state.botDecks && game.state.currentBot
+              ? game.state.botDecks[game.state.currentBot - 1]
+                  ?.currentCardIndex ?? -1
+              : -1
+            : typeof game.state.currentCardIndex === "number"
+            ? game.state.currentCardIndex
+            : -1) >= 0
+        }
+        onCopyClick={handleCopyGameCode}
+        copyButtonDisabled={buttonCopyStatus === "copied"}
+        copyButtonLabel={
+          buttonCopyStatus === "copied"
+            ? "✅ Skopiowano!"
+            : buttonCopyStatus === "error"
+            ? "❌ Błąd!"
+            : "Kopiuj stan gry"
+        }
+      />
 
       <ConfirmModal
         isOpen={showExitModal}
