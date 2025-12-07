@@ -26,7 +26,8 @@ type GameAction =
   | { type: "SWITCH_BOT"; payload: number }
   | { type: "NEXT_BOT" }
   | { type: "NEXT_BOT_AND_DRAW" }
-  | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" };
+  | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }
+  | { type: "END_ROUND"; payload: number };
 
 // Utility function to generate shuffled sequence
 function generateShuffledSequence(): number[] {
@@ -216,6 +217,47 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         currentBot: action.payload,
+      };
+    }
+
+    case "END_ROUND": {
+      const startingBot = action.payload;
+      
+      if (state.mode === "individual" && state.botDecks) {
+        // Reshuffle all bot decks
+        const botDecks = state.botDecks.map(deck => ({
+          ...deck,
+          cardSequence: generateShuffledSequence(),
+          currentCardIndex: -1,
+          usedCards: [] as number[],
+        }));
+        
+        // Switch to starting bot and draw first card
+        const botIdx = startingBot - 1;
+        const startingDeck = botDecks[botIdx];
+        if (startingDeck && startingDeck.cardSequence.length > 0) {
+          botDecks[botIdx] = {
+            ...startingDeck,
+            currentCardIndex: 0,
+            usedCards: [startingDeck.cardSequence[0]] as number[],
+          };
+        }
+        
+        return {
+          ...state,
+          currentBot: startingBot,
+          botDecks,
+        };
+      }
+      
+      // Shared mode - reshuffle and draw first card
+      const newSequence = generateShuffledSequence();
+      return {
+        ...state,
+        currentBot: startingBot,
+        cardSequence: newSequence,
+        currentCardIndex: 0,
+        usedCards: [newSequence[0]],
       };
     }
 
@@ -413,6 +455,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       nextBotAndDraw: () => dispatch({ type: "NEXT_BOT_AND_DRAW" }),
       nextBotAndShuffleAndDraw: () =>
         dispatch({ type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }),
+      endRound: (startingBot: number) =>
+        dispatch({ type: "END_ROUND", payload: startingBot }),
       getCurrentCard: () => {
         if (state.mode === "individual" && state.botDecks && state.currentBot) {
           const botIdx = state.currentBot - 1;

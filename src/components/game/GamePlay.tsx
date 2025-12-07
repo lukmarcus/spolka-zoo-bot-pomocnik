@@ -3,6 +3,7 @@ import { useGame } from "@lib/GameContext";
 import { BOT_CARDS } from "@lib/botCards";
 import { copyGameCodeToClipboard } from "@lib/gameStorage";
 import ConfirmModal from "@ui/ConfirmModal";
+import EndRoundModal from "@ui/EndRoundModal";
 import BottomControls from "@ui/BottomControls";
 import styles from "@game/GamePlay.module.css";
 
@@ -13,6 +14,7 @@ interface GamePlayProps {
 const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
   const game = useGame();
   const [showExitModal, setShowExitModal] = useState(false);
+  const [showEndRoundModal, setShowEndRoundModal] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"none" | "success" | "error">(
     "none"
   );
@@ -54,19 +56,19 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     }
   };
 
-  const handleBackToMenuClick = () => {
-    const inActiveGame =
-      game.state.botsSelected &&
-      ((game.state.mode === "individual" &&
-        game.state.botDecks &&
-        game.state.currentBot &&
-        (game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ??
-          -1) >= 0) ||
-        (game.state.mode !== "individual" &&
-          typeof game.state.currentCardIndex === "number" &&
-          game.state.currentCardIndex >= 0));
+  const isGameInProgress =
+    game.state.botsSelected &&
+    ((game.state.mode === "individual" &&
+      game.state.botDecks &&
+      game.state.currentBot &&
+      (game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ?? -1) >=
+        0) ||
+      (game.state.mode !== "individual" &&
+        typeof game.state.currentCardIndex === "number" &&
+        game.state.currentCardIndex >= 0));
 
-    if (!inActiveGame) {
+  const handleBackToMenuClick = () => {
+    if (!isGameInProgress) {
       onBackToMenu();
       return;
     }
@@ -102,6 +104,11 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       setButtonCopyStatus("error");
       setTimeout(() => setButtonCopyStatus("idle"), 2500);
     }
+  };
+
+  const handleEndRound = (selectedBot: number) => {
+    game.endRound(selectedBot);
+    setShowEndRoundModal(false);
   };
 
   const getModalMessage = () => {
@@ -213,6 +220,15 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
               </button>
             )}
           </div>
+          {isGameInProgress && (
+            <button
+              className="btn-secondary"
+              onClick={() => setShowEndRoundModal(true)}
+              style={{ marginTop: "1rem" }}
+            >
+              Koniec rundy
+            </button>
+          )}
         </section>
 
         {currentCard && (
@@ -306,6 +322,14 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
         onConfirm={confirmExitWithoutCopy}
         onCopy={copyGameCode}
         onCancel={cancelExit}
+      />
+
+      <EndRoundModal
+        isOpen={showEndRoundModal}
+        botCount={game.state.botCount || 1}
+        currentBot={game.state.currentBot || 1}
+        onConfirm={handleEndRound}
+        onCancel={() => setShowEndRoundModal(false)}
       />
     </>
   );
