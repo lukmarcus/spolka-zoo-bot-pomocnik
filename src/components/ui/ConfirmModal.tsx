@@ -40,14 +40,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
   return (
     <div
-      className={styles.overlay}
+      className="overlay"
       onClick={handleOverlayClick}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      <div className={styles.modal}>
+      <div className="modal">
         {title && (
-          <div className={styles.header}>
+          <div className="header">
             <h3 className={styles.title}>{title}</h3>
             <button
               className={styles.closeButton}
@@ -59,7 +59,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </div>
         )}
 
-        <div className={styles.content}>
+        <div className="content">
           {message.split("\n").map((line, index) => (
             <p
               key={index}

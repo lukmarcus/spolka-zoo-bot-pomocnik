@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "@ui/ConfirmModal.module.css";
+import styles from "@ui/EndRoundModal.module.css";
+import confirmStyles from "@ui/ConfirmModal.module.css";
 
 interface EndRoundModalProps {
   isOpen: boolean;
@@ -36,16 +37,16 @@ const EndRoundModal: React.FC<EndRoundModalProps> = ({
 
   return (
     <div
-      className={styles.overlay}
+      className="overlay"
       onClick={handleOverlayClick}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      <div className={styles.modal}>
-        <div className={styles.header}>
-          <h3 className={styles.title}>KONIEC RUNDY</h3>
+      <div className="modal">
+        <div className="header">
+          <h3 className={confirmStyles.title}>KONIEC RUNDY</h3>
           <button
-            className={styles.closeButton}
+            className={confirmStyles.closeButton}
             onClick={onCancel}
             aria-label="Zamknij"
           >
@@ -53,10 +54,8 @@ const EndRoundModal: React.FC<EndRoundModalProps> = ({
           </button>
         </div>
 
-        <div className={styles.content}>
-          <p className={styles.message}>
-            Który bot zaczyna nową rundę?
-          </p>
+        <div className="content">
+          <p className={confirmStyles.message}>Który bot zaczyna nową rundę?</p>
         </div>
 
         <div className={styles.botSelection}>
