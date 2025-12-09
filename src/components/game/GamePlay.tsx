@@ -327,7 +327,6 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
       <EndRoundModal
         isOpen={showEndRoundModal}
         botCount={game.state.botCount || 1}
-        currentBot={game.state.currentBot || 1}
         onConfirm={handleEndRound}
         onCancel={() => setShowEndRoundModal(false)}
       />

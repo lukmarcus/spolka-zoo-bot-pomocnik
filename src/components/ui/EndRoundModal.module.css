@@ -31,6 +31,12 @@
   background: rgba(139, 69, 19, 0.1);
 }
 
+.botButton.selectedBot {
+  border-color: var(--button-primary);
+  background: var(--button-primary);
+  color: white;
+}
+
 @media (max-width: 480px) {
   .botSelection {
     grid-template-columns: 1fr;
