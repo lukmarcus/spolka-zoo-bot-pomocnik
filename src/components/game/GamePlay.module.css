@@ -3,9 +3,11 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 0 0 1rem 0;
-  margin-bottom: 1rem;
   flex-wrap: wrap;
+}
+
+.endRoundButton {
+  margin-top: 0;
 }
 
 .gameControls button {

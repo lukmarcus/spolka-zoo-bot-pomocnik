@@ -61,8 +61,8 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
     ((game.state.mode === "individual" &&
       game.state.botDecks &&
       game.state.currentBot &&
-      (game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ?? -1) >=
-        0) ||
+      (game.state.botDecks[game.state.currentBot - 1]?.currentCardIndex ??
+        -1) >= 0) ||
       (game.state.mode !== "individual" &&
         typeof game.state.currentCardIndex === "number" &&
         game.state.currentCardIndex >= 0));
@@ -219,16 +219,15 @@ const GamePlay: React.FC<GamePlayProps> = ({ onBackToMenu }) => {
                 {gameActions.secondary.text}
               </button>
             )}
+            {isGameInProgress && (
+              <button
+                className={`btn-secondary ${styles.endRoundButton}`}
+                onClick={() => setShowEndRoundModal(true)}
+              >
+                Koniec rundy
+              </button>
+            )}
           </div>
-          {isGameInProgress && (
-            <button
-              className="btn-secondary"
-              onClick={() => setShowEndRoundModal(true)}
-              style={{ marginTop: "1rem" }}
-            >
-              Koniec rundy
-            </button>
-          )}
         </section>
 
         {currentCard && (
