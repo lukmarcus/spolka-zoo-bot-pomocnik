@@ -5,6 +5,20 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.7] - 2025-12-11
+
+### Dodane
+
+- Przycisk "Koniec rundy" w sekcji kontrolek GamePlay
+- Komponent `EndRoundModal` z obsługą dwóch trybów (potwierdzenie dla 1 bota, selekcja dla wielu botów)
+- Metoda `endRound(startingBot)` w GameContext obsługująca tryb individual i shared
+- Nowy plik stylów `EndRoundModal.module.css` z stylami selekcji botów
+
+### Zmienione
+
+- Wspólne style modalowe (`.overlay`, `.modal`, `.header`, `.content`) przeniesione do `globals.css`
+- Czyszczenie stylów: usunięcie duplikatów z `ConfirmModal.module.css`
+
 ## [0.5.6] - 2025-12-06
 
 ### Dodane

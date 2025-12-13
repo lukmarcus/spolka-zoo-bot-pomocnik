@@ -54,6 +54,7 @@ export interface GameContextType {
   nextBot: () => void;
   nextBotAndDraw: () => void;
   nextBotAndShuffleAndDraw?: () => void;
+  endRound: (startingBot: number) => void;
   getCurrentCard: () => number | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;
