@@ -3,6 +3,7 @@ import { GameProvider } from "@lib/GameContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "@ui/Home";
 import Game from "@game/Game";
+import AdvancedGame from "@game/AdvancedGame";
 import LoadGame from "@ui/LoadGame";
 import About from "@ui/About";
 import Rules from "@ui/Rules";
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/game" element={<Game />} />
+            <Route path="/game-advanced" element={<AdvancedGame />} />
             <Route path="/load" element={<LoadGame />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/about" element={<About />} />
