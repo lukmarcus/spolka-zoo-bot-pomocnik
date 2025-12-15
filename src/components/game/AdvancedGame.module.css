@@ -1,0 +1,67 @@
+.changeCountButton {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.configTable {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+.configTable thead tr {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.configTable th {
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.configTable th.center {
+  text-align: center;
+}
+
+.configTable tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.configTable td {
+  padding: 0.5rem;
+}
+
+.configTable td.center {
+  text-align: center;
+}
+
+.colorButtons {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.colorButton {
+  flex: 1 1 auto;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.colorButton.selected {
+  border: 3px solid #fff;
+}
+
+.startGameButton {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.continueButton {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}

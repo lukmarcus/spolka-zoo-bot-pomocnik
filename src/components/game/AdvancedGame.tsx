@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@ui/Layout";
+import BottomControls from "@ui/BottomControls";
 import type { Player, PlayerColor } from "@lib/types";
-import styles from "@game/GameSetup.module.css";
+import setupStyles from "@game/GameSetup.module.css";
+import styles from "@game/AdvancedGame.module.css";
 
 const AVAILABLE_COLORS: PlayerColor[] = [
   "red",
@@ -72,55 +74,32 @@ const AdvancedGame: React.FC = () => {
         <section className="section">
           {/* Sekcja wyboru liczby graczy - zawsze widoczna */}
           <div style={{ marginBottom: isConfigured ? "1.5rem" : "0" }}>
-            <h2>LICZBA GRACZY</h2>
-            <div className={styles.botButtons}>
+            <h2>LICZBA WSZYSTKICH GRACZY</h2>
+            <div className={setupStyles.botButtons}>
               {[2, 3, 4, 5].map((count) => (
                 <button
                   key={count}
-                  className={`${styles.botOption} ${
-                    playerCount === count ? styles.selected : ""
+                  className={`${setupStyles.botOption} ${
+                    playerCount === count ? setupStyles.selected : ""
                   }`}
                   onClick={() => setPlayerCount(count)}
                   disabled={isConfigured}
                   style={{
                     opacity: isConfigured ? 0.6 : 1,
                     cursor: isConfigured ? "not-allowed" : "pointer",
+                    padding: "1rem",
                   }}
                 >
-                  <span className={styles.botNumber}>{count}</span>
-                  <span className={styles.botLabel}>
-                    {count === 2
-                      ? "graczy"
-                      : count === 3 || count === 4
-                      ? "graczy"
-                      : "graczy"}
-                  </span>
+                  <span className={setupStyles.botNumber}>{count}</span>
+                  <span className={setupStyles.botLabel}>graczy</span>
                 </button>
               ))}
             </div>
 
             {!isConfigured && (
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  justifyContent: "center",
-                }}
-              >
+              <div className={styles.continueButton}>
                 <button className="btn-primary" onClick={handleConfirmCount}>
                   Dalej
-                </button>
-              </div>
-            )}
-
-            {isConfigured && (
-              <div style={{ textAlign: "center" }}>
-                <button
-                  className="btn-secondary"
-                  onClick={handleChangeCount}
-                  style={{ fontSize: "0.85rem", padding: "0.4rem 0.8rem" }}
-                >
-                  Zmień liczbę graczy
                 </button>
               </div>
             )}
@@ -129,39 +108,27 @@ const AdvancedGame: React.FC = () => {
           {/* Sekcja konfiguracji graczy - pokazuje się po kliknięciu Dalej */}
           {isConfigured && (
             <>
-              <h2 style={{ marginBottom: "1rem" }}>KONFIGURACJA GRACZY</h2>
-              <table
-                style={{
-                  width: "100%",
-                  marginBottom: "1rem",
-                  borderCollapse: "collapse",
-                }}
-              >
+              <h2>KONFIGURACJA GRACZY</h2>
+              <div className={styles.changeCountButton}>
+                <button className="btn-secondary" onClick={handleChangeCount}>
+                  Zmień liczbę graczy
+                </button>
+              </div>
+              <table className={styles.configTable}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
-                    <th style={{ padding: "0.5rem", textAlign: "left" }}>
-                      Gracz
-                    </th>
-                    <th style={{ padding: "0.5rem", textAlign: "center" }}>
-                      Bot
-                    </th>
-                    <th style={{ padding: "0.5rem", textAlign: "left" }}>
-                      Kolor
-                    </th>
+                  <tr>
+                    <th>Gracz</th>
+                    <th className={styles.center}>Bot</th>
+                    <th>Kolor</th>
                   </tr>
                 </thead>
                 <tbody>
                   {players.map((player) => (
-                    <tr
-                      key={player.id}
-                      style={{
-                        borderBottom: "1px solid rgba(255,255,255,0.1)",
-                      }}
-                    >
-                      <td style={{ padding: "0.5rem" }}>
+                    <tr key={player.id}>
+                      <td>
                         <strong>Gracz {player.id}</strong>
                       </td>
-                      <td style={{ padding: "0.5rem", textAlign: "center" }}>
+                      <td className={styles.center}>
                         <input
                           type="checkbox"
                           checked={player.isBot}
@@ -169,32 +136,19 @@ const AdvancedGame: React.FC = () => {
                           style={{ cursor: "pointer" }}
                         />
                       </td>
-                      <td style={{ padding: "0.5rem" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "0.25rem",
-                            flexWrap: "wrap",
-                          }}
-                        >
+                      <td>
+                        <div className={styles.colorButtons}>
                           {AVAILABLE_COLORS.map((color) => (
                             <button
                               key={color}
+                              className={`${styles.colorButton} ${
+                                player.color === color ? styles.selected : ""
+                              }`}
                               onClick={() =>
                                 handleColorChange(player.id, color)
                               }
                               style={{
-                                flex: "1 1 auto",
-                                minWidth: "40px",
-                                height: "40px",
                                 backgroundColor: COLOR_BACKGROUNDS[color],
-                                border:
-                                  player.color === color
-                                    ? "3px solid #fff"
-                                    : "2px solid rgba(255,255,255,0.3)",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                transition: "all 0.2s",
                               }}
                             />
                           ))}
@@ -205,13 +159,7 @@ const AdvancedGame: React.FC = () => {
                 </tbody>
               </table>
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  justifyContent: "center",
-                }}
-              >
+              <div className={styles.startGameButton}>
                 <button className="btn-primary" onClick={handleStartGame}>
                   Rozpocznij grę
                 </button>
@@ -221,9 +169,7 @@ const AdvancedGame: React.FC = () => {
         </section>
       </div>
 
-      <button className="btn-secondary" onClick={() => navigate("/")}>
-        Powrót do menu
-      </button>
+      <BottomControls onBackClick={() => navigate("/")} />
     </Layout>
   );
 };
