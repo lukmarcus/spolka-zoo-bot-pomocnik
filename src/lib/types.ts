@@ -16,7 +16,18 @@ export interface GameModules {
   intrigues: boolean;
 }
 
+// Player colors available in the game
+export type PlayerColor = "red" | "yellow" | "green" | "orange" | "blue";
+
+// Player in advanced mode
+export interface Player {
+  id: number;
+  color: PlayerColor;
+  isBot: boolean;
+}
+
 export interface GameState {
+  gameMode?: "quick" | "advanced"; // New: game mode type
   mode: "shared" | "individual";
   modules?: GameModules;
   currentCardIndex?: number;
@@ -26,6 +37,9 @@ export interface GameState {
   botCount?: number;
   currentBot?: number;
   botsSelected?: boolean;
+  // Advanced mode fields
+  players?: Player[];
+  currentPlayerIndex?: number;
 }
 
 export interface GameCodePreview {

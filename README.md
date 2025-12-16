@@ -2,12 +2,13 @@
 
 > Cyfrowy zamiennik kart botów dla gry planszowej "Spółka ZOO"
 
-[![Version](https://img.shields.io/badge/version-0.5.7-blue.svg)](./package.json)
+[![Version](https://img.shields.io/badge/version-0.6.0-blue.svg)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1.1-blue.svg)](https://reactjs.org/)
 
 ## ✨ Funkcjonalności
 
+🎮 **Tryb zaawansowany (🚧)** - Pełna konfiguracja graczy z kolorami i modułami  
 🤖 **Zarządzanie botami** - Obsługa 1-4 botów z niezależnymi taliami  
 🎯 **Inteligentne akcje** - Automatyczna kolejność i dobieranie kart  
 💾 **Zapisywanie stanu** - Kompaktowe kody gry z podglądem w stylu kart  
@@ -46,6 +47,7 @@ npm run dev
 
 ### 🎮 Podstawy gry
 
+**Tryb szybki (klasyczny):**
 1. **Rozpocznij grę** → Wybierz tryb i liczbę botów (1-4)
 2. **Dobieranie kart** → Dwa inteligentne przyciski:
    - 🎯 Dobierz kartę dla aktualnego bota
@@ -53,6 +55,12 @@ npm run dev
 3. **Tryby gry**:
    - **Wspólna talia** - wszyscy boty dobierają z tej samej sekwencji
    - **Osobne talie** - każdy bot ma niezależną talię
+
+**Tryb zaawansowany (🚧 w budowie):**
+1. **Konfiguracja** → Dynamiczna liczba graczy (2-5) przyciskami +/-
+2. **Gracze** → Wybór koloru (5 kolorów) i typ (Człowiek/Bot) dla każdego
+3. **Tryb gry** → Wspólna/Osobne talie (gdy >1 bot)
+4. **Moduły** → Ukryte Cele i Intrygi z bonusowymi monetami
 
 ### 💾 Zapisywanie i udostępnianie
 
@@ -89,9 +97,10 @@ npm run dev
 src/
 ├── components/
 │   ├── game/                    # Rozgrywka
-│   │   ├── Game.tsx            # Router: Setup ↔ Play
+│   │   ├── Game.tsx            # Router: Setup ↔ Play (tryb szybki)
 │   │   ├── GameSetup.tsx       # Konfiguracja botów
-│   │   └── GamePlay.tsx        # Aktywna rozgrywka
+│   │   ├── GamePlay.tsx        # Aktywna rozgrywka
+│   │   └── AdvancedGame.tsx    # 🚧 Tryb zaawansowany
 │   └── ui/                     # Interfejs
 │       ├── Home.tsx            # Menu główne
 │       ├── LoadGame.tsx        # Wczytywanie gry

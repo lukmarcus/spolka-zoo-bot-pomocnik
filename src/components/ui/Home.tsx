@@ -14,6 +14,10 @@ const Home: React.FC = React.memo(() => {
     navigate("/game");
   }, [newGame, navigate]);
 
+  const handleAdvancedGame = useCallback(() => {
+    navigate("/game-advanced");
+  }, [navigate]);
+
   const handleLoadGame = useCallback(() => navigate("/load"), [navigate]);
   const handleRules = useCallback(() => navigate("/rules"), [navigate]);
   const handleAbout = useCallback(() => navigate("/about"), [navigate]);
@@ -25,6 +29,13 @@ const Home: React.FC = React.memo(() => {
       description: "Uruchom boty z kartami",
       action: handleStartGame,
       primary: true,
+    },
+    {
+      id: "advanced-game",
+      title: "NOWA GRA (ZAAWANSOWANA) 🚧",
+      description: "Tryb z rundami, graczami i punktacją",
+      action: handleAdvancedGame,
+      primary: false,
     },
     {
       id: "load-game",

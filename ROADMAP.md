@@ -4,8 +4,7 @@
 
 | Wersja | Status       | Opis krótki               | Szczegóły techniczne                                      |
 | ------ | ------------ | ------------------------- | --------------------------------------------------------- |
-| 0.5.7  | ✅ Gotowe    | Koniec rundy - tasowanie  | Przycisk "Koniec rundy" resetujący i tasujący talie botów |
-| 0.6.0  | 🔮 Planowane | Tryb zaawansowany (setup) | Nowy tryb w menu, konfiguracja graczy, kolory             |
+| 0.6.0  | ✅ Gotowe    | Tryb zaawansowany (setup) | Konfiguracja graczy, kolory, tryb gry, moduły             |
 | 0.6.1  | 🔮 Planowane | Rundy i fazy              | 5 rund, 3/4 fazy, wyświetlanie stanu gry                  |
 | 0.6.2  | 🔮 Planowane | Mechanika końca rundy     | Tasowanie, zmiana pierwszego gracza, potwierdzenia        |
 | 0.6.3  | 🔮 Planowane | Punktacja botów           | Licznik pomocników dla botów w trakcie gry                |
@@ -14,38 +13,57 @@
 
 ## 📋 Szczegółowe plany rozwoju
 
-### v0.6.0 — Tryb zaawansowany (setup) 🔮
+### v0.6.0 — Tryb zaawansowany (setup) ✅
 
 🎯 Cel: wprowadzenie nowego trybu gry z pełną konfiguracją graczy
 
 ⚙️ Architektura: Aplikacja to **pomocnik do dobierania kart botów**. Gracze rozgrywają całą swoją grę na planszy, boty wykonują akcje na planszy, aplikacja jedynie wspomaga dobieranie kart.
 
-Planowane zadania:
+Zrealizowane:
 
-- **Nowy tryb w menu**
+- **✅ Nowy tryb w menu**
 
   - Przycisk "Nowa gra (zaawansowana)" z oznaczeniem 🚧 (w budowie)
+  - Routing /game-advanced z osobnym komponentem AdvancedGame
   - Stary tryb działa bez zmian (przyszły "Tryb szybki")
-  - Osobny system zapisów (nie psuje starych kodów!)
 
-- **Ekran konfiguracji graczy**
+- **✅ Ekran konfiguracji graczy**
 
-  - Wybór liczby graczy (2-5): co najmniej jeden gracz + boty, lub tylko boty
-  - Wybór koloru żetonu dla każdego gracza/bota: czerwony, żółty, zielony, pomarańczowy, niebieski
-  - Kolejność graczy (od lewej do prawej przy stole)
+  - Dynamiczna liczba graczy (2-5): przyciski +/- z walidacją
+  - Domyślnie 2 graczy (człowiek + bot)
+  - Wybór koloru dla każdego gracza/bota: czerwony, żółty, zielony, pomarańczowy, niebieski
+  - Automatyczne zamienianie kolorów przy wyborze zajętego koloru
+  - Toggle switch dla każdego gracza: Człowiek/Bot
+  - Walidacja: wymagany minimum 1 bot (komunikat ostrzegający)
+  - Karty graczy z gradientami, centrowane (max-width: 320px)
 
-- **Refaktoryzacja GameContext**
+- **✅ Wybór trybu gry i modułów**
 
-  - Dodanie stanu graczy (players[], kolory, isBot)
-  - Osobny stan dla trybu zaawansowanego
+  - Tryb gry: "Wspólna talia" / "Osobne talie" (tylko jeśli >1 bot)
+  - Jeśli 1 bot: wyświetla "Jedna talia" (disabled)
+  - Moduły: Ukryte Cele i Intrygi (checkboxy)
+  - Podsumowanie konfiguracji z bonusowymi monetami dla botów
+  - Style zgodne z ekranem /game (setupStyles)
+
+- **✅ Refaktoryzacja GameContext**
+
+  - Typy rozszerzone: Player, PlayerColor, GameModules
+  - Stan lokalny w AdvancedGame (players[], selectedMode, selectedModules)
+  - Przycisk "Rozpocznij grę" loguje pełną konfigurację do konsoli
 
 ---
 
 ### v0.6.1 — Rundy i fazy 🔮
 
-🎯 Cel: implementacja systemu rund i faz zgodnie z mechaniką gry planszowej
+🎯 Cel: implementacja systemu rund i faz zgodnie z mechaniką gry planszowej + integracja setupu z GameContext
 
 Planowane zadania:
+
+- **Integracja z GameContext**
+
+  - Akcja START_ADVANCED_GAME w GameContext
+  - Inicjalizacja stanu gry z konfiguracją z v0.6.0
+  - Przejście do ekranu gry po kliknięciu "Rozpocznij grę"
 
 - **Mechanika gry**
 

@@ -5,6 +5,18 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025-12-16
+
+### Dodane
+
+- Tryb zaawansowany - routing `/game-advanced` z komponentem `AdvancedGame.tsx`
+- Przycisk "NOWA GRA (ZAAWANSOWANA) 🚧" w menu głównym
+- Dynamiczna konfiguracja liczby graczy (2-5) z przyciskami +/-
+- Wybór koloru dla każdego gracza z automatycznym zamienianiem przy konflikcie
+- Toggle switch Człowiek/Bot dla każdego gracza
+- Walidacja minimalnej liczby botów z komunikatem ostrzegającym
+- Typy TypeScript: `Player`, `PlayerColor` rozszerzone w `types.ts`
+
 ## [0.5.7] - 2025-12-11
 
 ### Dodane
