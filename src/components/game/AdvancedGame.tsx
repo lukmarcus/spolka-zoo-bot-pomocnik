@@ -26,9 +26,10 @@ const COLOR_BACKGROUNDS: Record<PlayerColor, string> = {
 
 const AdvancedGame: React.FC = () => {
   const navigate = useNavigate();
-  const [isConfigured, setIsConfigured] = useState<boolean>(false);
-  const [playerCount, setPlayerCount] = useState<number>(2);
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<Player[]>([
+    { id: 1, color: "red", isBot: false },
+    { id: 2, color: "yellow", isBot: true },
+  ]);
   const [selectedMode, setSelectedMode] = useState<"shared" | "individual">(
     "shared"
   );
@@ -37,34 +38,37 @@ const AdvancedGame: React.FC = () => {
     intrigues: false,
   });
 
-  const handleConfirmCount = () => {
-    // Inicjalizuj graczy na podstawie wybranej liczby
-    const initialPlayers: Player[] = Array.from(
-      { length: playerCount },
-      (_, i) => ({
-        id: i + 1,
-        color: AVAILABLE_COLORS[i % AVAILABLE_COLORS.length],
-        isBot: i > 0,
-      })
-    );
-    setPlayers(initialPlayers);
-    setIsConfigured(true);
+  const handleAddPlayer = () => {
+    if (players.length < 5) {
+      const usedColors = players.map((p) => p.color);
+      const nextColor =
+        AVAILABLE_COLORS.find((c) => !usedColors.includes(c)) ||
+        AVAILABLE_COLORS[players.length % AVAILABLE_COLORS.length];
+
+      setPlayers((prev) => [
+        ...prev,
+        {
+          id: Math.max(...prev.map((p) => p.id)) + 1,
+          color: nextColor,
+          isBot: true,
+        },
+      ]);
+    }
   };
 
-  const handleChangeCount = () => {
-    setPlayers([]);
-    setIsConfigured(false);
+  const handleRemovePlayer = () => {
+    if (players.length > 2) {
+      setPlayers((prev) => prev.slice(0, -1));
+    }
   };
 
   const handleColorChange = (playerId: number, newColor: PlayerColor) => {
     setPlayers((prev) => {
-      // Sprawdź czy inny gracz ma już ten kolor
       const otherPlayerWithColor = prev.find(
         (p) => p.id !== playerId && p.color === newColor
       );
 
       if (otherPlayerWithColor) {
-        // Zamień kolory między graczami
         const currentPlayerColor = prev.find((p) => p.id === playerId)!.color;
         return prev.map((p) => {
           if (p.id === playerId) return { ...p, color: newColor };
@@ -73,7 +77,6 @@ const AdvancedGame: React.FC = () => {
           return p;
         });
       } else {
-        // Normalnie zmień kolor
         return prev.map((p) =>
           p.id === playerId ? { ...p, color: newColor } : p
         );
@@ -99,7 +102,6 @@ const AdvancedGame: React.FC = () => {
   };
 
   const handleStartGame = () => {
-    // TODO: Uruchomienie gry z konfiguracją graczy
     console.log("Starting game with:", {
       players,
       mode: selectedMode,
@@ -107,7 +109,6 @@ const AdvancedGame: React.FC = () => {
     });
   };
 
-  // Policz boty
   const botCount = players.filter((p) => p.isBot).length;
 
   return (
@@ -118,89 +119,77 @@ const AdvancedGame: React.FC = () => {
     >
       <div className="card">
         <section className="section">
-          {/* Sekcja wyboru liczby graczy - zawsze widoczna */}
-          <div style={{ marginBottom: isConfigured ? "1.5rem" : "0" }}>
-            <h2>LICZBA WSZYSTKICH GRACZY</h2>
-            <div className={setupStyles.botButtons}>
-              {[2, 3, 4, 5].map((count) => (
-                <button
-                  key={count}
-                  className={`${setupStyles.botOption} ${
-                    playerCount === count ? setupStyles.selected : ""
-                  }`}
-                  onClick={() => setPlayerCount(count)}
-                  disabled={isConfigured}
-                  style={{
-                    opacity: isConfigured ? 0.6 : 1,
-                    cursor: isConfigured ? "not-allowed" : "pointer",
-                    padding: "1rem",
-                  }}
-                >
-                  <span className={setupStyles.botNumber}>{count}</span>
-                  <span className={setupStyles.botLabel}>graczy</span>
-                </button>
-              ))}
-            </div>
+          <h2>KONFIGURACJA GRACZY</h2>
 
-            {!isConfigured && (
-              <div className={styles.continueButton}>
-                <button className="btn-primary" onClick={handleConfirmCount}>
-                  Dalej
-                </button>
-              </div>
-            )}
+          <div className={styles.playerControls}>
+            <span className={styles.playerCountLabel}>Liczba graczy:</span>
+            <span className={styles.playerCount}>{players.length}</span>
+            <button
+              className={styles.playerButton}
+              onClick={handleRemovePlayer}
+              disabled={players.length <= 2}
+              style={{ opacity: players.length <= 2 ? 0.5 : 1 }}
+            >
+              −
+            </button>
+            <button
+              className={styles.playerButton}
+              onClick={handleAddPlayer}
+              disabled={players.length >= 5}
+              style={{ opacity: players.length >= 5 ? 0.5 : 1 }}
+            >
+              +
+            </button>
           </div>
 
-          {/* Sekcja konfiguracji graczy - pokazuje się po kliknięciu Dalej */}
-          {isConfigured && (
-            <>
-              <h2>KONFIGURACJA GRACZY</h2>
-              <div className={styles.changeCountButton}>
-                <button className="btn-secondary" onClick={handleChangeCount}>
-                  Zmień liczbę graczy
-                </button>
+          {players.map((player) => (
+            <div key={player.id} className={styles.playerCard}>
+              <div className={styles.playerHeader}>
+                <span className={styles.playerLabel}>Gracz {player.id}:</span>
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={player.isBot}
+                    onChange={() => handleBotToggle(player.id)}
+                  />
+                  <span className={styles.slider}></span>
+                </label>
+                <span className={styles.playerType}>
+                  {player.isBot ? "Bot" : "Człowiek"}
+                </span>
               </div>
 
-              {players.map((player) => (
-                <div key={player.id} className={styles.playerCard}>
-                  <div className={styles.playerHeader}>
-                    <span className={styles.playerLabel}>
-                      Gracz {player.id}:
-                    </span>
-                    <label className={styles.switch}>
-                      <input
-                        type="checkbox"
-                        checked={player.isBot}
-                        onChange={() => handleBotToggle(player.id)}
-                      />
-                      <span className={styles.slider}></span>
-                    </label>
-                    <span className={styles.playerType}>
-                      {player.isBot ? "Bot" : "Człowiek"}
-                    </span>
-                  </div>
-
-                  <div className={styles.colorSection}>
-                    <span className={styles.colorLabel}>Kolor:</span>
-                    <div className={styles.colorButtons}>
-                      {AVAILABLE_COLORS.map((color) => (
-                        <button
-                          key={color}
-                          className={`${styles.colorButton} ${
-                            player.color === color ? styles.selected : ""
-                          }`}
-                          onClick={() => handleColorChange(player.id, color)}
-                          style={{
-                            backgroundColor: COLOR_BACKGROUNDS[color],
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
+              <div className={styles.colorSection}>
+                <span className={styles.colorLabel}>Kolor:</span>
+                <div className={styles.colorButtons}>
+                  {AVAILABLE_COLORS.map((color) => (
+                    <button
+                      key={color}
+                      className={`${styles.colorButton} ${
+                        player.color === color ? styles.selected : ""
+                      }`}
+                      onClick={() => handleColorChange(player.id, color)}
+                      style={{
+                        backgroundColor: COLOR_BACKGROUNDS[color],
+                      }}
+                    />
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+          ))}
 
-              {/* Wybór trybu gry */}
+          {botCount === 0 ? (
+            <section className="section">
+              <div className={styles.noBotWarning}>
+                <p>⚠️ Musisz wybrać przynajmniej jednego bota</p>
+                <p className={styles.warningSubtext}>
+                  Przełącz dowolnego gracza na "Bot" za pomocą przełącznika
+                </p>
+              </div>
+            </section>
+          ) : (
+            <>
               <section className="section">
                 <h2>TRYB GRY</h2>
                 <div className={setupStyles.modeButtons}>
@@ -236,7 +225,6 @@ const AdvancedGame: React.FC = () => {
                 </div>
               </section>
 
-              {/* Wybór modułów */}
               <section className="section">
                 <h2>DODATKOWE MODUŁY</h2>
                 <div className={setupStyles.moduleButtons}>
@@ -300,11 +288,11 @@ const AdvancedGame: React.FC = () => {
                 </div>
               </section>
 
-              <div className={styles.startGameButton}>
+              <section className="section">
                 <button className="btn-primary" onClick={handleStartGame}>
                   Rozpocznij grę
                 </button>
-              </div>
+              </section>
             </>
           )}
         </section>
