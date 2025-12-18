@@ -4,7 +4,13 @@
 
 import { createContext, useReducer, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
-import type { BotDeck, GameState, GameContextType } from "./types";
+import type {
+  BotDeck,
+  GameState,
+  GameContextType,
+  Player,
+  GameModules,
+} from "./types";
 import { TOTAL_CARDS } from "./botCards";
 import { loadAutoSavedGameState } from "./gameStorage";
 
@@ -27,7 +33,15 @@ type GameAction =
   | { type: "NEXT_BOT" }
   | { type: "NEXT_BOT_AND_DRAW" }
   | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }
-  | { type: "END_ROUND"; payload: number };
+  | { type: "END_ROUND"; payload: number }
+  | {
+      type: "START_ADVANCED_GAME";
+      payload: {
+        players: Player[];
+        mode: "shared" | "individual";
+        modules: GameModules;
+      };
+    };
 
 // Utility function to generate shuffled sequence
 function generateShuffledSequence(): number[] {
@@ -429,6 +443,47 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case "START_ADVANCED_GAME": {
+      const { players, mode, modules } = action.payload;
+      const botPlayers = players.filter((p) => p.isBot);
+      const botCount = botPlayers.length;
+      const maxPhases = players.length === 2 ? 4 : 3;
+
+      if (mode === "individual") {
+        return {
+          gameMode: "advanced",
+          mode: "individual",
+          modules,
+          players,
+          currentPlayerIndex: 0,
+          currentRound: 1,
+          currentPhase: 1,
+          maxPhases,
+          botDecks: generateBotDecks(botCount),
+          botCount,
+          currentBot: 1,
+          botsSelected: true,
+        };
+      }
+
+      return {
+        gameMode: "advanced",
+        mode: "shared",
+        modules,
+        players,
+        currentPlayerIndex: 0,
+        currentRound: 1,
+        currentPhase: 1,
+        maxPhases,
+        cardSequence: generateShuffledSequence(),
+        currentCardIndex: -1,
+        usedCards: [],
+        botCount,
+        currentBot: 1,
+        botsSelected: true,
+      };
+    }
+
     default:
       return state;
   }
@@ -457,6 +512,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }),
       endRound: (startingBot: number) =>
         dispatch({ type: "END_ROUND", payload: startingBot }),
+      startAdvancedGame: (
+        players: Player[],
+        mode: "shared" | "individual",
+        modules: GameModules
+      ) =>
+        dispatch({
+          type: "START_ADVANCED_GAME",
+          payload: { players, mode, modules },
+        }),
       getCurrentCard: () => {
         if (state.mode === "individual" && state.botDecks && state.currentBot) {
           const botIdx = state.currentBot - 1;

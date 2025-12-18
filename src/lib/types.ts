@@ -27,7 +27,7 @@ export interface Player {
 }
 
 export interface GameState {
-  gameMode?: "quick" | "advanced"; // New: game mode type
+  gameMode?: "quick" | "advanced";
   mode: "shared" | "individual";
   modules?: GameModules;
   currentCardIndex?: number;
@@ -40,6 +40,9 @@ export interface GameState {
   // Advanced mode fields
   players?: Player[];
   currentPlayerIndex?: number;
+  currentRound?: number;
+  currentPhase?: number;
+  maxPhases?: number;
 }
 
 export interface GameCodePreview {
@@ -69,6 +72,11 @@ export interface GameContextType {
   nextBotAndDraw: () => void;
   nextBotAndShuffleAndDraw?: () => void;
   endRound: (startingBot: number) => void;
+  startAdvancedGame: (
+    players: Player[],
+    mode: "shared" | "individual",
+    modules: GameModules
+  ) => void;
   getCurrentCard: () => number | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;

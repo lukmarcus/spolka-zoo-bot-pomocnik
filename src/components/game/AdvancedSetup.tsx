@@ -4,8 +4,9 @@ import Layout from "@ui/Layout";
 import BottomControls from "@ui/BottomControls";
 import type { Player, PlayerColor, GameModules } from "@lib/types";
 import { calculateBonusCoins } from "@lib/types";
+import { useGame } from "@lib/GameContext";
 import setupStyles from "@game/GameSetup.module.css";
-import styles from "@game/AdvancedGame.module.css";
+import styles from "@game/AdvancedSetup.module.css";
 import moneyIcon from "@images/interface/money.png";
 
 const AVAILABLE_COLORS: PlayerColor[] = [
@@ -26,6 +27,7 @@ const COLOR_BACKGROUNDS: Record<PlayerColor, string> = {
 
 const AdvancedGame: React.FC = () => {
   const navigate = useNavigate();
+  const game = useGame();
   const [players, setPlayers] = useState<Player[]>([
     { id: 1, color: "red", isBot: false },
     { id: 2, color: "yellow", isBot: true },
@@ -102,11 +104,8 @@ const AdvancedGame: React.FC = () => {
   };
 
   const handleStartGame = () => {
-    console.log("Starting game with:", {
-      players,
-      mode: selectedMode,
-      modules: selectedModules,
-    });
+    game.startAdvancedGame(players, selectedMode, selectedModules);
+    navigate("/advanced-game");
   };
 
   const botCount = players.filter((p) => p.isBot).length;
