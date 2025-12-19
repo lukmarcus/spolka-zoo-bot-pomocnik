@@ -77,7 +77,11 @@ export interface GameContextType {
     mode: "shared" | "individual",
     modules: GameModules
   ) => void;
+  nextPlayer: () => void;
+  nextPhase: () => void;
+  nextRound: () => void;
   getCurrentCard: () => number | null;
+  getCardById: (cardId: number) => BotCard | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;
 }

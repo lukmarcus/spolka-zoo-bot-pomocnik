@@ -10,8 +10,9 @@ import type {
   GameContextType,
   Player,
   GameModules,
+  BotCard,
 } from "./types";
-import { TOTAL_CARDS } from "./botCards";
+import { TOTAL_CARDS, BOT_CARDS } from "./botCards";
 import { loadAutoSavedGameState } from "./gameStorage";
 
 // === CONTEXT ===
@@ -41,7 +42,10 @@ type GameAction =
         mode: "shared" | "individual";
         modules: GameModules;
       };
-    };
+    }
+  | { type: "NEXT_PLAYER" }
+  | { type: "NEXT_PHASE" }
+  | { type: "NEXT_ROUND" };
 
 // Utility function to generate shuffled sequence
 function generateShuffledSequence(): number[] {
@@ -484,6 +488,88 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case "NEXT_PLAYER": {
+      if (state.gameMode !== "advanced" || !state.players) return state;
+      
+      const nextPlayerIndex = (state.currentPlayerIndex! + 1) % state.players.length;
+      
+      // Jeśli wróciliśmy do pierwszego gracza, przejdź do następnej fazy
+      if (nextPlayerIndex === 0) {
+        return gameReducer(state, { type: "NEXT_PHASE" });
+      }
+      
+      // Przejdź do karty następnego gracza (jeśli bot)
+      const nextPlayer = state.players[nextPlayerIndex];
+      if (nextPlayer.isBot && state.mode === "individual" && state.botDecks) {
+        const botDeck = state.botDecks[nextPlayerIndex];
+        if (botDeck) {
+          const newBotDecks = [...state.botDecks];
+          newBotDecks[nextPlayerIndex] = {
+            ...botDeck,
+            currentCardIndex: botDeck.currentCardIndex + 1,
+          };
+          return {
+            ...state,
+            currentPlayerIndex: nextPlayerIndex,
+            botDecks: newBotDecks,
+          };
+        }
+      }
+      
+      // Tryb shared lub gracz ludzki
+      if (state.mode === "shared" && nextPlayer.isBot) {
+        return {
+          ...state,
+          currentPlayerIndex: nextPlayerIndex,
+          currentCardIndex: (state.currentCardIndex ?? -1) + 1,
+        };
+      }
+      
+      return {
+        ...state,
+        currentPlayerIndex: nextPlayerIndex,
+      };
+    }
+
+    case "NEXT_PHASE": {
+      if (state.gameMode !== "advanced" || !state.players) return state;
+      
+      const nextPhase = state.currentPhase! + 1;
+      
+      // Jeśli przekroczyliśmy maksymalną liczbę faz, przejdź do następnej rundy
+      if (nextPhase > state.maxPhases!) {
+        return gameReducer(state, { type: "NEXT_ROUND" });
+      }
+      
+      return {
+        ...state,
+        currentPhase: nextPhase,
+        currentPlayerIndex: 0, // Reset do pierwszego gracza
+      };
+    }
+
+    case "NEXT_ROUND": {
+      if (state.gameMode !== "advanced" || !state.players) return state;
+      
+      const nextRound = state.currentRound! + 1;
+      
+      // Jeśli przekroczyliśmy 5 rund, gra się kończy
+      if (nextRound > 5) {
+        // TODO: Przejście do ekranu końca gry
+        return state;
+      }
+      
+      // Zmiana gracza startowego (następny w kolejności)
+      const newStartingPlayer = (state.currentPlayerIndex! + 1) % state.players.length;
+      
+      return {
+        ...state,
+        currentRound: nextRound,
+        currentPhase: 1,
+        currentPlayerIndex: newStartingPlayer,
+      };
+    }
+
     default:
       return state;
   }
@@ -521,6 +607,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
           type: "START_ADVANCED_GAME",
           payload: { players, mode, modules },
         }),
+      nextPlayer: () => dispatch({ type: "NEXT_PLAYER" }),
+      nextPhase: () => dispatch({ type: "NEXT_PHASE" }),
+      nextRound: () => dispatch({ type: "NEXT_ROUND" }),
       getCurrentCard: () => {
         if (state.mode === "individual" && state.botDecks && state.currentBot) {
           const botIdx = state.currentBot - 1;
@@ -559,6 +648,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
           return Math.max(0, TOTAL_CARDS - (botDeck.currentCardIndex + 1));
         }
         return Math.max(0, TOTAL_CARDS - ((state.currentCardIndex ?? -1) + 1));
+      },
+      getCardById: (cardId: number): BotCard | null => {
+        const card = BOT_CARDS.find((c) => c.id === cardId);
+        return card || null;
       },
     }),
     [state]

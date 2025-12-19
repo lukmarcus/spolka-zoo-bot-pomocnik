@@ -4,6 +4,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "@ui/Home";
 import Game from "@game/Game";
 import AdvancedSetup from "@game/AdvancedSetup";
+import AdvancedGame from "@game/AdvancedGame";
 import LoadGame from "@ui/LoadGame";
 import About from "@ui/About";
 import Rules from "@ui/Rules";
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/game" element={<Game />} />
             <Route path="/advanced-setup" element={<AdvancedSetup />} />
+            <Route path="/advanced-game" element={<AdvancedGame />} />
             <Route path="/load" element={<LoadGame />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/about" element={<About />} />
