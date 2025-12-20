@@ -124,7 +124,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return getCleanState(state.mode, state.botCount || 1);
     }
     case "SELECT_BOTS": {
-
       if (state.mode === "individual") {
         return {
           ...state,
@@ -240,16 +239,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case "END_ROUND": {
       const startingBot = action.payload;
-      
+
       if (state.mode === "individual" && state.botDecks) {
         // Reshuffle all bot decks
-        const botDecks = state.botDecks.map(deck => ({
+        const botDecks = state.botDecks.map((deck) => ({
           ...deck,
           cardSequence: generateShuffledSequence(),
           currentCardIndex: -1,
           usedCards: [] as number[],
         }));
-        
+
         // Switch to starting bot and draw first card
         const botIdx = startingBot - 1;
         const startingDeck = botDecks[botIdx];
@@ -260,14 +259,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             usedCards: [startingDeck.cardSequence[0]] as number[],
           };
         }
-        
+
         return {
           ...state,
           currentBot: startingBot,
           botDecks,
         };
       }
-      
+
       // Shared mode - reshuffle and draw first card
       const newSequence = generateShuffledSequence();
       return {
@@ -280,7 +279,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "NEXT_BOT": {
-
       const nextBot =
         state.currentBot && state.botCount
           ? (state.currentBot % state.botCount) + 1
@@ -454,12 +452,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const maxPhases = players.length === 2 ? 4 : 3;
 
       if (mode === "individual") {
+        // Znajdź pierwszego bota
+        const firstBotIndex = players.findIndex((p) => p.isBot);
+        const startingBotIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+
         return {
           gameMode: "advanced",
           mode: "individual",
           modules,
           players,
-          currentPlayerIndex: 0,
+          currentPlayerIndex: startingBotIndex,
           currentRound: 1,
           currentPhase: 1,
           maxPhases,
@@ -470,12 +472,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         };
       }
 
+      // Tryb shared - też reset na pierwszego bota
+      const firstBotIndex = players.findIndex((p) => p.isBot);
+      const startingBotIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+
       return {
         gameMode: "advanced",
         mode: "shared",
         modules,
         players,
-        currentPlayerIndex: 0,
+        currentPlayerIndex: startingBotIndex,
         currentRound: 1,
         currentPhase: 1,
         maxPhases,
@@ -490,78 +496,90 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case "NEXT_PLAYER": {
       if (state.gameMode !== "advanced" || !state.players) return state;
-      
-      const nextPlayerIndex = (state.currentPlayerIndex! + 1) % state.players.length;
-      
-      // Jeśli wróciliśmy do pierwszego gracza, przejdź do następnej fazy
-      if (nextPlayerIndex === 0) {
+
+      // Znajdź kolejnego bota (omijając ludzi)
+      let nextBotIndex = state.currentPlayerIndex! + 1;
+      while (nextBotIndex < state.players.length) {
+        if (state.players[nextBotIndex].isBot) {
+          break;
+        }
+        nextBotIndex++;
+      }
+
+      // Jeśli nie ma więcej botów, przejdź do następnej fazy
+      if (nextBotIndex >= state.players.length) {
         return gameReducer(state, { type: "NEXT_PHASE" });
       }
-      
-      // Przejdź do karty następnego gracza (jeśli bot)
-      const nextPlayer = state.players[nextPlayerIndex];
-      if (nextPlayer.isBot && state.mode === "individual" && state.botDecks) {
-        const botDeck = state.botDecks[nextPlayerIndex];
+
+      // Przejdź do następnego bota
+
+      if (state.mode === "individual" && state.botDecks) {
+        const botDeck = state.botDecks[nextBotIndex];
         if (botDeck) {
           const newBotDecks = [...state.botDecks];
-          newBotDecks[nextPlayerIndex] = {
+          newBotDecks[nextBotIndex] = {
             ...botDeck,
             currentCardIndex: botDeck.currentCardIndex + 1,
           };
           return {
             ...state,
-            currentPlayerIndex: nextPlayerIndex,
+            currentPlayerIndex: nextBotIndex,
             botDecks: newBotDecks,
           };
         }
       }
-      
-      // Tryb shared lub gracz ludzki
-      if (state.mode === "shared" && nextPlayer.isBot) {
+
+      // Tryb shared
+      if (state.mode === "shared") {
         return {
           ...state,
-          currentPlayerIndex: nextPlayerIndex,
+          currentPlayerIndex: nextBotIndex,
           currentCardIndex: (state.currentCardIndex ?? -1) + 1,
         };
       }
-      
+
       return {
         ...state,
-        currentPlayerIndex: nextPlayerIndex,
+        currentPlayerIndex: nextBotIndex,
       };
     }
 
     case "NEXT_PHASE": {
       if (state.gameMode !== "advanced" || !state.players) return state;
-      
+
       const nextPhase = state.currentPhase! + 1;
-      
+
       // Jeśli przekroczyliśmy maksymalną liczbę faz, przejdź do następnej rundy
       if (nextPhase > state.maxPhases!) {
         return gameReducer(state, { type: "NEXT_ROUND" });
       }
-      
+
+      // Znajdź pierwszego bota
+      const firstBotIndex = state.players.findIndex((p) => p.isBot);
+      const resetPlayerIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+
       return {
         ...state,
         currentPhase: nextPhase,
-        currentPlayerIndex: 0, // Reset do pierwszego gracza
+        currentPlayerIndex: resetPlayerIndex,
       };
     }
 
     case "NEXT_ROUND": {
       if (state.gameMode !== "advanced" || !state.players) return state;
-      
+
       const nextRound = state.currentRound! + 1;
-      
+
       // Jeśli przekroczyliśmy 5 rund, gra się kończy
       if (nextRound > 5) {
         // TODO: Przejście do ekranu końca gry
         return state;
       }
-      
+
       // Zmiana gracza startowego (następny w kolejności)
-      const newStartingPlayer = (state.currentPlayerIndex! + 1) % state.players.length;
-      
+      const newStartingPlayer =
+        (state.currentPlayerIndex! + 1) % state.players.length;
+
       return {
         ...state,
         currentRound: nextRound,

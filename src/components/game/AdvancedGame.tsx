@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "@lib/GameContext";
 import Layout from "@ui/Layout";
@@ -23,27 +23,69 @@ export default function AdvancedGame() {
   const { state } = game;
 
   // Sprawdzenie czy jesteśmy w trybie zaawansowanym
-  if (state.gameMode !== "advanced" || !state.players || state.players.length === 0) {
-    navigate("/");
+  useEffect(() => {
+    if (
+      state.gameMode !== "advanced" ||
+      !state.players ||
+      state.players.length === 0
+    ) {
+      navigate("/advanced-setup");
+    }
+  }, [state.gameMode, state.players, navigate]);
+
+  // Jeśli brak stanu gry, nie renderuj
+  if (
+    state.gameMode !== "advanced" ||
+    !state.players ||
+    state.players.length === 0
+  ) {
     return null;
   }
 
   const currentPlayer = state.players[state.currentPlayerIndex!];
-  const currentBotDeck = currentPlayer.isBot 
+  const currentBotDeck = currentPlayer.isBot
     ? state.botDecks?.[state.currentPlayerIndex!]
     : null;
-  const currentBotCard = currentBotDeck 
+  const currentBotCard = currentBotDeck
     ? currentBotDeck.cardSequence[currentBotDeck.currentCardIndex]
     : null;
 
-  const handleNextPlayer = () => {
-    setShowNextPlayerModal(true);
-  };
+  // Sprawdzenie czy jest następny bot
+  const hasNextBot = state.players
+    .slice(state.currentPlayerIndex! + 1)
+    .some((p) => p.isBot);
 
-  const confirmNextPlayer = () => {
-    game.nextPlayer();
-    setShowNextPlayerModal(false);
-  };
+  // Sprawdzenie czy jest następna faza
+  const hasNextPhase = state.currentPhase! < state.maxPhases!;
+
+  // Sprawdzenie czy jest następna runda
+  const hasNextRound = state.currentRound! < 5;
+
+  // Dynamiczny tekst i akcja przycisku
+  let actionButtonText = "Następny bot";
+  let actionButtonAction: () => void;
+
+  if (hasNextBot) {
+    actionButtonText = "Następny bot";
+    actionButtonAction = () => {
+      setShowNextPlayerModal(true);
+    };
+  } else if (hasNextPhase) {
+    actionButtonText = "Koniec fazy";
+    actionButtonAction = () => {
+      game.nextPhase();
+    };
+  } else if (hasNextRound) {
+    actionButtonText = "Koniec rundy";
+    actionButtonAction = () => {
+      game.nextRound();
+    };
+  } else {
+    actionButtonText = "Koniec gry";
+    actionButtonAction = () => {
+      navigate("/");
+    };
+  }
 
   const handleDrawCard = () => {
     const currentCardId = game.getCurrentCard();
@@ -60,9 +102,7 @@ export default function AdvancedGame() {
       <div className={styles.container}>
         {/* Header z informacjami o rundzie i fazie */}
         <div className={styles.header}>
-          <div className={styles.roundInfo}>
-            Runda {state.currentRound}/5
-          </div>
+          <div className={styles.roundInfo}>Runda {state.currentRound}/5</div>
           <div className={styles.phaseInfo}>
             Faza {state.currentPhase}/{state.maxPhases}
           </div>
@@ -71,11 +111,11 @@ export default function AdvancedGame() {
         {/* Aktualny gracz */}
         <div className={styles.currentPlayerSection}>
           <h2 className={styles.sectionTitle}>Aktualny gracz</h2>
-          <div 
+          <div
             className={styles.playerCard}
-            style={{ 
+            style={{
               backgroundColor: currentPlayer.color,
-              color: currentPlayer.color === 'yellow' ? '#000' : '#fff'
+              color: currentPlayer.color === "yellow" ? "#000" : "#fff",
             }}
           >
             <div className={styles.playerName}>
@@ -90,9 +130,7 @@ export default function AdvancedGame() {
           <div className={styles.botCardSection}>
             <h3 className={styles.sectionTitle}>Karta bota</h3>
             <div className={styles.botCard}>
-              <div className={styles.botCardContent}>
-                {currentBotCard}
-              </div>
+              <div className={styles.botCardContent}>{currentBotCard}</div>
             </div>
           </div>
         )}
@@ -109,7 +147,7 @@ export default function AdvancedGame() {
                 }`}
                 style={{ borderColor: player.color }}
               >
-                <div 
+                <div
                   className={styles.playerColorDot}
                   style={{ backgroundColor: player.color }}
                 />
@@ -129,27 +167,26 @@ export default function AdvancedGame() {
 
         {/* Przyciski akcji */}
         <div className={styles.actions}>
-          <button 
-            className={styles.actionButton}
-            onClick={handleDrawCard}
-          >
+          <button className={styles.actionButton} onClick={handleDrawCard}>
             Dobierz kartę
           </button>
-          <button 
-            className={styles.actionButton}
-            onClick={handleNextPlayer}
-          >
-            Następny gracz
+          <button className={styles.actionButton} onClick={actionButtonAction}>
+            {actionButtonText}
           </button>
         </div>
 
-        {/* Modal potwierdzenia */}
-        <ConfirmModal
-          isOpen={showNextPlayerModal}
-          message="Przejść do następnego gracza?"
-          onConfirm={confirmNextPlayer}
-          onCancel={() => setShowNextPlayerModal(false)}
-        />
+        {/* Modal potwierdzenia (tylko dla "Następny bot") */}
+        {actionButtonText === "Następny bot" && (
+          <ConfirmModal
+            isOpen={showNextPlayerModal}
+            message="Przejść do następnego bota?"
+            onConfirm={() => {
+              game.nextPlayer();
+              setShowNextPlayerModal(false);
+            }}
+            onCancel={() => setShowNextPlayerModal(false)}
+          />
+        )}
 
         <BottomControls onBackClick={() => navigate("/")} />
       </div>
