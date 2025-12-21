@@ -98,67 +98,108 @@ export default function AdvancedGame() {
   };
 
   return (
-    <Layout>
-      <div className={styles.container}>
+    <Layout backgroundType="game">
+      <div className="card">
         {/* Header z informacjami o rundzie i fazie */}
-        <div className={styles.header}>
-          <div className={styles.roundInfo}>Runda {state.currentRound}/5</div>
-          <div className={styles.phaseInfo}>
-            Faza {state.currentPhase}/{state.maxPhases}
-          </div>
-        </div>
-
-        {/* Aktualny gracz */}
-        <div className={styles.currentPlayerSection}>
-          <h2 className={styles.sectionTitle}>Aktualny gracz</h2>
+        <section className="section">
           <div
-            className={styles.playerCard}
             style={{
-              backgroundColor: currentPlayer.color,
-              color: currentPlayer.color === "yellow" ? "#000" : "#fff",
+              display: "flex",
+              justifyContent: "space-between",
+              fontSize: "1.3rem",
+              fontWeight: "bold",
             }}
           >
-            <div className={styles.playerName}>
-              {currentPlayer.color.toUpperCase()}
-              {currentPlayer.isBot && " (BOT)"}
+            <div>Runda {state.currentRound}/5</div>
+            <div>
+              Faza {state.currentPhase}/{state.maxPhases}
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Aktualny gracz */}
+        <section className="section">
+          <h2>AKTUALNY GRACZ</h2>
+          <div
+            style={{
+              padding: "2rem",
+              borderRadius: "var(--border-radius)",
+              textAlign: "center",
+              backgroundColor: currentPlayer.color,
+              color: currentPlayer.color === "yellow" ? "#000" : "#fff",
+              fontSize: "1.8rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+            }}
+          >
+            {currentPlayer.color.toUpperCase()}
+            {currentPlayer.isBot && " (BOT)"}
+          </div>
+        </section>
 
         {/* Karta bota (jeśli aktualny gracz to bot) */}
         {currentBotCard && (
-          <div className={styles.botCardSection}>
-            <h3 className={styles.sectionTitle}>Karta bota</h3>
-            <div className={styles.botCard}>
-              <div className={styles.botCardContent}>{currentBotCard}</div>
+          <section className="section">
+            <h3>KARTA BOTA</h3>
+            <div
+              className="card-content"
+              style={{ fontSize: "1.3rem", fontWeight: "bold" }}
+            >
+              {currentBotCard}
             </div>
-          </div>
+          </section>
         )}
 
         {/* Lista graczy */}
-        <div className={styles.playersSection}>
-          <h3 className={styles.sectionTitle}>Gracze</h3>
-          <div className={styles.playersList}>
+        <section className="section">
+          <h3>GRACZE</h3>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
+          >
             {state.players.map((player, index) => (
               <div
                 key={player.id}
-                className={`${styles.playerItem} ${
-                  index === state.currentPlayerIndex ? styles.active : ""
-                }`}
-                style={{ borderColor: player.color }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "1rem",
+                  backgroundColor: "var(--card-bg)",
+                  border:
+                    index === state.currentPlayerIndex
+                      ? "3px solid var(--button-primary)"
+                      : "2px solid var(--card-border)",
+                  borderRadius: "var(--border-radius)",
+                  transition: "all 0.2s",
+                  boxShadow:
+                    index === state.currentPlayerIndex
+                      ? "var(--shadow-medium)"
+                      : "var(--shadow-light)",
+                  transform:
+                    index === state.currentPlayerIndex
+                      ? "scale(1.02)"
+                      : "scale(1)",
+                }}
               >
                 <div
-                  className={styles.playerColorDot}
-                  style={{ backgroundColor: player.color }}
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    borderRadius: "50%",
+                    backgroundColor: player.color,
+                    border: "2px solid var(--text-primary)",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+                  }}
                 />
-                <span className={styles.playerItemName}>
+                <span style={{ fontSize: "1.1rem", fontWeight: "600" }}>
                   {player.color.toUpperCase()}
                   {player.isBot && " (BOT)"}
                 </span>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Wyświetlenie karty */}
         {cardDisplay.isVisible && cardDisplay.cardId !== null && (
@@ -166,30 +207,32 @@ export default function AdvancedGame() {
         )}
 
         {/* Przyciski akcji */}
-        <div className={styles.actions}>
-          <button className={styles.actionButton} onClick={handleDrawCard}>
-            Dobierz kartę
-          </button>
-          <button className={styles.actionButton} onClick={actionButtonAction}>
-            {actionButtonText}
-          </button>
-        </div>
-
-        {/* Modal potwierdzenia (tylko dla "Następny bot") */}
-        {actionButtonText === "Następny bot" && (
-          <ConfirmModal
-            isOpen={showNextPlayerModal}
-            message="Przejść do następnego bota?"
-            onConfirm={() => {
-              game.nextPlayer();
-              setShowNextPlayerModal(false);
-            }}
-            onCancel={() => setShowNextPlayerModal(false)}
-          />
-        )}
-
-        <BottomControls onBackClick={() => navigate("/")} />
+        <section className="section">
+          <div className={styles.gameControls}>
+            <button className="btn-primary" onClick={handleDrawCard}>
+              Dobierz kartę
+            </button>
+            <button className="btn-secondary" onClick={actionButtonAction}>
+              {actionButtonText}
+            </button>
+          </div>
+        </section>
       </div>
+
+      {/* Modal potwierdzenia (tylko dla "Następny bot") */}
+      {actionButtonText === "Następny bot" && (
+        <ConfirmModal
+          isOpen={showNextPlayerModal}
+          message="Przejść do następnego bota?"
+          onConfirm={() => {
+            game.nextPlayer();
+            setShowNextPlayerModal(false);
+          }}
+          onCancel={() => setShowNextPlayerModal(false)}
+        />
+      )}
+
+      <BottomControls onBackClick={() => navigate("/")} />
     </Layout>
   );
 }
@@ -205,39 +248,87 @@ function CardDisplay({ cardId, game }: CardDisplayProps) {
   if (!card) return null;
 
   return (
-    <div className={styles.cardSection}>
-      <div className={styles.cardDisplay}>
-        <div className={styles.cardHeader}>
-          <h3 className={styles.cardTitle}>Karta #{card.id}</h3>
-        </div>
+    <section className="section">
+      <h3>KARTA #{card.id}</h3>
 
-        <div className={styles.cardBody}>
-          {/* Efekty */}
-          <div className={styles.effectsSection}>
-            <h4 className={styles.cardSectionLabel}>Efekty:</h4>
-            <div className={styles.effectsList}>
-              {card.effects.map((effect, idx) => (
-                <div key={idx} className={styles.effectItem}>
-                  <span className={styles.effectNumber}>{idx + 1}.</span>
-                  <div
-                    className={styles.effectContent}
-                    dangerouslySetInnerHTML={{ __html: effect }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Zdolność */}
-          <div className={styles.abilitySection}>
-            <h4 className={styles.cardSectionLabel}>Zdolność:</h4>
+      {/* Efekty */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h4
+          style={{
+            fontSize: "1.1rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+          }}
+        >
+          Efekty:
+        </h4>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}
+        >
+          {card.effects.map((effect, idx) => (
             <div
-              className={styles.abilityContent}
-              dangerouslySetInnerHTML={{ __html: card.ability }}
-            />
-          </div>
+              key={idx}
+              style={{
+                display: "flex",
+                gap: "0.8rem",
+                padding: "0.8rem",
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderLeft: "4px solid var(--button-primary)",
+                borderRadius: "4px",
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: "var(--button-primary)",
+                  minWidth: "25px",
+                }}
+              >
+                {idx + 1}.
+              </span>
+              <div
+                style={{
+                  color: "var(--text-primary)",
+                  lineHeight: "1.5",
+                  fontSize: "1rem",
+                }}
+                dangerouslySetInnerHTML={{ __html: effect }}
+              />
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+
+      {/* Zdolność */}
+      <div
+        style={{
+          paddingTop: "1rem",
+          borderTop: "2px solid var(--card-border)",
+        }}
+      >
+        <h4
+          style={{
+            fontSize: "1.1rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+          }}
+        >
+          Zdolność:
+        </h4>
+        <div
+          style={{
+            padding: "1.2rem",
+            backgroundColor: "rgba(139, 69, 19, 0.05)",
+            border: "2px solid var(--button-secondary)",
+            borderRadius: "var(--border-radius)",
+            color: "var(--text-primary)",
+            lineHeight: "1.6",
+            fontSize: "1.05rem",
+            fontWeight: "500",
+          }}
+          dangerouslySetInnerHTML={{ __html: card.ability }}
+        />
+      </div>
+    </section>
   );
 }
