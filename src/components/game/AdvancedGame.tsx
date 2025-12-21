@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "@lib/GameContext";
+import { BOT_CARDS } from "@lib/botCards";
 import Layout from "@ui/Layout";
 import BottomControls from "@ui/BottomControls";
 import ConfirmModal from "@ui/ConfirmModal";
 import styles from "./AdvancedGame.module.css";
 
-interface CardDisplayState {
-  isVisible: boolean;
-  cardId: number | null;
-}
-
 export default function AdvancedGame() {
   const navigate = useNavigate();
   const game = useGame();
   const [showNextPlayerModal, setShowNextPlayerModal] = useState(false);
-  const [cardDisplay, setCardDisplay] = useState<CardDisplayState>({
-    isVisible: false,
-    cardId: null,
-  });
 
   const { state } = game;
+
+  const [hasInitializedCard, setHasInitializedCard] = useState(false);
 
   // Sprawdzenie czy jesteśmy w trybie zaawansowanym
   useEffect(() => {
@@ -33,6 +27,32 @@ export default function AdvancedGame() {
     }
   }, [state.gameMode, state.players, navigate]);
 
+  // Wylosuj pierwszą kartę dla pierwszego bota na starcie
+  useEffect(() => {
+    if (
+      state.gameMode === "advanced" &&
+      state.botsSelected &&
+      !hasInitializedCard
+    ) {
+      const currentCardId = game.getCurrentCard();
+      if (currentCardId === null) {
+        // Brak karty - wylosuj pierwszą
+        if (game.isDeckExhausted()) {
+          game.shuffleDeck();
+        }
+        game.drawCard();
+      }
+      setHasInitializedCard(true);
+    }
+  }, [state.gameMode, state.botsSelected, hasInitializedCard, game]);
+
+  const handleDrawCard = () => {
+    if (game.isDeckExhausted()) {
+      game.shuffleDeck();
+    }
+    game.drawCard();
+  };
+
   // Jeśli brak stanu gry, nie renderuj
   if (
     state.gameMode !== "advanced" ||
@@ -41,14 +61,6 @@ export default function AdvancedGame() {
   ) {
     return null;
   }
-
-  const currentPlayer = state.players[state.currentPlayerIndex!];
-  const currentBotDeck = currentPlayer.isBot
-    ? state.botDecks?.[state.currentPlayerIndex!]
-    : null;
-  const currentBotCard = currentBotDeck
-    ? currentBotDeck.cardSequence[currentBotDeck.currentCardIndex]
-    : null;
 
   // Sprawdzenie czy jest następny bot
   const hasNextBot = state.players
@@ -61,15 +73,24 @@ export default function AdvancedGame() {
   // Sprawdzenie czy jest następna runda
   const hasNextRound = state.currentRound! < 5;
 
+  const handleNextBot = () => {
+    // Znajdź indeks następnego bota
+    const nextBotIndex = state
+      .players!.slice(state.currentPlayerIndex! + 1)
+      .findIndex((p) => p.isBot);
+
+    if (nextBotIndex !== -1) {
+      setShowNextPlayerModal(true);
+    }
+  };
+
   // Dynamiczny tekst i akcja przycisku
   let actionButtonText = "Następny bot";
   let actionButtonAction: () => void;
 
   if (hasNextBot) {
     actionButtonText = "Następny bot";
-    actionButtonAction = () => {
-      setShowNextPlayerModal(true);
-    };
+    actionButtonAction = handleNextBot;
   } else if (hasNextPhase) {
     actionButtonText = "Koniec fazy";
     actionButtonAction = () => {
@@ -87,123 +108,127 @@ export default function AdvancedGame() {
     };
   }
 
-  const handleDrawCard = () => {
-    const currentCardId = game.getCurrentCard();
-    if (currentCardId !== null) {
-      setCardDisplay({
-        isVisible: !cardDisplay.isVisible,
-        cardId: currentCardId,
-      });
-    }
-  };
+  // Pobierz kartę z GameContext (używając getCurrentCard jak w GamePlay)
+  const currentCardId = game.getCurrentCard();
+  const drawnCardObject =
+    currentCardId !== null
+      ? BOT_CARDS.find((card) => card.id === currentCardId + 1)
+      : null;
 
   return (
     <Layout backgroundType="game">
       <div className="card">
-        {/* Header z informacjami o rundzie i fazie */}
-        <section className="section">
+        {/* Header z informacjami o rundzie, fazie i gracze */}
+        <section className="section" style={{ paddingBottom: "1rem" }}>
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
-              fontSize: "1.3rem",
-              fontWeight: "bold",
+              alignItems: "center",
+              gap: "1rem",
+              marginBottom: "0.8rem",
             }}
           >
-            <div>Runda {state.currentRound}/5</div>
-            <div>
-              Faza {state.currentPhase}/{state.maxPhases}
+            <div style={{ fontSize: "1rem", fontWeight: "bold" }}>
+              Runda {state.currentRound}/5 • Faza {state.currentPhase}/
+              {state.maxPhases}
             </div>
           </div>
-        </section>
 
-        {/* Aktualny gracz */}
-        <section className="section">
-          <h2>AKTUALNY GRACZ</h2>
-          <div
-            style={{
-              padding: "2rem",
-              borderRadius: "var(--border-radius)",
-              textAlign: "center",
-              backgroundColor: currentPlayer.color,
-              color: currentPlayer.color === "yellow" ? "#000" : "#fff",
-              fontSize: "1.8rem",
-              fontWeight: "bold",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-            }}
-          >
-            {currentPlayer.color.toUpperCase()}
-            {currentPlayer.isBot && " (BOT)"}
-          </div>
-        </section>
-
-        {/* Karta bota (jeśli aktualny gracz to bot) */}
-        {currentBotCard && (
-          <section className="section">
-            <h3>KARTA BOTA</h3>
-            <div
-              className="card-content"
-              style={{ fontSize: "1.3rem", fontWeight: "bold" }}
-            >
-              {currentBotCard}
-            </div>
-          </section>
-        )}
-
-        {/* Lista graczy */}
-        <section className="section">
-          <h3>GRACZE</h3>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}
-          >
+          {/* Kwadraty graczy */}
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
             {state.players.map((player, index) => (
               <div
                 key={player.id}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  padding: "1rem",
-                  backgroundColor: "var(--card-bg)",
+                  width: "60px",
+                  height: "60px",
+                  backgroundColor: player.color,
                   border:
                     index === state.currentPlayerIndex
-                      ? "3px solid var(--button-primary)"
-                      : "2px solid var(--card-border)",
-                  borderRadius: "var(--border-radius)",
+                      ? "4px solid var(--button-primary)"
+                      : "2px solid rgba(0,0,0,0.1)",
+                  borderRadius: "6px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: player.color === "yellow" ? "#000" : "#fff",
+                  fontSize: "0.75rem",
+                  fontWeight: "bold",
                   transition: "all 0.2s",
+                  textAlign: "center",
+                  padding: "0.25rem",
+                  lineHeight: "1.1",
                   boxShadow:
                     index === state.currentPlayerIndex
-                      ? "var(--shadow-medium)"
-                      : "var(--shadow-light)",
-                  transform:
-                    index === state.currentPlayerIndex
-                      ? "scale(1.02)"
-                      : "scale(1)",
+                      ? "0 4px 8px rgba(139,69,19,0.3)"
+                      : "none",
                 }}
               >
-                <div
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    borderRadius: "50%",
-                    backgroundColor: player.color,
-                    border: "2px solid var(--text-primary)",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-                  }}
-                />
-                <span style={{ fontSize: "1.1rem", fontWeight: "600" }}>
-                  {player.color.toUpperCase()}
-                  {player.isBot && " (BOT)"}
-                </span>
+                <div>G{index + 1}</div>
+                <div>{player.isBot ? "BOT" : "CZ"}</div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Wyświetlenie karty */}
-        {cardDisplay.isVisible && cardDisplay.cardId !== null && (
-          <CardDisplay cardId={cardDisplay.cardId} game={game} />
+        {/* Karta bota - wyświetlona dla aktualnego bota */}
+        {drawnCardObject && (
+          <section className="section">
+            <h2>
+              AKTUALNA KARTA (
+              {(state.mode === "individual"
+                ? state.botDecks && state.currentPlayerIndex !== undefined
+                  ? (state.botDecks[state.currentPlayerIndex]
+                      ?.currentCardIndex ?? -1) + 1
+                  : 0
+                : typeof state.currentCardIndex === "number"
+                ? state.currentCardIndex + 1
+                : 0) +
+                "/" +
+                BOT_CARDS.length}
+              )
+            </h2>
+            {(() => {
+              // Determine effect labels based on number of effects
+              const getEffectLabel = (index: number, totalEffects: number) => {
+                if (totalEffects === 1) {
+                  return "EFEKT";
+                } else {
+                  if (index === 0) return "PIERWSZY EFEKT";
+                  if (index === 1) return "DRUGI EFEKT";
+                  return `EFEKT ${index + 1}`;
+                }
+              };
+
+              // build sections array (effects + ability)
+              const sections = drawnCardObject.effects.map((effect, index) => ({
+                key: `effect-${index}`,
+                title: getEffectLabel(index, drawnCardObject.effects.length),
+                html: effect,
+              }));
+
+              sections.push({
+                key: `ability`,
+                title: "ZDOLNOSĆ DODATKOWA",
+                html: drawnCardObject.ability as string,
+              });
+
+              return (
+                <>
+                  {sections.map((s) => (
+                    <div key={s.key}>
+                      <h3>{s.title}</h3>
+                      <div className="card-content">
+                        <p dangerouslySetInnerHTML={{ __html: s.html }} />
+                      </div>
+                    </div>
+                  ))}
+                </>
+              );
+            })()}
+          </section>
         )}
 
         {/* Przyciski akcji */}
@@ -228,107 +253,13 @@ export default function AdvancedGame() {
             game.nextPlayer();
             setShowNextPlayerModal(false);
           }}
-          onCancel={() => setShowNextPlayerModal(false)}
+          onCancel={() => {
+            setShowNextPlayerModal(false);
+          }}
         />
       )}
 
       <BottomControls onBackClick={() => navigate("/")} />
     </Layout>
-  );
-}
-
-// Komponent wyświetlenia karty
-interface CardDisplayProps {
-  cardId: number;
-  game: ReturnType<typeof useGame>;
-}
-
-function CardDisplay({ cardId, game }: CardDisplayProps) {
-  const card = game.getCardById(cardId);
-  if (!card) return null;
-
-  return (
-    <section className="section">
-      <h3>KARTA #{card.id}</h3>
-
-      {/* Efekty */}
-      <div style={{ marginBottom: "1.5rem" }}>
-        <h4
-          style={{
-            fontSize: "1.1rem",
-            fontWeight: "bold",
-            marginBottom: "1rem",
-          }}
-        >
-          Efekty:
-        </h4>
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}
-        >
-          {card.effects.map((effect, idx) => (
-            <div
-              key={idx}
-              style={{
-                display: "flex",
-                gap: "0.8rem",
-                padding: "0.8rem",
-                backgroundColor: "rgba(255, 255, 255, 0.5)",
-                borderLeft: "4px solid var(--button-primary)",
-                borderRadius: "4px",
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: "bold",
-                  color: "var(--button-primary)",
-                  minWidth: "25px",
-                }}
-              >
-                {idx + 1}.
-              </span>
-              <div
-                style={{
-                  color: "var(--text-primary)",
-                  lineHeight: "1.5",
-                  fontSize: "1rem",
-                }}
-                dangerouslySetInnerHTML={{ __html: effect }}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Zdolność */}
-      <div
-        style={{
-          paddingTop: "1rem",
-          borderTop: "2px solid var(--card-border)",
-        }}
-      >
-        <h4
-          style={{
-            fontSize: "1.1rem",
-            fontWeight: "bold",
-            marginBottom: "1rem",
-          }}
-        >
-          Zdolność:
-        </h4>
-        <div
-          style={{
-            padding: "1.2rem",
-            backgroundColor: "rgba(139, 69, 19, 0.05)",
-            border: "2px solid var(--button-secondary)",
-            borderRadius: "var(--border-radius)",
-            color: "var(--text-primary)",
-            lineHeight: "1.6",
-            fontSize: "1.05rem",
-            fontWeight: "500",
-          }}
-          dangerouslySetInnerHTML={{ __html: card.ability }}
-        />
-      </div>
-    </section>
   );
 }

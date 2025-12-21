@@ -90,6 +90,12 @@ Planowane zadania:
   - Zmiana pierwszego gracza (potwierdzenie modalem)
   - Automatyczne przejście do nowej rundy
 
+- **Modalne potwierdzenia i informacje**
+
+  - Modal "Koniec fazy" - informacja o resecie do pierwszego bota
+  - Modal "Koniec rundy" - informacja o tasowaniu i zmianie gracza startowego
+  - Modal "Koniec gry" - podsumowanie rozgrywki, powrót do menu
+
 ---
 
 ### v0.6.3 — Punktacja botów 🔮
