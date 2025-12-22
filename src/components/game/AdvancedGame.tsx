@@ -173,6 +173,19 @@ export default function AdvancedGame() {
           </div>
         </section>
 
+        {/* Przyciski akcji - przed kartą */}
+        <section className="section">
+          <h2>DOBIERZ KARTĘ</h2>
+          <div className={styles.gameControls}>
+            <button className="btn-primary" onClick={handleDrawCard}>
+              Dobierz kartę
+            </button>
+            <button className="btn-secondary" onClick={actionButtonAction}>
+              {actionButtonText}
+            </button>
+          </div>
+        </section>
+
         {/* Karta bota - wyświetlona dla aktualnego bota */}
         {drawnCardObject && (
           <section className="section">
@@ -231,33 +244,21 @@ export default function AdvancedGame() {
           </section>
         )}
 
-        {/* Przyciski akcji */}
-        <section className="section">
-          <div className={styles.gameControls}>
-            <button className="btn-primary" onClick={handleDrawCard}>
-              Dobierz kartę
-            </button>
-            <button className="btn-secondary" onClick={actionButtonAction}>
-              {actionButtonText}
-            </button>
-          </div>
-        </section>
+        {/* Modal potwierdzenia (tylko dla "Następny bot") */}
+        {actionButtonText === "Następny bot" && (
+          <ConfirmModal
+            isOpen={showNextPlayerModal}
+            message="Przejść do następnego bota?"
+            onConfirm={() => {
+              game.nextPlayer();
+              setShowNextPlayerModal(false);
+            }}
+            onCancel={() => {
+              setShowNextPlayerModal(false);
+            }}
+          />
+        )}
       </div>
-
-      {/* Modal potwierdzenia (tylko dla "Następny bot") */}
-      {actionButtonText === "Następny bot" && (
-        <ConfirmModal
-          isOpen={showNextPlayerModal}
-          message="Przejść do następnego bota?"
-          onConfirm={() => {
-            game.nextPlayer();
-            setShowNextPlayerModal(false);
-          }}
-          onCancel={() => {
-            setShowNextPlayerModal(false);
-          }}
-        />
-      )}
 
       <BottomControls onBackClick={() => navigate("/")} />
     </Layout>
