@@ -10,11 +10,10 @@ import styles from "./AdvancedGame.module.css";
 export default function AdvancedGame() {
   const navigate = useNavigate();
   const game = useGame();
-  const [showNextPlayerModal, setShowNextPlayerModal] = useState(false);
+  const [showDrawCardModal, setShowDrawCardModal] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false);
 
   const { state } = game;
-
-  const [hasInitializedCard, setHasInitializedCard] = useState(false);
 
   // Sprawdzenie czy jesteśmy w trybie zaawansowanym
   useEffect(() => {
@@ -26,25 +25,6 @@ export default function AdvancedGame() {
       navigate("/advanced-setup");
     }
   }, [state.gameMode, state.players, navigate]);
-
-  // Wylosuj pierwszą kartę dla pierwszego bota na starcie
-  useEffect(() => {
-    if (
-      state.gameMode === "advanced" &&
-      state.botsSelected &&
-      !hasInitializedCard
-    ) {
-      const currentCardId = game.getCurrentCard();
-      if (currentCardId === null) {
-        // Brak karty - wylosuj pierwszą
-        if (game.isDeckExhausted()) {
-          game.shuffleDeck();
-        }
-        game.drawCard();
-      }
-      setHasInitializedCard(true);
-    }
-  }, [state.gameMode, state.botsSelected, hasInitializedCard, game]);
 
   const handleDrawCard = () => {
     if (game.isDeckExhausted()) {
@@ -73,14 +53,32 @@ export default function AdvancedGame() {
   // Sprawdzenie czy jest następna runda
   const hasNextRound = state.currentRound! < 5;
 
-  const handleNextBot = () => {
-    // Znajdź indeks następnego bota
-    const nextBotIndex = state
-      .players!.slice(state.currentPlayerIndex! + 1)
-      .findIndex((p) => p.isBot);
+  // Czy aktualny gracz jest ostatnim graczem
+  const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
 
-    if (nextBotIndex !== -1) {
-      setShowNextPlayerModal(true);
+  // Tekst dla modalu akcji drugiego przycisku
+  const getActionModalMessage = (): string => {
+    if (actionButtonText === "Następny bot") {
+      return "Czy faza tego bota została już rozegrana?";
+    } else if (actionButtonText === "Koniec fazy") {
+      if (isLastPlayer) {
+        return "Wszyscy gracze rozegrali obecną fazę, czy przejść do następnej fazy?";
+      } else {
+        return "Rozegraj fazy wszystkich graczy i potwierdź";
+      }
+    } else if (actionButtonText === "Koniec rundy") {
+      if (isLastPlayer) {
+        return "Wszyscy gracze rozegrali fazy w tej rundzie, czy przejść do następnej rundy?";
+      } else {
+        return "Rozegraj fazy wszystkich graczy w tej rundzie i potwierdź";
+      }
+    } else {
+      // Koniec gry
+      if (isLastPlayer) {
+        return "Wszyscy gracze rozegrali fazy w tej rundzie, czy przejść do końca gry?";
+      } else {
+        return "Rozegraj rundę do końca i potwierdź";
+      }
     }
   };
 
@@ -90,22 +88,16 @@ export default function AdvancedGame() {
 
   if (hasNextBot) {
     actionButtonText = "Następny bot";
-    actionButtonAction = handleNextBot;
+    actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextPhase) {
     actionButtonText = "Koniec fazy";
-    actionButtonAction = () => {
-      game.nextPhase();
-    };
+    actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextRound) {
     actionButtonText = "Koniec rundy";
-    actionButtonAction = () => {
-      game.nextRound();
-    };
+    actionButtonAction = () => setShowActionModal(true);
   } else {
     actionButtonText = "Koniec gry";
-    actionButtonAction = () => {
-      navigate("/");
-    };
+    actionButtonAction = () => setShowActionModal(true);
   }
 
   // Pobierz kartę z GameContext (używając getCurrentCard jak w GamePlay)
@@ -177,7 +169,10 @@ export default function AdvancedGame() {
         <section className="section">
           <h2>DOBIERZ KARTĘ</h2>
           <div className={styles.gameControls}>
-            <button className="btn-primary" onClick={handleDrawCard}>
+            <button
+              className="btn-primary"
+              onClick={() => setShowDrawCardModal(true)}
+            >
               Dobierz kartę
             </button>
             <button className="btn-secondary" onClick={actionButtonAction}>
@@ -192,9 +187,9 @@ export default function AdvancedGame() {
             <h2>
               AKTUALNA KARTA (
               {(state.mode === "individual"
-                ? state.botDecks && state.currentPlayerIndex !== undefined
-                  ? (state.botDecks[state.currentPlayerIndex]
-                      ?.currentCardIndex ?? -1) + 1
+                ? state.botDecks && state.currentBot
+                  ? (state.botDecks[state.currentBot - 1]?.currentCardIndex ??
+                      -1) + 1
                   : 0
                 : typeof state.currentCardIndex === "number"
                 ? state.currentCardIndex + 1
@@ -244,20 +239,40 @@ export default function AdvancedGame() {
           </section>
         )}
 
-        {/* Modal potwierdzenia (tylko dla "Następny bot") */}
-        {actionButtonText === "Następny bot" && (
-          <ConfirmModal
-            isOpen={showNextPlayerModal}
-            message="Przejść do następnego bota?"
-            onConfirm={() => {
+        {/* Modal potwierdzenia dla dobrania karty */}
+        <ConfirmModal
+          isOpen={showDrawCardModal}
+          message="Dobrać kartę dla aktualnego bota?"
+          onConfirm={() => {
+            handleDrawCard();
+            setShowDrawCardModal(false);
+          }}
+          onCancel={() => {
+            setShowDrawCardModal(false);
+          }}
+        />
+
+        {/* Modal potwierdzenia dla akcji drugiego przycisku */}
+        <ConfirmModal
+          isOpen={showActionModal}
+          message={getActionModalMessage()}
+          onConfirm={() => {
+            if (actionButtonText === "Następny bot") {
               game.nextPlayer();
-              setShowNextPlayerModal(false);
-            }}
-            onCancel={() => {
-              setShowNextPlayerModal(false);
-            }}
-          />
-        )}
+            } else if (actionButtonText === "Koniec fazy") {
+              game.nextPhase();
+            } else if (actionButtonText === "Koniec rundy") {
+              game.nextRound();
+            } else {
+              // Koniec gry
+              navigate("/");
+            }
+            setShowActionModal(false);
+          }}
+          onCancel={() => {
+            setShowActionModal(false);
+          }}
+        />
       </div>
 
       <BottomControls onBackClick={() => navigate("/")} />

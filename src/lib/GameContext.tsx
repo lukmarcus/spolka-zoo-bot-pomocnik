@@ -456,6 +456,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         const firstBotIndex = players.findIndex((p) => p.isBot);
         const startingBotIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
 
+        const botDecks = generateBotDecks(botCount);
+        // Wylosuj pierwszą kartę dla pierwszego bota
+        botDecks[0] = {
+          ...botDecks[0],
+          currentCardIndex: 0,
+        };
+
         return {
           gameMode: "advanced",
           mode: "individual",
@@ -465,7 +472,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           currentRound: 1,
           currentPhase: 1,
           maxPhases,
-          botDecks: generateBotDecks(botCount),
+          botDecks,
           botCount,
           currentBot: 1,
           botsSelected: true,
@@ -486,7 +493,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         currentPhase: 1,
         maxPhases,
         cardSequence: generateShuffledSequence(),
-        currentCardIndex: -1,
+        currentCardIndex: 0, // Wylosuj pierwszą kartę
         usedCards: [],
         botCount,
         currentBot: 1,
