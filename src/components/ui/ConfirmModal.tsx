@@ -84,12 +84,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           >
             {cancelText}
           </button>
-          <button
-            className={`${styles.button} ${styles.confirmButton} ${styles.widerButton}`}
-            onClick={onCopy}
-          >
-            {copyButtonText}
-          </button>
+          {copyButtonText && onCopy && (
+            <button
+              className={`${styles.button} ${styles.confirmButton} ${styles.widerButton}`}
+              onClick={onCopy}
+            >
+              {copyButtonText}
+            </button>
+          )}
           <button
             className={`${styles.button} ${styles.copyButton}`}
             onClick={onConfirm}

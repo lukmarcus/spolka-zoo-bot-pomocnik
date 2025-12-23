@@ -108,57 +108,46 @@ export default function AdvancedGame() {
       : null;
 
   return (
-    <Layout backgroundType="game">
+    <Layout
+      backgroundType="game"
+      title="ZAAWANSOWANA GRA W TOKU"
+      subtitle={(() => {
+        const botCount = state.players.filter((p) => p.isBot).length;
+        const deckMode =
+          botCount === 1
+            ? "jedna talia"
+            : state.mode === "shared"
+            ? "wspólna talia"
+            : "osobne talie";
+        return `${state.players.length} gracz${
+          state.players.length > 1 ? "y" : ""
+        } (${botCount} bot${botCount !== 1 ? "y" : ""}), ${deckMode}`;
+      })()}
+    >
       <div className="card">
-        {/* Header z informacjami o rundzie, fazie i gracze */}
-        <section className="section" style={{ paddingBottom: "1rem" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "1rem",
-              marginBottom: "0.8rem",
-            }}
-          >
-            <div style={{ fontSize: "1rem", fontWeight: "bold" }}>
-              Runda {state.currentRound}/5 • Faza {state.currentPhase}/
-              {state.maxPhases}
-            </div>
+        {/* Info o rundzie, fazie i graczach */}
+        <section className={`section ${styles.infoSection}`}>
+          <div className={styles.roundPhaseInfo}>
+            Runda {state.currentRound}/5 • Faza {state.currentPhase}/
+            {state.maxPhases}
           </div>
 
           {/* Kwadraty graczy */}
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <div className={styles.playersContainer}>
             {state.players.map((player, index) => (
               <div
                 key={player.id}
+                className={`${styles.playerSquare} ${
+                  index === state.currentPlayerIndex
+                    ? styles.active
+                    : styles.inactive
+                }`}
                 style={{
-                  width: "60px",
-                  height: "60px",
                   backgroundColor: player.color,
-                  border:
-                    index === state.currentPlayerIndex
-                      ? "4px solid var(--button-primary)"
-                      : "2px solid rgba(0,0,0,0.1)",
-                  borderRadius: "6px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
                   color: player.color === "yellow" ? "#000" : "#fff",
-                  fontSize: "0.75rem",
-                  fontWeight: "bold",
-                  transition: "all 0.2s",
-                  textAlign: "center",
-                  padding: "0.25rem",
-                  lineHeight: "1.1",
-                  boxShadow:
-                    index === state.currentPlayerIndex
-                      ? "0 4px 8px rgba(139,69,19,0.3)"
-                      : "none",
                 }}
               >
-                <div>G{index + 1}</div>
+                <div className={styles.playerSquareNumber}>G{index + 1}</div>
                 <div>{player.isBot ? "BOT" : "CZ"}</div>
               </div>
             ))}
