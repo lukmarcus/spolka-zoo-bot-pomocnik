@@ -47,6 +47,16 @@ export default function AdvancedGame() {
     .slice(state.currentPlayerIndex! + 1)
     .some((p) => p.isBot);
 
+  // Indeks następnego bota (w całej liście) lub -1 jeśli brak
+  const nextBotIndex = (() => {
+    for (let i = state.currentPlayerIndex! + 1; i < state.players.length; i++) {
+      if (state.players[i].isBot) return i;
+    }
+    return -1;
+  })();
+
+  const isNextBotAdjacent = nextBotIndex === state.currentPlayerIndex! + 1;
+
   // Sprawdzenie czy jest następna faza
   const hasNextPhase = state.currentPhase! < state.maxPhases!;
 
@@ -59,25 +69,53 @@ export default function AdvancedGame() {
   // Tekst dla modalu akcji drugiego przycisku
   const getActionModalMessage = (): string => {
     if (actionButtonText === "Następny bot") {
-      return "Czy faza tego bota została już rozegrana?";
+      if (isNextBotAdjacent) {
+        return (
+          "Czy faza tego bota została już rozegrana?" +
+          "\nPo potwierdzeniu przejdziemy do następnego bota w tej fazie."
+        );
+      } else {
+        return (
+          "W następnej kolejności znajdują się gracze. Czy chcesz przejść bezpośrednio do następnego bota (pominięcie graczy)?" +
+          "\nPo potwierdzeniu pominiemy wszystkich graczy między obecnym botem a następnym botem."
+        );
+      }
     } else if (actionButtonText === "Koniec fazy") {
       if (isLastPlayer) {
-        return "Wszyscy gracze rozegrali obecną fazę, czy przejść do następnej fazy?";
+        return (
+          "Wszyscy gracze rozegrali obecną fazę. Czy przejść do następnej fazy?" +
+          "\nPo przejściu do następnej fazy rozpocznie ją pierwszy bot."
+        );
       } else {
-        return "Rozegraj fazy wszystkich graczy i potwierdź";
+        return (
+          "Rozegraj fazy wszystkich graczy i potwierdź." +
+          "\nPo potwierdzeniu faza zostanie zakończona i przejdziemy dalej."
+        );
       }
     } else if (actionButtonText === "Koniec rundy") {
       if (isLastPlayer) {
-        return "Wszyscy gracze rozegrali fazy w tej rundzie, czy przejść do następnej rundy?";
+        return (
+          "Wszyscy gracze rozegrali fazy w tej rundzie. Czy przejść do następnej rundy?" +
+          "\nTalia zostanie w razie potrzeby przetasowana, a pierwszy gracz zmieniony."
+        );
       } else {
-        return "Rozegraj fazy wszystkich graczy w tej rundzie i potwierdź";
+        return (
+          "Rozegraj fazy wszystkich graczy w tej rundzie i potwierdź." +
+          "\nPo potwierdzeniu zakończymy rundę i przejdziemy do kolejnej."
+        );
       }
     } else {
       // Koniec gry
       if (isLastPlayer) {
-        return "Wszyscy gracze rozegrali fazy w tej rundzie, czy przejść do końca gry?";
+        return (
+          "Wszyscy gracze rozegrali fazy w tej rundzie. Czy przejść do końca gry?" +
+          "\nPo potwierdzeniu nastąpi powrót do menu i reset stanu gry."
+        );
       } else {
-        return "Rozegraj rundę do końca i potwierdź";
+        return (
+          "Rozegraj rundę do końca i potwierdź." +
+          "\nPo potwierdzeniu gra zostanie zakończona."
+        );
       }
     }
   };
@@ -156,7 +194,7 @@ export default function AdvancedGame() {
 
         {/* Przyciski akcji - przed kartą */}
         <section className="section">
-          <h2>DOBIERZ KARTĘ</h2>
+          <h2>MOŻLIWE AKCJE</h2>
           <div className={styles.gameControls}>
             <button
               className="btn-primary"
@@ -231,7 +269,12 @@ export default function AdvancedGame() {
         {/* Modal potwierdzenia dla dobrania karty */}
         <ConfirmModal
           isOpen={showDrawCardModal}
-          message="Dobrać kartę dla aktualnego bota?"
+          title="DOBIERZ KARTĘ"
+          message={
+            "Nie można wykonać żadnej akcji z aktualnej karty i chcesz dobrać nową kartę dla aktualnego bota?"
+          }
+          confirmText="Dobierz"
+          cancelText="Anuluj"
           onConfirm={() => {
             handleDrawCard();
             setShowDrawCardModal(false);
@@ -244,7 +287,18 @@ export default function AdvancedGame() {
         {/* Modal potwierdzenia dla akcji drugiego przycisku */}
         <ConfirmModal
           isOpen={showActionModal}
+          title={actionButtonText}
           message={getActionModalMessage()}
+          confirmText={
+            actionButtonText === "Następny bot"
+              ? "Tak, następny"
+              : actionButtonText === "Koniec fazy"
+              ? "Zakończ fazę"
+              : actionButtonText === "Koniec rundy"
+              ? "Zakończ rundę"
+              : "Zakończ grę"
+          }
+          cancelText="Anuluj"
           onConfirm={() => {
             if (actionButtonText === "Następny bot") {
               game.nextPlayer();
@@ -254,6 +308,7 @@ export default function AdvancedGame() {
               game.nextRound();
             } else {
               // Koniec gry
+              game.resetGame();
               navigate("/");
             }
             setShowActionModal(false);

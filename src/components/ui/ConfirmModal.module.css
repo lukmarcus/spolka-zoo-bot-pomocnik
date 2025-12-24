@@ -3,6 +3,7 @@
   font-size: var(--font-size-lg);
   font-weight: 600;
   color: white;
+  text-transform: uppercase;
 }
 
 .closeButton {
@@ -32,6 +33,7 @@
   color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.5;
+  text-align: left;
 }
 
 .message:last-child {
