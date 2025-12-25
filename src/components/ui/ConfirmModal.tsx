@@ -11,6 +11,7 @@ interface ConfirmModalProps {
   onCancel: () => void;
   copyButtonText?: string;
   onCopy?: () => void;
+  notes?: string;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -23,6 +24,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel,
   copyButtonText,
   onCopy,
+  notes,
 }) => {
   if (!isOpen) return null;
 
@@ -74,6 +76,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               {line}
             </p>
           ))}
+          {notes && (
+            <div className={styles.notesOnly}>
+              <p className={styles.notesText}>
+                <em>{notes}</em>
+              </p>
+            </div>
+          )}
         </div>
 
         <div className={styles.threeButtonHorizontal}>

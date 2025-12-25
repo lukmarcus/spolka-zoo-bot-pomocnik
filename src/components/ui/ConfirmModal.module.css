@@ -40,6 +40,18 @@
   margin-bottom: 0;
 }
 
+.notesOnly {
+  margin-top: 0.5rem;
+}
+
+.notesText {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: left;
+  margin: 0;
+}
+
 .successMessage {
   color: var(--success);
   font-weight: 500;
