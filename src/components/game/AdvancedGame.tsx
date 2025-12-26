@@ -5,6 +5,8 @@ import { BOT_CARDS } from "@lib/botCards";
 import Layout from "@ui/Layout";
 import BottomControls from "@ui/BottomControls";
 import ConfirmModal from "@ui/ConfirmModal";
+import getModalText from "@lib/getModalText";
+import modalTexts from "@lib/modalTexts.json";
 import styles from "./AdvancedGame.module.css";
 
 export default function AdvancedGame() {
@@ -72,81 +74,249 @@ export default function AdvancedGame() {
   const willBeFirstInNextPhase =
     state.currentPlayerIndex === nextPhaseStartIndex;
 
-  // Tekst dla modalu akcji drugiego przycisku
+  // Tekst dla modalu akcji drugiego przycisku — pobierany z modalTexts.json
   const getActionModalMessage = (): { message: string; notes?: string } => {
-    // Determine base message per action (keep original strings unchanged)
-    if (actionButtonText === "Następny bot") {
-      const message = "Dobrać kartę dla kolejnego Bota w tej fazie?";
-      const notes = isNextBotAdjacent
-        ? "Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.\nPrzejdź do kolejnego Bota w tej fazie i dobierz dla niego kartę."
-        : "Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.\nZanim przejdziesz do kolejnego Bota w tej fazie i dobierzesz dla niego kartę, rozegraj fazę gracza pomiędzy Botami.";
-      return { message, notes };
-    }
+    if (actionKey === "nextBot") {
+      const nextBotNode = (
+        modalTexts as unknown as { advancedGame?: Record<string, unknown> }
+      )?.advancedGame?.nextBot as Record<string, unknown> | undefined;
 
-    if (actionButtonText === "Koniec fazy") {
-      // message differs only by punctuation depending on whether current player is last
-      const message = "Zakończyć aktualną fazę i przejść do następnej?";
+      const baseMessage =
+        typeof nextBotNode?.message === "string"
+          ? (nextBotNode.message as string)
+          : "Dobrać kartę dla kolejnego Bota w tej fazie?";
 
-      // notes vary by the four logical cases; keep original note strings
-      if (!isLastPlayer && !willBeFirstInNextPhase) {
-        return {
-          message,
-          notes:
-            "Nie wszyscy gracze rozegrali aktualną fazę.\nZanim przejdziesz do następnej fazy i dobierzesz kartę dla Bota, rozegraj fazę gracza w aktualnej fazie oraz fazę gracza w nowej fazie przed Botem.",
-        };
+      // note1 may be a simple string or an object with 'performed'
+      let note1Text: string | undefined;
+      const rawNote1 = nextBotNode?.note1;
+      if (typeof rawNote1 === "string") {
+        note1Text = rawNote1;
+      } else if (typeof rawNote1 === "object" && rawNote1 !== null) {
+        note1Text = (rawNote1 as Record<string, unknown>)["performed"] as
+          | string
+          | undefined;
       }
-      if (!isLastPlayer && willBeFirstInNextPhase) {
-        return {
-          message,
-          notes:
-            "Nie wszyscy gracze rozegrali aktualną fazę.\nZanim przejdziesz do następnej fazy i dobierzesz kartę dla Bota, rozegraj fazę gracza w aktualnej fazie.",
-        };
-      }
-      if (isLastPlayer && !willBeFirstInNextPhase) {
-        return {
-          message,
-          notes:
-            "Wszyscy gracze rozegrali aktualną fazę.\nZanim przejdziesz do następnej fazy i dobierzesz kartę dla Bota, rozegraj fazę gracza w nowej fazie przed Botem.",
-        };
-      }
+
+      // pick note2 variant
+      const note2Key = isNextBotAdjacent ? "adjacent" : "withPlayers";
+      const note2Text =
+        typeof (nextBotNode?.note2 as Record<string, unknown>)?.[note2Key] ===
+        "string"
+          ? (nextBotNode?.note2 as Record<string, string>)[note2Key]
+          : undefined;
+
+      const notesParts: string[] = [];
+      if (note1Text) notesParts.push(note1Text);
+      if (note2Text) notesParts.push(note2Text);
+
       return {
-        message,
-        notes:
-          "Wszyscy gracze rozegrali aktualną fazę.\nPrzejdź do następnej fazy i dobierz kartę dla Bota.",
+        message: baseMessage,
+        notes: notesParts.length ? notesParts.join("\n") : undefined,
       };
     }
 
-    if (actionButtonText === "Koniec rundy") {
-      const message = "Przejść do następnej rundy?";
-      const notes = isLastPlayer
-        ? "Wszyscy gracze rozegrali fazy w tej rundzie.\nTalia zostanie w razie potrzeby przetasowana, a pierwszy gracz zmieniony."
-        : "Rozegraj fazy wszystkich graczy w tej rundzie i potwierdź.\nPo potwierdzeniu zakończemy rundę i przejdziemy do kolejnej.";
-      return { message, notes };
+    if (actionKey === "nextPhase") {
+      // choose note1: whether bot is last or not
+      const note1Key = isLastPlayer ? "last" : "notLast";
+
+      // choose note2 (new): 'first' or 'notFirst'
+      const note2Key = willBeFirstInNextPhase ? "first" : "notFirst";
+
+      // choose note3 (old info2): depends on last/notLast and willBeFirst
+      const note3Variant = `${isLastPlayer ? "last" : "notLast"}_${
+        willBeFirstInNextPhase ? "first" : "notFirst"
+      }`;
+
+      const base = getModalText("advancedGame", "nextPhase.message");
+      const note1 = getModalText("advancedGame", `nextPhase.note1.${note1Key}`);
+      const note2 = getModalText("advancedGame", `nextPhase.note2.${note2Key}`);
+      const note3 = getModalText(
+        "advancedGame",
+        `nextPhase.note3.${note3Variant}`
+      );
+
+      const baseMessage =
+        base?.message ?? "Zakończyć obecną fazę i przejść do następnej?";
+      // build notes in the order specified by modalTexts.json -> advancedGame.nextPhase.noteOrder
+      const noteOrder: string[] = (
+        modalTexts as unknown as {
+          advancedGame?: AdvancedGameTexts;
+        }
+      )?.advancedGame?.nextPhase?.noteOrder ?? ["note1", "note2", "note3"];
+
+      const noteMap: Record<string, string | undefined> = {
+        note1: note1?.message,
+        note2: note2?.message,
+        note3: note3?.message,
+      };
+
+      const notesParts: string[] = noteOrder
+        .map((k) => noteMap[k])
+        .filter((m): m is string => typeof m === "string");
+
+      return {
+        message: baseMessage,
+        notes: notesParts.length ? notesParts.join("\n") : undefined,
+      };
     }
 
-    // Koniec gry
-    const message = "Przejść do końca gry?";
-    const notes = isLastPlayer
-      ? "Wszyscy gracze rozegrali fazy w tej rundzie.\nPo potwierdzeniu nastąpi powrót do menu i reset stanu gry."
-      : "Rozegraj rundę do końca i potwierdź.\nPo potwierdzeniu gra zostanie zakończona.";
-    return { message, notes };
+    if (actionKey === "nextRound") {
+      // choose note1: whether bot is last or not
+      const note1Key = isLastPlayer ? "last" : "notLast";
+
+      // choose note2: 'first' or 'notFirst'
+      const note2Key = willBeFirstInNextPhase ? "first" : "notFirst";
+
+      // choose note3: depends on last/notLast and willBeFirst
+      const note3Variant = `${isLastPlayer ? "last" : "notLast"}_${
+        willBeFirstInNextPhase ? "first" : "notFirst"
+      }`;
+
+      const base = getModalText("advancedGame", "nextRound.message");
+      const note1 = getModalText("advancedGame", `nextRound.note1.${note1Key}`);
+      const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
+      const note3 = getModalText(
+        "advancedGame",
+        `nextRound.note3.${note3Variant}`
+      );
+
+      const baseMessage =
+        base?.message ?? "Przejść do następnej rundy?";
+      // build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
+      const noteOrder: string[] = (
+        modalTexts as unknown as {
+          advancedGame?: AdvancedGameTexts;
+        }
+      )?.advancedGame?.nextRound?.noteOrder ?? ["note1", "note2", "note3"];
+
+      const noteMap: Record<string, string | undefined> = {
+        note1: note1?.message,
+        note2: note2?.message,
+        note3: note3?.message,
+      };
+
+      const notesParts: string[] = noteOrder
+        .map((k) => noteMap[k])
+        .filter((m): m is string => typeof m === "string");
+
+      return {
+        message: baseMessage,
+        notes: notesParts.length ? notesParts.join("\n") : undefined,
+      };
+    }
+
+    const key = isLastPlayer ? "endGame.last" : "endGame.notLast";
+    const { message, notes } = getModalText("advancedGame", key);
+    return { message, notes: notes ? notes.join("\n") : undefined };
   };
 
   // Dynamiczny tekst i akcja przycisku
-  let actionButtonText = "Następny bot";
+  // labels come from modalTexts.json -> advancedGame.gameButtons
+  type UiRoot = {
+    gameButtons?: Record<string, string>;
+    modalTitles?: Record<string, string>;
+    modalConfirm?: Record<string, string>;
+    modalCancel?: string;
+    common?: { modalCancel?: string; modalOk?: string };
+  };
+
+  // Partial typing for modalTexts. We only declare the parts we access.
+  type NextPhaseNode = {
+    gameButton?: string;
+    modalTitle?: string;
+    modalConfirm?: string;
+    message?: string;
+    noteOrder?: string[];
+    note1?: Record<string, string>;
+    note2?: Record<string, string>;
+    note3?: Record<string, string>;
+  };
+
+  type AdvancedGameTexts = {
+    gameButtons?: Record<string, string>;
+    modalTitles?: Record<string, string>;
+    modalConfirm?: Record<string, string>;
+    common?: { modalCancel?: string };
+    nextPhase?: NextPhaseNode;
+    nextRound?: NextPhaseNode;
+    nextBot?: NextPhaseNode;
+    drawCard?: NextPhaseNode;
+  };
+
+  const uiRoot = (modalTexts as unknown as { advancedGame?: AdvancedGameTexts })
+    ?.advancedGame as UiRoot | undefined;
+  const gameButtons = uiRoot?.gameButtons ?? {};
+  const modalTitles = uiRoot?.modalTitles ?? {};
+  const modalConfirm = uiRoot?.modalConfirm ?? {};
+  // new: prefer nextPhase-local strings if present
+  const nextPhaseNode = (
+    modalTexts as unknown as { advancedGame?: AdvancedGameTexts }
+  )?.advancedGame?.nextPhase as NextPhaseNode | undefined;
+
+  const getUiString = (
+    localNode: Record<string, unknown> | undefined,
+    globalNode: Record<string, unknown> | undefined,
+    key: string,
+    defaultValue: string
+  ) => {
+    if (
+      localNode &&
+      typeof (localNode as Record<string, unknown>)[key] === "string"
+    )
+      return (localNode as Record<string, string>)[key];
+    if (
+      globalNode &&
+      typeof (globalNode as Record<string, unknown>)[key] === "string"
+    )
+      return (globalNode as Record<string, string>)[key];
+    return defaultValue;
+  };
+
+  const modalCancel =
+    uiRoot?.common?.modalCancel ??
+    (typeof uiRoot?.modalCancel === "string" ? uiRoot?.modalCancel : "Anuluj");
+
+  // access advancedGame raw object safely for modal-specific overrides (drawCard, etc.)
+  const advancedTexts = modalTexts as unknown as {
+    advancedGame?: Record<string, unknown>;
+  };
+  const drawLocal = advancedTexts?.advancedGame?.drawCard as
+    | Record<string, unknown>
+    | undefined;
+  const drawLocalTitle =
+    typeof drawLocal?.modalTitle === "string"
+      ? (drawLocal.modalTitle as string)
+      : undefined;
+  const drawLocalConfirm =
+    typeof drawLocal?.modalConfirm === "string"
+      ? (drawLocal.modalConfirm as string)
+      : undefined;
+  const commonOk = uiRoot?.common?.modalOk ?? "Tak";
+
+  let actionKey: "nextBot" | "nextPhase" | "nextRound" | "endGame" = "nextBot";
+  let actionButtonText = gameButtons.nextBot || "Następny bot";
   let actionButtonAction: () => void;
 
   if (hasNextBot) {
-    actionButtonText = "Następny bot";
+    actionKey = "nextBot";
+    actionButtonText = gameButtons.nextBot || "Następny bot";
     actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextPhase) {
-    actionButtonText = "Koniec fazy";
+    actionKey = "nextPhase";
+    actionButtonText = getUiString(
+      nextPhaseNode,
+      gameButtons,
+      "gameButton",
+      "Koniec fazy"
+    );
     actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextRound) {
-    actionButtonText = "Koniec rundy";
+    actionKey = "nextRound";
+    actionButtonText = gameButtons.nextRound || "Koniec rundy";
     actionButtonAction = () => setShowActionModal(true);
   } else {
-    actionButtonText = "Koniec gry";
+    actionKey = "endGame";
+    actionButtonText = gameButtons.endGame || "Koniec gry";
     actionButtonAction = () => setShowActionModal(true);
   }
 
@@ -281,13 +451,20 @@ export default function AdvancedGame() {
         {/* Modal potwierdzenia dla dobrania karty */}
         <ConfirmModal
           isOpen={showDrawCardModal}
-          title="DOBIERZ KARTĘ"
-          message={"Dobrać nową kartę dla aktualnego Bota?"}
-          notes={
-            "Aktualny Bot nie jest w stanie wykonać przynajmniej jednego efektu z dostępnej karty."
+          title={drawLocalTitle ?? modalTitles.drawCard ?? "DOBIERZ KARTĘ"}
+          message={
+            getModalText("advancedGame", "drawCard").message ||
+            "Dobrać nową kartę dla aktualnego Bota?"
           }
-          confirmText="Dobierz kartę"
-          cancelText="Anuluj"
+          notes={
+            typeof drawLocal?.note1 === "string" ? (drawLocal.note1 as string) : undefined
+          }
+          confirmText={drawLocalConfirm ?? modalConfirm.drawCard ?? commonOk}
+          cancelText={
+            typeof modalCancel === "string"
+              ? modalCancel
+              : modalCancel || "Anuluj"
+          }
           onConfirm={() => {
             handleDrawCard();
             setShowDrawCardModal(false);
@@ -303,25 +480,39 @@ export default function AdvancedGame() {
           return (
             <ConfirmModal
               isOpen={showActionModal}
-              title={actionButtonText}
+              title={
+                actionKey === "nextPhase"
+                  ? getUiString(
+                      nextPhaseNode,
+                      modalTitles,
+                      "modalTitle",
+                      actionButtonText
+                    )
+                  : modalTitles[actionKey] || actionButtonText
+              }
               message={message}
               notes={notes}
               confirmText={
-                actionButtonText === "Następny bot"
-                  ? "Tak, następny"
-                  : actionButtonText === "Koniec fazy"
-                  ? "Zakończ fazę"
-                  : actionButtonText === "Koniec rundy"
-                  ? "Zakończ rundę"
-                  : "Zakończ grę"
+                actionKey === "nextPhase"
+                  ? getUiString(
+                      nextPhaseNode,
+                      modalConfirm,
+                      "modalConfirm",
+                      commonOk
+                    )
+                  : modalConfirm[actionKey] ?? commonOk
               }
-              cancelText="Anuluj"
+              cancelText={
+                typeof modalCancel === "string"
+                  ? modalCancel
+                  : modalCancel || "Anuluj"
+              }
               onConfirm={() => {
-                if (actionButtonText === "Następny bot") {
+                if (actionKey === "nextBot") {
                   game.nextPlayer();
-                } else if (actionButtonText === "Koniec fazy") {
+                } else if (actionKey === "nextPhase") {
                   game.nextPhase();
-                } else if (actionButtonText === "Koniec rundy") {
+                } else if (actionKey === "nextRound") {
                   game.nextRound();
                 } else {
                   // Koniec gry
