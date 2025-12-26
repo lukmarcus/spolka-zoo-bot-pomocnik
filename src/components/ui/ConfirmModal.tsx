@@ -62,6 +62,15 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         )}
 
         <div className="content">
+          {notes && (
+            <div className={styles.notesOnly}>
+              {notes.split("\n").map((line, i) => (
+                <p key={`note-${i}`} className={styles.notesText}>
+                  <em>{line}</em>
+                </p>
+              ))}
+            </div>
+          )}
           {message.split("\n").map((line, index) => (
             <p
               key={index}
@@ -76,13 +85,6 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               {line}
             </p>
           ))}
-          {notes && (
-            <div className={styles.notesOnly}>
-              <p className={styles.notesText}>
-                <em>{notes}</em>
-              </p>
-            </div>
-          )}
         </div>
 
         <div className={styles.threeButtonHorizontal}>

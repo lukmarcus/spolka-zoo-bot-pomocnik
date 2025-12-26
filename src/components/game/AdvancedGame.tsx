@@ -66,60 +66,70 @@ export default function AdvancedGame() {
   // Czy aktualny gracz jest ostatnim graczem
   const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
 
+  // Oblicz indeks gracza, który zacznie następną fazę
+  const firstBotIndex = state.players.findIndex((p) => p.isBot);
+  const nextPhaseStartIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+  const willBeFirstInNextPhase =
+    state.currentPlayerIndex === nextPhaseStartIndex;
+
   // Tekst dla modalu akcji drugiego przycisku
   const getActionModalMessage = (): { message: string; notes?: string } => {
+    // Determine base message per action (keep original strings unchanged)
     if (actionButtonText === "Następny bot") {
-      if (isNextBotAdjacent) {
-        return {
-          message: "Czy dobrać kartę dla następnego bota w tej fazie?",
-          notes: "Przejdziemy do następnego bota w tej fazie i dobierzemy dla niego kartę.",
-        };
-      } else {
-        return {
-          message: "Czy faza tego bota została już rozegrana?",
-          notes:
-            "Przed potwierdzeniem rozegraj fazę graczy między obecnym botem a następnym botem.",
-        };
-      }
-    } else if (actionButtonText === "Koniec fazy") {
-      if (isLastPlayer) {
-        return {
-          message: "Wszyscy gracze rozegrali obecną fazę. Czy przejść do następnej fazy?",
-          notes: "Po przejściu do następnej fazy rozpocznie ją pierwszy bot.",
-        };
-      } else {
-        return {
-          message: "Rozegraj fazy wszystkich graczy i potwierdź.",
-          notes: "Po potwierdzeniu faza zostanie zakończona i przejdziemy dalej.",
-        };
-      }
-    } else if (actionButtonText === "Koniec rundy") {
-      if (isLastPlayer) {
-        return {
-          message: "Wszyscy gracze rozegrali fazy w tej rundzie. Czy przejść do następnej rundy?",
-          notes:
-            "Talia zostanie w razie potrzeby przetasowana, a pierwszy gracz zmieniony.",
-        };
-      } else {
-        return {
-          message: "Rozegraj fazy wszystkich graczy w tej rundzie i potwierdź.",
-          notes: "Po potwierdzeniu zakończymy rundę i przejdziemy do kolejnej.",
-        };
-      }
-    } else {
-      // Koniec gry
-      if (isLastPlayer) {
-        return {
-          message: "Wszyscy gracze rozegrali fazy w tej rundzie. Czy przejść do końca gry?",
-          notes: "Po potwierdzeniu nastąpi powrót do menu i reset stanu gry.",
-        };
-      } else {
-        return {
-          message: "Rozegraj rundę do końca i potwierdź.",
-          notes: "Po potwierdzeniu gra zostanie zakończona.",
-        };
-      }
+      const message = "Dobrać kartę dla kolejnego Bota w tej fazie?";
+      const notes = isNextBotAdjacent
+        ? "Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.\nPrzejdź do kolejnego Bota w tej fazie i dobierz dla niego kartę."
+        : "Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.\nZanim przejdziesz do kolejnego Bota w tej fazie i dobierzesz dla niego kartę, rozegraj fazę gracza pomiędzy Botami.";
+      return { message, notes };
     }
+
+    if (actionButtonText === "Koniec fazy") {
+      // message differs only by punctuation depending on whether current player is last
+      const message = "Zakończyć aktualną fazę i przejść do następnej?";
+
+      // notes vary by the four logical cases; keep original note strings
+      if (!isLastPlayer && !willBeFirstInNextPhase) {
+        return {
+          message,
+          notes:
+            "Nie wszyscy gracze rozegrali aktualną fazę.\nZanim przejdziesz do następnej fazy i dobierzesz kartę dla Bota, rozegraj fazę gracza w aktualnej fazie oraz fazę gracza w nowej fazie przed Botem.",
+        };
+      }
+      if (!isLastPlayer && willBeFirstInNextPhase) {
+        return {
+          message,
+          notes:
+            "Nie wszyscy gracze rozegrali aktualną fazę.\nZanim przejdziesz do następnej fazy i dobierzesz kartę dla Bota, rozegraj fazę gracza w aktualnej fazie.",
+        };
+      }
+      if (isLastPlayer && !willBeFirstInNextPhase) {
+        return {
+          message,
+          notes:
+            "Wszyscy gracze rozegrali aktualną fazę.\nZanim przejdziesz do następnej fazy i dobierzesz kartę dla Bota, rozegraj fazę gracza w nowej fazie przed Botem.",
+        };
+      }
+      return {
+        message,
+        notes:
+          "Wszyscy gracze rozegrali aktualną fazę.\nPrzejdź do następnej fazy i dobierz kartę dla Bota.",
+      };
+    }
+
+    if (actionButtonText === "Koniec rundy") {
+      const message = "Przejść do następnej rundy?";
+      const notes = isLastPlayer
+        ? "Wszyscy gracze rozegrali fazy w tej rundzie.\nTalia zostanie w razie potrzeby przetasowana, a pierwszy gracz zmieniony."
+        : "Rozegraj fazy wszystkich graczy w tej rundzie i potwierdź.\nPo potwierdzeniu zakończemy rundę i przejdziemy do kolejnej.";
+      return { message, notes };
+    }
+
+    // Koniec gry
+    const message = "Przejść do końca gry?";
+    const notes = isLastPlayer
+      ? "Wszyscy gracze rozegrali fazy w tej rundzie.\nPo potwierdzeniu nastąpi powrót do menu i reset stanu gry."
+      : "Rozegraj rundę do końca i potwierdź.\nPo potwierdzeniu gra zostanie zakończona.";
+    return { message, notes };
   };
 
   // Dynamiczny tekst i akcja przycisku
@@ -272,11 +282,11 @@ export default function AdvancedGame() {
         <ConfirmModal
           isOpen={showDrawCardModal}
           title="DOBIERZ KARTĘ"
-            message={"Czy dobrać nową kartę dla aktualnego bota?"}
-            notes={
-              "Obecna karta nie daje żadnych możliwych efektów dla tego bota."
-            }
-          confirmText="Dobierz"
+          message={"Dobrać nową kartę dla aktualnego Bota?"}
+          notes={
+            "Aktualny Bot nie jest w stanie wykonać przynajmniej jednego efektu z dostępnej karty."
+          }
+          confirmText="Dobierz kartę"
           cancelText="Anuluj"
           onConfirm={() => {
             handleDrawCard();
@@ -326,7 +336,6 @@ export default function AdvancedGame() {
             />
           );
         })()}
-        
       </div>
 
       <BottomControls onBackClick={() => navigate("/")} />
