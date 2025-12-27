@@ -3,17 +3,18 @@
     "drawCard": {
       "gameButton": "Dobierz kartę",
       "modalTitle": "Dobierz kartę",
-      "note1": "Aktualny Bot nie jest w stanie wykonać przynajmniej jednego efektu z dostępnej karty.",
+      "note1": "Ten Bot nie jest w stanie wykonać przynajmniej jednego efektu z dostępnej karty.",
       "message": "Dobrać nową kartę dla aktualnego Bota?"
     },
     "nextBot": {
       "gameButton": "Następny bot",
       "modalTitle": "Następny bot",
-      "note1": "Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
+      "note1": "Ten Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
-        "adjacent": "Przejdź do kolejnego Bota w tej fazie i dobierz dla niego kartę.",
-        "withPlayers": "Zanim przejdziesz do kolejnego Bota w tej fazie i dobierzesz dla niego kartę, rozegraj fazę gracza pomiędzy Botami."
+        "adjacent": "Przejdź do kolejnego Bota w tej fazie.",
+        "withPlayers": "Najpierw rozegraj fazę graczy pomiędzy Botami, a dopiero później potwierdź przejście do kolejnego Bota w tej fazie."
       },
+      "note3": "Zostanie dobrana karta dla kolejnego Bota w tej fazie.",
       "message": "Dobrać kartę dla kolejnego Bota w tej fazie?"
     },
     "nextPhase": {
@@ -24,14 +25,18 @@
         "notLast": "Ten Bot nie jest ostatnim graczem w aktualnej fazie."
       },
       "note2": {
-        "first": "Pierwszym graczem następnej fazy jest Bot.",
-        "notFirst": "Pierwszym graczem następnej fazy nie jest Bot."
+        "first": "Pierwszym graczem w następnej fazie jest Bot.",
+        "notFirst": "Pierwszym graczem w następnej fazie nie jest Bot."
       },
       "note3": {
-        "last_first": "Potwierdź przejście do następnej fazy i dobierz kartę dla pierwszego Bota.",
-        "last_notFirst": "Najpierw rozegraj nową fazę dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej fazy (czyli dobranie karty dla pierwszego Bota).",
-        "notLast_first": "Najpierw rozegraj aktualną fazę dla pozostałych graczy, a dopiero później potwierdź przejście do następnej fazy (czyli dobranie karty dla pierwszego Bota).",
-        "notLast_notFirst": "Najpierw rozegraj aktualną fazę dla pozostałych graczy, następnie rozegraj nową fazę dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej fazy (czyli dobranie karty dla pierwszego Bota)."
+        "last_first": "Potwierdź przejście do następnej fazy.",
+        "last_notFirst": "Najpierw rozegraj nową fazę dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej fazy.",
+        "notLast_first": "Najpierw rozegraj aktualną fazę dla pozostałych graczy, a dopiero później potwierdź przejście do następnej fazy.",
+        "notLast_notFirst": "Najpierw rozegraj aktualną fazę dla pozostałych graczy, następnie rozegraj nową fazę dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej fazy."
+      },
+      "note4": {
+        "single": "Zostanie dobrana karta dla Bota w następnej fazie.",
+        "multiple": "Zostanie dobrana karta dla pierwszego Bota w następnej fazie."
       },
       "message": "Przejść do następnej fazy?"
     },
@@ -52,18 +57,27 @@
       "gameButton": "Następna runda",
       "modalTitle": "Następna runda",
       "note1": {
-        "last": "Wszyscy gracze rozegrali fazy w tej rundzie.",
-        "notLast": "Rozegraj fazy wszystkich graczy w tej rundzie."
+        "last": "Ten Bot jest ostatnim graczem w aktualnej (ostatniej) fazie tej rundy.",
+        "notLast": "Ten Bot nie jest ostatnim graczem w aktualnej (ostatniej) fazie tej rundy."
       },
       "note2": {
-        "first": "Pierwszym graczem następnej rundy jest Bot.",
-        "notFirst": "Pierwszym graczem następnej rundy nie jest Bot."
+        "first": "Pierwszym graczem w pierwszej fazie następnej rundy jest Bot.",
+        "notFirst": "Pierwszym graczem w pierwszej fazie następnej rundy nie jest Bot."
       },
       "note3": {
-        "last_first": "Talia zostanie w razie potrzeby przetasowana, a pierwszy gracz zmieniony. Dobierz kartę dla pierwszego Bota.",
-        "last_notFirst": "Talia zostanie w razie potrzeby przetasowana, a pierwszy gracz zmieniony. Najpierw rozegraj nową rundę dla graczy przed pierwszym Botem, a dopiero później dobierz kartę dla pierwszego Bota.",
-        "notLast_first": "Po potwierdzeniu zakończymy rundę i przejdziemy do kolejnej. Dobierz kartę dla pierwszego Bota.",
-        "notLast_notFirst": "Po potwierdzeniu zakończymy rundę i przejdziemy do kolejnej. Najpierw rozegraj nową rundę dla graczy przed pierwszym Botem, a dopiero później dobierz kartę dla pierwszego Bota."
+        "last_first": "Potwierdź przejście do następnej rundy.",
+        "last_notFirst": "Najpierw rozegraj pierwszą fazę w nowej rundzie dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej rundy.",
+        "notLast_first": "Najpierw rozegraj aktualną (ostatnią) fazę tej rundy do końca dla pozostałych graczy, a dopiero później potwierdź przejście do następnej rundy.",
+        "notLast_notFirst": "Najpierw rozegraj aktualną (ostatnią) fazę tej rundy do końca dla pozostałych graczy, następnie rozegraj pierwszą fazę w nowej rundzie dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej rundy."
+      },
+      "note4": {
+        "single": "Talia Bota zostanie przetasowana.",
+        "multiple_shared": "Wspólna talia Botów zostanie przetasowana.",
+        "multiple_individual": "Osobne talie Botów zostaną przetasowane."
+      },
+      "note5": {
+        "single": "Zostanie dobrana karta dla Bota w pierwszej fazie następnej rundy.",
+        "multiple": "Zostanie dobrana karta dla pierwszego Bota w pierwszej fazie następnej rundy."
       },
       "message": "Przejść do następnej rundy?"
     },

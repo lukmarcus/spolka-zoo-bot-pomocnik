@@ -68,11 +68,18 @@ export default function AdvancedGame() {
   // Czy aktualny gracz jest ostatnim graczem
   const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
 
-  // Oblicz indeks gracza, który zacznie następną fazę
+  // Oblicz indeks gracza, który zacznie następną fazę (w tej samej rundzie)
   const firstBotIndex = state.players.findIndex((p) => p.isBot);
   const nextPhaseStartIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
   const willBeFirstInNextPhase =
     state.currentPlayerIndex === nextPhaseStartIndex;
+
+  // Oblicz indeks gracza, który zacznie następną runę
+  const nextRoundStartIndex =
+    (state.currentPlayerIndex! + 1) % state.players.length;
+
+  const isFirstInNextRoundABot =
+    state.players[nextRoundStartIndex]?.isBot ?? false;
 
   // Tekst dla modalu akcji drugiego przycisku — pobierany z modalTexts.json
   const getActionModalMessage = (): { message: string; notes?: string } => {
@@ -105,9 +112,16 @@ export default function AdvancedGame() {
           ? (nextBotNode?.note2 as Record<string, string>)[note2Key]
           : undefined;
 
+      // note3 is a simple string
+      const note3Text =
+        typeof nextBotNode?.note3 === "string"
+          ? (nextBotNode.note3 as string)
+          : undefined;
+
       const notesParts: string[] = [];
       if (note1Text) notesParts.push(note1Text);
       if (note2Text) notesParts.push(note2Text);
+      if (note3Text) notesParts.push(note3Text);
 
       return {
         message: baseMessage,
@@ -127,6 +141,10 @@ export default function AdvancedGame() {
         willBeFirstInNextPhase ? "first" : "notFirst"
       }`;
 
+      // choose note4: depends on bot count only
+      const botCount = state.players!.filter((p) => p.isBot).length;
+      const note4Key = botCount === 1 ? "single" : "multiple";
+
       const base = getModalText("advancedGame", "nextPhase.message");
       const note1 = getModalText("advancedGame", `nextPhase.note1.${note1Key}`);
       const note2 = getModalText("advancedGame", `nextPhase.note2.${note2Key}`);
@@ -134,6 +152,7 @@ export default function AdvancedGame() {
         "advancedGame",
         `nextPhase.note3.${note3Variant}`
       );
+      const note4 = getModalText("advancedGame", `nextPhase.note4.${note4Key}`);
 
       const baseMessage =
         base?.message ?? "Zakończyć obecną fazę i przejść do następnej?";
@@ -142,12 +161,18 @@ export default function AdvancedGame() {
         modalTexts as unknown as {
           advancedGame?: AdvancedGameTexts;
         }
-      )?.advancedGame?.nextPhase?.noteOrder ?? ["note1", "note2", "note3"];
+      )?.advancedGame?.nextPhase?.noteOrder ?? [
+        "note1",
+        "note2",
+        "note3",
+        "note4",
+      ];
 
       const noteMap: Record<string, string | undefined> = {
         note1: note1?.message,
         note2: note2?.message,
         note3: note3?.message,
+        note4: note4?.message,
       };
 
       const notesParts: string[] = noteOrder
@@ -164,13 +189,27 @@ export default function AdvancedGame() {
       // choose note1: whether bot is last or not
       const note1Key = isLastPlayer ? "last" : "notLast";
 
-      // choose note2: 'first' or 'notFirst'
-      const note2Key = willBeFirstInNextPhase ? "first" : "notFirst";
+      // choose note2: 'first' or 'notFirst' - first player of NEXT ROUND
+      const note2Key = isFirstInNextRoundABot ? "first" : "notFirst";
 
-      // choose note3: depends on last/notLast and willBeFirst
+      // choose note3: depends on last/notLast and first player of next round
       const note3Variant = `${isLastPlayer ? "last" : "notLast"}_${
-        willBeFirstInNextPhase ? "first" : "notFirst"
+        isFirstInNextRoundABot ? "first" : "notFirst"
       }`;
+
+      // choose note4: depends on bot count and deck mode
+      const botCount = state.players!.filter((p) => p.isBot).length;
+      let note4Key: string;
+      if (botCount === 1) {
+        note4Key = "single";
+      } else if (state.mode === "shared") {
+        note4Key = "multiple_shared";
+      } else {
+        note4Key = "multiple_individual";
+      }
+
+      // choose note5: depends on bot count only
+      const note5Key = botCount === 1 ? "single" : "multiple";
 
       const base = getModalText("advancedGame", "nextRound.message");
       const note1 = getModalText("advancedGame", `nextRound.note1.${note1Key}`);
@@ -179,20 +218,29 @@ export default function AdvancedGame() {
         "advancedGame",
         `nextRound.note3.${note3Variant}`
       );
+      const note4 = getModalText("advancedGame", `nextRound.note4.${note4Key}`);
+      const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
 
-      const baseMessage =
-        base?.message ?? "Przejść do następnej rundy?";
+      const baseMessage = base?.message ?? "Przejść do następnej rundy?";
       // build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
       const noteOrder: string[] = (
         modalTexts as unknown as {
           advancedGame?: AdvancedGameTexts;
         }
-      )?.advancedGame?.nextRound?.noteOrder ?? ["note1", "note2", "note3"];
+      )?.advancedGame?.nextRound?.noteOrder ?? [
+        "note1",
+        "note2",
+        "note3",
+        "note4",
+        "note5",
+      ];
 
       const noteMap: Record<string, string | undefined> = {
         note1: note1?.message,
         note2: note2?.message,
         note3: note3?.message,
+        note4: note4?.message,
+        note5: note5?.message,
       };
 
       const notesParts: string[] = noteOrder
@@ -230,6 +278,8 @@ export default function AdvancedGame() {
     note1?: Record<string, string>;
     note2?: Record<string, string>;
     note3?: Record<string, string>;
+    note4?: Record<string, string>;
+    note5?: Record<string, string>;
   };
 
   type AdvancedGameTexts = {
@@ -245,7 +295,6 @@ export default function AdvancedGame() {
 
   const uiRoot = (modalTexts as unknown as { advancedGame?: AdvancedGameTexts })
     ?.advancedGame as UiRoot | undefined;
-  const gameButtons = uiRoot?.gameButtons ?? {};
   const modalTitles = uiRoot?.modalTitles ?? {};
   const modalConfirm = uiRoot?.modalConfirm ?? {};
   // new: prefer nextPhase-local strings if present
@@ -291,32 +340,53 @@ export default function AdvancedGame() {
     typeof drawLocal?.modalConfirm === "string"
       ? (drawLocal.modalConfirm as string)
       : undefined;
+
+  const nextBotNode = advancedTexts?.advancedGame?.nextBot as
+    | Record<string, unknown>
+    | undefined;
+  const nextRoundNode = advancedTexts?.advancedGame?.nextRound as
+    | Record<string, unknown>
+    | undefined;
+  const endGameNode = advancedTexts?.advancedGame?.endGame as
+    | Record<string, unknown>
+    | undefined;
+
   const commonOk = uiRoot?.common?.modalOk ?? "Tak";
 
   let actionKey: "nextBot" | "nextPhase" | "nextRound" | "endGame" = "nextBot";
-  let actionButtonText = gameButtons.nextBot || "Następny bot";
+  let actionButtonText: string;
   let actionButtonAction: () => void;
 
   if (hasNextBot) {
     actionKey = "nextBot";
-    actionButtonText = gameButtons.nextBot || "Następny bot";
+    actionButtonText = getUiString(
+      nextBotNode,
+      undefined,
+      "gameButton",
+      ""
+    );
     actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextPhase) {
     actionKey = "nextPhase";
     actionButtonText = getUiString(
       nextPhaseNode,
-      gameButtons,
+      undefined,
       "gameButton",
-      "Koniec fazy"
+      ""
     );
     actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextRound) {
     actionKey = "nextRound";
-    actionButtonText = gameButtons.nextRound || "Koniec rundy";
+    actionButtonText = getUiString(
+      nextRoundNode,
+      undefined,
+      "gameButton",
+      ""
+    );
     actionButtonAction = () => setShowActionModal(true);
   } else {
     actionKey = "endGame";
-    actionButtonText = gameButtons.endGame || "Koniec gry";
+    actionButtonText = (endGameNode?.gameButton as string) || "";
     actionButtonAction = () => setShowActionModal(true);
   }
 
@@ -457,7 +527,9 @@ export default function AdvancedGame() {
             "Dobrać nową kartę dla aktualnego Bota?"
           }
           notes={
-            typeof drawLocal?.note1 === "string" ? (drawLocal.note1 as string) : undefined
+            typeof drawLocal?.note1 === "string"
+              ? (drawLocal.note1 as string)
+              : undefined
           }
           confirmText={drawLocalConfirm ?? modalConfirm.drawCard ?? commonOk}
           cancelText={
@@ -481,26 +553,54 @@ export default function AdvancedGame() {
             <ConfirmModal
               isOpen={showActionModal}
               title={
-                actionKey === "nextPhase"
+                actionKey === "nextBot"
+                  ? getUiString(
+                      nextBotNode,
+                      undefined,
+                      "modalTitle",
+                      ""
+                    )
+                  : actionKey === "nextPhase"
                   ? getUiString(
                       nextPhaseNode,
-                      modalTitles,
+                      undefined,
                       "modalTitle",
-                      actionButtonText
+                      ""
                     )
-                  : modalTitles[actionKey] || actionButtonText
+                  : actionKey === "nextRound"
+                  ? getUiString(
+                      nextRoundNode,
+                      undefined,
+                      "modalTitle",
+                      ""
+                    )
+                  : (endGameNode?.modalTitle as string) || ""
               }
               message={message}
               notes={notes}
               confirmText={
-                actionKey === "nextPhase"
+                actionKey === "nextBot"
                   ? getUiString(
-                      nextPhaseNode,
-                      modalConfirm,
+                      nextBotNode,
+                      undefined,
                       "modalConfirm",
                       commonOk
                     )
-                  : modalConfirm[actionKey] ?? commonOk
+                  : actionKey === "nextPhase"
+                  ? getUiString(
+                      nextPhaseNode,
+                      undefined,
+                      "modalConfirm",
+                      commonOk
+                    )
+                  : actionKey === "nextRound"
+                  ? getUiString(
+                      nextRoundNode,
+                      undefined,
+                      "modalConfirm",
+                      commonOk
+                    )
+                  : (endGameNode?.modalConfirm as string) || commonOk
               }
               cancelText={
                 typeof modalCancel === "string"
