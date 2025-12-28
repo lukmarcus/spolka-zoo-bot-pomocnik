@@ -3,42 +3,44 @@
     "drawCard": {
       "gameButton": "Dobierz kartę",
       "modalTitle": "Dobierz kartę",
-      "note1": "Ten Bot nie jest w stanie wykonać przynajmniej jednego efektu z dostępnej karty.",
+      "note1": "- Aktualny Bot nie jest w stanie wykonać żadnego efektu z dostępnej karty.",
+      "note2": "- Potwierdź dobranie nowej karty.",
       "message": "Dobrać nową kartę dla aktualnego Bota?"
     },
     "nextBot": {
       "gameButton": "Następny bot",
       "modalTitle": "Następny bot",
-      "note1": "Ten Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
+      "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
-        "adjacent": "Przejdź do kolejnego Bota w tej fazie.",
-        "withPlayers": "Najpierw rozegraj fazę graczy pomiędzy Botami, a dopiero później potwierdź przejście do kolejnego Bota w tej fazie."
+        "adjacent": "• Potwierdź przejście do kolejnego Bota w tej fazie Akcji.",
+        "withPlayers": "• Zanim potwierdzisz przejście do kolejnego Bota w tej fazie Akcji, zagraj żetony Akcji graczy pomiędzy aktualnym i następnym Botem."
       },
-      "note3": "Zostanie dobrana karta dla kolejnego Bota w tej fazie.",
-      "message": "Dobrać kartę dla kolejnego Bota w tej fazie?"
+      "note3": "• Dla kolejnego Bota w tej fazie Akcji zostanie dobrana nowa karta.",
+      "message": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?"
     },
     "nextPhase": {
-      "gameButton": "Następna faza",
-      "modalTitle": "Następna faza",
-      "note1": {
-        "last": "Ten Bot jest ostatnim graczem w aktualnej fazie.",
-        "notLast": "Ten Bot nie jest ostatnim graczem w aktualnej fazie."
-      },
+      "gameButton": "Następna faza Akcji",
+      "modalTitle": "Następna faza Akcji",
+      "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
-        "first": "Pierwszym graczem w następnej fazie jest Bot.",
-        "notFirst": "Pierwszym graczem w następnej fazie nie jest Bot."
+        "last": "• Aktualny Bot jest ostatnim graczem w aktualnej fazie Akcji.",
+        "notLast": "• Aktualny Bot nie jest ostatnim graczem w aktualnej fazie Akcji."
       },
       "note3": {
-        "last_first": "Potwierdź przejście do następnej fazy.",
-        "last_notFirst": "Najpierw rozegraj nową fazę dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej fazy.",
-        "notLast_first": "Najpierw rozegraj aktualną fazę dla pozostałych graczy, a dopiero później potwierdź przejście do następnej fazy.",
-        "notLast_notFirst": "Najpierw rozegraj aktualną fazę dla pozostałych graczy, następnie rozegraj nową fazę dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej fazy."
+        "first": "• Bot jest pierwszym graczem w następnej fazie Akcji.",
+        "notFirst": "• Bot nie jest pierwszym graczem w następnej fazie Akcji."
       },
       "note4": {
-        "single": "Zostanie dobrana karta dla Bota w następnej fazie.",
-        "multiple": "Zostanie dobrana karta dla pierwszego Bota w następnej fazie."
+        "last_first": "• Potwierdź przejście do następnej fazy Akcji.",
+        "last_notFirst": "• Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy przed pierwszym Botem w następnej fazie Akcji.",
+        "notLast_first": "• Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy po aktualnym Bocie w aktualnej fazie Akcji.",
+        "notLast_notFirst": "• Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy po aktualnym Bocie w aktualnej fazie Akcji oraz żetony Akcji graczy przed pierwszym Botem w następnej fazie Akcji."
       },
-      "message": "Przejść do następnej fazy?"
+      "note5": {
+        "single": "• Dla Bota w następnej fazie Akcji zostanie dobrana karta.",
+        "multiple": "• Dla pierwszego Bota w następnej fazie Akcji zostanie dobrana karta."
+      },
+      "message": "Przejść do następnej fazy Akcji?"
     },
     "gameButtons": {
       "endGame": "Koniec gry"
