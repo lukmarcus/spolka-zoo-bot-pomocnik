@@ -189,40 +189,41 @@ export default function AdvancedGame() {
     }
 
     if (actionKey === "nextRound") {
-      // choose note1: whether bot is last or not
-      const note1Key = isLastPlayer ? "last" : "notLast";
+      // choose note2: whether bot is last or not
+      const note2Key = isLastPlayer ? "last" : "notLast";
 
-      // choose note2: 'first' or 'notFirst' - first player of NEXT ROUND
-      const note2Key = isFirstInNextRoundABot ? "first" : "notFirst";
+      // choose note3: 'first' or 'notFirst' - first player of NEXT ROUND
+      const note3Key = isFirstInNextRoundABot ? "first" : "notFirst";
 
-      // choose note3: depends on last/notLast and first player of next round
-      const note3Variant = `${isLastPlayer ? "last" : "notLast"}_${
+      // choose note4: depends on last/notLast and first player of next round
+      const note4Variant = `${isLastPlayer ? "last" : "notLast"}_${
         isFirstInNextRoundABot ? "first" : "notFirst"
       }`;
 
-      // choose note4: depends on bot count and deck mode
+      // choose note5: depends on bot count and deck mode
       const botCount = state.players!.filter((p) => p.isBot).length;
-      let note4Key: string;
+      let note5Key: string;
       if (botCount === 1) {
-        note4Key = "single";
+        note5Key = "single";
       } else if (state.mode === "shared") {
-        note4Key = "multiple_shared";
+        note5Key = "multiple_shared";
       } else {
-        note4Key = "multiple_individual";
+        note5Key = "multiple_individual";
       }
 
-      // choose note5: depends on bot count only
-      const note5Key = botCount === 1 ? "single" : "multiple";
+      // choose note6: depends on bot count only
+      const note6Key = botCount === 1 ? "single" : "multiple";
 
       const base = getModalText("advancedGame", "nextRound.message");
-      const note1 = getModalText("advancedGame", `nextRound.note1.${note1Key}`);
+      const note1 = getModalText("advancedGame", "nextRound.note1");
       const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
-      const note3 = getModalText(
+      const note3 = getModalText("advancedGame", `nextRound.note3.${note3Key}`);
+      const note4 = getModalText(
         "advancedGame",
-        `nextRound.note3.${note3Variant}`
+        `nextRound.note4.${note4Variant}`
       );
-      const note4 = getModalText("advancedGame", `nextRound.note4.${note4Key}`);
       const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
+      const note6 = getModalText("advancedGame", `nextRound.note6.${note6Key}`);
 
       const baseMessage = base?.message ?? "Przejść do następnej rundy?";
       // build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
@@ -236,6 +237,7 @@ export default function AdvancedGame() {
         "note3",
         "note4",
         "note5",
+        "note6",
       ];
 
       const noteMap: Record<string, string | undefined> = {
@@ -244,6 +246,7 @@ export default function AdvancedGame() {
         note3: note3?.message,
         note4: note4?.message,
         note5: note5?.message,
+        note6: note6?.message,
       };
 
       const notesParts: string[] = noteOrder
@@ -336,8 +339,8 @@ export default function AdvancedGame() {
     | Record<string, unknown>
     | undefined;
   const drawLocalTitle =
-    typeof drawLocal?.modalTitle === "string"
-      ? (drawLocal.modalTitle as string)
+    typeof drawLocal?.title === "string"
+      ? (drawLocal.title as string)
       : undefined;
   const drawLocalConfirm =
     typeof drawLocal?.modalConfirm === "string"
@@ -362,19 +365,19 @@ export default function AdvancedGame() {
 
   if (hasNextBot) {
     actionKey = "nextBot";
-    actionButtonText = getUiString(nextBotNode, undefined, "gameButton", "");
+    actionButtonText = getUiString(nextBotNode, undefined, "title", "");
     actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextPhase) {
     actionKey = "nextPhase";
-    actionButtonText = getUiString(nextPhaseNode, undefined, "gameButton", "");
+    actionButtonText = getUiString(nextPhaseNode, undefined, "title", "");
     actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextRound) {
     actionKey = "nextRound";
-    actionButtonText = getUiString(nextRoundNode, undefined, "gameButton", "");
+    actionButtonText = getUiString(nextRoundNode, undefined, "title", "");
     actionButtonAction = () => setShowActionModal(true);
   } else {
     actionKey = "endGame";
-    actionButtonText = (endGameNode?.gameButton as string) || "";
+    actionButtonText = (endGameNode?.title as string) || "";
     actionButtonAction = () => setShowActionModal(true);
   }
 
@@ -556,12 +559,12 @@ export default function AdvancedGame() {
               isOpen={showActionModal}
               title={
                 actionKey === "nextBot"
-                  ? getUiString(nextBotNode, undefined, "modalTitle", "")
+                  ? getUiString(nextBotNode, undefined, "title", "")
                   : actionKey === "nextPhase"
-                  ? getUiString(nextPhaseNode, undefined, "modalTitle", "")
-                  : actionKey === "nextRound"
-                  ? getUiString(nextRoundNode, undefined, "modalTitle", "")
-                  : (endGameNode?.modalTitle as string) || ""
+                    ? getUiString(nextPhaseNode, undefined, "title", "")
+                    : actionKey === "nextRound"
+                      ? getUiString(nextRoundNode, undefined, "title", "")
+                      : (endGameNode?.title as string) || ""
               }
               message={message}
               notes={notes}

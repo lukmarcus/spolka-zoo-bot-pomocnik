@@ -1,15 +1,13 @@
 {
   "advancedGame": {
     "drawCard": {
-      "gameButton": "Dobierz kartę",
-      "modalTitle": "Dobierz kartę",
+      "title": "Dobierz kartę",
       "note1": "- Aktualny Bot nie jest w stanie wykonać żadnego efektu z dostępnej karty.",
       "note2": "- Potwierdź dobranie nowej karty.",
       "message": "Dobrać nową kartę dla aktualnego Bota?"
     },
     "nextBot": {
-      "gameButton": "Następny bot",
-      "modalTitle": "Następny bot",
+      "title": "Następny bot",
       "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
         "adjacent": "• Potwierdź przejście do kolejnego Bota w tej fazie Akcji.",
@@ -19,8 +17,7 @@
       "message": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?"
     },
     "nextPhase": {
-      "gameButton": "Następna faza Akcji",
-      "modalTitle": "Następna faza Akcji",
+      "title": "Następna faza Akcji",
       "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
         "last": "• Aktualny Bot jest ostatnim graczem w aktualnej fazie Akcji.",
@@ -42,12 +39,6 @@
       },
       "message": "Przejść do następnej fazy Akcji?"
     },
-    "gameButtons": {
-      "endGame": "Koniec gry"
-    },
-    "modalTitles": {
-      "endGame": "Koniec gry"
-    },
     "modalConfirm": {
       "endGame": "Zakończ grę"
     },
@@ -56,34 +47,35 @@
       "modalOk": "Tak"
     },
     "nextRound": {
-      "gameButton": "Następna runda",
-      "modalTitle": "Następna runda",
-      "note1": {
-        "last": "Ten Bot jest ostatnim graczem w aktualnej (ostatniej) fazie tej rundy.",
-        "notLast": "Ten Bot nie jest ostatnim graczem w aktualnej (ostatniej) fazie tej rundy."
-      },
+      "title": "Następna runda",
+      "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
+        "last": "Ten Bot jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji tej rundy.",
+        "notLast": "Ten Bot nie jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji tej rundy."
+      },
+      "note3": {
         "first": "Pierwszym graczem w pierwszej fazie następnej rundy jest Bot.",
         "notFirst": "Pierwszym graczem w pierwszej fazie następnej rundy nie jest Bot."
       },
-      "note3": {
+      "note4": {
         "last_first": "Potwierdź przejście do następnej rundy.",
         "last_notFirst": "Najpierw rozegraj pierwszą fazę w nowej rundzie dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej rundy.",
         "notLast_first": "Najpierw rozegraj aktualną (ostatnią) fazę tej rundy do końca dla pozostałych graczy, a dopiero później potwierdź przejście do następnej rundy.",
         "notLast_notFirst": "Najpierw rozegraj aktualną (ostatnią) fazę tej rundy do końca dla pozostałych graczy, następnie rozegraj pierwszą fazę w nowej rundzie dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej rundy."
       },
-      "note4": {
+      "note5": {
         "single": "Talia Bota zostanie przetasowana.",
         "multiple_shared": "Wspólna talia Botów zostanie przetasowana.",
         "multiple_individual": "Osobne talie Botów zostaną przetasowane."
       },
-      "note5": {
+      "note6": {
         "single": "Zostanie dobrana karta dla Bota w pierwszej fazie następnej rundy.",
         "multiple": "Zostanie dobrana karta dla pierwszego Bota w pierwszej fazie następnej rundy."
       },
       "message": "Przejść do następnej rundy?"
     },
     "endGame": {
+      "title": "Koniec gry",
       "last": {
         "message": "Przejść do końca gry?",
         "notes": [
