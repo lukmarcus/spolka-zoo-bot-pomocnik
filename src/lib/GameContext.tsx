@@ -153,11 +153,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         const botDeck = botDecks[botIdx];
         if (!botDeck || botDeck.cardSequence.length === 0) return state;
         const nextIndex = botDeck.currentCardIndex + 1;
+
+        // Jeśli osiągnęliśmy koniec talii, tasuj
         if (
           nextIndex >= botDeck.cardSequence.length ||
           nextIndex >= TOTAL_CARDS
-        )
-          return state;
+        ) {
+          botDecks[botIdx] = {
+            ...botDeck,
+            cardSequence: generateShuffledSequence(),
+            currentCardIndex: -1,
+            usedCards: [],
+          };
+          // Spróbuj dobrać kartę z nowej talii
+          return gameReducer({ ...state, botDecks }, { type: "DRAW_CARD" });
+        }
+
         const newUsedCards = [
           ...botDeck.usedCards,
           botDeck.cardSequence[nextIndex],
@@ -185,9 +196,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return state;
       }
       const nextIndex = currentCardIndex + 1;
+
+      // Jeśli osiągnęliśmy koniec talii, tasuj
       if (nextIndex >= cardSequence.length || nextIndex >= TOTAL_CARDS) {
-        return state;
+        const newState = {
+          ...state,
+          currentCardIndex: -1,
+          cardSequence: generateShuffledSequence(),
+          usedCards: [],
+        };
+        // Spróbuj dobrać kartę z nowej talii
+        return gameReducer(newState, { type: "DRAW_CARD" });
       }
+
       const newUsedCards = [...usedCards, cardSequence[nextIndex]];
       return {
         ...state,
@@ -518,37 +539,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return gameReducer(state, { type: "NEXT_PHASE" });
       }
 
-      // Przejdź do następnego bota
-
-      if (state.mode === "individual" && state.botDecks) {
-        const botDeck = state.botDecks[nextBotIndex];
-        if (botDeck) {
-          const newBotDecks = [...state.botDecks];
-          newBotDecks[nextBotIndex] = {
-            ...botDeck,
-            currentCardIndex: botDeck.currentCardIndex + 1,
-          };
-          return {
-            ...state,
-            currentPlayerIndex: nextBotIndex,
-            botDecks: newBotDecks,
-          };
-        }
-      }
-
-      // Tryb shared
-      if (state.mode === "shared") {
-        return {
-          ...state,
-          currentPlayerIndex: nextBotIndex,
-          currentCardIndex: (state.currentCardIndex ?? -1) + 1,
-        };
-      }
-
-      return {
+      // Zaktualizuj currentBot dla trybu individual - to indeks +1 (1-based)
+      const nextBot = nextBotIndex + 1;
+      const newState = {
         ...state,
         currentPlayerIndex: nextBotIndex,
+        currentBot: nextBot,
       };
+
+      // Dobrać kartę dla nowego gracza
+      return gameReducer(newState, { type: "DRAW_CARD" });
     }
 
     case "NEXT_PHASE": {
@@ -564,12 +564,17 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       // Znajdź pierwszego bota
       const firstBotIndex = state.players.findIndex((p) => p.isBot);
       const resetPlayerIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+      const nextBot = resetPlayerIndex + 1;
 
-      return {
+      const newState = {
         ...state,
         currentPhase: nextPhase,
         currentPlayerIndex: resetPlayerIndex,
+        currentBot: nextBot,
       };
+
+      // Dobrać kartę dla nowego gracza
+      return gameReducer(newState, { type: "DRAW_CARD" });
     }
 
     case "NEXT_ROUND": {
@@ -587,12 +592,51 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       const newStartingPlayer =
         (state.currentPlayerIndex! + 1) % state.players.length;
 
-      return {
+      // Znajdź pierwszego bota od gracza startowego
+      let firstBotInRound = newStartingPlayer;
+      while (firstBotInRound < state.players.length) {
+        if (state.players[firstBotInRound].isBot) break;
+        firstBotInRound++;
+      }
+      // Jeśli nie znaleziono bota, szukaj od początku
+      if (firstBotInRound >= state.players.length) {
+        firstBotInRound = state.players.findIndex((p) => p.isBot);
+      }
+      const nextBot = firstBotInRound >= 0 ? firstBotInRound + 1 : 1;
+
+      // Tasuj talię
+      let newBotDecks = state.botDecks;
+      let newCardSequence = state.cardSequence;
+      let newCurrentCardIndex = state.currentCardIndex;
+
+      if (state.mode === "individual" && state.botDecks) {
+        // W trybie individual, tasuj wszystkie talie botów
+        newBotDecks = state.botDecks.map((deck) => ({
+          ...deck,
+          cardSequence: generateShuffledSequence(),
+          currentCardIndex: -1,
+          usedCards: [],
+        }));
+      } else if (state.mode === "shared") {
+        // W trybie shared, tasuj wspólną talię
+        newCardSequence = generateShuffledSequence();
+        newCurrentCardIndex = -1;
+      }
+
+      const newState = {
         ...state,
         currentRound: nextRound,
         currentPhase: 1,
         currentPlayerIndex: newStartingPlayer,
+        currentBot: nextBot,
+        botDecks: newBotDecks,
+        cardSequence: newCardSequence,
+        currentCardIndex: newCurrentCardIndex,
+        usedCards: [],
       };
+
+      // Dobrać kartę dla pierwszego bota rundy
+      return gameReducer(newState, { type: "DRAW_CARD" });
     }
 
     default:

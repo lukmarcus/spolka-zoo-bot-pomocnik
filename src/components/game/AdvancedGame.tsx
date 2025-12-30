@@ -14,6 +14,8 @@ export default function AdvancedGame() {
   const game = useGame();
   const [showDrawCardModal, setShowDrawCardModal] = useState(false);
   const [showActionModal, setShowActionModal] = useState(false);
+  const [showActionInstructionsModal, setShowActionInstructionsModal] =
+    useState(false);
 
   const { state } = game;
 
@@ -68,11 +70,8 @@ export default function AdvancedGame() {
   // Czy aktualny gracz jest ostatnim graczem
   const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
 
-  // Oblicz indeks gracza, który zacznie następną fazę (w tej samej rundzie)
-  const firstBotIndex = state.players.findIndex((p) => p.isBot);
-  const nextPhaseStartIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
-  const willBeFirstInNextPhase =
-    state.currentPlayerIndex === nextPhaseStartIndex;
+  // Dla nextPhase: czy pierwszy gracz nowej fazy jest botem
+  const willBeFirstInNextPhase = isLastPlayer && state.players[0].isBot;
 
   // Oblicz indeks gracza, który zacznie następną runę
   const nextRoundStartIndex =
@@ -301,8 +300,7 @@ export default function AdvancedGame() {
 
   const uiRoot = (modalTexts as unknown as { advancedGame?: AdvancedGameTexts })
     ?.advancedGame as UiRoot | undefined;
-  const modalTitles = uiRoot?.modalTitles ?? {};
-  const modalConfirm = uiRoot?.modalConfirm ?? {};
+
   // new: prefer nextPhase-local strings if present
   const nextPhaseNode = (
     modalTexts as unknown as { advancedGame?: AdvancedGameTexts }
@@ -335,17 +333,6 @@ export default function AdvancedGame() {
   const advancedTexts = modalTexts as unknown as {
     advancedGame?: Record<string, unknown>;
   };
-  const drawLocal = advancedTexts?.advancedGame?.drawCard as
-    | Record<string, unknown>
-    | undefined;
-  const drawLocalTitle =
-    typeof drawLocal?.title === "string"
-      ? (drawLocal.title as string)
-      : undefined;
-  const drawLocalConfirm =
-    typeof drawLocal?.modalConfirm === "string"
-      ? (drawLocal.modalConfirm as string)
-      : undefined;
 
   const nextBotNode = advancedTexts?.advancedGame?.nextBot as
     | Record<string, unknown>
@@ -360,25 +347,15 @@ export default function AdvancedGame() {
   const commonOk = uiRoot?.common?.modalOk ?? "Tak";
 
   let actionKey: "nextBot" | "nextPhase" | "nextRound" | "endGame" = "nextBot";
-  let actionButtonText: string;
-  let actionButtonAction: () => void;
 
   if (hasNextBot) {
     actionKey = "nextBot";
-    actionButtonText = getUiString(nextBotNode, undefined, "title", "");
-    actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextPhase) {
     actionKey = "nextPhase";
-    actionButtonText = getUiString(nextPhaseNode, undefined, "title", "");
-    actionButtonAction = () => setShowActionModal(true);
   } else if (hasNextRound) {
     actionKey = "nextRound";
-    actionButtonText = getUiString(nextRoundNode, undefined, "title", "");
-    actionButtonAction = () => setShowActionModal(true);
   } else {
     actionKey = "endGame";
-    actionButtonText = (endGameNode?.title as string) || "";
-    actionButtonAction = () => setShowActionModal(true);
   }
 
   // Pobierz kartę z GameContext (używając getCurrentCard jak w GamePlay)
@@ -437,16 +414,22 @@ export default function AdvancedGame() {
 
         {/* Przyciski akcji - przed kartą */}
         <section className="section">
-          <h2>MOŻLIWE AKCJE</h2>
+          <h2>AKCJA BOTA</h2>
+          <p style={{ textAlign: "center", marginBottom: "1rem" }}>
+            Czy Bot wykonał przynajmniej jeden efekt z aktualnej karty?
+          </p>
           <div className={styles.gameControls}>
             <button
               className="btn-primary"
               onClick={() => setShowDrawCardModal(true)}
             >
-              Dobierz kartę
+              Nie, dobierz kartę
             </button>
-            <button className="btn-secondary" onClick={actionButtonAction}>
-              {actionButtonText}
+            <button
+              className="btn-primary"
+              onClick={() => setShowActionModal(true)}
+            >
+              Tak, przejdź dalej
             </button>
           </div>
         </section>
@@ -511,35 +494,27 @@ export default function AdvancedGame() {
 
         {/* Modal potwierdzenia dla dobrania karty */}
         {(() => {
-          const note1Text =
-            typeof drawLocal?.note1 === "string"
-              ? (drawLocal.note1 as string)
+          const drawLocal = advancedTexts?.advancedGame?.drawCard as
+            | Record<string, unknown>
+            | undefined;
+          const drawLocalTitle =
+            typeof drawLocal?.title === "string"
+              ? (drawLocal.title as string)
               : undefined;
-          const note2Text =
-            typeof drawLocal?.note2 === "string"
-              ? (drawLocal.note2 as string)
+          const drawLocalConfirm =
+            typeof drawLocal?.modalConfirm === "string"
+              ? (drawLocal.modalConfirm as string)
               : undefined;
-          const notes =
-            note1Text && note2Text
-              ? `${note1Text}\n${note2Text}`
-              : note1Text || note2Text;
           return (
             <ConfirmModal
               isOpen={showDrawCardModal}
-              title={drawLocalTitle ?? modalTitles.drawCard ?? "DOBIERZ KARTĘ"}
+              title={drawLocalTitle ?? "DOBIERZ KARTĘ"}
               message={
                 getModalText("advancedGame", "drawCard").message ||
                 "Dobrać nową kartę dla aktualnego Bota?"
               }
-              notes={notes}
-              confirmText={
-                drawLocalConfirm ?? modalConfirm.drawCard ?? commonOk
-              }
-              cancelText={
-                typeof modalCancel === "string"
-                  ? modalCancel
-                  : modalCancel || "Anuluj"
-              }
+              confirmText={drawLocalConfirm ?? commonOk}
+              cancelText={modalCancel}
               onConfirm={() => {
                 handleDrawCard();
                 setShowDrawCardModal(false);
@@ -561,58 +536,67 @@ export default function AdvancedGame() {
                 actionKey === "nextBot"
                   ? getUiString(nextBotNode, undefined, "title", "")
                   : actionKey === "nextPhase"
-                    ? getUiString(nextPhaseNode, undefined, "title", "")
-                    : actionKey === "nextRound"
-                      ? getUiString(nextRoundNode, undefined, "title", "")
-                      : (endGameNode?.title as string) || ""
+                  ? getUiString(nextPhaseNode, undefined, "title", "")
+                  : actionKey === "nextRound"
+                  ? getUiString(nextRoundNode, undefined, "title", "")
+                  : (endGameNode?.title as string) || ""
               }
               message={message}
               notes={notes}
-              confirmText={
-                actionKey === "nextBot"
-                  ? getUiString(
-                      nextBotNode,
-                      undefined,
-                      "modalConfirm",
-                      commonOk
-                    )
-                  : actionKey === "nextPhase"
-                  ? getUiString(
-                      nextPhaseNode,
-                      undefined,
-                      "modalConfirm",
-                      commonOk
-                    )
-                  : actionKey === "nextRound"
-                  ? getUiString(
-                      nextRoundNode,
-                      undefined,
-                      "modalConfirm",
-                      commonOk
-                    )
-                  : (endGameNode?.modalConfirm as string) || commonOk
-              }
-              cancelText={
-                typeof modalCancel === "string"
-                  ? modalCancel
-                  : modalCancel || "Anuluj"
-              }
+              confirmText={commonOk}
+              cancelText={modalCancel}
               onConfirm={() => {
+                setShowActionModal(false);
+                // Dla nextBot: jeśli sąsiedni, wykonaj od razu bez drugiego modala
+                if (actionKey === "nextBot" && isNextBotAdjacent) {
+                  game.nextPlayer();
+                } 
+                // Dla nextPhase: jeśli bot kończy fazę i następny bot zaczyna nową fazę, bez drugiego modala
+                else if (actionKey === "nextPhase" && isLastPlayer && willBeFirstInNextPhase) {
+                  game.nextPhase();
+                }
+                // W pozostałych przypadkach pokaż drugi modal jeśli są notatki
+                else if (notes && actionKey !== "endGame") {
+                  setShowActionInstructionsModal(true);
+                } else {
+                  // Wykonaj akcję bezpośrednio
+                  if (actionKey === "nextPhase") {
+                    game.nextPhase();
+                  } else if (actionKey === "nextRound") {
+                    game.nextRound();
+                  } else if (actionKey === "endGame") {
+                    navigate("/advanced-setup");
+                  }
+                }
+              }}
+              onCancel={() => {
+                setShowActionModal(false);
+              }}
+            />
+          );
+        })()}
+
+        {/* Modal instrukcji dla akcji */}
+        {(() => {
+          return (
+            <ConfirmModal
+              isOpen={showActionInstructionsModal}
+              title="CZEKAJ"
+              message="Czekaj! Inne gracze mogą mieć teraz grać."
+              confirmText={commonOk}
+              cancelText={undefined}
+              onConfirm={() => {
+                setShowActionInstructionsModal(false);
                 if (actionKey === "nextBot") {
                   game.nextPlayer();
                 } else if (actionKey === "nextPhase") {
                   game.nextPhase();
                 } else if (actionKey === "nextRound") {
                   game.nextRound();
-                } else {
-                  // Koniec gry
-                  game.resetGame();
-                  navigate("/");
                 }
-                setShowActionModal(false);
               }}
               onCancel={() => {
-                setShowActionModal(false);
+                setShowActionInstructionsModal(false);
               }}
             />
           );

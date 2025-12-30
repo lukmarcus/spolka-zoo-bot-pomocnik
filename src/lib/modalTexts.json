@@ -1,9 +1,11 @@
 {
   "advancedGame": {
+    "checkBotEffect": {
+      "title": "Czy Bot wykonał efekt?",
+      "message": "Czy Bot wykonał przynajmniej jeden efekt z poniższej karty?"
+    },
     "drawCard": {
       "title": "Dobierz kartę",
-      "note1": "- Aktualny Bot nie jest w stanie wykonać żadnego efektu z dostępnej karty.",
-      "note2": "- Potwierdź dobranie nowej karty.",
       "message": "Dobrać nową kartę dla aktualnego Bota?"
     },
     "nextBot": {
@@ -50,29 +52,29 @@
       "title": "Następna runda",
       "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
-        "last": "Ten Bot jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji tej rundy.",
-        "notLast": "Ten Bot nie jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji tej rundy."
+        "last": "• Aktualny Bot jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji aktualnej rundy.",
+        "notLast": "• Aktualny Bot nie jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji aktualnej rundy."
       },
       "note3": {
-        "first": "Pierwszym graczem w pierwszej fazie następnej rundy jest Bot.",
-        "notFirst": "Pierwszym graczem w pierwszej fazie następnej rundy nie jest Bot."
+        "first": "• Bot jest pierwszym graczem w pierwszej fazie następnej rundy.",
+        "notFirst": "• Bot nie jest pierwszym graczem w pierwszej fazie następnej rundy."
       },
       "note4": {
-        "last_first": "Potwierdź przejście do następnej rundy.",
-        "last_notFirst": "Najpierw rozegraj pierwszą fazę w nowej rundzie dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej rundy.",
-        "notLast_first": "Najpierw rozegraj aktualną (ostatnią) fazę tej rundy do końca dla pozostałych graczy, a dopiero później potwierdź przejście do następnej rundy.",
-        "notLast_notFirst": "Najpierw rozegraj aktualną (ostatnią) fazę tej rundy do końca dla pozostałych graczy, następnie rozegraj pierwszą fazę w nowej rundzie dla graczy przed pierwszym Botem, a dopiero później potwierdź przejście do następnej rundy."
+        "last_first": "• Potwierdź przejście do pierwszej fazy Akcji następnej rundy",
+        "last_notFirst": "• Zanim potwierdzisz przejście do pierwszej fazy Akcji następnej rundy, zagraj żetony Akcji graczy przed pierwszym Botem w pierwszej fazie Akcji następnej rundy.",
+        "notLast_first": "• Zanim potwierdzisz przejście do pierwszej fazy Akcji następnej rundy, zagraj żetony Akcji graczy po aktualnym Bocie w aktualnej (ostatniej) fazie Akcji aktualnej rundy.",
+        "notLast_notFirst": "• Zanim potwierdzisz przejście do pierwszej fazy Akcji następnej rundy, zagraj żetony Akcji graczy po aktualnym Bocie w aktualnej (ostatniej) fazie Akcji aktualnej rundy oraz żetony Akcji graczy przed pierwszym Botem w pierwszej fazie Akcji następnej rundy."
       },
       "note5": {
-        "single": "Talia Bota zostanie przetasowana.",
-        "multiple_shared": "Wspólna talia Botów zostanie przetasowana.",
-        "multiple_individual": "Osobne talie Botów zostaną przetasowane."
+        "single": "• Talia Bota zostanie przetasowana.",
+        "multiple_shared": "• Wspólna talia Botów zostanie przetasowana.",
+        "multiple_individual": "• Osobne talie Botów zostaną przetasowane."
       },
       "note6": {
-        "single": "Zostanie dobrana karta dla Bota w pierwszej fazie następnej rundy.",
-        "multiple": "Zostanie dobrana karta dla pierwszego Bota w pierwszej fazie następnej rundy."
+        "single": "• Dla Bota w pierwszej fazie Akcji następnej rundy zostanie dobrana karta.",
+        "multiple": "• Dla pierwszego Bota w pierwszej fazie Akcji następnej rundy zostanie dobrana karta."
       },
-      "message": "Przejść do następnej rundy?"
+      "message": "Przejść do pierwszej fazy Akcji następnej rundy?"
     },
     "endGame": {
       "title": "Koniec gry",
