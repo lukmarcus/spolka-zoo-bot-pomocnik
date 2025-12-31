@@ -14,7 +14,7 @@ function App() {
   return (
     <ErrorBoundary>
       <GameProvider>
-        <Router basename="/spolka-zoo-bot-pomocnik">
+        <Router basename="/spolka-zoo-bot-pomocnik/">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/game" element={<Game />} />

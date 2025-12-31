@@ -6,7 +6,11 @@
     },
     "drawCard": {
       "title": "Dobierz kartę",
-      "message": "Dobrać nową kartę dla aktualnego Bota?"
+      "message": "Czy dobrać nową kartę dla aktualnego Bota?"
+    },
+    "instructionModal": {
+      "title": "CZEKAJ",
+      "message": "Czekaj! Inne gracze mogą mieć teraz grać."
     },
     "nextBot": {
       "title": "Następny bot",

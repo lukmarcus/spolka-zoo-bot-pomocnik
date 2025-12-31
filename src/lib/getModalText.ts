@@ -8,12 +8,12 @@ export function getModalText(
 ): { message: string; notes?: Notes } {
   const modalRoot = modalTexts as unknown;
   if (typeof modalRoot !== "object" || modalRoot === null) {
-    return { message: "", notes: [] };
+    return { message: `[BŁĄD: modalTexts nie jest obiektem]`, notes: [] };
   }
 
   const screenObj = (modalRoot as Record<string, unknown>)[screen];
   if (typeof screenObj !== "object" || screenObj === null) {
-    return { message: "", notes: [] };
+    return { message: `[BŁĄD: brakuje sekcji '${screen}']`, notes: [] };
   }
 
   const parts = key.split(".");
@@ -58,7 +58,7 @@ export function getModalText(
   }
 
   return {
-    message: message ?? "",
+    message: message ?? `[BŁĄD: brakuje wartości dla '${screen}.${key}']`,
     notes: notesCollected.length ? notesCollected : undefined,
   };
 }

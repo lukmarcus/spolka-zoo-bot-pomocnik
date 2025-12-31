@@ -90,7 +90,7 @@ export default function AdvancedGame() {
       const baseMessage =
         typeof nextBotNode?.message === "string"
           ? (nextBotNode.message as string)
-          : "Dobrać kartę dla kolejnego Bota w tej fazie?";
+          : "";
 
       // note1 may be a simple string or an object with 'performed'
       let note1Text: string | undefined;
@@ -154,8 +154,7 @@ export default function AdvancedGame() {
       );
       const note5 = getModalText("advancedGame", `nextPhase.note5.${note5Key}`);
 
-      const baseMessage =
-        base?.message ?? "Zakończyć obecną fazę i przejść do następnej?";
+      const baseMessage = base.message;
       // build notes in the order specified by modalTexts.json -> advancedGame.nextPhase.noteOrder
       const noteOrder: string[] = (
         modalTexts as unknown as {
@@ -224,7 +223,7 @@ export default function AdvancedGame() {
       const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
       const note6 = getModalText("advancedGame", `nextRound.note6.${note6Key}`);
 
-      const baseMessage = base?.message ?? "Przejść do następnej rundy?";
+      const baseMessage = base.message;
       // build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
       const noteOrder: string[] = (
         modalTexts as unknown as {
@@ -325,9 +324,10 @@ export default function AdvancedGame() {
     return defaultValue;
   };
 
-  const modalCancel =
-    uiRoot?.common?.modalCancel ??
-    (typeof uiRoot?.modalCancel === "string" ? uiRoot?.modalCancel : "Anuluj");
+  const modalCancel = getModalText(
+    "advancedGame",
+    "common.modalCancel"
+  ).message;
 
   // access advancedGame raw object safely for modal-specific overrides (drawCard, etc.)
   const advancedTexts = modalTexts as unknown as {
@@ -344,7 +344,7 @@ export default function AdvancedGame() {
     | Record<string, unknown>
     | undefined;
 
-  const commonOk = uiRoot?.common?.modalOk ?? "Tak";
+  const commonOk = uiRoot?.common?.modalOk || "Tak";
 
   let actionKey: "nextBot" | "nextPhase" | "nextRound" | "endGame" = "nextBot";
 
@@ -508,11 +508,11 @@ export default function AdvancedGame() {
           return (
             <ConfirmModal
               isOpen={showDrawCardModal}
-              title={drawLocalTitle ?? "DOBIERZ KARTĘ"}
-              message={
-                getModalText("advancedGame", "drawCard").message ||
-                "Dobrać nową kartę dla aktualnego Bota?"
+              title={
+                drawLocalTitle ??
+                getModalText("advancedGame", "drawCard.title").message
               }
+              message={getModalText("advancedGame", "drawCard.message").message}
               confirmText={drawLocalConfirm ?? commonOk}
               cancelText={modalCancel}
               onConfirm={() => {
@@ -550,9 +550,13 @@ export default function AdvancedGame() {
                 // Dla nextBot: jeśli sąsiedni, wykonaj od razu bez drugiego modala
                 if (actionKey === "nextBot" && isNextBotAdjacent) {
                   game.nextPlayer();
-                } 
+                }
                 // Dla nextPhase: jeśli bot kończy fazę i następny bot zaczyna nową fazę, bez drugiego modala
-                else if (actionKey === "nextPhase" && isLastPlayer && willBeFirstInNextPhase) {
+                else if (
+                  actionKey === "nextPhase" &&
+                  isLastPlayer &&
+                  willBeFirstInNextPhase
+                ) {
                   game.nextPhase();
                 }
                 // W pozostałych przypadkach pokaż drugi modal jeśli są notatki
@@ -578,11 +582,19 @@ export default function AdvancedGame() {
 
         {/* Modal instrukcji dla akcji */}
         {(() => {
+          const instructionTitle = getModalText(
+            "advancedGame",
+            "instructionModal.title"
+          ).message;
+          const instructionMessage = getModalText(
+            "advancedGame",
+            "instructionModal.message"
+          ).message;
           return (
             <ConfirmModal
               isOpen={showActionInstructionsModal}
-              title="CZEKAJ"
-              message="Czekaj! Inne gracze mogą mieć teraz grać."
+              title={instructionTitle}
+              message={instructionMessage}
               confirmText={commonOk}
               cancelText={undefined}
               onConfirm={() => {
