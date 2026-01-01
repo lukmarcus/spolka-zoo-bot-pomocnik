@@ -61,6 +61,16 @@ export default function AdvancedGame() {
 
   const isNextBotAdjacent = nextBotIndex === state.currentPlayerIndex! + 1;
 
+  // Dla nextBot gdy nie jest sąsiedni - znajdź WSZYSTKICH graczy między botami
+  const nextBotIntermediatePlayers = (() => {
+    if (isNextBotAdjacent || nextBotIndex === -1) return [];
+    const players = [];
+    for (let i = state.currentPlayerIndex! + 1; i < nextBotIndex; i++) {
+      players.push({ index: i, ...state.players[i] });
+    }
+    return players;
+  })();
+
   // Sprawdzenie czy jest następna faza
   const hasNextPhase = state.currentPhase! < state.maxPhases!;
 
@@ -551,6 +561,10 @@ export default function AdvancedGame() {
                 if (actionKey === "nextBot" && isNextBotAdjacent) {
                   game.nextPlayer();
                 }
+                // Dla nextBot: jeśli NIE sąsiedni, pokaż drugi modal z listą graczy
+                else if (actionKey === "nextBot" && nextBotIntermediatePlayers.length > 0) {
+                  setShowActionInstructionsModal(true);
+                }
                 // Dla nextPhase: jeśli bot kończy fazę i następny bot zaczyna nową fazę, bez drugiego modala
                 else if (
                   actionKey === "nextPhase" &&
@@ -582,14 +596,52 @@ export default function AdvancedGame() {
 
         {/* Modal instrukcji dla akcji */}
         {(() => {
-          const instructionTitle = getModalText(
-            "advancedGame",
-            "instructionModal.title"
-          ).message;
-          const instructionMessage = getModalText(
-            "advancedGame",
-            "instructionModal.message"
-          ).message;
+          let instructionTitle = "";
+          let instructionMessage: string | React.ReactNode = "";
+
+          if (actionKey === "nextBot" && nextBotIntermediatePlayers.length > 0) {
+            // nextBot z pośrednimi graczami - lista graczy z kolorowymi ramkami
+            instructionTitle = getModalText(
+              "advancedGame",
+              "nextBotInstruction.title"
+            ).message;
+            
+            // Renderuj jako JSX z listą graczy w kolorowych ramkach
+            instructionMessage = (
+              <div>
+                <p>Przed potwierdzeniem wykonaj fazę Akcji dla graczy:</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "12px" }}>
+                  {nextBotIntermediatePlayers.map((player) => (
+                    <div
+                      key={player.index}
+                      style={{
+                        display: "inline-block",
+                        padding: "8px 16px",
+                        border: `3px solid ${player.color || "#000"}`,
+                        borderRadius: "8px",
+                        fontSize: "18px",
+                        fontWeight: "bold",
+                        color: player.color || "#000",
+                      }}
+                    >
+                      {player.color}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          } else {
+            // Dla nextPhase, nextRound i innych
+            instructionTitle = getModalText(
+              "advancedGame",
+              "instructionModal.title"
+            ).message;
+            instructionMessage = getModalText(
+              "advancedGame",
+              "instructionModal.message"
+            ).message;
+          }
+
           return (
             <ConfirmModal
               isOpen={showActionInstructionsModal}

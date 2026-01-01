@@ -12,6 +12,10 @@
       "title": "CZEKAJ",
       "message": "Czekaj! Inne gracze mogą mieć teraz grać."
     },
+    "nextBotInstruction": {
+      "title": "CZEKAJ",
+      "message": "Gracz {{playerName}} musi teraz wykonać swoją fazę Akcji."
+    },
     "nextBot": {
       "title": "Następny bot",
       "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",

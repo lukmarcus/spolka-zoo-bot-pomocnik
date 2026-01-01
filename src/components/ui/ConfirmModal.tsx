@@ -1,10 +1,11 @@
 import React from "react";
+import type { ReactNode } from "react";
 import styles from "@ui/ConfirmModal.module.css";
 
 interface ConfirmModalProps {
   isOpen: boolean;
   title?: string;
-  message: string;
+  message: string | ReactNode;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
@@ -71,20 +72,24 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               ))}
             </div>
           )}
-          {message.split("\n").map((line, index) => (
-            <p
-              key={index}
-              className={`${styles.message} ${
-                line.includes("✅")
-                  ? styles.successMessage
-                  : line.includes("❌")
+          {typeof message === "string" ? (
+            message.split("\n").map((line, index) => (
+              <p
+                key={index}
+                className={`${styles.message} ${
+                  line.includes("✅")
+                    ? styles.successMessage
+                    : line.includes("❌")
                   ? styles.errorMessage
                   : ""
               }`}
             >
               {line}
             </p>
-          ))}
+            ))
+          ) : (
+            message
+          )}
         </div>
 
         <div className={styles.threeButtonHorizontal}>
