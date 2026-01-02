@@ -13,17 +13,15 @@
       "message": "Czekaj! Inne gracze mogą mieć teraz grać."
     },
     "nextBotInstruction": {
-      "title": "CZEKAJ",
-      "message": "Gracz {{playerName}} musi teraz wykonać swoją fazę Akcji."
+      "title": "Następny bot",
+      "message": "Zanim potwierdzisz przejście do kolejnego Bota w tej fazie Akcji i dobranie dla niego nowej karty, zagraj żetony Akcji graczy:",
+      "confirmText": "Kontynuuj"
     },
     "nextBot": {
       "title": "Następny bot",
-      "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
-        "adjacent": "• Potwierdź przejście do kolejnego Bota w tej fazie Akcji.",
-        "withPlayers": "• Zanim potwierdzisz przejście do kolejnego Bota w tej fazie Akcji, zagraj żetony Akcji graczy pomiędzy aktualnym i następnym Botem."
+        "adjacent": "• Potwierdź przejście do kolejnego Bota w tej fazie Akcji."
       },
-      "note3": "• Dla kolejnego Bota w tej fazie Akcji zostanie dobrana nowa karta.",
       "message": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?"
     },
     "nextPhase": {

@@ -91,7 +91,10 @@ export default function AdvancedGame() {
     state.players[nextRoundStartIndex]?.isBot ?? false;
 
   // Tekst dla modalu akcji drugiego przycisku — pobierany z modalTexts.json
-  const getActionModalMessage = (): { message: string; notes?: string } => {
+  const getActionModalMessage = (): {
+    message: string | React.ReactNode;
+    notes?: string;
+  } => {
     if (actionKey === "nextBot") {
       const nextBotNode = (
         modalTexts as unknown as { advancedGame?: Record<string, unknown> }
@@ -102,17 +105,6 @@ export default function AdvancedGame() {
           ? (nextBotNode.message as string)
           : "";
 
-      // note1 may be a simple string or an object with 'performed'
-      let note1Text: string | undefined;
-      const rawNote1 = nextBotNode?.note1;
-      if (typeof rawNote1 === "string") {
-        note1Text = rawNote1;
-      } else if (typeof rawNote1 === "object" && rawNote1 !== null) {
-        note1Text = (rawNote1 as Record<string, unknown>)["performed"] as
-          | string
-          | undefined;
-      }
-
       // pick note2 variant
       const note2Key = isNextBotAdjacent ? "adjacent" : "withPlayers";
       const note2Text =
@@ -121,19 +113,17 @@ export default function AdvancedGame() {
           ? (nextBotNode?.note2 as Record<string, string>)[note2Key]
           : undefined;
 
-      // note3 is a simple string
-      const note3Text =
-        typeof nextBotNode?.note3 === "string"
-          ? (nextBotNode.note3 as string)
-          : undefined;
-
       const notesParts: string[] = [];
-      if (note1Text) notesParts.push(note1Text);
-      if (note2Text) notesParts.push(note2Text);
-      if (note3Text) notesParts.push(note3Text);
+      // Dla nextBot: tylko note2 w pierwszym modalu (jeśli sąsiedni)
+      if (isNextBotAdjacent && note2Text) notesParts.push(note2Text);
+
+      // Zawiń message w div wycentrowany
+      const centeredMessage = (
+        <div style={{ textAlign: "center" }}>{baseMessage}</div>
+      );
 
       return {
-        message: baseMessage,
+        message: centeredMessage,
         notes: notesParts.length ? notesParts.join("\n") : undefined,
       };
     }
@@ -562,7 +552,10 @@ export default function AdvancedGame() {
                   game.nextPlayer();
                 }
                 // Dla nextBot: jeśli NIE sąsiedni, pokaż drugi modal z listą graczy
-                else if (actionKey === "nextBot" && nextBotIntermediatePlayers.length > 0) {
+                else if (
+                  actionKey === "nextBot" &&
+                  nextBotIntermediatePlayers.length > 0
+                ) {
                   setShowActionInstructionsModal(true);
                 }
                 // Dla nextPhase: jeśli bot kończy fazę i następny bot zaczyna nową fazę, bez drugiego modala
@@ -598,33 +591,85 @@ export default function AdvancedGame() {
         {(() => {
           let instructionTitle = "";
           let instructionMessage: string | React.ReactNode = "";
+          let confirmButtonText = commonOk;
 
-          if (actionKey === "nextBot" && nextBotIntermediatePlayers.length > 0) {
-            // nextBot z pośrednimi graczami - lista graczy z kolorowymi ramkami
+          if (
+            actionKey === "nextBot" &&
+            nextBotIntermediatePlayers.length > 0
+          ) {
+            // nextBot z pośrednimi graczami - lista graczy jeden pod drugim
             instructionTitle = getModalText(
               "advancedGame",
               "nextBotInstruction.title"
             ).message;
-            
-            // Renderuj jako JSX z listą graczy w kolorowych ramkach
+
+            const confirmTextFromJson = getModalText(
+              "advancedGame",
+              "nextBotInstruction.confirmText"
+            ).message;
+            confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
+              ? commonOk
+              : confirmTextFromJson;
+
+            // Mapowanie kolorów na polskie nazwy
+            const colorNames: Record<string, string> = {
+              red: "Czerwony",
+              yellow: "Żółty",
+              green: "Zielony",
+              orange: "Pomarańczowy",
+              blue: "Niebieski",
+            };
+
+            // Konwertuj color hex do RGB dla przezroczystości
+            const colorToRGB: Record<string, string> = {
+              red: "#FF6B6B",
+              yellow: "#FFD93D",
+              green: "#6BCB77",
+              orange: "#FF8C42",
+              blue: "#4D96FF",
+            };
+
+            // Renderuj jako JSX z listą graczy jeden pod drugim
             instructionMessage = (
               <div>
-                <p>Przed potwierdzeniem wykonaj fazę Akcji dla graczy:</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "12px" }}>
+                <p>
+                  {
+                    getModalText("advancedGame", "nextBotInstruction.message")
+                      .message
+                  }
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                    marginTop: "12px",
+                    alignItems: "center",
+                  }}
+                >
                   {nextBotIntermediatePlayers.map((player) => (
                     <div
                       key={player.index}
                       style={{
-                        display: "inline-block",
-                        padding: "8px 16px",
-                        border: `3px solid ${player.color || "#000"}`,
-                        borderRadius: "8px",
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        color: player.color || "#000",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
                       }}
                     >
-                      {player.color}
+                      <div
+                        style={{
+                          padding: "8px 16px",
+                          backgroundColor: colorToRGB[player.color] || "#999",
+                          borderRadius: "6px",
+                          fontSize: "16px",
+                          fontWeight: "bold",
+                          color: "#000",
+                          minWidth: "200px",
+                          textAlign: "center",
+                        }}
+                      >
+                        Gracz {colorNames[player.color] || player.color}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -647,7 +692,7 @@ export default function AdvancedGame() {
               isOpen={showActionInstructionsModal}
               title={instructionTitle}
               message={instructionMessage}
-              confirmText={commonOk}
+              confirmText={confirmButtonText}
               cancelText={undefined}
               onConfirm={() => {
                 setShowActionInstructionsModal(false);
