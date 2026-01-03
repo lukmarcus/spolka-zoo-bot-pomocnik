@@ -90,6 +90,35 @@ export default function AdvancedGame() {
   const isFirstInNextRoundABot =
     state.players[nextRoundStartIndex]?.isBot ?? false;
 
+  // Dla nextPhase: gracze od bieżącego bota do końca tej fazy
+  const endOfPhaseIntermediatePlayers = (() => {
+    if (!isLastPlayer) return [];
+    // isLastPlayer = true oznacza że currentPlayer to ostatni gracz fazy
+    // Ale chcemy pokazać od tego gracza (włącznie) do końca
+    // Wait, jesli isLastPlayer to znaczy że juz jestesmy na ostatnim
+    // a gracze mają być wyświetlani przed następną fazą
+    // Czyli nikogo z tej fazy? Bo wszystko się juz grało?
+    // Czytam komentarz użytkownika jeszcze raz...
+    // "od aktualnego bota (ostatniego bota w tej fazie) wszyscy gracze w tej fazie"
+    // Znaczy od bota (currentPlayer) do ostatniego gracza w fazie
+    const players = [];
+    for (let i = state.currentPlayerIndex!; i < state.players.length; i++) {
+      players.push({ index: i, ...state.players[i] });
+    }
+    return players;
+  })();
+
+  // Dla nextPhase: gracze w nowej fazie od 0 do pierwszego bota
+  const nextPhaseIntermediatePlayers = (() => {
+    if (!hasNextPhase) return [];
+    const players = [];
+    for (let i = 0; i < state.players.length; i++) {
+      if (state.players[i].isBot) break;
+      players.push({ index: i, ...state.players[i] });
+    }
+    return players;
+  })();
+
   // Tekst dla modalu akcji drugiego przycisku — pobierany z modalTexts.json
   const getActionModalMessage = (): {
     message: string | React.ReactNode;
@@ -155,7 +184,8 @@ export default function AdvancedGame() {
       const note5 = getModalText("advancedGame", `nextPhase.note5.${note5Key}`);
 
       const baseMessage = base.message;
-      // build notes in the order specified by modalTexts.json -> advancedGame.nextPhase.noteOrder
+
+      // Dla nextPhase: przechowaj notatki dla drugiego modalu
       const noteOrder: string[] = (
         modalTexts as unknown as {
           advancedGame?: AdvancedGameTexts;
@@ -176,13 +206,18 @@ export default function AdvancedGame() {
         note5: note5?.message,
       };
 
-      const notesParts: string[] = noteOrder
+      const allNotes: string[] = noteOrder
         .map((k) => noteMap[k])
         .filter((m): m is string => typeof m === "string");
 
+      // Zawiń message w div wycentrowany - bez notatek w pierwszym modalu
+      const centeredMessage = (
+        <div style={{ textAlign: "center" }}>{baseMessage}</div>
+      );
+
       return {
-        message: baseMessage,
-        notes: notesParts.length ? notesParts.join("\n") : undefined,
+        message: centeredMessage,
+        notes: allNotes.length ? allNotes.join("\n") : undefined,
       };
     }
 
@@ -566,6 +601,14 @@ export default function AdvancedGame() {
                 ) {
                   game.nextPhase();
                 }
+                // Dla nextPhase: pokaż drugi modal jeśli są gracze do wyświetlenia
+                else if (
+                  actionKey === "nextPhase" &&
+                  (endOfPhaseIntermediatePlayers.length > 0 ||
+                    nextPhaseIntermediatePlayers.length > 0)
+                ) {
+                  setShowActionInstructionsModal(true);
+                }
                 // W pozostałych przypadkach pokaż drugi modal jeśli są notatki
                 else if (notes && actionKey !== "endGame") {
                   setShowActionInstructionsModal(true);
@@ -589,6 +632,7 @@ export default function AdvancedGame() {
 
         {/* Modal instrukcji dla akcji */}
         {(() => {
+          const { notes } = getActionModalMessage();
           let instructionTitle = "";
           let instructionMessage: string | React.ReactNode = "";
           let confirmButtonText = commonOk;
@@ -675,8 +719,106 @@ export default function AdvancedGame() {
                 </div>
               </div>
             );
+          } else if (
+            actionKey === "nextPhase" &&
+            (endOfPhaseIntermediatePlayers.length > 0 ||
+              nextPhaseIntermediatePlayers.length > 0)
+          ) {
+            // nextPhase - wyświetl graczy z kolorami
+            instructionTitle = getModalText(
+              "advancedGame",
+              "nextPhaseInstruction.title"
+            ).message;
+
+            const confirmTextFromJson = getModalText(
+              "advancedGame",
+              "nextPhaseInstruction.confirmText"
+            ).message;
+            confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
+              ? commonOk
+              : confirmTextFromJson;
+
+            // Mapowanie kolorów na polskie nazwy (jak w nextBot)
+            const colorNames: Record<string, string> = {
+              red: "Czerwony",
+              green: "Zielony",
+              blue: "Niebieski",
+              yellow: "Żółty",
+              orange: "Pomarańczowy",
+              purple: "Fioletowy",
+            };
+
+            const allNextPhasePlayersDisplay = [
+              ...endOfPhaseIntermediatePlayers,
+              ...nextPhaseIntermediatePlayers,
+            ];
+
+            // Renderuj graczy jeden pod drugim
+            instructionMessage = (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                {allNextPhasePlayersDisplay.map((player) => (
+                  <div
+                    key={player.index}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "8px 12px",
+                      borderRadius: "4px",
+                      backgroundColor: player.color || "#ccc",
+                      minWidth: "250px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "bold",
+                        color: "#000",
+                        minWidth: "200px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Gracz {colorNames[player.color] || player.color}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          } else if (actionKey === "nextPhase" && notes) {
+            // nextPhase - fallback na notatki jeśli brak graczy
+            instructionTitle = getModalText(
+              "advancedGame",
+              "nextPhaseInstruction.title"
+            ).message;
+
+            const confirmTextFromJson = getModalText(
+              "advancedGame",
+              "nextPhaseInstruction.confirmText"
+            ).message;
+            confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
+              ? commonOk
+              : confirmTextFromJson;
+
+            // Renderuj notatki
+            instructionMessage = (
+              <div>
+                {notes.split("\n").map((line: string, index: number) => (
+                  <p key={index} style={{ margin: "8px 0", textAlign: "left" }}>
+                    {line}
+                  </p>
+                ))}
+              </div>
+            );
           } else {
-            // Dla nextPhase, nextRound i innych
+            // Dla nextRound i innych
             instructionTitle = getModalText(
               "advancedGame",
               "instructionModal.title"

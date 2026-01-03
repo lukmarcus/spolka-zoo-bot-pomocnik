@@ -24,6 +24,10 @@
       },
       "message": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?"
     },
+    "nextPhaseInstruction": {
+      "title": "Następna faza Akcji",
+      "confirmText": "Kontynuuj"
+    },
     "nextPhase": {
       "title": "Następna faza Akcji",
       "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
