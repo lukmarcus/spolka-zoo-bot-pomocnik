@@ -26,11 +26,11 @@
     },
     "nextPhaseInstruction": {
       "title": "Następna faza Akcji",
+      "message": "Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy:",
       "confirmText": "Kontynuuj"
     },
     "nextPhase": {
       "title": "Następna faza Akcji",
-      "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
         "last": "• Aktualny Bot jest ostatnim graczem w aktualnej fazie Akcji.",
         "notLast": "• Aktualny Bot nie jest ostatnim graczem w aktualnej fazie Akcji."

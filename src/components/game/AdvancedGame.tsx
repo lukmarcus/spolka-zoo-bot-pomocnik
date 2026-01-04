@@ -90,19 +90,11 @@ export default function AdvancedGame() {
   const isFirstInNextRoundABot =
     state.players[nextRoundStartIndex]?.isBot ?? false;
 
-  // Dla nextPhase: gracze od bieżącego bota do końca tej fazy
+  // Dla nextPhase: gracze od następnego po bocie do końca tej fazy
   const endOfPhaseIntermediatePlayers = (() => {
-    if (!isLastPlayer) return [];
-    // isLastPlayer = true oznacza że currentPlayer to ostatni gracz fazy
-    // Ale chcemy pokazać od tego gracza (włącznie) do końca
-    // Wait, jesli isLastPlayer to znaczy że juz jestesmy na ostatnim
-    // a gracze mają być wyświetlani przed następną fazą
-    // Czyli nikogo z tej fazy? Bo wszystko się juz grało?
-    // Czytam komentarz użytkownika jeszcze raz...
-    // "od aktualnego bota (ostatniego bota w tej fazie) wszyscy gracze w tej fazie"
-    // Znaczy od bota (currentPlayer) do ostatniego gracza w fazie
     const players = [];
-    for (let i = state.currentPlayerIndex!; i < state.players.length; i++) {
+    // Gracze POMIĘDZY botem a końcem fazy (nie włączając samego bota)
+    for (let i = state.currentPlayerIndex! + 1; i < state.players.length; i++) {
       players.push({ index: i, ...state.players[i] });
     }
     return players;
@@ -166,7 +158,6 @@ export default function AdvancedGame() {
       const note5Key = botCount === 1 ? "single" : "multiple";
 
       const base = getModalText("advancedGame", "nextPhase.message");
-      const note1 = getModalText("advancedGame", "nextPhase.note1");
       const note2 = getModalText("advancedGame", `nextPhase.note2.${note2Key}`);
       const note3 = getModalText("advancedGame", `nextPhase.note3.${note3Key}`);
       const note4 = getModalText(
@@ -183,7 +174,6 @@ export default function AdvancedGame() {
           advancedGame?: AdvancedGameTexts;
         }
       )?.advancedGame?.nextPhase?.noteOrder ?? [
-        "note1",
         "note2",
         "note3",
         "note4",
@@ -191,7 +181,6 @@ export default function AdvancedGame() {
       ];
 
       const noteMap: Record<string, string | undefined> = {
-        note1: note1?.message,
         note2: note2?.message,
         note3: note3?.message,
         note4: note4?.message,
@@ -740,48 +729,117 @@ export default function AdvancedGame() {
               purple: "Fioletowy",
             };
 
-            const allNextPhasePlayersDisplay = [
-              ...endOfPhaseIntermediatePlayers,
-              ...nextPhaseIntermediatePlayers,
-            ];
+            // Konwertuj color hex do RGB dla przezroczystości
+            const colorToRGB: Record<string, string> = {
+              red: "#FF6B6B",
+              yellow: "#FFD93D",
+              green: "#6BCB77",
+              orange: "#FF8C42",
+              blue: "#4D96FF",
+            };
 
             // Renderuj graczy jeden pod drugim
             instructionMessage = (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "8px",
-                }}
-              >
-                {allNextPhasePlayersDisplay.map((player) => (
-                  <div
-                    key={player.index}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      padding: "8px 12px",
-                      borderRadius: "4px",
-                      backgroundColor: player.color || "#ccc",
-                      minWidth: "250px",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        color: "#000",
-                        minWidth: "200px",
-                        textAlign: "center",
-                      }}
-                    >
-                      Gracz {colorNames[player.color] || player.color}
-                    </div>
-                  </div>
-                ))}
+              <div>
+                <p>
+                  {
+                    getModalText("advancedGame", "nextPhaseInstruction.message")
+                      .message
+                  }
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                    marginTop: "12px",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Gracze z końca tej fazy */}
+                  {endOfPhaseIntermediatePlayers.length > 0 && (
+                    <>
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          color: "#666",
+                          marginTop: "8px",
+                        }}
+                      >
+                        W tej fazie:
+                      </div>
+                      {endOfPhaseIntermediatePlayers.map((player) => (
+                        <div
+                          key={player.index}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              padding: "8px 16px",
+                              backgroundColor:
+                                colorToRGB[player.color] || "#999",
+                              borderRadius: "6px",
+                              fontSize: "16px",
+                              fontWeight: "bold",
+                              color: "#000",
+                              minWidth: "200px",
+                              textAlign: "center",
+                            }}
+                          >
+                            Gracz {colorNames[player.color] || player.color}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+
+                  {/* Gracze z następnej fazy */}
+                  {nextPhaseIntermediatePlayers.length > 0 && (
+                    <>
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          color: "#666",
+                          marginTop: "8px",
+                        }}
+                      >
+                        W następnej fazie:
+                      </div>
+                      {nextPhaseIntermediatePlayers.map((player) => (
+                        <div
+                          key={player.index}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              padding: "8px 16px",
+                              backgroundColor:
+                                colorToRGB[player.color] || "#999",
+                              borderRadius: "6px",
+                              fontSize: "16px",
+                              fontWeight: "bold",
+                              color: "#000",
+                              minWidth: "200px",
+                              textAlign: "center",
+                            }}
+                          >
+                            Gracz {colorNames[player.color] || player.color}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
               </div>
             );
           } else if (actionKey === "nextPhase" && notes) {
