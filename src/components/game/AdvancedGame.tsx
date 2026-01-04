@@ -134,17 +134,9 @@ export default function AdvancedGame() {
           ? (nextBotNode.message as string)
           : "";
 
-      // pick note2 variant
-      const note2Key = isNextBotAdjacent ? "adjacent" : "withPlayers";
-      const note2Text =
-        typeof (nextBotNode?.note2 as Record<string, unknown>)?.[note2Key] ===
-        "string"
-          ? (nextBotNode?.note2 as Record<string, string>)[note2Key]
-          : undefined;
-
       const notesParts: string[] = [];
-      // Dla nextBot: tylko note2 w pierwszym modalu (jeśli sąsiedni)
-      if (isNextBotAdjacent && note2Text) notesParts.push(note2Text);
+      // Dla nextBot: bez dodatkowych notatek w pierwszym modalu
+      // (niezależnie od tego czy sąsiedni czy nie)
 
       // Zawiń message w div wycentrowany
       const centeredMessage = (
