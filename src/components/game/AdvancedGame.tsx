@@ -142,50 +142,14 @@ export default function AdvancedGame() {
     }
 
     if (actionKey === "nextPhase") {
-      // choose note2: whether bot is last or not
-      const note2Key = isLastPlayer ? "last" : "notLast";
-
-      // choose note3 (new): 'first' or 'notFirst'
-      const note3Key = willBeFirstInNextPhase ? "first" : "notFirst";
-
-      // choose note4 (old info2): depends on last/notLast and willBeFirst
-      const note4Variant = `${isLastPlayer ? "last" : "notLast"}_${
-        willBeFirstInNextPhase ? "first" : "notFirst"
-      }`;
-
-      // choose note5: depends on bot count only
-      const botCount = state.players!.filter((p) => p.isBot).length;
-      const note5Key = botCount === 1 ? "single" : "multiple";
-
       const base = getModalText("advancedGame", "nextPhase.message");
-      const note2 = getModalText("advancedGame", `nextPhase.note2.${note2Key}`);
-      const note3 = getModalText("advancedGame", `nextPhase.note3.${note3Key}`);
-      const note4 = getModalText(
-        "advancedGame",
-        `nextPhase.note4.${note4Variant}`
-      );
-      const note5 = getModalText("advancedGame", `nextPhase.note5.${note5Key}`);
 
       const baseMessage = base.message;
 
-      // Dla nextPhase: przechowaj notatki dla drugiego modalu
-      const noteOrder: string[] = (
-        modalTexts as unknown as {
-          advancedGame?: AdvancedGameTexts;
-        }
-      )?.advancedGame?.nextPhase?.noteOrder ?? [
-        "note2",
-        "note3",
-        "note4",
-        "note5",
-      ];
+      // Dla nextPhase: brak notatek - drugi modal pokazuje scenariusz wizualnie
+      const noteOrder: string[] = [];
 
-      const noteMap: Record<string, string | undefined> = {
-        note2: note2?.message,
-        note3: note3?.message,
-        note4: note4?.message,
-        note5: note5?.message,
-      };
+      const noteMap: Record<string, string | undefined> = {};
 
       const allNotes: string[] = noteOrder
         .map((k) => noteMap[k])

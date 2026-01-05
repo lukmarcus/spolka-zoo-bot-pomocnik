@@ -31,25 +31,7 @@
     },
     "nextPhase": {
       "title": "Następna faza Akcji",
-      "note2": {
-        "last": "• Aktualny Bot jest ostatnim graczem w aktualnej fazie Akcji.",
-        "notLast": "• Aktualny Bot nie jest ostatnim graczem w aktualnej fazie Akcji."
-      },
-      "note3": {
-        "first": "• Bot jest pierwszym graczem w następnej fazie Akcji.",
-        "notFirst": "• Bot nie jest pierwszym graczem w następnej fazie Akcji."
-      },
-      "note4": {
-        "last_first": "• Potwierdź przejście do następnej fazy Akcji.",
-        "last_notFirst": "• Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy przed pierwszym Botem w następnej fazie Akcji.",
-        "notLast_first": "• Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy po aktualnym Bocie w aktualnej fazie Akcji.",
-        "notLast_notFirst": "• Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy po aktualnym Bocie w aktualnej fazie Akcji oraz żetony Akcji graczy przed pierwszym Botem w następnej fazie Akcji."
-      },
-      "note5": {
-        "single": "• Dla Bota w następnej fazie Akcji zostanie dobrana karta.",
-        "multiple": "• Dla pierwszego Bota w następnej fazie Akcji zostanie dobrana karta."
-      },
-      "message": "Przejść do następnej fazy Akcji?"
+      "message": "Przejść do pierwszego Bota w następnej fazie Akcji i dobrać dla niego nową kartę?"
     },
     "modalConfirm": {
       "endGame": "Zakończ grę"
