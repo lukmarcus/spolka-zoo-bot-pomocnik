@@ -19,7 +19,7 @@ export default function AdvancedGame() {
 
   const { state } = game;
 
-  // Sprawdzenie czy jesteśmy w trybie zaawansowanym
+  // Check if we're in advanced mode
   useEffect(() => {
     if (
       state.gameMode !== "advanced" ||
@@ -37,7 +37,7 @@ export default function AdvancedGame() {
     game.drawCard();
   };
 
-  // Jeśli brak stanu gry, nie renderuj
+  // If no game state, don't render
   if (
     state.gameMode !== "advanced" ||
     !state.players ||
@@ -46,12 +46,12 @@ export default function AdvancedGame() {
     return null;
   }
 
-  // Sprawdzenie czy jest następny bot
+  // Check if there's a next bot
   const hasNextBot = state.players
     .slice(state.currentPlayerIndex! + 1)
     .some((p) => p.isBot);
 
-  // Indeks następnego bota (w całej liście) lub -1 jeśli brak
+  // Index of the next bot (in the full list) or -1 if none exists
   const nextBotIndex = (() => {
     for (let i = state.currentPlayerIndex! + 1; i < state.players.length; i++) {
       if (state.players[i].isBot) return i;
@@ -61,7 +61,7 @@ export default function AdvancedGame() {
 
   const isNextBotAdjacent = nextBotIndex === state.currentPlayerIndex! + 1;
 
-  // Dla nextBot gdy nie jest sąsiedni - znajdź WSZYSTKICH graczy między botami
+  // For nextBot when not adjacent - find ALL players between bots
   const nextBotIntermediatePlayers = (() => {
     if (isNextBotAdjacent || nextBotIndex === -1) return [];
     const players = [];
@@ -71,36 +71,36 @@ export default function AdvancedGame() {
     return players;
   })();
 
-  // Sprawdzenie czy jest następna faza
+  // Check if there's a next phase
   const hasNextPhase = state.currentPhase! < state.maxPhases!;
 
-  // Sprawdzenie czy jest następna runda
+  // Check if there's a next round
   const hasNextRound = state.currentRound! < 5;
 
-  // Czy aktualny gracz jest ostatnim graczem
+  // Whether the current player is the last player
   const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
 
-  // Dla nextPhase: czy pierwszy gracz nowej fazy jest botem
+  // For nextPhase: whether the first player of the next phase is a bot
   const willBeFirstInNextPhase = isLastPlayer && state.players[0].isBot;
 
-  // Oblicz indeks gracza, który zacznie następną runę
+  // Calculate the index of the player who will start the next round
   const nextRoundStartIndex =
     (state.currentPlayerIndex! + 1) % state.players.length;
 
   const isFirstInNextRoundABot =
     state.players[nextRoundStartIndex]?.isBot ?? false;
 
-  // Dla nextPhase: gracze od następnego po bocie do końca tej fazy
+  // For nextPhase: players from the next one after the bot to the end of this phase
   const endOfPhaseIntermediatePlayers = (() => {
     const players = [];
-    // Gracze POMIĘDZY botem a końcem fazy (nie włączając samego bota)
+    // Players BETWEEN the bot and the end of the phase (not including the bot itself)
     for (let i = state.currentPlayerIndex! + 1; i < state.players.length; i++) {
       players.push({ index: i, ...state.players[i] });
     }
     return players;
   })();
 
-  // Dla nextPhase: gracze w nowej fazie od 0 do pierwszego bota
+  // For nextPhase: players in the new phase from 0 to the first bot
   const nextPhaseIntermediatePlayers = (() => {
     if (!hasNextPhase) return [];
     const players = [];
@@ -111,7 +111,7 @@ export default function AdvancedGame() {
     return players;
   })();
 
-  // Tekst dla modalu akcji drugiego przycisku — pobierany z modalTexts.json
+  // Text for the second button in the action modal — retrieved from modalTexts.json
   const getActionModalMessage = (): {
     message: string | React.ReactNode;
     notes?: string;
@@ -127,10 +127,7 @@ export default function AdvancedGame() {
           : "";
 
       const notesParts: string[] = [];
-      // Dla nextBot: bez dodatkowych notatek w pierwszym modalu
-      // (niezależnie od tego czy sąsiedni czy nie)
 
-      // Zawiń message w div wycentrowany
       const centeredMessage = (
         <div style={{ textAlign: "center" }}>{baseMessage}</div>
       );
@@ -142,11 +139,17 @@ export default function AdvancedGame() {
     }
 
     if (actionKey === "nextPhase") {
-      const base = getModalText("advancedGame", "nextPhase.message");
+      // Select message variant: depends on bot count
+      const botCount = state.players!.filter((p) => p.isBot).length;
+      const messageKey = botCount === 1 ? "single" : "multiple";
+
+      const base = getModalText(
+        "advancedGame",
+        `nextPhase.message.${messageKey}`
+      );
 
       const baseMessage = base.message;
 
-      // Dla nextPhase: brak notatek - drugi modal pokazuje scenariusz wizualnie
       const noteOrder: string[] = [];
 
       const noteMap: Record<string, string | undefined> = {};
@@ -155,7 +158,6 @@ export default function AdvancedGame() {
         .map((k) => noteMap[k])
         .filter((m): m is string => typeof m === "string");
 
-      // Zawiń message w div wycentrowany - bez notatek w pierwszym modalu
       const centeredMessage = (
         <div style={{ textAlign: "center" }}>{baseMessage}</div>
       );
@@ -167,18 +169,14 @@ export default function AdvancedGame() {
     }
 
     if (actionKey === "nextRound") {
-      // choose note2: whether bot is last or not
       const note2Key = isLastPlayer ? "last" : "notLast";
 
-      // choose note3: 'first' or 'notFirst' - first player of NEXT ROUND
       const note3Key = isFirstInNextRoundABot ? "first" : "notFirst";
 
-      // choose note4: depends on last/notLast and first player of next round
       const note4Variant = `${isLastPlayer ? "last" : "notLast"}_${
         isFirstInNextRoundABot ? "first" : "notFirst"
       }`;
 
-      // choose note5: depends on bot count and deck mode
       const botCount = state.players!.filter((p) => p.isBot).length;
       let note5Key: string;
       if (botCount === 1) {
@@ -189,7 +187,6 @@ export default function AdvancedGame() {
         note5Key = "multiple_individual";
       }
 
-      // choose note6: depends on bot count only
       const note6Key = botCount === 1 ? "single" : "multiple";
 
       const base = getModalText("advancedGame", "nextRound.message");
@@ -204,7 +201,7 @@ export default function AdvancedGame() {
       const note6 = getModalText("advancedGame", `nextRound.note6.${note6Key}`);
 
       const baseMessage = base.message;
-      // build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
+      // Build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
       const noteOrder: string[] = (
         modalTexts as unknown as {
           advancedGame?: AdvancedGameTexts;
@@ -242,8 +239,8 @@ export default function AdvancedGame() {
     return { message, notes: notes ? notes.join("\n") : undefined };
   };
 
-  // Dynamiczny tekst i akcja przycisku
-  // labels come from modalTexts.json -> advancedGame.gameButtons
+  // Dynamic text and button action
+  // Labels come from modalTexts.json -> advancedGame.gameButtons
   type UiRoot = {
     gameButtons?: Record<string, string>;
     modalTitles?: Record<string, string>;
@@ -280,7 +277,6 @@ export default function AdvancedGame() {
   const uiRoot = (modalTexts as unknown as { advancedGame?: AdvancedGameTexts })
     ?.advancedGame as UiRoot | undefined;
 
-  // new: prefer nextPhase-local strings if present
   const nextPhaseNode = (
     modalTexts as unknown as { advancedGame?: AdvancedGameTexts }
   )?.advancedGame?.nextPhase as NextPhaseNode | undefined;
@@ -338,7 +334,6 @@ export default function AdvancedGame() {
     actionKey = "endGame";
   }
 
-  // Pobierz kartę z GameContext (używając getCurrentCard jak w GamePlay)
   const currentCardId = game.getCurrentCard();
   const drawnCardObject =
     currentCardId !== null
@@ -443,7 +438,7 @@ export default function AdvancedGame() {
                 }
               };
 
-              // build sections array (effects + ability)
+              // Build sections array (effects + ability)
               const sections = drawnCardObject.effects.map((effect, index) => ({
                 key: `effect-${index}`,
                 title: getEffectLabel(index, drawnCardObject.effects.length),
@@ -589,12 +584,12 @@ export default function AdvancedGame() {
             // nextBot z pośrednimi graczami - lista graczy jeden pod drugim
             instructionTitle = getModalText(
               "advancedGame",
-              "nextBotInstruction.title"
+              "nextBot.title"
             ).message;
 
             const confirmTextFromJson = getModalText(
               "advancedGame",
-              "nextBotInstruction.confirmText"
+              "nextBot.confirmText"
             ).message;
             confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
               ? commonOk
@@ -623,7 +618,7 @@ export default function AdvancedGame() {
               <div>
                 <p>
                   {
-                    getModalText("advancedGame", "nextBotInstruction.message")
+                    getModalText("advancedGame", "nextBot.message2")
                       .message
                   }
                 </p>
@@ -672,12 +667,12 @@ export default function AdvancedGame() {
             // nextPhase - wyświetl graczy z kolorami
             instructionTitle = getModalText(
               "advancedGame",
-              "nextPhaseInstruction.title"
+              "nextPhase.title"
             ).message;
 
             const confirmTextFromJson = getModalText(
               "advancedGame",
-              "nextPhaseInstruction.confirmText"
+              "nextPhase.confirmText"
             ).message;
             confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
               ? commonOk
@@ -707,7 +702,7 @@ export default function AdvancedGame() {
               <div>
                 <p>
                   {
-                    getModalText("advancedGame", "nextPhaseInstruction.message")
+                    getModalText("advancedGame", "nextPhase.message2")
                       .message
                   }
                 </p>
@@ -723,37 +718,24 @@ export default function AdvancedGame() {
                   {/* Gracze z końca tej fazy */}
                   {endOfPhaseIntermediatePlayers.length > 0 && (
                     <>
-                      <div
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          color: "#666",
-                          marginTop: "8px",
-                        }}
-                      >
-                        W tej fazie:
+                      <div className={styles.phaseLabel}>
+                        {
+                          getModalText(
+                            "advancedGame",
+                            "nextPhase.phaseLabels.current"
+                          ).message
+                        }
                       </div>
                       {endOfPhaseIntermediatePlayers.map((player) => (
                         <div
                           key={player.index}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
+                          className={styles.playerBox}
                         >
                           <div
                             style={{
-                              padding: "8px 16px",
-                              backgroundColor:
-                                colorToRGB[player.color] || "#999",
-                              borderRadius: "6px",
-                              fontSize: "16px",
-                              fontWeight: "bold",
-                              color: "#000",
-                              minWidth: "200px",
-                              textAlign: "center",
+                              backgroundColor: colorToRGB[player.color] || "#999",
                             }}
+                            className={styles.playerBoxContent}
                           >
                             Gracz {colorNames[player.color] || player.color}
                           </div>
@@ -765,37 +747,24 @@ export default function AdvancedGame() {
                   {/* Gracze z następnej fazy */}
                   {nextPhaseIntermediatePlayers.length > 0 && (
                     <>
-                      <div
-                        style={{
-                          fontSize: "14px",
-                          fontWeight: "bold",
-                          color: "#666",
-                          marginTop: "8px",
-                        }}
-                      >
-                        W następnej fazie:
+                      <div className={styles.phaseLabel}>
+                        {
+                          getModalText(
+                            "advancedGame",
+                            "nextPhase.phaseLabels.next"
+                          ).message
+                        }
                       </div>
                       {nextPhaseIntermediatePlayers.map((player) => (
                         <div
                           key={player.index}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
+                          className={styles.playerBox}
                         >
                           <div
                             style={{
-                              padding: "8px 16px",
-                              backgroundColor:
-                                colorToRGB[player.color] || "#999",
-                              borderRadius: "6px",
-                              fontSize: "16px",
-                              fontWeight: "bold",
-                              color: "#000",
-                              minWidth: "200px",
-                              textAlign: "center",
+                              backgroundColor: colorToRGB[player.color] || "#999",
                             }}
+                            className={styles.playerBoxContent}
                           >
                             Gracz {colorNames[player.color] || player.color}
                           </div>
@@ -810,12 +779,12 @@ export default function AdvancedGame() {
             // nextPhase - fallback na notatki jeśli brak graczy
             instructionTitle = getModalText(
               "advancedGame",
-              "nextPhaseInstruction.title"
+              "nextPhase.title"
             ).message;
 
             const confirmTextFromJson = getModalText(
               "advancedGame",
-              "nextPhaseInstruction.confirmText"
+              "nextPhase.confirmText"
             ).message;
             confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
               ? commonOk
@@ -835,7 +804,7 @@ export default function AdvancedGame() {
             // Dla nextRound i innych
             instructionTitle = getModalText(
               "advancedGame",
-              "instructionModal.title"
+              "nextPhase.title"
             ).message;
             instructionMessage = getModalText(
               "advancedGame",

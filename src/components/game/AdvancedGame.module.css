@@ -73,6 +73,37 @@
   font-size: 0.9rem;
 }
 
+.modalPlayersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.phaseLabel {
+  font-size: 14px;
+  font-weight: bold;
+  color: #666;
+  margin-top: 8px;
+}
+
+.playerBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.playerBoxContent {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  min-width: 200px;
+  text-align: center;
+}
+
 @media (max-width: 360px) {
   .gameControls {
     flex-direction: column;
