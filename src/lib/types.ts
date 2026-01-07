@@ -22,6 +22,7 @@ export type PlayerColor = "red" | "yellow" | "green" | "orange" | "blue";
 // Player in advanced mode
 export interface Player {
   id: number;
+  playerNumber: number;
   color: PlayerColor;
   isBot: boolean;
 }

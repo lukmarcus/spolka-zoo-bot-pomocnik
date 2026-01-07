@@ -380,7 +380,9 @@ export default function AdvancedGame() {
                   color: player.color === "yellow" ? "#000" : "#fff",
                 }}
               >
-                <div className={styles.playerSquareNumber}>G{index + 1}</div>
+                <div className={styles.playerSquareNumber}>
+                  G{player.playerNumber}
+                </div>
                 <div>{player.isBot ? "BOT" : "CZ"}</div>
               </div>
             ))}
@@ -617,10 +619,7 @@ export default function AdvancedGame() {
             instructionMessage = (
               <div>
                 <p>
-                  {
-                    getModalText("advancedGame", "nextBot.message2")
-                      .message
-                  }
+                  {getModalText("advancedGame", "nextBot.message2").message}
                 </p>
                 <div
                   style={{
@@ -678,17 +677,7 @@ export default function AdvancedGame() {
               ? commonOk
               : confirmTextFromJson;
 
-            // Mapowanie kolorów na polskie nazwy (jak w nextBot)
-            const colorNames: Record<string, string> = {
-              red: "Czerwony",
-              green: "Zielony",
-              blue: "Niebieski",
-              yellow: "Żółty",
-              orange: "Pomarańczowy",
-              purple: "Fioletowy",
-            };
-
-            // Konwertuj color hex do RGB dla przezroczystości
+            // Convert color hex to RGB for transparency
             const colorToRGB: Record<string, string> = {
               red: "#FF6B6B",
               yellow: "#FFD93D",
@@ -697,14 +686,11 @@ export default function AdvancedGame() {
               blue: "#4D96FF",
             };
 
-            // Renderuj graczy jeden pod drugim
+            // Render players in rows
             instructionMessage = (
               <div>
                 <p>
-                  {
-                    getModalText("advancedGame", "nextPhase.message2")
-                      .message
-                  }
+                  {getModalText("advancedGame", "nextPhase.message2").message}
                 </p>
                 <div
                   style={{
@@ -727,17 +713,15 @@ export default function AdvancedGame() {
                         }
                       </div>
                       {endOfPhaseIntermediatePlayers.map((player) => (
-                        <div
-                          key={player.index}
-                          className={styles.playerBox}
-                        >
+                        <div key={player.index} className={styles.playerBox}>
                           <div
                             style={{
-                              backgroundColor: colorToRGB[player.color] || "#999",
+                              backgroundColor:
+                                colorToRGB[player.color] || "#999",
                             }}
                             className={styles.playerBoxContent}
                           >
-                            Gracz {colorNames[player.color] || player.color}
+                            G{player.playerNumber}
                           </div>
                         </div>
                       ))}
@@ -756,17 +740,15 @@ export default function AdvancedGame() {
                         }
                       </div>
                       {nextPhaseIntermediatePlayers.map((player) => (
-                        <div
-                          key={player.index}
-                          className={styles.playerBox}
-                        >
+                        <div key={player.index} className={styles.playerBox}>
                           <div
                             style={{
-                              backgroundColor: colorToRGB[player.color] || "#999",
+                              backgroundColor:
+                                colorToRGB[player.color] || "#999",
                             }}
                             className={styles.playerBoxContent}
                           >
-                            Gracz {colorNames[player.color] || player.color}
+                            G{player.playerNumber}
                           </div>
                         </div>
                       ))}

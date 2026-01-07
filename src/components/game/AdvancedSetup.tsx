@@ -29,8 +29,8 @@ const AdvancedGame: React.FC = () => {
   const navigate = useNavigate();
   const game = useGame();
   const [players, setPlayers] = useState<Player[]>([
-    { id: 1, color: "red", isBot: false },
-    { id: 2, color: "yellow", isBot: true },
+    { id: 1, playerNumber: 1, color: "red", isBot: false },
+    { id: 2, playerNumber: 2, color: "yellow", isBot: true },
   ]);
   const [selectedMode, setSelectedMode] = useState<"shared" | "individual">(
     "shared"
@@ -51,6 +51,7 @@ const AdvancedGame: React.FC = () => {
         ...prev,
         {
           id: Math.max(...prev.map((p) => p.id)) + 1,
+          playerNumber: prev.length + 1,
           color: nextColor,
           isBot: true,
         },
