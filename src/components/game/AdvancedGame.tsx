@@ -190,7 +190,6 @@ export default function AdvancedGame() {
       const note6Key = botCount === 1 ? "single" : "multiple";
 
       const base = getModalText("advancedGame", "nextRound.message");
-      const note1 = getModalText("advancedGame", "nextRound.note1");
       const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
       const note3 = getModalText("advancedGame", `nextRound.note3.${note3Key}`);
       const note4 = getModalText(
@@ -207,7 +206,6 @@ export default function AdvancedGame() {
           advancedGame?: AdvancedGameTexts;
         }
       )?.advancedGame?.nextRound?.noteOrder ?? [
-        "note1",
         "note2",
         "note3",
         "note4",
@@ -216,7 +214,6 @@ export default function AdvancedGame() {
       ];
 
       const noteMap: Record<string, string | undefined> = {
-        note1: note1?.message,
         note2: note2?.message,
         note3: note3?.message,
         note4: note4?.message,
@@ -783,14 +780,17 @@ export default function AdvancedGame() {
               </div>
             );
           } else {
-            // Dla nextRound i innych
+            // For nextRound and others
+            const botCountForMessage = state.players!.filter((p) => p.isBot).length;
+            const message2Key = botCountForMessage === 1 ? "single" : "multiple";
+            
             instructionTitle = getModalText(
               "advancedGame",
-              "nextPhase.title"
+              "nextRound.title"
             ).message;
             instructionMessage = getModalText(
               "advancedGame",
-              "instructionModal.message"
+              `nextRound.message2.${message2Key}`
             ).message;
           }
 

@@ -43,7 +43,6 @@
     },
     "nextRound": {
       "title": "Następna runda",
-      "note1": "• Aktualny Bot wykonał przynajmniej jeden efekt z dostępnej karty.",
       "note2": {
         "last": "• Aktualny Bot jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji aktualnej rundy.",
         "notLast": "• Aktualny Bot nie jest ostatnim graczem w aktualnej (ostatniej) fazie Akcji aktualnej rundy."
@@ -67,7 +66,11 @@
         "single": "• Dla Bota w pierwszej fazie Akcji następnej rundy zostanie dobrana karta.",
         "multiple": "• Dla pierwszego Bota w pierwszej fazie Akcji następnej rundy zostanie dobrana karta."
       },
-      "message": "Przejść do pierwszej fazy Akcji następnej rundy?"
+      "message": "Przejść do pierwszej fazy Akcji następnej rundy?",
+      "message2": {
+        "single": "Przejść do Bota w pierwszej fazie Akcji następnej rundy i dobrać dla niego nową kartę?",
+        "multiple": "Przejść do pierwszego Bota w pierwszej fazie Akcji następnej rundy i dobrać dla niego nową kartę?"
+      }
     },
     "endGame": {
       "title": "Koniec gry",
