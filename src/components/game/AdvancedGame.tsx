@@ -187,9 +187,9 @@ export default function AdvancedGame() {
         note5Key = "multiple_individual";
       }
 
-      const note6Key = botCount === 1 ? "single" : "multiple";
-
-      const base = getModalText("advancedGame", "nextRound.message");
+      const messageKey = botCount === 1 ? "single" : "multiple";
+      const base = getModalText("advancedGame", `nextRound.message.${messageKey}`);
+      const note1 = getModalText("advancedGame", "nextRound.note1");
       const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
       const note3 = getModalText("advancedGame", `nextRound.note3.${note3Key}`);
       const note4 = getModalText(
@@ -197,7 +197,6 @@ export default function AdvancedGame() {
         `nextRound.note4.${note4Variant}`
       );
       const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
-      const note6 = getModalText("advancedGame", `nextRound.note6.${note6Key}`);
 
       const baseMessage = base.message;
       // Build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
@@ -206,19 +205,19 @@ export default function AdvancedGame() {
           advancedGame?: AdvancedGameTexts;
         }
       )?.advancedGame?.nextRound?.noteOrder ?? [
+        "note1",
         "note2",
         "note3",
         "note4",
         "note5",
-        "note6",
       ];
 
       const noteMap: Record<string, string | undefined> = {
+        note1: note1?.message,
         note2: note2?.message,
         note3: note3?.message,
         note4: note4?.message,
         note5: note5?.message,
-        note6: note6?.message,
       };
 
       const notesParts: string[] = noteOrder
@@ -790,7 +789,7 @@ export default function AdvancedGame() {
             ).message;
             instructionMessage = getModalText(
               "advancedGame",
-              `nextRound.message2.${message2Key}`
+              `nextRound.message.${message2Key}`
             ).message;
           }
 
