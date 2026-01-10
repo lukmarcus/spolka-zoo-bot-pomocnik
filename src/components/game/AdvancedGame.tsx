@@ -83,13 +83,6 @@ export default function AdvancedGame() {
   // For nextPhase: whether the first player of the next phase is a bot
   const willBeFirstInNextPhase = isLastPlayer && state.players[0].isBot;
 
-  // Calculate the index of the player who will start the next round
-  const nextRoundStartIndex =
-    (state.currentPlayerIndex! + 1) % state.players.length;
-
-  const isFirstInNextRoundABot =
-    state.players[nextRoundStartIndex]?.isBot ?? false;
-
   // For nextPhase: players from the next one after the bot to the end of this phase
   const endOfPhaseIntermediatePlayers = (() => {
     const players = [];
@@ -169,64 +162,16 @@ export default function AdvancedGame() {
     }
 
     if (actionKey === "nextRound") {
-      const note2Key = isLastPlayer ? "last" : "notLast";
-
-      const note3Key = isFirstInNextRoundABot ? "first" : "notFirst";
-
-      const note4Variant = `${isLastPlayer ? "last" : "notLast"}_${
-        isFirstInNextRoundABot ? "first" : "notFirst"
-      }`;
-
       const botCount = state.players!.filter((p) => p.isBot).length;
-      let note5Key: string;
-      if (botCount === 1) {
-        note5Key = "single";
-      } else if (state.mode === "shared") {
-        note5Key = "multiple_shared";
-      } else {
-        note5Key = "multiple_individual";
-      }
 
       const messageKey = botCount === 1 ? "single" : "multiple";
       const base = getModalText("advancedGame", `nextRound.message.${messageKey}`);
-      const note1 = getModalText("advancedGame", "nextRound.note1");
-      const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
-      const note3 = getModalText("advancedGame", `nextRound.note3.${note3Key}`);
-      const note4 = getModalText(
-        "advancedGame",
-        `nextRound.note4.${note4Variant}`
-      );
-      const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
 
       const baseMessage = base.message;
-      // Build notes in the order specified by modalTexts.json -> advancedGame.nextRound.noteOrder
-      const noteOrder: string[] = (
-        modalTexts as unknown as {
-          advancedGame?: AdvancedGameTexts;
-        }
-      )?.advancedGame?.nextRound?.noteOrder ?? [
-        "note1",
-        "note2",
-        "note3",
-        "note4",
-        "note5",
-      ];
-
-      const noteMap: Record<string, string | undefined> = {
-        note1: note1?.message,
-        note2: note2?.message,
-        note3: note3?.message,
-        note4: note4?.message,
-        note5: note5?.message,
-      };
-
-      const notesParts: string[] = noteOrder
-        .map((k) => noteMap[k])
-        .filter((m): m is string => typeof m === "string");
 
       return {
         message: baseMessage,
-        notes: notesParts.length ? notesParts.join("\n") : undefined,
+        notes: undefined,
       };
     }
 
@@ -539,7 +484,7 @@ export default function AdvancedGame() {
                 ) {
                   game.nextPhase();
                 }
-                // Dla nextPhase: pokaż drugi modal jeśli są gracze do wyświetlenia
+                // For nextPhase: show second modal if there are players to display
                 else if (
                   actionKey === "nextPhase" &&
                   (endOfPhaseIntermediatePlayers.length > 0 ||
@@ -547,7 +492,11 @@ export default function AdvancedGame() {
                 ) {
                   setShowActionInstructionsModal(true);
                 }
-                // W pozostałych przypadkach pokaż drugi modal jeśli są notatki
+                // For nextRound: always show second modal (contains info about player rotation and deck shuffling)
+                else if (hasNextRound) {
+                  setShowActionInstructionsModal(true);
+                }
+                // In other cases show second modal if there are notes
                 else if (notes && actionKey !== "endGame") {
                   setShowActionInstructionsModal(true);
                 } else {
@@ -779,18 +728,56 @@ export default function AdvancedGame() {
               </div>
             );
           } else {
-            // For nextRound and others
-            const botCountForMessage = state.players!.filter((p) => p.isBot).length;
-            const message2Key = botCountForMessage === 1 ? "single" : "multiple";
-            
+            // For nextRound: display message2 + notes about player rotation and deck shuffling
             instructionTitle = getModalText(
               "advancedGame",
               "nextRound.title"
             ).message;
-            instructionMessage = getModalText(
+            const message2 = getModalText(
               "advancedGame",
-              `nextRound.message.${message2Key}`
+              "nextRound.message2"
             ).message;
+            
+            // Generate notes for nextRound
+            const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
+            const note2Key = isLastPlayer ? "last" : "notLast";
+            const note3Key = state.players[0].isBot ? "first" : "notFirst";
+            const note4Variant = `${isLastPlayer ? "last" : "notLast"}_${
+              state.players[0].isBot ? "first" : "notFirst"
+            }`;
+            const botCount = state.players!.filter((p) => p.isBot).length;
+            const note5Key = botCount === 1 ? "single" : state.mode === "shared" ? "multiple_shared" : "multiple_individual";
+            
+            const note1 = getModalText("advancedGame", "nextRound.note1");
+            const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
+            const note3 = getModalText("advancedGame", `nextRound.note3.${note3Key}`);
+            const note4 = getModalText("advancedGame", `nextRound.note4.${note4Variant}`);
+            const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
+            
+            const noteOrder = ["note1", "note2", "note3", "note4", "note5"];
+            const noteMap: Record<string, string | undefined> = {
+              note1: note1?.message,
+              note2: note2?.message,
+              note3: note3?.message,
+              note4: note4?.message,
+              note5: note5?.message,
+            };
+            const notesParts: string[] = noteOrder
+              .map((k) => noteMap[k])
+              .filter((m): m is string => typeof m === "string");
+            
+            instructionMessage = (
+              <div className={styles.modalContent}>
+                <p style={{ margin: "0 0 16px 0", textAlign: "center", fontWeight: "bold" }}>
+                  {message2}
+                </p>
+                {notesParts.map((line: string, index: number) => (
+                  <p key={index} style={{ margin: "8px 0", textAlign: "left" }}>
+                    {line}
+                  </p>
+                ))}
+              </div>
+            );
           }
 
           return (

@@ -66,7 +66,8 @@
       "message": {
         "single": "Przejść do Bota w pierwszej fazie Akcji następnej rundy i dobrać dla niego nową kartę?",
         "multiple": "Przejść do pierwszego Bota w pierwszej fazie Akcji następnej rundy i dobrać dla niego nową kartę?"
-      }
+      },
+      "message2": "Zanim potwierdzisz przejście do pierwszej fazy Akcji następnej rundy, wykonaj czynności:"
     },
     "endGame": {
       "title": "Koniec gry",
