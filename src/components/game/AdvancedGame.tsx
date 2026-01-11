@@ -104,6 +104,27 @@ export default function AdvancedGame() {
     return players;
   })();
 
+  // For nextRound: players remaining in current phase and players in next round after rotation
+  const nextRoundPlayers = (() => {
+    if (!hasNextRound) return { endOfRound: [], startOfNextRound: [] };
+
+    // Players remaining to act in current phase (after current player to end)
+    const endOfRound = [];
+    for (let i = state.currentPlayerIndex! + 1; i < state.players.length; i++) {
+      endOfRound.push({ index: i, ...state.players[i] });
+    }
+
+    // After rotation, players from 0 to first bot in new round
+    const rotatedPlayers = [...state.players.slice(1), state.players[0]];
+    const startOfNextRound = [];
+    for (let i = 0; i < rotatedPlayers.length; i++) {
+      if (rotatedPlayers[i].isBot) break;
+      startOfNextRound.push({ index: i, ...rotatedPlayers[i] });
+    }
+
+    return { endOfRound, startOfNextRound };
+  })();
+
   // Text for the second button in the action modal — retrieved from modalTexts.json
   const getActionModalMessage = (): {
     message: string | React.ReactNode;
@@ -165,7 +186,10 @@ export default function AdvancedGame() {
       const botCount = state.players!.filter((p) => p.isBot).length;
 
       const messageKey = botCount === 1 ? "single" : "multiple";
-      const base = getModalText("advancedGame", `nextRound.message.${messageKey}`);
+      const base = getModalText(
+        "advancedGame",
+        `nextRound.message.${messageKey}`
+      );
 
       const baseMessage = base.message;
 
@@ -728,7 +752,7 @@ export default function AdvancedGame() {
               </div>
             );
           } else {
-            // For nextRound: display message2 + notes about player rotation and deck shuffling
+            // For nextRound: display message2 + notes about player rotation and deck shuffling + player lists
             instructionTitle = getModalText(
               "advancedGame",
               "nextRound.title"
@@ -737,45 +761,126 @@ export default function AdvancedGame() {
               "advancedGame",
               "nextRound.message2"
             ).message;
-            
-            // Generate notes for nextRound
-            const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
-            const note2Key = isLastPlayer ? "last" : "notLast";
-            const note3Key = state.players[0].isBot ? "first" : "notFirst";
-            const note4Variant = `${isLastPlayer ? "last" : "notLast"}_${
-              state.players[0].isBot ? "first" : "notFirst"
-            }`;
+
+            // Get text notes
             const botCount = state.players!.filter((p) => p.isBot).length;
-            const note5Key = botCount === 1 ? "single" : state.mode === "shared" ? "multiple_shared" : "multiple_individual";
-            
+            const note5Key =
+              botCount === 1
+                ? "single"
+                : state.mode === "shared"
+                ? "multiple_shared"
+                : "multiple_individual";
+
             const note1 = getModalText("advancedGame", "nextRound.note1");
-            const note2 = getModalText("advancedGame", `nextRound.note2.${note2Key}`);
-            const note3 = getModalText("advancedGame", `nextRound.note3.${note3Key}`);
-            const note4 = getModalText("advancedGame", `nextRound.note4.${note4Variant}`);
-            const note5 = getModalText("advancedGame", `nextRound.note5.${note5Key}`);
-            
-            const noteOrder = ["note1", "note2", "note3", "note4", "note5"];
-            const noteMap: Record<string, string | undefined> = {
-              note1: note1?.message,
-              note2: note2?.message,
-              note3: note3?.message,
-              note4: note4?.message,
-              note5: note5?.message,
+            const note2 = getModalText("advancedGame", "nextRound.note2");
+            const note3 = getModalText(
+              "advancedGame",
+              `nextRound.note3.${note5Key}`
+            );
+
+            const currentPhaseLabel = getModalText(
+              "advancedGame",
+              "nextRound.phaseLabels.current"
+            ).message;
+            const nextRoundLabel = getModalText(
+              "advancedGame",
+              "nextRound.phaseLabels.next"
+            ).message;
+
+            const colorToRGB: Record<string, string> = {
+              red: "#d32f2f",
+              blue: "#1976d2",
+              green: "#388e3c",
+              yellow: "#f57c00",
+              purple: "#7b1fa2",
+              orange: "#e64a19",
             };
-            const notesParts: string[] = noteOrder
-              .map((k) => noteMap[k])
-              .filter((m): m is string => typeof m === "string");
-            
+
             instructionMessage = (
-              <div className={styles.modalContent}>
-                <p style={{ margin: "0 0 16px 0", textAlign: "center", fontWeight: "bold" }}>
+              <div>
+                <p
+                  style={{
+                    margin: "0 0 16px 0",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
                   {message2}
                 </p>
-                {notesParts.map((line: string, index: number) => (
-                  <p key={index} style={{ margin: "8px 0", textAlign: "left" }}>
-                    {line}
-                  </p>
-                ))}
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                    marginTop: "12px",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Players remaining in current phase */}
+                  {nextRoundPlayers.endOfRound.length > 0 && (
+                    <>
+                      <div className={styles.phaseLabel}>
+                        {currentPhaseLabel}
+                      </div>
+                      {nextRoundPlayers.endOfRound.map((player) => (
+                        <div key={player.index} className={styles.playerBox}>
+                          <div
+                            style={{
+                              backgroundColor:
+                                colorToRGB[player.color] || "#999",
+                            }}
+                            className={styles.playerBoxContent}
+                          >
+                            G{player.playerNumber}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+
+                  {/* Text notes about rotation and deck shuffling - between sections */}
+                  {note1?.message && (
+                    <p>
+                      {note1.message}
+                    </p>
+                  )}
+                  {note2?.message && (
+                    <p>
+                      {note2.message}
+                    </p>
+                  )}
+                  {note3?.message && (
+                    <p>
+                      {note3.message}
+                    </p>
+                  )}
+
+                  {/* Players to act in next round */}
+                  {nextRoundPlayers.startOfNextRound.length > 0 && (
+                    <>
+                      <div
+                        className={styles.phaseLabel}
+                        style={{ marginTop: "8px" }}
+                      >
+                        {nextRoundLabel}
+                      </div>
+                      {nextRoundPlayers.startOfNextRound.map((player) => (
+                        <div key={player.index} className={styles.playerBox}>
+                          <div
+                            style={{
+                              backgroundColor:
+                                colorToRGB[player.color] || "#999",
+                            }}
+                            className={styles.playerBoxContent}
+                          >
+                            G{player.playerNumber}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
               </div>
             );
           }
