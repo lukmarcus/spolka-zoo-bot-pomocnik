@@ -14,11 +14,11 @@
     },
     "nextBot": {
       "title": "Następny bot",
-      "message": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?",
-      "message2": "Zanim potwierdzisz przejście do kolejnego Bota w tej fazie Akcji i dobranie dla niego nowej karty, zagraj żetony Akcji graczy:",
-      "note2": {
-        "adjacent": "• Potwierdź przejście do kolejnego Bota w tej fazie Akcji."
+      "message": {
+        "adjacent": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?",
+        "notAdjacent": "Zanim przejdziesz do kolejnego Bota w tej fazie Akcji i dobierzesz dla niego nową kartę:"
       },
+      "instructionLabel": "• Zagraj żetony Akcji dla:",
       "confirmText": "Kontynuuj"
     },
     "nextPhase": {
@@ -28,6 +28,7 @@
         "multiple": "Przejść do pierwszego Bota w następnej fazie Akcji i dobrać dla niego nową kartę?"
       },
       "message2": "Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy:",
+      "note": "• Rozegraj fazę Rynku dla wszystkich graczy.",
       "confirmText": "Kontynuuj",
       "phaseLabels": {
         "current": "W tej fazie:",

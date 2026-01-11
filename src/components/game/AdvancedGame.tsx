@@ -125,30 +125,78 @@ export default function AdvancedGame() {
     return { endOfRound, startOfNextRound };
   })();
 
+  // Color mappings for modals
+  const colorToRGB: Record<string, string> = {
+    red: "#FF0000",
+    yellow: "#FFFF00",
+    green: "#00CC00",
+    orange: "#FFA500",
+    blue: "#0000FF",
+  };
+
+  const colorNames: Record<string, string> = {
+    red: "Czerwony",
+    yellow: "Żółty",
+    green: "Zielony",
+    orange: "Pomarańczowy",
+    blue: "Niebieski",
+  };
+
   // Text for the second button in the action modal — retrieved from modalTexts.json
   const getActionModalMessage = (): {
     message: string | React.ReactNode;
     notes?: string;
   } => {
     if (actionKey === "nextBot") {
-      const nextBotNode = (
-        modalTexts as unknown as { advancedGame?: Record<string, unknown> }
-      )?.advancedGame?.nextBot as Record<string, unknown> | undefined;
+      const messageKey = isNextBotAdjacent ? "adjacent" : "notAdjacent";
+      const baseMessage = getModalText(
+        "advancedGame",
+        `nextBot.message.${messageKey}`
+      ).message;
 
-      const baseMessage =
-        typeof nextBotNode?.message === "string"
-          ? (nextBotNode.message as string)
-          : "";
-
-      const notesParts: string[] = [];
+      const instructionLabel = getModalText(
+        "advancedGame",
+        "nextBot.instructionLabel"
+      ).message;
 
       const centeredMessage = (
-        <div style={{ textAlign: "center" }}>{baseMessage}</div>
+        <div>
+          <p style={{ textAlign: "center" }}>{baseMessage}</p>
+          {nextBotIntermediatePlayers.length > 0 && (
+            <>
+              <div className={styles.phaseLabel} style={{ marginTop: "12px" }}>
+                {instructionLabel}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                  marginTop: "12px",
+                  alignItems: "center",
+                }}
+              >
+                {nextBotIntermediatePlayers.map((player) => (
+                  <div key={player.index} className={styles.playerBox}>
+                    <div
+                      style={{
+                        backgroundColor: colorToRGB[player.color] || "#999",
+                      }}
+                      className={styles.playerBoxContent}
+                    >
+                      Gracz {colorNames[player.color] || player.color}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       );
 
       return {
         message: centeredMessage,
-        notes: notesParts.length ? notesParts.join("\n") : undefined,
+        notes: undefined,
       };
     }
 
@@ -489,16 +537,9 @@ export default function AdvancedGame() {
               cancelText={modalCancel}
               onConfirm={() => {
                 setShowActionModal(false);
-                // Dla nextBot: jeśli sąsiedni, wykonaj od razu bez drugiego modala
-                if (actionKey === "nextBot" && isNextBotAdjacent) {
+                // nextBot: always execute directly (all content is in single modal)
+                if (actionKey === "nextBot") {
                   game.nextPlayer();
-                }
-                // Dla nextBot: jeśli NIE sąsiedni, pokaż drugi modal z listą graczy
-                else if (
-                  actionKey === "nextBot" &&
-                  nextBotIntermediatePlayers.length > 0
-                ) {
-                  setShowActionInstructionsModal(true);
                 }
                 // Dla nextPhase: jeśli bot kończy fazę i następny bot zaczyna nową fazę, bez drugiego modala
                 else if (
@@ -575,15 +616,6 @@ export default function AdvancedGame() {
               blue: "Niebieski",
             };
 
-            // Konwertuj color hex do RGB dla przezroczystości
-            const colorToRGB: Record<string, string> = {
-              red: "#FF6B6B",
-              yellow: "#FFD93D",
-              green: "#6BCB77",
-              orange: "#FF8C42",
-              blue: "#4D96FF",
-            };
-
             // Renderuj jako JSX z listą graczy jeden pod drugim
             instructionMessage = (
               <div>
@@ -647,20 +679,17 @@ export default function AdvancedGame() {
               : confirmTextFromJson;
 
             // Convert color hex to RGB for transparency
-            const colorToRGB: Record<string, string> = {
-              red: "#FF6B6B",
-              yellow: "#FFD93D",
-              green: "#6BCB77",
-              orange: "#FF8C42",
-              blue: "#4D96FF",
-            };
-
             // Render players in rows
             instructionMessage = (
               <div>
                 <p>
                   {getModalText("advancedGame", "nextPhase.message2").message}
                 </p>
+                {getModalText("advancedGame", "nextPhase.note")?.message && (
+                  <p>
+                    {getModalText("advancedGame", "nextPhase.note").message}
+                  </p>
+                )}
                 <div
                   style={{
                     display: "flex",
@@ -787,15 +816,6 @@ export default function AdvancedGame() {
               "nextRound.phaseLabels.next"
             ).message;
 
-            const colorToRGB: Record<string, string> = {
-              red: "#d32f2f",
-              blue: "#1976d2",
-              green: "#388e3c",
-              yellow: "#f57c00",
-              purple: "#7b1fa2",
-              orange: "#e64a19",
-            };
-
             instructionMessage = (
               <div>
                 <p
@@ -840,21 +860,9 @@ export default function AdvancedGame() {
                   )}
 
                   {/* Text notes about rotation and deck shuffling - between sections */}
-                  {note1?.message && (
-                    <p>
-                      {note1.message}
-                    </p>
-                  )}
-                  {note2?.message && (
-                    <p>
-                      {note2.message}
-                    </p>
-                  )}
-                  {note3?.message && (
-                    <p>
-                      {note3.message}
-                    </p>
-                  )}
+                  {note1?.message && <p>{note1.message}</p>}
+                  {note2?.message && <p>{note2.message}</p>}
+                  {note3?.message && <p>{note3.message}</p>}
 
                   {/* Players to act in next round */}
                   {nextRoundPlayers.startOfNextRound.length > 0 && (
