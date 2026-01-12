@@ -85,7 +85,6 @@
   font-size: 14px;
   font-weight: bold;
   color: #666;
-  margin-top: 8px;
 }
 
 .playerBox {
@@ -95,7 +94,7 @@
 }
 
 .playerBoxContent {
-  padding: 8px 16px;
+  padding: 4px 16px;
   border-radius: 6px;
   font-size: 16px;
   font-weight: bold;

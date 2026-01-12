@@ -24,16 +24,13 @@
     "nextPhase": {
       "title": "Następna faza Akcji",
       "message": {
-        "single": "Przejść do Bota w następnej fazie Akcji i dobrać dla niego nową kartę?",
-        "multiple": "Przejść do pierwszego Bota w następnej fazie Akcji i dobrać dla niego nową kartę?"
+        "single": "Zanim przejdziesz do Bota w następnej fazie Akcji i dobierzesz dla niego nową kartę:",
+        "multiple": "Zanim przejdziesz do pierwszego Bota w następnej fazie Akcji i dobierzesz dla niego nową kartę:"
       },
-      "message2": "Zanim potwierdzisz przejście do następnej fazy Akcji, zagraj żetony Akcji graczy:",
-      "note": "• Rozegraj fazę Rynku dla wszystkich graczy.",
-      "confirmText": "Kontynuuj",
-      "phaseLabels": {
-        "current": "W tej fazie:",
-        "next": "W następnej fazie:"
-      }
+      "currentPhasePlayers": "• W tej fazie Akcji zagraj żetony Akcji dla:",
+      "marketPhase": "• Rozegraj fazę Rynku dla wszystkich graczy.",
+      "nextPhasePlayers": "• W następnej fazie Akcji zagraj żetony Akcji dla:",
+      "confirmText": "Kontynuuj"
     },
     "modalConfirm": {
       "endGame": "Zakończ grę"

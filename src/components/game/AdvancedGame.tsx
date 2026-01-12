@@ -81,7 +81,8 @@ export default function AdvancedGame() {
   const isLastPlayer = state.currentPlayerIndex === state.players!.length - 1;
 
   // For nextPhase: whether the first player of the next phase is a bot
-  const willBeFirstInNextPhase = isLastPlayer && state.players[0].isBot;
+  // NOTE: This was previously used but is now unused since nextPhase is a single modal
+  // const willBeFirstInNextPhase = isLastPlayer && state.players[0].isBot;
 
   // For nextPhase: players from the next one after the bot to the end of this phase
   const endOfPhaseIntermediatePlayers = (() => {
@@ -125,13 +126,13 @@ export default function AdvancedGame() {
     return { endOfRound, startOfNextRound };
   })();
 
-  // Color mappings for modals
+  // Color mappings for modals - same as in AdvancedSetup
   const colorToRGB: Record<string, string> = {
-    red: "#FF0000",
-    yellow: "#FFFF00",
-    green: "#00CC00",
-    orange: "#FFA500",
-    blue: "#0000FF",
+    red: "#da4833",
+    yellow: "#f3ba3a",
+    green: "#80ac48",
+    orange: "#eb7433",
+    blue: "#89c2cf",
   };
 
   const colorNames: Record<string, string> = {
@@ -211,22 +212,87 @@ export default function AdvancedGame() {
       );
 
       const baseMessage = base.message;
-
-      const noteOrder: string[] = [];
-
-      const noteMap: Record<string, string | undefined> = {};
-
-      const allNotes: string[] = noteOrder
-        .map((k) => noteMap[k])
-        .filter((m): m is string => typeof m === "string");
+      const marketPhase = getModalText(
+        "advancedGame",
+        "nextPhase.marketPhase"
+      ).message;
 
       const centeredMessage = (
-        <div style={{ textAlign: "center" }}>{baseMessage}</div>
+        <div>
+          <p style={{ textAlign: "center" }}>{baseMessage}</p>
+          {(endOfPhaseIntermediatePlayers.length > 0 ||
+            nextPhaseIntermediatePlayers.length > 0) && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                marginTop: "12px",
+                alignItems: "center",
+              }}
+            >
+              {/* Gracze z końca tej fazy */}
+              {endOfPhaseIntermediatePlayers.length > 0 && (
+                <>
+                  <div className={styles.phaseLabel}>
+                    {
+                      getModalText(
+                        "advancedGame",
+                        "nextPhase.currentPhasePlayers"
+                      ).message
+                    }
+                  </div>
+                  {endOfPhaseIntermediatePlayers.map((player) => (
+                    <div key={player.index} className={styles.playerBox}>
+                      <div
+                        style={{
+                          backgroundColor: colorToRGB[player.color] || "#999",
+                        }}
+                        className={styles.playerBoxContent}
+                      >
+                        Gracz {colorNames[player.color] || player.color}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {/* Market Phase */}
+              {marketPhase && (
+                <div className={styles.phaseLabel}>{marketPhase}</div>
+              )}
+
+              {/* Gracze z następnej fazy */}
+              {nextPhaseIntermediatePlayers.length > 0 && (
+                <>
+                  <div className={styles.phaseLabel}>
+                    {
+                      getModalText("advancedGame", "nextPhase.nextPhasePlayers")
+                        .message
+                    }
+                  </div>
+                  {nextPhaseIntermediatePlayers.map((player) => (
+                    <div key={player.index} className={styles.playerBox}>
+                      <div
+                        style={{
+                          backgroundColor: colorToRGB[player.color] || "#999",
+                        }}
+                        className={styles.playerBoxContent}
+                      >
+                        Gracz {colorNames[player.color] || player.color}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          )}
+        </div>
       );
 
       return {
         message: centeredMessage,
-        notes: allNotes.length ? allNotes.join("\n") : undefined,
+        notes: undefined,
       };
     }
 
@@ -518,7 +584,7 @@ export default function AdvancedGame() {
 
         {/* Modal potwierdzenia dla akcji drugiego przycisku */}
         {(() => {
-          const { message, notes } = getActionModalMessage();
+          const { message } = getActionModalMessage();
           return (
             <ConfirmModal
               isOpen={showActionModal}
@@ -532,7 +598,6 @@ export default function AdvancedGame() {
                   : (endGameNode?.title as string) || ""
               }
               message={message}
-              notes={notes}
               confirmText={commonOk}
               cancelText={modalCancel}
               onConfirm={() => {
@@ -541,34 +606,16 @@ export default function AdvancedGame() {
                 if (actionKey === "nextBot") {
                   game.nextPlayer();
                 }
-                // Dla nextPhase: jeśli bot kończy fazę i następny bot zaczyna nową fazę, bez drugiego modala
-                else if (
-                  actionKey === "nextPhase" &&
-                  isLastPlayer &&
-                  willBeFirstInNextPhase
-                ) {
+                // nextPhase: always execute directly (all content is in single modal)
+                else if (actionKey === "nextPhase") {
                   game.nextPhase();
-                }
-                // For nextPhase: show second modal if there are players to display
-                else if (
-                  actionKey === "nextPhase" &&
-                  (endOfPhaseIntermediatePlayers.length > 0 ||
-                    nextPhaseIntermediatePlayers.length > 0)
-                ) {
-                  setShowActionInstructionsModal(true);
                 }
                 // For nextRound: always show second modal (contains info about player rotation and deck shuffling)
                 else if (hasNextRound) {
                   setShowActionInstructionsModal(true);
-                }
-                // In other cases show second modal if there are notes
-                else if (notes && actionKey !== "endGame") {
-                  setShowActionInstructionsModal(true);
                 } else {
-                  // Wykonaj akcję bezpośrednio
-                  if (actionKey === "nextPhase") {
-                    game.nextPhase();
-                  } else if (actionKey === "nextRound") {
+                  // Execute action directly
+                  if (actionKey === "nextRound") {
                     game.nextRound();
                   } else if (actionKey === "endGame") {
                     navigate("/advanced-setup");
@@ -584,7 +631,6 @@ export default function AdvancedGame() {
 
         {/* Modal instrukcji dla akcji */}
         {(() => {
-          const { notes } = getActionModalMessage();
           let instructionTitle = "";
           let instructionMessage: string | React.ReactNode = "";
           let confirmButtonText = commonOk;
@@ -657,127 +703,6 @@ export default function AdvancedGame() {
                     </div>
                   ))}
                 </div>
-              </div>
-            );
-          } else if (
-            actionKey === "nextPhase" &&
-            (endOfPhaseIntermediatePlayers.length > 0 ||
-              nextPhaseIntermediatePlayers.length > 0)
-          ) {
-            // nextPhase - wyświetl graczy z kolorami
-            instructionTitle = getModalText(
-              "advancedGame",
-              "nextPhase.title"
-            ).message;
-
-            const confirmTextFromJson = getModalText(
-              "advancedGame",
-              "nextPhase.confirmText"
-            ).message;
-            confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
-              ? commonOk
-              : confirmTextFromJson;
-
-            // Convert color hex to RGB for transparency
-            // Render players in rows
-            instructionMessage = (
-              <div>
-                <p>
-                  {getModalText("advancedGame", "nextPhase.message2").message}
-                </p>
-                {getModalText("advancedGame", "nextPhase.note")?.message && (
-                  <p>
-                    {getModalText("advancedGame", "nextPhase.note").message}
-                  </p>
-                )}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                    marginTop: "12px",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* Gracze z końca tej fazy */}
-                  {endOfPhaseIntermediatePlayers.length > 0 && (
-                    <>
-                      <div className={styles.phaseLabel}>
-                        {
-                          getModalText(
-                            "advancedGame",
-                            "nextPhase.phaseLabels.current"
-                          ).message
-                        }
-                      </div>
-                      {endOfPhaseIntermediatePlayers.map((player) => (
-                        <div key={player.index} className={styles.playerBox}>
-                          <div
-                            style={{
-                              backgroundColor:
-                                colorToRGB[player.color] || "#999",
-                            }}
-                            className={styles.playerBoxContent}
-                          >
-                            G{player.playerNumber}
-                          </div>
-                        </div>
-                      ))}
-                    </>
-                  )}
-
-                  {/* Gracze z następnej fazy */}
-                  {nextPhaseIntermediatePlayers.length > 0 && (
-                    <>
-                      <div className={styles.phaseLabel}>
-                        {
-                          getModalText(
-                            "advancedGame",
-                            "nextPhase.phaseLabels.next"
-                          ).message
-                        }
-                      </div>
-                      {nextPhaseIntermediatePlayers.map((player) => (
-                        <div key={player.index} className={styles.playerBox}>
-                          <div
-                            style={{
-                              backgroundColor:
-                                colorToRGB[player.color] || "#999",
-                            }}
-                            className={styles.playerBoxContent}
-                          >
-                            G{player.playerNumber}
-                          </div>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
-              </div>
-            );
-          } else if (actionKey === "nextPhase" && notes) {
-            // nextPhase - fallback na notatki jeśli brak graczy
-            instructionTitle = getModalText(
-              "advancedGame",
-              "nextPhase.title"
-            ).message;
-
-            const confirmTextFromJson = getModalText(
-              "advancedGame",
-              "nextPhase.confirmText"
-            ).message;
-            confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
-              ? commonOk
-              : confirmTextFromJson;
-
-            // Renderuj notatki
-            instructionMessage = (
-              <div>
-                {notes.split("\n").map((line: string, index: number) => (
-                  <p key={index} style={{ margin: "8px 0", textAlign: "left" }}>
-                    {line}
-                  </p>
-                ))}
               </div>
             );
           } else {
