@@ -306,9 +306,92 @@ export default function AdvancedGame() {
       );
 
       const baseMessage = base.message;
+      const message2 = getModalText(
+        "advancedGame",
+        "nextRound.message2"
+      ).message;
+
+      const note1 = getModalText("advancedGame", "nextRound.note1");
+      const note2 = getModalText("advancedGame", "nextRound.note2");
+      const note5Key =
+        botCount === 1
+          ? "single"
+          : state.mode === "shared"
+          ? "multiple_shared"
+          : "multiple_individual";
+      const note3 = getModalText("advancedGame", `nextRound.note3.${note5Key}`);
+
+      const currentPhaseLabel = getModalText(
+        "advancedGame",
+        "nextRound.phaseLabels.current"
+      ).message;
+      const nextRoundLabel = getModalText(
+        "advancedGame",
+        "nextRound.phaseLabels.next"
+      ).message;
+
+      const message = (
+        <div>
+          <p style={{ textAlign: "center" }}>{baseMessage}</p>
+          <p style={{ textAlign: "center", marginTop: "12px" }}>{message2}</p>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              marginTop: "12px",
+              alignItems: "center",
+            }}
+          >
+            {/* Players remaining in current round */}
+            {nextRoundPlayers.endOfRound.length > 0 && (
+              <>
+                <div className={styles.phaseLabel}>{currentPhaseLabel}</div>
+                {nextRoundPlayers.endOfRound.map((player) => (
+                  <div key={player.index} className={styles.playerBox}>
+                    <div
+                      style={{
+                        backgroundColor: colorToRGB[player.color] || "#999",
+                      }}
+                      className={styles.playerBoxContent}
+                    >
+                      Gracz {colorNames[player.color] || player.color}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+
+            {/* Text notes about rotation and deck shuffling - between sections */}
+            {note1?.message && <p>{note1.message}</p>}
+            {note2?.message && <p>{note2.message}</p>}
+            {note3?.message && <p>{note3.message}</p>}
+
+            {/* Players to act in next round */}
+            {nextRoundPlayers.startOfNextRound.length > 0 && (
+              <>
+                <div className={styles.phaseLabel}>{nextRoundLabel}</div>
+                {nextRoundPlayers.startOfNextRound.map((player) => (
+                  <div key={player.index} className={styles.playerBox}>
+                    <div
+                      style={{
+                        backgroundColor: colorToRGB[player.color] || "#999",
+                      }}
+                      className={styles.playerBoxContent}
+                    >
+                      Gracz {colorNames[player.color] || player.color}
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+      );
 
       return {
-        message: baseMessage,
+        message: message,
         notes: undefined,
       };
     }
@@ -610,16 +693,11 @@ export default function AdvancedGame() {
                 else if (actionKey === "nextPhase") {
                   game.nextPhase();
                 }
-                // For nextRound: always show second modal (contains info about player rotation and deck shuffling)
-                else if (hasNextRound) {
-                  setShowActionInstructionsModal(true);
-                } else {
-                  // Execute action directly
-                  if (actionKey === "nextRound") {
-                    game.nextRound();
-                  } else if (actionKey === "endGame") {
-                    navigate("/advanced-setup");
-                  }
+                // nextRound: always execute directly (all content is in single modal)
+                else if (actionKey === "nextRound") {
+                  game.nextRound();
+                } else if (actionKey === "endGame") {
+                  navigate("/advanced-setup");
                 }
               }}
               onCancel={() => {
@@ -705,117 +783,6 @@ export default function AdvancedGame() {
                 </div>
               </div>
             );
-          } else {
-            // For nextRound: display message2 + notes about player rotation and deck shuffling + player lists
-            instructionTitle = getModalText(
-              "advancedGame",
-              "nextRound.title"
-            ).message;
-            const message2 = getModalText(
-              "advancedGame",
-              "nextRound.message2"
-            ).message;
-
-            // Get text notes
-            const botCount = state.players!.filter((p) => p.isBot).length;
-            const note5Key =
-              botCount === 1
-                ? "single"
-                : state.mode === "shared"
-                ? "multiple_shared"
-                : "multiple_individual";
-
-            const note1 = getModalText("advancedGame", "nextRound.note1");
-            const note2 = getModalText("advancedGame", "nextRound.note2");
-            const note3 = getModalText(
-              "advancedGame",
-              `nextRound.note3.${note5Key}`
-            );
-
-            const currentPhaseLabel = getModalText(
-              "advancedGame",
-              "nextRound.phaseLabels.current"
-            ).message;
-            const nextRoundLabel = getModalText(
-              "advancedGame",
-              "nextRound.phaseLabels.next"
-            ).message;
-
-            instructionMessage = (
-              <div>
-                <p
-                  style={{
-                    margin: "0 0 16px 0",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {message2}
-                </p>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                    marginTop: "12px",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* Players remaining in current phase */}
-                  {nextRoundPlayers.endOfRound.length > 0 && (
-                    <>
-                      <div className={styles.phaseLabel}>
-                        {currentPhaseLabel}
-                      </div>
-                      {nextRoundPlayers.endOfRound.map((player) => (
-                        <div key={player.index} className={styles.playerBox}>
-                          <div
-                            style={{
-                              backgroundColor:
-                                colorToRGB[player.color] || "#999",
-                            }}
-                            className={styles.playerBoxContent}
-                          >
-                            G{player.playerNumber}
-                          </div>
-                        </div>
-                      ))}
-                    </>
-                  )}
-
-                  {/* Text notes about rotation and deck shuffling - between sections */}
-                  {note1?.message && <p>{note1.message}</p>}
-                  {note2?.message && <p>{note2.message}</p>}
-                  {note3?.message && <p>{note3.message}</p>}
-
-                  {/* Players to act in next round */}
-                  {nextRoundPlayers.startOfNextRound.length > 0 && (
-                    <>
-                      <div
-                        className={styles.phaseLabel}
-                        style={{ marginTop: "8px" }}
-                      >
-                        {nextRoundLabel}
-                      </div>
-                      {nextRoundPlayers.startOfNextRound.map((player) => (
-                        <div key={player.index} className={styles.playerBox}>
-                          <div
-                            style={{
-                              backgroundColor:
-                                colorToRGB[player.color] || "#999",
-                            }}
-                            className={styles.playerBoxContent}
-                          >
-                            G{player.playerNumber}
-                          </div>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
-              </div>
-            );
           }
 
           return (
@@ -831,8 +798,6 @@ export default function AdvancedGame() {
                   game.nextPlayer();
                 } else if (actionKey === "nextPhase") {
                   game.nextPhase();
-                } else if (actionKey === "nextRound") {
-                  game.nextRound();
                 }
               }}
               onCancel={() => {
