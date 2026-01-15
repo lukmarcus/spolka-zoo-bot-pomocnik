@@ -306,10 +306,6 @@ export default function AdvancedGame() {
       );
 
       const baseMessage = base.message;
-      const message2 = getModalText(
-        "advancedGame",
-        "nextRound.message2"
-      ).message;
 
       const note1 = getModalText("advancedGame", "nextRound.note1");
       const note2 = getModalText("advancedGame", "nextRound.note2");
@@ -332,8 +328,9 @@ export default function AdvancedGame() {
 
       const message = (
         <div>
-          <p style={{ textAlign: "center" }}>{baseMessage}</p>
-          <p style={{ textAlign: "center", marginTop: "12px" }}>{message2}</p>
+          <p style={{ textAlign: "center" }}>
+            {baseMessage}
+          </p>
 
           <div
             style={{
@@ -344,6 +341,10 @@ export default function AdvancedGame() {
               alignItems: "center",
             }}
           >
+            {/* Text notes about rotation and market phase */}
+            {note1?.message && <p>{note1.message}</p>}
+            {note2?.message && <p>{note2.message}</p>}
+
             {/* Players remaining in current round */}
             {nextRoundPlayers.endOfRound.length > 0 && (
               <>
@@ -363,9 +364,7 @@ export default function AdvancedGame() {
               </>
             )}
 
-            {/* Text notes about rotation and deck shuffling - between sections */}
-            {note1?.message && <p>{note1.message}</p>}
-            {note2?.message && <p>{note2.message}</p>}
+            {/* Text note about deck shuffling */}
             {note3?.message && <p>{note3.message}</p>}
 
             {/* Players to act in next round */}

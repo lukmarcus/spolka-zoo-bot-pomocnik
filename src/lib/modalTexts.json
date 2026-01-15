@@ -41,22 +41,22 @@
     },
     "nextRound": {
       "title": "Następna runda",
+      "message": {
+        "single": "Zanim przejdziesz do Bota w pierwszej fazie Akcji następnej rundy i dobierzesz dla niego nową kartę:",
+        "multiple": "Zanim przejdziesz do pierwszego Bota w pierwszej fazie Akcji następnej rundy i dobierzesz dla niego nową kartę:"
+      },
       "note1": "• Pierwszy gracz przejdzie na koniec kolejki graczy.",
       "note2": "• Rozegraj fazę Rynku dla wszystkich graczy.",
+      "phaseLabels": {
+        "current": "W tej fazie zagraj żetony Akcji graczy:",
+        "next": "W nowej rundzie zagraj żetony Akcji graczy:"
+      },
       "note3": {
         "single": "• Talia Bota zostanie automatycznie przetasowana.",
         "multiple_shared": "• Wspólna talia Botów zostanie automatycznie przetasowana.",
         "multiple_individual": "• Osobne talie Botów zostaną automatycznie przetasowane."
       },
-      "phaseLabels": {
-        "current": "W tej fazie zagraj żetony Akcji graczy:",
-        "next": "W nowej rundzie zagraj żetony Akcji graczy:"
-      },
-      "message": {
-        "single": "Przejść do Bota w pierwszej fazie Akcji następnej rundy i dobrać dla niego nową kartę?",
-        "multiple": "Przejść do pierwszego Bota w pierwszej fazie Akcji następnej rundy i dobrać dla niego nową kartę?"
-      },
-      "message2": "Zanim potwierdzisz przejście do pierwszej fazy Akcji następnej rundy, wykonaj czynności:"
+      "confirmText": "Kontynuuj"
     },
     "endGame": {
       "title": "Koniec gry",
