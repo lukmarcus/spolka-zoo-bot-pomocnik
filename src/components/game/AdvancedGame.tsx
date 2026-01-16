@@ -328,9 +328,7 @@ export default function AdvancedGame() {
 
       const message = (
         <div>
-          <p style={{ textAlign: "center" }}>
-            {baseMessage}
-          </p>
+          <p style={{ textAlign: "center" }}>{baseMessage}</p>
 
           <div
             style={{
@@ -341,10 +339,6 @@ export default function AdvancedGame() {
               alignItems: "center",
             }}
           >
-            {/* Text notes about rotation and market phase */}
-            {note1?.message && <p>{note1.message}</p>}
-            {note2?.message && <p>{note2.message}</p>}
-
             {/* Players remaining in current round */}
             {nextRoundPlayers.endOfRound.length > 0 && (
               <>
@@ -364,7 +358,13 @@ export default function AdvancedGame() {
               </>
             )}
 
-            {/* Text note about deck shuffling */}
+            {/* Market phase */}
+            {note2?.message && <p>{note2.message}</p>}
+
+            {/* Player rotation */}
+            {note1?.message && <p>{note1.message}</p>}
+
+            {/* Deck shuffle */}
             {note3?.message && <p>{note3.message}</p>}
 
             {/* Players to act in next round */}
@@ -402,15 +402,6 @@ export default function AdvancedGame() {
 
   // Dynamic text and button action
   // Labels come from modalTexts.json -> advancedGame.gameButtons
-  type UiRoot = {
-    gameButtons?: Record<string, string>;
-    modalTitles?: Record<string, string>;
-    modalConfirm?: Record<string, string>;
-    modalCancel?: string;
-    common?: { modalCancel?: string; modalOk?: string };
-  };
-
-  // Partial typing for modalTexts. We only declare the parts we access.
   type NextPhaseNode = {
     gameButton?: string;
     modalTitle?: string;
@@ -434,9 +425,6 @@ export default function AdvancedGame() {
     nextBot?: NextPhaseNode;
     drawCard?: NextPhaseNode;
   };
-
-  const uiRoot = (modalTexts as unknown as { advancedGame?: AdvancedGameTexts })
-    ?.advancedGame as UiRoot | undefined;
 
   const nextPhaseNode = (
     modalTexts as unknown as { advancedGame?: AdvancedGameTexts }
@@ -480,8 +468,6 @@ export default function AdvancedGame() {
   const endGameNode = advancedTexts?.advancedGame?.endGame as
     | Record<string, unknown>
     | undefined;
-
-  const commonOk = uiRoot?.common?.modalOk || "Tak";
 
   let actionKey: "nextBot" | "nextPhase" | "nextRound" | "endGame" = "nextBot";
 
@@ -554,25 +540,23 @@ export default function AdvancedGame() {
         <section className="section">
           <h2>AKCJA BOTA</h2>
           <p style={{ textAlign: "center", marginBottom: "1rem" }}>
-            Czy Bot wykonał przynajmniej jeden efekt z aktualnej karty?
+            {getModalText("advancedGame", "checkBotEffect.message").message}
           </p>
           <div className={styles.gameControls}>
             <button
               className="btn-primary"
               onClick={() => setShowDrawCardModal(true)}
             >
-              Nie, dobierz kartę
+              {getModalText("advancedGame", "checkBotEffect.cancelText").message}
             </button>
             <button
               className="btn-primary"
               onClick={() => setShowActionModal(true)}
             >
-              Tak, przejdź dalej
+              {getModalText("advancedGame", "checkBotEffect.confirmText").message}
             </button>
           </div>
         </section>
-
-        {/* Karta bota - wyświetlona dla aktualnego bota */}
         {drawnCardObject && (
           <section className="section">
             <h2>
@@ -640,8 +624,8 @@ export default function AdvancedGame() {
               ? (drawLocal.title as string)
               : undefined;
           const drawLocalConfirm =
-            typeof drawLocal?.modalConfirm === "string"
-              ? (drawLocal.modalConfirm as string)
+            typeof drawLocal?.confirmText === "string"
+              ? (drawLocal.confirmText as string)
               : undefined;
           return (
             <ConfirmModal
@@ -651,7 +635,7 @@ export default function AdvancedGame() {
                 getModalText("advancedGame", "drawCard.title").message
               }
               message={getModalText("advancedGame", "drawCard.message").message}
-              confirmText={drawLocalConfirm ?? commonOk}
+              confirmText={drawLocalConfirm ?? getModalText("advancedGame", "drawCard.confirmText").message}
               cancelText={modalCancel}
               onConfirm={() => {
                 handleDrawCard();
@@ -667,6 +651,18 @@ export default function AdvancedGame() {
         {/* Modal potwierdzenia dla akcji drugiego przycisku */}
         {(() => {
           const { message } = getActionModalMessage();
+          
+          let confirmText = getModalText("advancedGame", "common.modalOk").message;
+          if (actionKey === "nextBot") {
+            confirmText = getModalText("advancedGame", "nextBot.confirmText").message;
+          } else if (actionKey === "nextPhase") {
+            confirmText = getModalText("advancedGame", "nextPhase.confirmText").message;
+          } else if (actionKey === "nextRound") {
+            confirmText = getModalText("advancedGame", "nextRound.confirmText").message;
+          } else if (actionKey === "endGame") {
+            confirmText = getModalText("advancedGame", "endGame.confirmText").message;
+          }
+
           return (
             <ConfirmModal
               isOpen={showActionModal}
@@ -680,7 +676,7 @@ export default function AdvancedGame() {
                   : (endGameNode?.title as string) || ""
               }
               message={message}
-              confirmText={commonOk}
+              confirmText={confirmText}
               cancelText={modalCancel}
               onConfirm={() => {
                 setShowActionModal(false);
@@ -710,7 +706,10 @@ export default function AdvancedGame() {
         {(() => {
           let instructionTitle = "";
           let instructionMessage: string | React.ReactNode = "";
-          let confirmButtonText = commonOk;
+          let confirmButtonText = getModalText(
+            "advancedGame",
+            "common.modalOk"
+          ).message;
 
           if (
             actionKey === "nextBot" &&
@@ -726,9 +725,7 @@ export default function AdvancedGame() {
               "advancedGame",
               "nextBot.confirmText"
             ).message;
-            confirmButtonText = confirmTextFromJson.startsWith("[BŁĄD")
-              ? commonOk
-              : confirmTextFromJson;
+            confirmButtonText = confirmTextFromJson;
 
             // Mapowanie kolorów na polskie nazwy
             const colorNames: Record<string, string> = {
