@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@ui/Layout";
 import BottomControls from "@ui/BottomControls";
@@ -39,6 +39,15 @@ const AdvancedGame: React.FC = () => {
     hiddenGoals: false,
     intrigues: false,
   });
+
+  // Wczytaj poprzednią konfigurację jeśli gra była już uruchomiona
+  useEffect(() => {
+    if (game.state.gameMode === "advanced" && game.state.players && game.state.players.length > 0) {
+      setPlayers(game.state.players);
+      setSelectedMode(game.state.mode || "shared");
+      setSelectedModules(game.state.modules || { hiddenGoals: false, intrigues: false });
+    }
+  }, []);
 
   const handleAddPlayer = () => {
     if (players.length < 5) {

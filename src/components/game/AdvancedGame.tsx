@@ -16,6 +16,8 @@ export default function AdvancedGame() {
   const [showActionModal, setShowActionModal] = useState(false);
   const [showActionInstructionsModal, setShowActionInstructionsModal] =
     useState(false);
+  const [showFirstPhaseModal, setShowFirstPhaseModal] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const { state } = game;
 
@@ -124,6 +126,16 @@ export default function AdvancedGame() {
     }
 
     return { endOfRound, startOfNextRound };
+  })();
+
+  // For firstPhase: players before first bot at game start
+  const firstPhasePlayers = (() => {
+    const players = [];
+    for (let i = 0; i < state.players.length; i++) {
+      if (state.players[i].isBot) break;
+      players.push({ index: i, ...state.players[i] });
+    }
+    return players;
   })();
 
   // Color mappings for modals - same as in AdvancedSetup
@@ -557,7 +569,7 @@ export default function AdvancedGame() {
             </button>
           </div>
         </section>
-        {drawnCardObject && (
+        {drawnCardObject && gameStarted && (
           <section className="section">
             <h2>
               AKTUALNA KARTA (
@@ -798,6 +810,72 @@ export default function AdvancedGame() {
               }}
               onCancel={() => {
                 setShowActionInstructionsModal(false);
+              }}
+            />
+          );
+        })()}
+
+        {/* Modal dla pierwszej fazy na starcie gry */}
+        {(() => {
+          const botCount = state.players.filter((p) => p.isBot).length;
+          const messageKey = botCount === 1 ? "single" : "multiple";
+          const base = getModalText(
+            "advancedGame",
+            `firstPhase.message.${messageKey}`
+          );
+
+          const baseMessage = base.message;
+          const phaseLabel = getModalText(
+            "advancedGame",
+            "firstPhase.phaseLabel"
+          ).message;
+
+          const message = (
+            <div>
+              <p style={{ textAlign: "center" }}>{baseMessage}</p>
+
+              {firstPhasePlayers.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                    marginTop: "12px",
+                    alignItems: "center",
+                  }}
+                >
+                  <div className={styles.phaseLabel}>{phaseLabel}</div>
+                  {firstPhasePlayers.map((player) => (
+                    <div key={player.index} className={styles.playerBox}>
+                      <div
+                        style={{
+                          backgroundColor: colorToRGB[player.color] || "#999",
+                        }}
+                        className={styles.playerBoxContent}
+                      >
+                        Gracz {colorNames[player.color] || player.color}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+
+          return (
+            <ConfirmModal
+              isOpen={showFirstPhaseModal && !gameStarted && firstPhasePlayers.length > 0}
+              title={getModalText("advancedGame", "firstPhase.title").message}
+              message={message}
+              confirmText={getModalText("advancedGame", "firstPhase.confirmText").message}
+              cancelText={getModalText("advancedGame", "firstPhase.cancelText").message}
+              onConfirm={() => {
+                setShowFirstPhaseModal(false);
+                setGameStarted(true);
+              }}
+              onCancel={() => {
+                setShowFirstPhaseModal(false);
+                navigate("/advanced-setup");
               }}
             />
           );

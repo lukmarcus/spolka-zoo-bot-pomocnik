@@ -15,6 +15,16 @@
       "title": "CZEKAJ",
       "message": "Czekaj! Inne gracze mogą mieć teraz grać."
     },
+    "firstPhase": {
+      "title": "Pierwsza faza",
+      "message": {
+        "single": "Zanim przejdziesz do Bota w pierwszej fazie Akcji pierwszej rundy i dobierzesz dla niego nową kartę:",
+        "multiple": "Zanim przejdziesz do pierwszego Bota w pierwszej fazie Akcji pierwszej rundy i dobierzesz dla niego nową kartę:"
+      },
+      "phaseLabel": "• Zagraj żetony Akcji dla:",
+      "confirmText": "Dalej",
+      "cancelText": "Wróć do menu"
+    },
     "nextBot": {
       "title": "Następny bot",
       "message": {
