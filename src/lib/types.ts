@@ -22,12 +22,13 @@ export type PlayerColor = "red" | "yellow" | "green" | "orange" | "blue";
 // Player in advanced mode
 export interface Player {
   id: number;
+  playerNumber: number;
   color: PlayerColor;
   isBot: boolean;
 }
 
 export interface GameState {
-  gameMode?: "quick" | "advanced"; // New: game mode type
+  gameMode?: "quick" | "advanced";
   mode: "shared" | "individual";
   modules?: GameModules;
   currentCardIndex?: number;
@@ -40,6 +41,9 @@ export interface GameState {
   // Advanced mode fields
   players?: Player[];
   currentPlayerIndex?: number;
+  currentRound?: number;
+  currentPhase?: number;
+  maxPhases?: number;
 }
 
 export interface GameCodePreview {
@@ -69,7 +73,16 @@ export interface GameContextType {
   nextBotAndDraw: () => void;
   nextBotAndShuffleAndDraw?: () => void;
   endRound: (startingBot: number) => void;
+  startAdvancedGame: (
+    players: Player[],
+    mode: "shared" | "individual",
+    modules: GameModules
+  ) => void;
+  nextPlayer: () => void;
+  nextPhase: () => void;
+  nextRound: () => void;
   getCurrentCard: () => number | null;
+  getCardById: (cardId: number) => BotCard | null;
   isDeckExhausted: () => boolean;
   getCardsRemaining: () => number;
 }

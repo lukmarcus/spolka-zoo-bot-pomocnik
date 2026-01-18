@@ -15,7 +15,7 @@ const Home: React.FC = React.memo(() => {
   }, [newGame, navigate]);
 
   const handleAdvancedGame = useCallback(() => {
-    navigate("/game-advanced");
+    navigate("/advanced-setup");
   }, [navigate]);
 
   const handleLoadGame = useCallback(() => navigate("/load"), [navigate]);

@@ -3,6 +3,7 @@ import { GameProvider } from "@lib/GameContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "@ui/Home";
 import Game from "@game/Game";
+import AdvancedSetup from "@game/AdvancedSetup";
 import AdvancedGame from "@game/AdvancedGame";
 import LoadGame from "@ui/LoadGame";
 import About from "@ui/About";
@@ -13,11 +14,12 @@ function App() {
   return (
     <ErrorBoundary>
       <GameProvider>
-        <Router basename="/spolka-zoo-bot-pomocnik">
+        <Router basename="/spolka-zoo-bot-pomocnik/">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/game" element={<Game />} />
-            <Route path="/game-advanced" element={<AdvancedGame />} />
+            <Route path="/advanced-setup" element={<AdvancedSetup />} />
+            <Route path="/advanced-game" element={<AdvancedGame />} />
             <Route path="/load" element={<LoadGame />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/about" element={<About />} />

@@ -1,0 +1,93 @@
+{
+  "advancedGame": {
+    "drawCard": {
+      "title": "Dobierz kartę",
+      "message": "Czy dobrać nową kartę dla aktualnego Bota?",
+      "confirmText": "Dobierz kartę"
+    },
+    "checkBotEffect": {
+      "title": "Czy Bot wykonał efekt?",
+      "message": "Czy Bot wykonał przynajmniej jeden efekt z aktualnej karty?",
+      "confirmText": "Tak, przejdź dalej",
+      "cancelText": "Nie, dobierz kartę"
+    },
+    "instructionModal": {
+      "title": "CZEKAJ",
+      "message": "Czekaj! Inne gracze mogą mieć teraz grać."
+    },
+    "beforeFirstRound": {
+      "title": "Pierwsza faza",
+      "message": {
+        "single": "Zanim dobierzesz nową kartę dla Bota:",
+        "multiple": "Zanim dobierzesz nową kartę dla pierwszego Bota:"
+      },
+      "phaseLabel": "• Zagraj żetony Akcji dla:",
+      "confirmText": "Dalej",
+      "cancelText": "Wróć do menu"
+    },
+    "nextBot": {
+      "title": "Następny bot",
+      "message": {
+        "adjacent": "Dobrać kartę dla kolejnego Bota?",
+        "notAdjacent": "Zanim dobierzesz kartę dla kolejnego Bota:"
+      },
+      "instructionLabel": "• Zagraj żetony Akcji dla:",
+      "confirmText": "Dalej"
+    },
+    "nextPhase": {
+      "title": "Następna faza Akcji",
+      "message": {
+        "single": "Zanim dobierzesz nową kartę dla Bota:",
+        "multiple": "Zanim dobierzesz nową kartę dla kolejnego Bota:"
+      },
+      "currentPhasePlayers": "• W tej fazie Akcji zagraj żetony Akcji dla:",
+      "marketPhase": "• Rozegraj fazę Rynku dla wszystkich graczy.",
+      "nextPhasePlayers": "• W następnej fazie Akcji zagraj żetony Akcji dla:",
+      "confirmText": "Dalej"
+    },
+    "modalConfirm": {
+      "endGame": "Zakończ grę"
+    },
+    "common": {
+      "modalCancel": "Anuluj",
+      "modalOk": "Tak"
+    },
+    "nextRound": {
+      "title": "Następna runda",
+      "message": {
+        "single": "Zanim dobierzesz nową kartę dla Bota:",
+        "multiple": "Zanim dobierzesz nową kartę dla kolejnego Bota:"
+      },
+      "phaseLabels": {
+        "current": "• W tej ostatniej fazie Akcji tej rundy zagraj żetony Akcji dla:",
+        "next": "• W pierwszej fazie Akcji nowej rundy zagraj żetony Akcji dla:"
+      },
+      "note2": "• Rozegraj fazę Rynku dla wszystkich graczy.",
+      "note1": "• Zamień kolejność graczy (pierwszy gracz staje się ostatnim).",
+      "note3": {
+        "single": "• Talia Bota zostanie automatycznie przetasowana.",
+        "multiple_shared": "• Wspólna talia Botów zostanie automatycznie przetasowana.",
+        "multiple_individual": "• Osobne talie Botów zostaną automatycznie przetasowane."
+      },
+      "confirmText": "Dalej"
+    },
+    "endGame": {
+      "title": "Koniec gry",
+      "last": {
+        "message": "Przejść do końca gry?",
+        "notes": [
+          "Wszyscy gracze rozegrali fazy w tej rundzie.",
+          "Po potwierdzeniu nastąpi powrót do menu i reset stanu gry."
+        ]
+      },
+      "notLast": {
+        "message": "Przejść do końca gry?",
+        "notes": [
+          "Rozegraj rundę do końca i potwierdź.",
+          "Po potwierdzeniu gra zostanie zakończona."
+        ]
+      },
+      "confirmText": "Zakończ grę"
+    }
+  }
+}

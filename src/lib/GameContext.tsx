@@ -4,8 +4,15 @@
 
 import { createContext, useReducer, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
-import type { BotDeck, GameState, GameContextType } from "./types";
-import { TOTAL_CARDS } from "./botCards";
+import type {
+  BotDeck,
+  GameState,
+  GameContextType,
+  Player,
+  GameModules,
+  BotCard,
+} from "./types";
+import { TOTAL_CARDS, BOT_CARDS } from "./botCards";
 import { loadAutoSavedGameState } from "./gameStorage";
 
 // === CONTEXT ===
@@ -27,7 +34,18 @@ type GameAction =
   | { type: "NEXT_BOT" }
   | { type: "NEXT_BOT_AND_DRAW" }
   | { type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }
-  | { type: "END_ROUND"; payload: number };
+  | { type: "END_ROUND"; payload: number }
+  | {
+      type: "START_ADVANCED_GAME";
+      payload: {
+        players: Player[];
+        mode: "shared" | "individual";
+        modules: GameModules;
+      };
+    }
+  | { type: "NEXT_PLAYER" }
+  | { type: "NEXT_PHASE" }
+  | { type: "NEXT_ROUND" };
 
 // Utility function to generate shuffled sequence
 function generateShuffledSequence(): number[] {
@@ -106,7 +124,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return getCleanState(state.mode, state.botCount || 1);
     }
     case "SELECT_BOTS": {
-
       if (state.mode === "individual") {
         return {
           ...state,
@@ -136,11 +153,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         const botDeck = botDecks[botIdx];
         if (!botDeck || botDeck.cardSequence.length === 0) return state;
         const nextIndex = botDeck.currentCardIndex + 1;
+
+        // Jeśli osiągnęliśmy koniec talii, tasuj
         if (
           nextIndex >= botDeck.cardSequence.length ||
           nextIndex >= TOTAL_CARDS
-        )
-          return state;
+        ) {
+          botDecks[botIdx] = {
+            ...botDeck,
+            cardSequence: generateShuffledSequence(),
+            currentCardIndex: -1,
+            usedCards: [],
+          };
+          // Spróbuj dobrać kartę z nowej talii
+          return gameReducer({ ...state, botDecks }, { type: "DRAW_CARD" });
+        }
+
         const newUsedCards = [
           ...botDeck.usedCards,
           botDeck.cardSequence[nextIndex],
@@ -168,9 +196,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return state;
       }
       const nextIndex = currentCardIndex + 1;
+
+      // Jeśli osiągnęliśmy koniec talii, tasuj
       if (nextIndex >= cardSequence.length || nextIndex >= TOTAL_CARDS) {
-        return state;
+        const newState = {
+          ...state,
+          currentCardIndex: -1,
+          cardSequence: generateShuffledSequence(),
+          usedCards: [],
+        };
+        // Spróbuj dobrać kartę z nowej talii
+        return gameReducer(newState, { type: "DRAW_CARD" });
       }
+
       const newUsedCards = [...usedCards, cardSequence[nextIndex]];
       return {
         ...state,
@@ -222,16 +260,16 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case "END_ROUND": {
       const startingBot = action.payload;
-      
+
       if (state.mode === "individual" && state.botDecks) {
         // Reshuffle all bot decks
-        const botDecks = state.botDecks.map(deck => ({
+        const botDecks = state.botDecks.map((deck) => ({
           ...deck,
           cardSequence: generateShuffledSequence(),
           currentCardIndex: -1,
           usedCards: [] as number[],
         }));
-        
+
         // Switch to starting bot and draw first card
         const botIdx = startingBot - 1;
         const startingDeck = botDecks[botIdx];
@@ -242,14 +280,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             usedCards: [startingDeck.cardSequence[0]] as number[],
           };
         }
-        
+
         return {
           ...state,
           currentBot: startingBot,
           botDecks,
         };
       }
-      
+
       // Shared mode - reshuffle and draw first card
       const newSequence = generateShuffledSequence();
       return {
@@ -262,7 +300,6 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     }
 
     case "NEXT_BOT": {
-
       const nextBot =
         state.currentBot && state.botCount
           ? (state.currentBot % state.botCount) + 1
@@ -429,6 +466,203 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     }
 
+    case "START_ADVANCED_GAME": {
+      const { players, mode, modules } = action.payload;
+      const botPlayers = players.filter((p) => p.isBot);
+      const botCount = botPlayers.length;
+      const maxPhases = players.length === 2 ? 4 : 3;
+
+      if (mode === "individual") {
+        // Znajdź pierwszego bota
+        const firstBotIndex = players.findIndex((p) => p.isBot);
+        const startingBotIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+
+        const botDecks = generateBotDecks(botCount);
+        // Wylosuj pierwszą kartę dla pierwszego bota
+        botDecks[0] = {
+          ...botDecks[0],
+          currentCardIndex: 0,
+        };
+
+        return {
+          gameMode: "advanced",
+          mode: "individual",
+          modules,
+          players,
+          currentPlayerIndex: startingBotIndex,
+          currentRound: 1,
+          currentPhase: 1,
+          maxPhases,
+          botDecks,
+          botCount,
+          currentBot: 1,
+          botsSelected: true,
+        };
+      }
+
+      // Tryb shared - też reset na pierwszego bota
+      const firstBotIndex = players.findIndex((p) => p.isBot);
+      const startingBotIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+
+      return {
+        gameMode: "advanced",
+        mode: "shared",
+        modules,
+        players,
+        currentPlayerIndex: startingBotIndex,
+        currentRound: 1,
+        currentPhase: 1,
+        maxPhases,
+        cardSequence: generateShuffledSequence(),
+        currentCardIndex: 0, // Wylosuj pierwszą kartę
+        usedCards: [],
+        botCount,
+        currentBot: 1,
+        botsSelected: true,
+      };
+    }
+
+    case "NEXT_PLAYER": {
+      if (state.gameMode !== "advanced" || !state.players) return state;
+
+      // Znajdź kolejnego bota (omijając ludzi)
+      let nextBotIndex = state.currentPlayerIndex! + 1;
+      while (nextBotIndex < state.players.length) {
+        if (state.players[nextBotIndex].isBot) {
+          break;
+        }
+        nextBotIndex++;
+      }
+
+      // Jeśli nie ma więcej botów, przejdź do następnej fazy
+      if (nextBotIndex >= state.players.length) {
+        return gameReducer(state, { type: "NEXT_PHASE" });
+      }
+
+      // Oblicz numer bota (ile botów napotkaliśmy do tego indeksu, włącznie)
+      // np. w bot-gracz-bot: players[0] jest bot #1, players[2] jest bot #2
+      let nextBotNumber = 1;
+      for (let i = 0; i <= nextBotIndex; i++) {
+        if (i < nextBotIndex && state.players[i].isBot) {
+          nextBotNumber++;
+        }
+      }
+
+      const newState = {
+        ...state,
+        currentPlayerIndex: nextBotIndex,
+        currentBot: nextBotNumber,
+      };
+
+      // Dobrać kartę dla nowego gracza
+      return gameReducer(newState, { type: "DRAW_CARD" });
+    }
+
+    case "NEXT_PHASE": {
+      if (state.gameMode !== "advanced" || !state.players) return state;
+
+      const nextPhase = state.currentPhase! + 1;
+
+      // Jeśli przekroczyliśmy maksymalną liczbę faz, przejdź do następnej rundy
+      if (nextPhase > state.maxPhases!) {
+        return gameReducer(state, { type: "NEXT_ROUND" });
+      }
+
+      // Znajdź pierwszego bota
+      const firstBotIndex = state.players.findIndex((p) => p.isBot);
+      const resetPlayerIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
+      
+      // Oblicz numer bota (ile botów napotkaliśmy do tego indeksu, włącznie)
+      let nextBotNumber = 1;
+      for (let i = 0; i <= resetPlayerIndex; i++) {
+        if (i < resetPlayerIndex && state.players[i].isBot) {
+          nextBotNumber++;
+        }
+      }
+
+      const newState = {
+        ...state,
+        currentPhase: nextPhase,
+        currentPlayerIndex: resetPlayerIndex,
+        currentBot: nextBotNumber,
+      };
+
+      // Dobrać kartę dla nowego gracza
+      return gameReducer(newState, { type: "DRAW_CARD" });
+    }
+
+    case "NEXT_ROUND": {
+      if (state.gameMode !== "advanced" || !state.players) return state;
+
+      const nextRound = state.currentRound! + 1;
+
+      // If we exceed 5 rounds, the game ends
+      if (nextRound > 5) {
+        // TODO: Transition to game end screen
+        return state;
+      }
+
+      // Rotate players: first player moves to the end
+      const rotatedPlayers = [...state.players.slice(1), state.players[0]];
+
+      // New starting player is at index 0 (after rotation)
+      const newStartingPlayer = 0;
+
+      // Find the first bot from the starting player
+      let firstBotInRound = newStartingPlayer;
+      while (firstBotInRound < rotatedPlayers.length) {
+        if (rotatedPlayers[firstBotInRound].isBot) break;
+        firstBotInRound++;
+      }
+      // If not found, search from the beginning
+      if (firstBotInRound >= rotatedPlayers.length) {
+        firstBotInRound = rotatedPlayers.findIndex((p) => p.isBot);
+      }
+      
+      // Oblicz numer bota (ile botów napotkaliśmy do tego indeksu, włącznie)
+      let nextBotNumber = 1;
+      for (let i = 0; i <= firstBotInRound; i++) {
+        if (i < firstBotInRound && rotatedPlayers[i].isBot) {
+          nextBotNumber++;
+        }
+      }
+
+      // Shuffle the deck
+      let newBotDecks = state.botDecks;
+      let newCardSequence = state.cardSequence;
+      let newCurrentCardIndex = state.currentCardIndex;
+
+      if (state.mode === "individual" && state.botDecks) {
+        // In individual mode, shuffle all bot decks
+        newBotDecks = state.botDecks.map((deck) => ({
+          ...deck,
+          cardSequence: generateShuffledSequence(),
+          currentCardIndex: -1,
+          usedCards: [],
+        }));
+      } else if (state.mode === "shared") {
+        // In shared mode, shuffle the common deck
+        newCardSequence = generateShuffledSequence();
+        newCurrentCardIndex = -1;
+      }
+
+      const newState = {
+        ...state,
+        currentRound: nextRound,
+        currentPhase: 1,
+        currentPlayerIndex: firstBotInRound,
+        players: rotatedPlayers,
+        currentBot: nextBotNumber,
+        botDecks: newBotDecks,
+        cardSequence: newCardSequence,
+        currentCardIndex: newCurrentCardIndex,
+        usedCards: [],
+      };
+
+      // Draw a card for the first bot of the round
+      return gameReducer(newState, { type: "DRAW_CARD" });
+    }
+
     default:
       return state;
   }
@@ -457,6 +691,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "NEXT_BOT_AND_SHUFFLE_AND_DRAW" }),
       endRound: (startingBot: number) =>
         dispatch({ type: "END_ROUND", payload: startingBot }),
+      startAdvancedGame: (
+        players: Player[],
+        mode: "shared" | "individual",
+        modules: GameModules
+      ) =>
+        dispatch({
+          type: "START_ADVANCED_GAME",
+          payload: { players, mode, modules },
+        }),
+      nextPlayer: () => dispatch({ type: "NEXT_PLAYER" }),
+      nextPhase: () => dispatch({ type: "NEXT_PHASE" }),
+      nextRound: () => dispatch({ type: "NEXT_ROUND" }),
       getCurrentCard: () => {
         if (state.mode === "individual" && state.botDecks && state.currentBot) {
           const botIdx = state.currentBot - 1;
@@ -495,6 +741,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
           return Math.max(0, TOTAL_CARDS - (botDeck.currentCardIndex + 1));
         }
         return Math.max(0, TOTAL_CARDS - ((state.currentCardIndex ?? -1) + 1));
+      },
+      getCardById: (cardId: number): BotCard | null => {
+        const card = BOT_CARDS.find((c) => c.id === cardId);
+        return card || null;
       },
     }),
     [state]

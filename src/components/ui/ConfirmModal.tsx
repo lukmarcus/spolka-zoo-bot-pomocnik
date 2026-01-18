@@ -1,16 +1,18 @@
 import React from "react";
+import type { ReactNode } from "react";
 import styles from "@ui/ConfirmModal.module.css";
 
 interface ConfirmModalProps {
   isOpen: boolean;
   title?: string;
-  message: string;
+  message: string | ReactNode;
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
   copyButtonText?: string;
   onCopy?: () => void;
+  notes?: string;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -23,6 +25,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel,
   copyButtonText,
   onCopy,
+  notes,
 }) => {
   if (!isOpen) return null;
 
@@ -60,20 +63,33 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         )}
 
         <div className="content">
-          {message.split("\n").map((line, index) => (
-            <p
-              key={index}
-              className={`${styles.message} ${
-                line.includes("✅")
-                  ? styles.successMessage
-                  : line.includes("❌")
+          {notes && (
+            <div className={styles.notesOnly}>
+              {notes.split("\n").map((line, i) => (
+                <p key={`note-${i}`} className={styles.notesText}>
+                  <em>{line}</em>
+                </p>
+              ))}
+            </div>
+          )}
+          {typeof message === "string" ? (
+            message.split("\n").map((line, index) => (
+              <p
+                key={index}
+                className={`${styles.message} ${
+                  line.includes("✅")
+                    ? styles.successMessage
+                    : line.includes("❌")
                   ? styles.errorMessage
                   : ""
               }`}
             >
               {line}
             </p>
-          ))}
+            ))
+          ) : (
+            message
+          )}
         </div>
 
         <div className={styles.threeButtonHorizontal}>
@@ -84,12 +100,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           >
             {cancelText}
           </button>
-          <button
-            className={`${styles.button} ${styles.confirmButton} ${styles.widerButton}`}
-            onClick={onCopy}
-          >
-            {copyButtonText}
-          </button>
+          {copyButtonText && onCopy && (
+            <button
+              className={`${styles.button} ${styles.confirmButton} ${styles.widerButton}`}
+              onClick={onCopy}
+            >
+              {copyButtonText}
+            </button>
+          )}
           <button
             className={`${styles.button} ${styles.copyButton}`}
             onClick={onConfirm}

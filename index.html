@@ -4,28 +4,71 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/zoo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Cyfrowy zamiennik kart botów dla gry planszowej Spółka ZOO. Oficjalna aplikacja webowa do gry solo i z botami - kompaktowe kody gry, responsywny design, tryby dla 1-4 graczy." />
-    <meta name="keywords" content="Spółka ZOO, gra planszowa, boty, karty botów, Coconut Salad, gry solo, aplikacja webowa" />
+    <meta
+      name="description"
+      content="Cyfrowy zamiennik kart botów dla gry planszowej Spółka ZOO. Oficjalna aplikacja webowa do gry solo i z botami - kompaktowe kody gry, responsywny design, tryby dla 1-4 graczy."
+    />
+    <meta
+      name="keywords"
+      content="Spółka ZOO, gra planszowa, boty, karty botów, Coconut Salad, gry solo, aplikacja webowa"
+    />
     <meta name="author" content="Marek Szumny" />
-    
+
+    <!-- Redirect /spolka-zoo-bot-pomocnik to /spolka-zoo-bot-pomocnik/ -->
+    <script>
+      if (window.location.pathname === "/spolka-zoo-bot-pomocnik") {
+        window.location.href = "/spolka-zoo-bot-pomocnik/";
+      }
+    </script>
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/" />
+    <meta
+      property="og:url"
+      content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/"
+    />
     <meta property="og:title" content="Spółka ZOO - Bot Pomocnik" />
-    <meta property="og:description" content="Cyfrowy zamiennik kart botów dla gry planszowej Spółka ZOO. Oficjalna aplikacja webowa do gry solo i z botami." />
-    <meta property="og:image" content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/game-cover.jpg" />
-    
+    <meta
+      property="og:description"
+      content="Cyfrowy zamiennik kart botów dla gry planszowej Spółka ZOO. Oficjalna aplikacja webowa do gry solo i z botami."
+    />
+    <meta
+      property="og:image"
+      content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/game-cover.jpg"
+    />
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/" />
+    <meta
+      property="twitter:url"
+      content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/"
+    />
     <meta property="twitter:title" content="Spółka ZOO - Bot Pomocnik" />
-    <meta property="twitter:description" content="Cyfrowy zamiennik kart botów dla gry planszowej Spółka ZOO. Oficjalna aplikacja webowa do gry solo i z botami." />
-    <meta property="twitter:image" content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/game-cover.jpg" />
-    
+    <meta
+      property="twitter:description"
+      content="Cyfrowy zamiennik kart botów dla gry planszowej Spółka ZOO. Oficjalna aplikacja webowa do gry solo i z botami."
+    />
+    <meta
+      property="twitter:image"
+      content="https://lukmarcus.github.io/spolka-zoo-bot-pomocnik/game-cover.jpg"
+    />
+
     <!-- Preload critical fonts -->
-    <link rel="preload" href="/src/assets/fonts/ChillScript.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/src/assets/fonts/RooneySansBold.woff2" as="font" type="font/woff2" crossorigin />
-    
+    <link
+      rel="preload"
+      href="/src/assets/fonts/ChillScript.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/src/assets/fonts/RooneySansBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <title>Spółka ZOO - Bot Pomocnik</title>
   </head>
   <body>

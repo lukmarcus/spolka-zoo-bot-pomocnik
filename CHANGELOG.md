@@ -5,6 +5,31 @@ Wszystkie znaczące zmiany w projekcie będą dokumentowane w tym pliku.
 Format oparty na [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 projekt stosuje [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2025-01-18
+
+### Dodane
+
+- Integracja trybu zaawansowanego z GameContext: akcja `START_ADVANCED_GAME`
+- Pełny system rund i faz: 5 rund, 3-4 fazy, wizualne kwadraty graczy ze statusem
+- System modalny potwierdzania akcji (nextBot, nextPhase, nextRound) z dynamicznymi wiadomościami
+- Modal `beforeFirstRound` wyświetlany tylko przed pierwszą rundą
+- Centralized `modalTexts.json` dla wszystkich stringów modalów
+- Auto-draw logika kart dla obu trybów (shared i individual) po każdej akcji
+- Refaktoryzacja stylów: przeniesienie inline stylów do CSS Modules (AdvancedGame.module.css)
+
+### Zmienione
+
+- Nagłówek strony `/advanced-game` korzysta z komponentu Layout
+- Wyświetlanie stanu gry oraz konfiguracji w subtitule (liczba graczy, botów, typ talii)
+- Logika numerowania botów w akcjach NEXT_PLAYER, NEXT_PHASE, NEXT_ROUND
+- AdvancedSetup: przywracanie poprzedniej konfiguracji przy powrocie z gry
+
+### Naprawione
+
+- Błąd wyświetlania licznika kart (pokazywał 2/13 zamiast 1/13)
+- Modal potwierdzenia dla obu przycisków akcji
+- Wsparcie dla indywidualnych talii botów
+
 ## [0.6.0] - 2025-12-16
 
 ### Dodane
