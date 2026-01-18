@@ -17,7 +17,8 @@ export default function AdvancedGame() {
   const [showActionInstructionsModal, setShowActionInstructionsModal] =
     useState(false);
   const [showFirstPhaseModal, setShowFirstPhaseModal] = useState(true);
-  const [gameStarted, setGameStarted] = useState(false);
+  // gameStarted powinno być true domyślnie, FALSE tylko jeśli są gracze przed botem (modal)
+  const [gameStarted, setGameStarted] = useState(true);
 
   const { state } = game;
 
@@ -31,6 +32,35 @@ export default function AdvancedGame() {
       navigate("/advanced-setup");
     }
   }, [state.gameMode, state.players, navigate]);
+
+  // If there are players before first bot, show firstPhase modal (gameStarted = false)
+  // Otherwise, game starts immediately (gameStarted = true)
+  useEffect(() => {
+    // Check if first player is NOT a bot
+    const hasPlayersBeforeFirstBot = state.players && state.players.length > 0 && !state.players[0].isBot;
+    if (hasPlayersBeforeFirstBot) {
+      setGameStarted(false);
+    }
+  }, [state.players]);
+
+  // Draw card automatically when game starts (after firstPhase modal is closed)
+  useEffect(() => {
+    if (gameStarted) {
+      // Check if card hasn't been drawn yet (works for both shared and individual mode)
+      const cardNotDrawn = 
+        state.mode === "individual"
+          ? state.botDecks && state.currentBot && state.botDecks[state.currentBot - 1]?.currentCardIndex === -1
+          : state.currentCardIndex === -1;
+      
+      if (cardNotDrawn) {
+        // Draw card logic
+        if (game.isDeckExhausted()) {
+          game.shuffleDeck();
+        }
+        game.drawCard();
+      }
+    }
+  }, [gameStarted, state.mode, state.currentBot, state.currentCardIndex, state.botDecks, game]);
 
   const handleDrawCard = () => {
     if (game.isDeckExhausted()) {
@@ -232,73 +262,68 @@ export default function AdvancedGame() {
       const centeredMessage = (
         <div>
           <p style={{ textAlign: "center" }}>{baseMessage}</p>
-          {(endOfPhaseIntermediatePlayers.length > 0 ||
-            nextPhaseIntermediatePlayers.length > 0) && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                marginTop: "12px",
-                alignItems: "center",
-              }}
-            >
-              {/* Gracze z końca tej fazy */}
-              {endOfPhaseIntermediatePlayers.length > 0 && (
-                <>
-                  <div className={styles.phaseLabel}>
-                    {
-                      getModalText(
-                        "advancedGame",
-                        "nextPhase.currentPhasePlayers"
-                      ).message
-                    }
-                  </div>
-                  {endOfPhaseIntermediatePlayers.map((player) => (
-                    <div key={player.index} className={styles.playerBox}>
-                      <div
-                        style={{
-                          backgroundColor: colorToRGB[player.color] || "#999",
-                        }}
-                        className={styles.playerBoxContent}
-                      >
-                        Gracz {colorNames[player.color] || player.color}
-                      </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              marginTop: "12px",
+              alignItems: "center",
+            }}
+          >
+            {/* Gracze z końca tej fazy */}
+            {endOfPhaseIntermediatePlayers.length > 0 && (
+              <>
+                <div className={styles.phaseLabel}>
+                  {
+                    getModalText(
+                      "advancedGame",
+                      "nextPhase.currentPhasePlayers"
+                    ).message
+                  }
+                </div>
+                {endOfPhaseIntermediatePlayers.map((player) => (
+                  <div key={player.index} className={styles.playerBox}>
+                    <div
+                      style={{
+                        backgroundColor: colorToRGB[player.color] || "#999",
+                      }}
+                      className={styles.playerBoxContent}
+                    >
+                      Gracz {colorNames[player.color] || player.color}
                     </div>
-                  ))}
-                </>
-              )}
-
-              {/* Market Phase */}
-              {marketPhase && (
-                <div className={styles.phaseLabel}>{marketPhase}</div>
-              )}
-
-              {/* Gracze z następnej fazy */}
-              {nextPhaseIntermediatePlayers.length > 0 && (
-                <>
-                  <div className={styles.phaseLabel}>
-                    {
-                      getModalText("advancedGame", "nextPhase.nextPhasePlayers")
-                        .message
-                    }
                   </div>
-                  {nextPhaseIntermediatePlayers.map((player) => (
-                    <div key={player.index} className={styles.playerBox}>
-                      <div
-                        style={{
-                          backgroundColor: colorToRGB[player.color] || "#999",
-                        }}
-                        className={styles.playerBoxContent}
-                      >
-                        Gracz {colorNames[player.color] || player.color}
-                      </div>
+                ))}
+              </>
+            )}
+
+            {/* Market Phase - always shown */}
+            <div className={styles.phaseLabel}>{marketPhase}</div>
+
+            {/* Gracze z następnej fazy */}
+            {nextPhaseIntermediatePlayers.length > 0 && (
+              <>
+                <div className={styles.phaseLabel}>
+                  {
+                    getModalText("advancedGame", "nextPhase.nextPhasePlayers")
+                      .message
+                  }
+                </div>
+                {nextPhaseIntermediatePlayers.map((player) => (
+                  <div key={player.index} className={styles.playerBox}>
+                    <div
+                      style={{
+                        backgroundColor: colorToRGB[player.color] || "#999",
+                      }}
+                      className={styles.playerBoxContent}
+                    >
+                      Gracz {colorNames[player.color] || player.color}
                     </div>
-                  ))}
-                </>
-              )}
-            </div>
-          )}
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       );
 
@@ -693,6 +718,7 @@ export default function AdvancedGame() {
               onConfirm={() => {
                 setShowActionModal(false);
                 // nextBot: always execute directly (all content is in single modal)
+                // game.nextPlayer() internally calls DRAW_CARD recursively
                 if (actionKey === "nextBot") {
                   game.nextPlayer();
                 }
@@ -821,13 +847,13 @@ export default function AdvancedGame() {
           const messageKey = botCount === 1 ? "single" : "multiple";
           const base = getModalText(
             "advancedGame",
-            `firstPhase.message.${messageKey}`
+            `beforeFirstRound.message.${messageKey}`
           );
 
           const baseMessage = base.message;
           const phaseLabel = getModalText(
             "advancedGame",
-            "firstPhase.phaseLabel"
+            "beforeFirstRound.phaseLabel"
           ).message;
 
           const message = (
@@ -864,11 +890,11 @@ export default function AdvancedGame() {
 
           return (
             <ConfirmModal
-              isOpen={showFirstPhaseModal && !gameStarted && firstPhasePlayers.length > 0}
-              title={getModalText("advancedGame", "firstPhase.title").message}
+              isOpen={showFirstPhaseModal && !gameStarted && firstPhasePlayers.length > 0 && state.currentRound === 1}
+              title={getModalText("advancedGame", "beforeFirstRound.title").message}
               message={message}
-              confirmText={getModalText("advancedGame", "firstPhase.confirmText").message}
-              cancelText={getModalText("advancedGame", "firstPhase.cancelText").message}
+              confirmText={getModalText("advancedGame", "beforeFirstRound.confirmText").message}
+              cancelText={getModalText("advancedGame", "beforeFirstRound.cancelText").message}
               onConfirm={() => {
                 setShowFirstPhaseModal(false);
                 setGameStarted(true);

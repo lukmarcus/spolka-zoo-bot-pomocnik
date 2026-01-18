@@ -539,12 +539,19 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         return gameReducer(state, { type: "NEXT_PHASE" });
       }
 
-      // Zaktualizuj currentBot dla trybu individual - to indeks +1 (1-based)
-      const nextBot = nextBotIndex + 1;
+      // Oblicz numer bota (ile botów napotkaliśmy do tego indeksu, włącznie)
+      // np. w bot-gracz-bot: players[0] jest bot #1, players[2] jest bot #2
+      let nextBotNumber = 1;
+      for (let i = 0; i <= nextBotIndex; i++) {
+        if (i < nextBotIndex && state.players[i].isBot) {
+          nextBotNumber++;
+        }
+      }
+
       const newState = {
         ...state,
         currentPlayerIndex: nextBotIndex,
-        currentBot: nextBot,
+        currentBot: nextBotNumber,
       };
 
       // Dobrać kartę dla nowego gracza
@@ -564,13 +571,20 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       // Znajdź pierwszego bota
       const firstBotIndex = state.players.findIndex((p) => p.isBot);
       const resetPlayerIndex = firstBotIndex !== -1 ? firstBotIndex : 0;
-      const nextBot = resetPlayerIndex + 1;
+      
+      // Oblicz numer bota (ile botów napotkaliśmy do tego indeksu, włącznie)
+      let nextBotNumber = 1;
+      for (let i = 0; i <= resetPlayerIndex; i++) {
+        if (i < resetPlayerIndex && state.players[i].isBot) {
+          nextBotNumber++;
+        }
+      }
 
       const newState = {
         ...state,
         currentPhase: nextPhase,
         currentPlayerIndex: resetPlayerIndex,
-        currentBot: nextBot,
+        currentBot: nextBotNumber,
       };
 
       // Dobrać kartę dla nowego gracza
@@ -604,7 +618,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       if (firstBotInRound >= rotatedPlayers.length) {
         firstBotInRound = rotatedPlayers.findIndex((p) => p.isBot);
       }
-      const nextBot = firstBotInRound >= 0 ? firstBotInRound + 1 : 1;
+      
+      // Oblicz numer bota (ile botów napotkaliśmy do tego indeksu, włącznie)
+      let nextBotNumber = 1;
+      for (let i = 0; i <= firstBotInRound; i++) {
+        if (i < firstBotInRound && rotatedPlayers[i].isBot) {
+          nextBotNumber++;
+        }
+      }
 
       // Shuffle the deck
       let newBotDecks = state.botDecks;
@@ -629,9 +650,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ...state,
         currentRound: nextRound,
         currentPhase: 1,
-        currentPlayerIndex: newStartingPlayer,
+        currentPlayerIndex: firstBotInRound,
         players: rotatedPlayers,
-        currentBot: nextBot,
+        currentBot: nextBotNumber,
         botDecks: newBotDecks,
         cardSequence: newCardSequence,
         currentCardIndex: newCurrentCardIndex,

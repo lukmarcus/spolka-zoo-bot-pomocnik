@@ -15,11 +15,11 @@
       "title": "CZEKAJ",
       "message": "Czekaj! Inne gracze mogą mieć teraz grać."
     },
-    "firstPhase": {
+    "beforeFirstRound": {
       "title": "Pierwsza faza",
       "message": {
-        "single": "Zanim przejdziesz do Bota w pierwszej fazie Akcji pierwszej rundy i dobierzesz dla niego nową kartę:",
-        "multiple": "Zanim przejdziesz do pierwszego Bota w pierwszej fazie Akcji pierwszej rundy i dobierzesz dla niego nową kartę:"
+        "single": "Zanim dobierzesz nową kartę dla Bota:",
+        "multiple": "Zanim dobierzesz nową kartę dla pierwszego Bota:"
       },
       "phaseLabel": "• Zagraj żetony Akcji dla:",
       "confirmText": "Dalej",
@@ -28,8 +28,8 @@
     "nextBot": {
       "title": "Następny bot",
       "message": {
-        "adjacent": "Przejść do kolejnego Bota w tej fazie Akcji i dobrać dla niego nową kartę?",
-        "notAdjacent": "Zanim przejdziesz do kolejnego Bota w tej fazie Akcji i dobierzesz dla niego nową kartę:"
+        "adjacent": "Dobrać kartę dla kolejnego Bota?",
+        "notAdjacent": "Zanim dobierzesz kartę dla kolejnego Bota:"
       },
       "instructionLabel": "• Zagraj żetony Akcji dla:",
       "confirmText": "Dalej"
@@ -37,8 +37,8 @@
     "nextPhase": {
       "title": "Następna faza Akcji",
       "message": {
-        "single": "Zanim przejdziesz do Bota w następnej fazie Akcji i dobierzesz dla niego nową kartę:",
-        "multiple": "Zanim przejdziesz do pierwszego Bota w następnej fazie Akcji i dobierzesz dla niego nową kartę:"
+        "single": "Zanim dobierzesz nową kartę dla Bota:",
+        "multiple": "Zanim dobierzesz nową kartę dla kolejnego Bota:"
       },
       "currentPhasePlayers": "• W tej fazie Akcji zagraj żetony Akcji dla:",
       "marketPhase": "• Rozegraj fazę Rynku dla wszystkich graczy.",
@@ -55,14 +55,14 @@
     "nextRound": {
       "title": "Następna runda",
       "message": {
-        "single": "Zanim przejdziesz do Bota w pierwszej fazie Akcji następnej rundy i dobierzesz dla niego nową kartę:",
-        "multiple": "Zanim przejdziesz do pierwszego Bota w pierwszej fazie Akcji następnej rundy i dobierzesz dla niego nową kartę:"
+        "single": "Zanim dobierzesz nową kartę dla Bota:",
+        "multiple": "Zanim dobierzesz nową kartę dla kolejnego Bota:"
       },
       "phaseLabels": {
         "current": "• W tej ostatniej fazie Akcji tej rundy zagraj żetony Akcji dla:",
         "next": "• W pierwszej fazie Akcji nowej rundy zagraj żetony Akcji dla:"
       },
-      "note2": "• Rozegraj ostatnią fazę Rynku tej rundy dla wszystkich graczy.",
+      "note2": "• Rozegraj fazę Rynku dla wszystkich graczy.",
       "note1": "• Zamień kolejność graczy (pierwszy gracz staje się ostatnim).",
       "note3": {
         "single": "• Talia Bota zostanie automatycznie przetasowana.",
