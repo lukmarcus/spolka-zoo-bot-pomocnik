@@ -5,11 +5,12 @@
 | Wersja | Status       | Opis krótki               | Szczegóły techniczne                                      |
 | ------ | ------------ | ------------------------- | --------------------------------------------------------- |
 | 0.6.0  | ✅ Gotowe    | Tryb zaawansowany (setup) | Konfiguracja graczy, kolory, tryb gry, moduły             |
-| 0.6.1  | 🔮 Planowane | Rundy i fazy              | 5 rund, 3/4 fazy, wyświetlanie stanu gry                  |
-| 0.6.2  | 🔮 Planowane | Mechanika końca rundy     | Tasowanie, zmiana pierwszego gracza, potwierdzenia        |
-| 0.6.3  | 🔮 Planowane | Punktacja botów           | Licznik pomocników dla botów w trakcie gry                |
+| 0.6.1  | ✅ Gotowe    | Rundy i fazy              | 5 rund, 3/4 fazy, modalne akcji, dobieranie kart          |
+| 0.6.2  | 🔮 Planowane | Testy                     | Vitest setup, unit testy GameContext                      |
+| 0.6.3  | 🔮 Planowane | Koniec gry                | Modal potwierdzenia końca gry, logika ostatniej rundy      |
 | 0.6.4  | 🔮 Planowane | Ekran końcowy             | Podsumowanie punktów, ranking graczy                      |
-| 0.6.5  | 🔮 Planowane | Finalizacja trybu         | Usunięcie 🚧, stary tryb jako "Tryb szybki" (opcjonalnie) |
+| 0.6.5  | 🔮 Planowane | Punktacja botów           | Licznik pomocników dla botów w trakcie gry                |
+| 0.6.6  | 🔮 Planowane | Finalizacja               | Usunięcie 🚧, cleanup kodu, dokumentacja                  |
 
 ## 📋 Szczegółowe plany rozwoju
 
@@ -53,72 +54,147 @@ Zrealizowane:
 
 ---
 
-### v0.6.1 — Rundy i fazy 🔮
+### v0.6.1 — Rundy i fazy ✅
 
 🎯 Cel: implementacja systemu rund i faz zgodnie z mechaniką gry planszowej + integracja setupu z GameContext
 
-Planowane zadania:
+**Status: GOTOWE** (Jan 18, 2025)
 
-- **Integracja z GameContext**
+- **✅ Integracja z GameContext**
 
-  - Akcja START_ADVANCED_GAME w GameContext
+  - Akcja `START_ADVANCED_GAME` w GameContext
   - Inicjalizacja stanu gry z konfiguracją z v0.6.0
   - Przejście do ekranu gry po kliknięciu "Rozpocznij grę"
+  - Auto-inicjalizacja pierwszej karty (index 0) dla trybu individual i shared
 
-- **Mechanika gry**
+- **✅ Mechanika gry**
 
   - **5 rund** na grę
-  - **Fazy w rundzie**: 4 fazy dla 2 osób, 3 fazy dla >2 osób
-  - Wyświetlanie: Runda X/5, Faza Y, Gracz: [kolor]
+  - **Fazy w rundzie**: 3 fazy dla >2 osób, 4 fazy dla 2 osób
+  - Wyświetlanie: "Runda X/5 • Faza Y/Z" w jednym wierszu
 
-- **Zmiana gracza**
+- **✅ Wizualizacja stanu gry**
 
-  - Przejście do następnego gracza z potwierdzeniem modalem
-  - Wizualne rozróżnienie graczy po kolorach żetonów
+  - Kwadraty graczy ze statusem aktualnego gracza (border, shadow, scale)
+  - Podsumowanie konfiguracji w subtitule (liczba graczy, botów, typ talii)
+  - Integracja z Layout component dla spójności visual z resztą app
+
+- **✅ System modalny akcji**
+
+  - Modal potwierdzania dobrania karty
+  - Modal potwierdzania dla przejścia (następny gracz/faza/runda/koniec gry)
+  - Dynamiczne wiadomości w modalach na podstawie kontekstu
+  - Warunkowe renderowanie przycisków w ConfirmModal (2-3 w zależności od props)
+
+- **✅ Centralized modal texts (modalTexts.json)**
+
+  - Wszystkie stringi modalów w jednym miejscu
+  - Struktury dla: drawCard, checkBotEffect, instructionModal, beforeFirstRound, nextBot, nextPhase, nextRound, endGame
+  - Obsługa wariantów wiadomości (np. single/multiple boty, adjacent/notAdjacent gracze)
+
+- **✅ Modal beforeFirstRound**
+
+  - Pojawia się tylko przed pierwszą rundą (state.currentRound === 1)
+  - Wyświetla gracza/graczy przed pierwszym botem
+  - Przyciski: "Dalej" i "Wróć do menu"
+
+- **✅ Modal nextBot z listą graczy**
+
+  - Warianty: "adjacent" (bezpośrednio następny) i "notAdjacent" (z graczami pomiędzy)
+  - Wyświetla graczy pomiędzy aktualnym a następnym botem
+  - Automatyczne dobieranie karty dla nowego bota
+
+- **✅ Modal nextPhase**
+
+  - Zawsze wyświetla: marketPhase ("Rozegraj fazę Rynku dla wszystkich graczy")
+  - Opcjonalnie gracze z końca tej fazy
+  - Opcjonalnie gracze z następnej fazy
+  - Prawidłowe resetowanie do pierwszego bota nowej fazy
+
+- **✅ Modal nextRound**
+
+  - Zmiana gracza startowego (rotation)
+  - Tasowanie wszystkich talii botów (individual) lub wspólnej talii (shared)
+  - Prawidłowe wskazanie pierwszego bota nowej rundy
+
+- **✅ Logika dobierania kart**
+
+  - Auto-draw przy starcie gry (jeśli nie ma beforeFirstRound)
+  - Auto-draw po nextPlayer (NEXT_PLAYER action)
+  - Auto-draw po nextPhase (NEXT_PHASE action)
+  - Auto-draw po nextRound (NEXT_ROUND action)
+  - Prawidłowe obsłanie obu trybów (shared i individual)
+
+- **✅ Naprawa logiki numerowania botów**
+
+  - NEXT_PLAYER: prawidłowe obliczanie numeru bota (nie indeksu gracza)
+  - NEXT_PHASE: prawidłowe obliczanie numeru bota dla pierwszego bota nowej fazy
+  - NEXT_ROUND: prawidłowe obliczanie numeru bota po rotacji graczy
+  - Zaczyna się od bota nr 1, a nie od numeru gracza
+
+- **✅ Refaktoryzacja stylów**
+
+  - Przeniesienie inline stylów do CSS Modules (AdvancedGame.module.css)
+  - Klasy: `.infoSection`, `.roundPhaseInfo`, `.playersContainer`, `.playerSquare`, `.playerSquare.active/inactive`, `.playerSquareNumber`
+  - Krótsze i bardziej czytelne renderowanie komponentu
 
 ---
 
-### v0.6.2 — Mechanika końca rundy 🔮
+### v0.6.2 — Testy 🔮
 
-🎯 Cel: prawidłowa obsługa końca rundy z tasowaniem i zmianą gracza
+🎯 Cel: pokrycie testami logiki GameContext dla pewności działania skomplikowanej logiki
 
 Planowane zadania:
 
-- **Koniec rundy**
+- **Setup Vitest**
 
-  - Tasowanie tali botów po każdej rundzie
-  - Zmiana pierwszego gracza (potwierdzenie modalem)
-  - Automatyczne przejście do nowej rundy
+  - Instalacja vitest, @testing-library/react
+  - Konfiguracja vitest.config.ts
+  - Setup testów dla GameContext reducer
 
-- **Modalne potwierdzenia i informacje**
+- **Unit testy GameContext**
 
-  - Modal "Koniec fazy" - informacja o resecie do pierwszego bota
-  - Modal "Koniec rundy" - informacja o tasowaniu i zmianie gracza startowego
-  - Modal "Koniec gry" - podsumowanie rozgrywki, powrót do menu
+  - Testy DRAW_CARD (shared i individual mode)
+  - Testy NEXT_PLAYER (prawidłowe numerowanie botów)
+  - Testy NEXT_PHASE (reset do pierwszego bota)
+  - Testy NEXT_ROUND (rotacja graczy, tasowanie, prawidłowy bot)
+  - Testy exhausted deck (tasowanie, reshuffle)
+
+- **Test scenarios checklist**
+
+  - Dokumentacja scenariuszy testowych do ręcznego testowania
+  - Checklist dla każdego setupu (boty-gracz-boty, shared/individual)
 
 ---
 
-### v0.6.3 — Punktacja botów 🔮
+### v0.6.3 — Koniec gry 🔮
 
-🎯 Cel: śledzenie punktów z pomocników dla botów w trakcie gry
+🎯 Cel: modal potwierdzenia końca gry i przejście do ekranu końcowego
 
 Planowane zadania:
 
-- **Zbieranie punktów w trakcie gry**
+- **Modal końca gry**
 
-  - Licznik tylko dla **botów**: karty pomocników
-  - Automatyczne zliczanie punktów z dobranych kart
-  - Gracze sami śledzą monety, pomocników i udziały na planszy
+  - Pojawia się po 5. rundzie (warunek: `currentRound > 5`)
+  - Wiadomość: "Przejść do końca gry?"
+  - Przyciski: "Zakończ grę" / "Anuluj"
+  - Logika przejścia do `/game-end`
+
+- **Walidacja ostatniej rundy**
+
+  - Obsługa stanu gry po kliknięciu "Zakończ grę"
+  - Reset stanu dla nowej gry
+  - Powrót do menu przy "Anuluj"
 
 ---
 
 ### v0.6.4 — Ekran końcowy 🔮
 
-🎯 Cel: podsumowanie gry z rankingiem graczy
+🎯 Cel: ekran podsumowania gry z rankingiem graczy i punktacją
 
 Planowane zadania:
 
-- **Ekran końcowy**
+- **Ekran `/game-end`**
 
   - Podsumowanie dla każdego gracza:
     - Punkty z kart pomocników (dla botów automatycznie)
@@ -130,7 +206,22 @@ Planowane zadania:
 
 ---
 
-### v0.6.5 — Finalizacja trybu 🔮
+### v0.6.5 — Punktacja botów 🔮
+
+🎯 Cel: śledzenie punktów z pomocników dla botów w trakcie gry
+
+Planowane zadania:
+
+- **Zbieranie punktów botów**
+
+  - Licznik tylko dla **botów**: karty pomocników
+  - Automatyczne zliczanie punktów z dobranych kart
+  - Wyświetlanie aktualnego stanu punktów w ekranie gry
+  - Integracja z ekranem końcowym
+
+---
+
+### v0.6.6 — Finalizacja trybu 🔮
 
 🎯 Cel: zakończenie prac nad trybem zaawansowanym
 
@@ -140,7 +231,7 @@ Planowane zadania:
 
   - Usunięcie oznaczenia 🚧 z przycisku
   - Stary tryb zostaje jako "Tryb szybki" (opcjonalnie do decyzji)
-  - Cleanup kodu, testy, bugfixy
+  - Cleanup kodu, bugfixy, documentation
 
 ---
 
