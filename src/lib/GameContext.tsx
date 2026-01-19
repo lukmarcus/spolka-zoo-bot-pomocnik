@@ -668,6 +668,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   }
 }
 
+// Export reducer and action types for testing
+export { gameReducer };
+export type { GameAction };
+
 // Provider component
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
